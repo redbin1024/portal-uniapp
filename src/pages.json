@@ -1,0 +1,106 @@
+{
+  "pages": [
+    {
+      "path": "pages/homepage/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/index/index",
+     "style": {
+            "navigationStyle": "custom",
+            "navigationBarTitleText": ""
+          }
+    },
+    {
+      "path": "pages/about/about",
+      "style": {
+        "navigationBarTitleText": "关于",
+         "backgroundColor": "#F8F8F8"
+      }
+    },
+    {
+      "path": "pages/serve/index",
+      "style": {
+        "navigationBarTitleText": "我们的服务",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/clientevaluation/index",
+      "style": {
+        "navigationBarTitleText": "客户怎么说",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/case/index",
+      "style": {
+        "navigationBarTitleText": "服务案例",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/casedetails/index",
+      "style": {
+        "navigationBarTitleText": "澜悦湾",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/waterfall-demo/index",
+      "style": {
+        "navigationBarTitleText": "瀑布流演示",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/teamIntroduction/index",
+      "style": {
+        "navigationBarTitleText": "团队亮相",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "MasterGo项目",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#2C80FF",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/homepage/index",
+        "iconPath": "static/index.png",
+        "selectedIconPath": "static/indexActive.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/clientevaluation/index",
+        "iconPath": "static/customer.png",
+        "selectedIconPath": "static/customerActive.png",
+        "text": "客户说"
+      },
+      {
+        "pagePath": "pages/serve/index",
+        "iconPath": "static/serve.png",
+        "selectedIconPath": "static/serveActive.png",
+        "text": "服务"
+      },
+      {
+        "pagePath": "pages/case/index",
+        "iconPath": "static/case.png",
+        "selectedIconPath": "static/caseActive.png",
+        "text": "案例"
+      }
+    ]
+  }
+}

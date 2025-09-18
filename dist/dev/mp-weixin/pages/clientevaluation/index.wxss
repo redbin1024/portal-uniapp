@@ -1,0 +1,161 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.client-evaluation-page.data-v-dbba45b8 {
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  padding-bottom: 20rpx;
+}
+.fixed-header.data-v-dbba45b8 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 40rpx 32rpx 30rpx;
+  background-color: #f7f7f7;
+}
+.fixed-header .header-content.data-v-dbba45b8 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+.fixed-header .main-title.data-v-dbba45b8 {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-right: 16rpx;
+}
+.fixed-header .chat-icon.data-v-dbba45b8 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.fixed-header .chat-bubble.data-v-dbba45b8 {
+  width: 60rpx;
+  height: 44rpx;
+  background: linear-gradient(135deg, #cde2ff 0%, #eaf2ff 100%);
+  border-radius: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  position: relative;
+}
+.fixed-header .chat-bubble.data-v-dbba45b8::after {
+  content: "";
+  position: absolute;
+  bottom: -4rpx;
+  left: 10rpx;
+  width: 0;
+  height: 0;
+  border-left: 8rpx solid transparent;
+  border-right: 8rpx solid transparent;
+  border-top: 8rpx solid #eaf2ff;
+  transform: rotate(-30deg);
+}
+.fixed-header .chat-bubble .dot.data-v-dbba45b8 {
+  width: 6rpx;
+  height: 6rpx;
+  background-color: #7ba7e7;
+  border-radius: 50%;
+}
+.fixed-header .sub-title.data-v-dbba45b8 {
+  font-size: 28rpx;
+  color: #999999;
+  margin-left: 4rpx;
+}
+.waterfall-container.data-v-dbba45b8 {
+  display: flex;
+  padding: 0 16rpx;
+  gap: 16rpx;
+  margin-top: 140rpx;
+}
+.waterfall-container .waterfall-column.data-v-dbba45b8 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+.card-item.data-v-dbba45b8 {
+  background-color: #ffffff;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-item.data-v-dbba45b8:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+.card-item .image-wrapper.data-v-dbba45b8 {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.card-item .image-wrapper .main-image.data-v-dbba45b8 {
+  width: 100%;
+  display: block;
+}
+.card-item .image-wrapper .overlay-text.data-v-dbba45b8 {
+  position: absolute;
+  bottom: 20rpx;
+  left: 20rpx;
+  right: 20rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.3);
+  padding: 16rpx 20rpx;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+  border-radius: 12rpx;
+  backdrop-filter: blur(10rpx);
+}
+.card-item .info-bar.data-v-dbba45b8 {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+}
+.card-item .info-bar .avatar.data-v-dbba45b8 {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+  border: 2rpx solid #f0f0f0;
+}
+.card-item .info-bar .merchant-name.data-v-dbba45b8 {
+  flex: 1;
+  font-size: 26rpx;
+  color: #666666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media screen and (min-width: 750px) {
+.waterfall-container.data-v-dbba45b8 {
+    max-width: 750px;
+    margin: 0 auto;
+}
+}

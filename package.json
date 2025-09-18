@@ -1,0 +1,93 @@
+{
+  "name": "mastergo-project",
+  "version": "1.0.0",
+  "description": "基于MasterGo设计稿的uniapp项目",
+  "main": "main.js",
+  "scripts": {
+    "dev": "uni",
+    "dev:mp-weixin": "uni -p mp-weixin --mode test",
+    "dev:mp-weixin:test": "uni --mode test",
+    "dev:mp-weixin:staging": "uni --mode staging",
+    "dev:mp-weixin:pro": "uni --mode pro",
+    "build": "uni build",
+    "build:h5": "uni build:h5",
+    "build:mp-weixin": "uni build:mp-weixin",
+    "build:mp-weixin:dev": "uni build:mp-weixin --mode dev",
+    "build:mp-weixin:test": "uni build:mp-weixin --mode test",
+    "build:mp-weixin:staging": "uni build:mp-weixin --mode staging",
+    "build:mp-weixin:pro": "uni build:mp-weixin --mode pro",
+    "build:app": "uni build:app",
+    "serve": "uni serve",
+    "env": "node scripts/env-switch.js",
+    "env:dev": "node scripts/env-switch.js dev",
+    "env:test": "node scripts/env-switch.js test",
+    "env:staging": "node scripts/env-switch.js staging",
+    "env:pro": "node scripts/env-switch.js pro"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app": "3.0.0-4030620241128001",
+    "@dcloudio/uni-components": "3.0.0-4030620241128001",
+    "@dcloudio/uni-h5": "3.0.0-4030620241128001",
+    "@dcloudio/uni-mp-alipay": "3.0.0-4030620241128001",
+    "@dcloudio/uni-mp-baidu": "3.0.0-4030620241128001",
+    "@dcloudio/uni-mp-qq": "3.0.0-4030620241128001",
+    "@dcloudio/uni-mp-toutiao": "3.0.0-4030620241128001",
+    "@dcloudio/uni-mp-weixin": "3.0.0-4030620241128001",
+    "@zebra-ui/swiper": "^3.0.2",
+    "@zebra-ui/uniapp": "^2.0.2",
+    "dayjs": "^1.11.13",
+    "pinia": "^2.1.0",
+    "pinia-plugin-persistedstate": "3.2.1",
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@dcloudio/types": "^3.4.8",
+    "@dcloudio/uni-cli-shared": "3.0.0-4030620241128001",
+    "@dcloudio/vite-plugin-uni": "3.0.0-4030620241128001",
+    "cross-env": "^7.0.3",
+    "less": "^4.4.1",
+    "sass": "^1.90.0",
+    "terser": "^5.43.1",
+    "vite": "5.2.8"
+  },
+  "uni-app": {
+    "scripts": {
+      "dev": {
+        "title": "微信小程序——开发版",
+        "env": {
+          "ENV_TYPE": "dev",
+          "UNI_PLATFORM": "mp-weixin",
+          "VITE_BASE_API": "https://dev-api.xiaodingdang1.com/",
+          "NODE_ENV": "development"
+        }
+      },
+      "test": {
+        "title": "微信小程序——测试版",
+        "env": {
+          "ENV_TYPE": "test",
+          "UNI_PLATFORM": "mp-weixin",
+          "VITE_BASE_API": "https://test-api.xiaodingdang1.com/",
+          "NODE_ENV": "development"
+        }
+      },
+      "staging": {
+        "title": "微信小程序——预发布版",
+        "env": {
+          "ENV_TYPE": "staging",
+          "UNI_PLATFORM": "mp-weixin",
+          "VITE_BASE_API": "https://staging-api.xiaodingdang1.com/",
+          "NODE_ENV": "production"
+        }
+      },
+      "pro": {
+        "title": "微信小程序——正式版",
+        "env": {
+          "ENV_TYPE": "pro",
+          "UNI_PLATFORM": "mp-weixin",
+          "VITE_BASE_API": "https://admin-api.xiaodingdang1.com/",
+          "NODE_ENV": "production"
+        }
+      }
+    }
+  }
+}

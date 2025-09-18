@@ -1,0 +1,1 @@
+<view class="container data-v-49e065b9"><view wx:if="{{a}}" class="loading data-v-49e065b9"><text class="data-v-49e065b9">加载中...</text></view><view wx:elif="{{b}}" class="error data-v-49e065b9"><text class="data-v-49e065b9">{{c}}</text></view><view wx:else class="data-v-49e065b9"><rich-text class="activity data-v-49e065b9" nodes="{{d}}" type="text"></rich-text></view></view>

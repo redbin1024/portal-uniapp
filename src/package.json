@@ -1,0 +1,17 @@
+{
+    "id": "hb-box",
+    "name": "轮播图海报",
+    "displayName": "轮播图海报",
+    "version": "1.0.0",
+    "description": "多款海报的轮播图，点击生成base64图片",
+    "keywords": [
+        "海报",
+        "轮播图"
+    ],
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ]
+    }
+}

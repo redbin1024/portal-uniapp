@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瀑布流测试</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .waterfall-container {
+            display: flex;
+            gap: 8px;
+            padding: 8px;
+        }
+        .waterfall-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .waterfall-item {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+        .waterfall-item:hover {
+            transform: scale(1.02);
+        }
+        .item-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .item-content {
+            padding: 12px;
+        }
+        .item-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .item-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .item-author {
+            display: flex;
+            align-items: center;
+        }
+        .author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .author-name {
+            font-size: 12px;
+            color: #999;
+        }
+        .stat-count {
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>瀑布流组件测试</h1>
+        <div id="waterfall" class="waterfall-container">
+            <!-- 瀑布流内容将在这里生成 -->
+        </div>
+    </div>
+
+    <script>
+        // 测试数据
+        const testData = [
+            {
+                id: 1,
+                title: "非常专业的设计团队，效果超出预期",
+                description: "从需求沟通到最终交付，整个过程都很顺畅。设计师理解能力强，能够准确把握我们的需求。",
+                image: "https://picsum.photos/300/400?random=1",
+                avatar: "https://picsum.photos/100/100?random=101",
+                author: "张先生",
+                likes: 1234
+            },
+            {
+                id: 2,
+                title: "开发质量很高，交付及时",
+                description: "技术团队很专业，代码质量高，项目按时交付，后期维护也很到位。",
+                image: "https://picsum.photos/300/500?random=2",
+                avatar: "https://picsum.photos/100/100?random=102",
+                author: "李女士",
+                likes: 856
+            },
+            {
+                id: 3,
+                title: "咨询服务很专业，给出了很多有价值的建议",
+                description: "顾问老师经验丰富，针对我们的业务痛点给出了切实可行的解决方案。",
+                image: "https://picsum.photos/300/350?random=3",
+                avatar: "https://picsum.photos/100/100?random=103",
+                author: "王总",
+                likes: 2341
+            },
+            {
+                id: 4,
+                title: "UI设计很棒，用户体验提升明显",
+                description: "新的界面设计简洁美观，用户反馈很好，转化率也有明显提升。",
+                image: "https://picsum.photos/300/450?random=4",
+                avatar: "https://picsum.photos/100/100?random=104",
+                author: "陈经理",
+                likes: 567
+            }
+        ];
+
+        // 瀑布流布局函数
+        function createWaterfallLayout(items, columnCount = 2) {
+            const columns = Array.from({ length: columnCount }, () => []);
+            const columnHeights = Array(columnCount).fill(0);
+
+            items.forEach((item) => {
+                // 找到最短的列
+                const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+                
+                // 将项目添加到最短的列
+                columns[shortestColumnIndex].push(item);
+                
+                // 估算高度（简化版本）
+                const estimatedHeight = 300 + Math.random() * 200;
+                columnHeights[shortestColumnIndex] += estimatedHeight;
+            });
+
+            return columns;
+        }
+
+        // 渲染瀑布流
+        function renderWaterfall() {
+            const container = document.getElementById('waterfall');
+            const columns = createWaterfallLayout(testData, 2);
+            
+            container.innerHTML = '';
+            
+            columns.forEach((column, columnIndex) => {
+                const columnDiv = document.createElement('div');
+                columnDiv.className = 'waterfall-column';
+                
+                column.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'waterfall-item';
+                    itemDiv.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}" class="item-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LXNpemU9IjE0Ij7lm77niYfliqDovb3lpLHotKU8L3RleHQ+Cjwvc3ZnPgo='">
+                        <div class="item-content">
+                            <div class="item-title">${item.title}</div>
+                            <div class="item-description">${item.description}</div>
+                            <div class="item-footer">
+                                <div class="item-author">
+                                    <img src="${item.avatar}" alt="${item.author}" class="author-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTIiIGZpbGw9IiNGNUY1RjUiLz4KPHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNiIgY3k9IjQiIHI9IjIiIGZpbGw9IiM5OTkiLz4KPHBhdGggZD0iTTIgMTBDMiA4IDQgNyA2IDdTMTAgOCAxMCAxMCIgc3Ryb2tlPSIjOTk5IiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPgo='">
+                                    <span class="author-name">${item.author}</span>
+                                </div>
+                                <div class="stat-count">♡ ${item.likes}</div>
+                            </div>
+                        </div>
+                    `;
+                    columnDiv.appendChild(itemDiv);
+                });
+                
+                container.appendChild(columnDiv);
+            });
+        }
+
+        // 页面加载完成后渲染
+        document.addEventListener('DOMContentLoaded', renderWaterfall);
+    </script>
+</body>
+</html>

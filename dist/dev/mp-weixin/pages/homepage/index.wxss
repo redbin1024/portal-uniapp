@@ -1,0 +1,321 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.main.data-v-46fe8b1b {
+  background-color: #f7f7f7;
+  min-height: 100vh;
+}
+.container.data-v-46fe8b1b {
+  padding: 0 26rpx;
+}
+.header.data-v-46fe8b1b {
+  padding: 110rpx 0rpx 30rpx 26rpx;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  transition: background-color 0.3s ease;
+}
+.header-with-bg.data-v-46fe8b1b {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10rpx);
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+.title-wrapper.data-v-46fe8b1b {
+  display: flex;
+  align-items: center;
+}
+.headLogo.data-v-46fe8b1b {
+  border-radius: 100rpx;
+  width: 62rpx;
+  height: 62rpx;
+}
+.logo.data-v-46fe8b1b {
+  width: 100%;
+  height: 100%;
+}
+.title.data-v-46fe8b1b {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #313131;
+  margin-left: 12rpx;
+}
+.right-icons.data-v-46fe8b1b {
+  display: flex;
+  align-items: center;
+}
+.search-icon.data-v-46fe8b1b {
+  font-size: 32rpx;
+  margin-left: 20rpx;
+}
+.banner.data-v-46fe8b1b {
+  margin-top: 250rpx;
+  position: relative;
+  width: 100%;
+  height: 400rpx;
+  overflow: hidden;
+}
+.company-info.data-v-46fe8b1b {
+  margin-top: 60rpx;
+}
+.company-title.data-v-46fe8b1b {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+.company-desc.data-v-46fe8b1b {
+  font-size: 24rpx;
+  color: #000000;
+  text-align: center;
+  margin-top: 50rpx;
+}
+
+/* 按钮样式 */
+.company-btn.data-v-46fe8b1b {
+  display: flex;
+  margin-top: 80rpx;
+  padding-bottom: 60rpx;
+  justify-content: space-around;
+}
+.contact-btn.data-v-46fe8b1b {
+  width: 80rpx;
+  height: 80rpx;
+  padding: 0;
+  margin: 0;
+  border: none !important;
+  background: transparent;
+}
+.contact-btn image.data-v-46fe8b1b {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+/* 轮播图样式 */
+.slideshow.data-v-46fe8b1b {
+  border-radius: 20rpx;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+.swiper-container.data-v-46fe8b1b {
+  width: 100%;
+  height: 935rpx;
+}
+.swiper-item.data-v-46fe8b1b {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.banner-image.data-v-46fe8b1b {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.banner-content.data-v-46fe8b1b {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  padding: 60rpx 30rpx 30rpx;
+  color: white;
+}
+.banner-title.data-v-46fe8b1b {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.5);
+}
+.banner-desc.data-v-46fe8b1b {
+  font-size: 26rpx;
+  opacity: 0.9;
+  line-height: 1.4;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.5);
+}
+
+/**品牌故事 */
+.brand-story.data-v-46fe8b1b {
+  background: #ffffff;
+  padding: 80rpx 48rpx;
+  color: #000000;
+  position: relative;
+}
+.brand-story-title.data-v-46fe8b1b {
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.brand-story-content.data-v-46fe8b1b {
+  font-size: 26rpx;
+  margin: 24rpx 0 81rpx 0;
+}
+.brand-story-decoration.data-v-46fe8b1b {
+  position: absolute;
+  right: 0;
+  top: 16rpx;
+  z-index: 0;
+}
+
+/**团队亮相 */
+.teamappearance.data-v-46fe8b1b {
+  padding: 40rpx 0;
+}
+.teamappearance-title.data-v-46fe8b1b {
+  color: #000000;
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  padding: 0 26rpx;
+}
+.teamappearance-content.data-v-46fe8b1b {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0 26rpx;
+  gap: 20rpx;
+  /* 隐藏滚动条 */
+}
+.teamappearance-content.data-v-46fe8b1b::-webkit-scrollbar {
+  display: none;
+}
+.teamappearance-content.data-v-46fe8b1b {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.teamappearance-item.data-v-46fe8b1b {
+  background: #ffffff;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+  width: 650rpx;
+  margin-right: 20rpx;
+}
+.teamappearance-item.data-v-46fe8b1b:last-child {
+  margin-right: 26rpx;
+}
+.teamappearance-item-title.data-v-46fe8b1b {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #000000;
+  margin: 24rpx 30rpx 0 30rpx;
+}
+.teamappearance-item-content.data-v-46fe8b1b {
+  padding: 24rpx 30rpx 76rpx 24rpx;
+}
+.certificate.data-v-46fe8b1b {
+  background: #ffffff;
+  padding: 80rpx 0;
+  margin-top: 80rpx;
+}
+.certificate-title.data-v-46fe8b1b {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+  padding: 0 49rpx;
+}
+.certificate-list.data-v-46fe8b1b {
+  margin-top: 40rpx;
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0 49rpx;
+  gap: 20rpx;
+  /* 隐藏滚动条 */
+}
+.certificate-list.data-v-46fe8b1b::-webkit-scrollbar {
+  display: none;
+}
+.certificate-list.data-v-46fe8b1b {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.certificate-item.data-v-46fe8b1b {
+  border: 1rpx solid #eeeeee;
+  border-radius: 12rpx;
+  width: 239rpx;
+  height: 265rpx;
+  flex-shrink: 0;
+  background: #ffffff;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.certificate-item.data-v-46fe8b1b:last-child {
+  margin-right: 49rpx;
+}
+.certificate-item image.data-v-46fe8b1b {
+  width: 100%;
+  height: 265rpx;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+/**合作商 */
+.businesspartner.data-v-46fe8b1b {
+  padding: 80rpx 0;
+  margin-top: 80rpx;
+}
+.businesspartner-list.data-v-46fe8b1b {
+  margin-top: 40rpx;
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0 49rpx;
+  gap: 20rpx;
+  justify-content: center;
+  scroll-snap-type: x mandatory;
+  /* 隐藏滚动条 */
+}
+.businesspartner-list.data-v-46fe8b1b::-webkit-scrollbar {
+  display: none;
+}
+.businesspartner-list.data-v-46fe8b1b {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.businesspartner-item.data-v-46fe8b1b {
+  border-radius: 20rpx;
+  width: 216rpx;
+  height: 88rpx;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: center;
+}
+.businesspartner-item.data-v-46fe8b1b:last-child {
+  margin-right: 49rpx;
+}
+.businesspartner-item image.data-v-46fe8b1b {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
