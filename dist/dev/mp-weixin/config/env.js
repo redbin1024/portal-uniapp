@@ -1,4 +1,5 @@
 "use strict";
+var define_process_env_default = { ENV_TYPE: "dev" };
 const envConfig = {
   // 开发环境
   dev: {
@@ -38,7 +39,7 @@ const envConfig = {
   }
 };
 function getEnvType() {
-  const processEnv = typeof process !== "undefined" ? process.env : {};
+  const processEnv = typeof process !== "undefined" ? define_process_env_default : {};
   return processEnv.ENV_TYPE || "dev";
 }
 function getConfig() {
@@ -46,5 +47,4 @@ function getConfig() {
   return envConfig[envType] || envConfig.dev;
 }
 const config = getConfig();
-getEnvType();
 exports.config = config;

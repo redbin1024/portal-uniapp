@@ -30,7 +30,7 @@
           <!-- 主图区域 -->
           <view class="image-wrapper">
             <image
-              :src="item.image"
+              :src="item.contentPhotos[0]"
               mode="widthFix"
               class="main-image"
               @load="onImageLoad(item.id, columnIndex, index)"
@@ -44,7 +44,7 @@
           <!-- 信息栏 -->
           <view class="info-bar">
             <image :src="item.avatar" class="avatar" />
-            <text class="merchant-name">{{ item.merchantName }}</text>
+            <text class="merchant-name">{{ item.nodeName }}</text>
           </view>
         </view>
       </view>
@@ -52,151 +52,115 @@
   </view>
 </template>
 
-<script>
-export default {
-  name: "ClientEvaluation",
-  data() {
-    return {
-      // 瀑布流列数据
-      columns: [[], []],
-      // 列高度记录
-      columnHeights: [0, 0],
-      // 商家数据
-      merchantData: [
-        {
-          id: 1,
-          image:
-            "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=400&h=500&fit=crop",
-          overlayText: "月子中心上班Vlog",
-          avatar:
-            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop",
-          merchantName: "东方幸福国际母婴会所",
-          height: 0,
-        },
-        {
-          id: 2,
-          image:
-            "https://images.unsplash.com/photo-1492725764893-90b379c2b6e7?w=400&h=300&fit=crop",
-          overlayText: "",
-          avatar:
-            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop",
-          merchantName: "长沙艾丽斯月子中心",
-          height: 0,
-        },
-        {
-          id: 3,
-          image:
-            "https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=400&h=450&fit=crop",
-          overlayText: "产后恢复日记",
-          avatar:
-            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop",
-          merchantName: "悦享月子会所",
-          height: 0,
-        },
-        {
-          id: 4,
-          image:
-            "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&h=350&fit=crop",
-          overlayText: "",
-          avatar:
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop",
-          merchantName: "贝康母婴护理中心",
-          height: 0,
-        },
-        {
-          id: 5,
-          image:
-            "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=400&h=480&fit=crop",
-          overlayText: "新生儿护理分享",
-          avatar:
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop",
-          merchantName: "馨月汇月子中心",
-          height: 0,
-        },
-        {
-          id: 6,
-          image:
-            "https://images.unsplash.com/photo-1489710437720-ebb67ec84dd2?w=400&h=320&fit=crop",
-          overlayText: "",
-          avatar:
-            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop",
-          merchantName: "爱帝宫月子中心",
-          height: 0,
-        },
-        {
-          id: 7,
-          image:
-            "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=420&fit=crop",
-          overlayText: "月子餐食谱推荐",
-          avatar:
-            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=50&h=50&fit=crop",
-          merchantName: "圣贝拉母婴护理",
-          height: 0,
-        },
-        {
-          id: 8,
-          image:
-            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=380&fit=crop",
-          overlayText: "",
-          avatar:
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=50&h=50&fit=crop",
-          merchantName: "优艾贝月子会所",
-          height: 0,
-        },
-      ],
-    };
-  },
-  mounted() {
-    this.initWaterfall();
-  },
-  methods: {
-    // 初始化瀑布流
-    initWaterfall() {
-      // 重置列数据
-      this.columns = [[], []];
-      this.columnHeights = [0, 0];
+<script setup>
+import { ref, onMounted } from "vue";
+import { getFeedPostPage } from "@/api/activity.js";
 
-      // 分配数据到列
-      this.merchantData.forEach((item) => {
-        // 找到高度最小的列
-        const minHeightIndex =
-          this.columnHeights[0] <= this.columnHeights[1] ? 0 : 1;
+// 响应式数据
+const columns = ref([[], []]);
+const columnHeights = ref([0, 0]);
+const loading = ref(false);
 
-        // 添加到对应列
-        this.columns[minHeightIndex].push(item);
+// 商家数据
+const merchantData = ref([]);
 
-        // 模拟高度（实际项目中应该根据图片实际高度计算）
-        const estimatedHeight = this.getEstimatedHeight(item);
-        this.columnHeights[minHeightIndex] += estimatedHeight;
-      });
-    },
+// 获取商家数据
+const fetchMerchantData = async () => {
+  try {
+    loading.value = true;
+    const response = await getFeedPostPage({
+      pageSize: 10,
+      pageNum: 1,
+    });
 
-    // 估算卡片高度
-    getEstimatedHeight(item) {
-      // 根据不同的内容类型返回不同的估算高度
-      // 实际项目中应该根据图片加载后的实际高度
-      const baseHeight = 200;
-      const randomHeight = Math.random() * 150 + 100;
-      return baseHeight + randomHeight;
-    },
+    console.log("API响应数据:", response);
 
-    // 图片加载完成
-    onImageLoad(itemId, columnIndex, itemIndex) {
-      // 图片加载完成后可以获取实际高度并重新计算布局
-      console.log("Image loaded:", itemId);
-    },
+    // 确保返回的数据是数组格式
+    let dataArray = [];
 
-    // 处理卡片点击
-    handleCardClick(item) {
-      console.log("Card clicked:", item);
-      // 可以跳转到详情页或执行其他操作
-      uni.showToast({
-        title: item.merchantName,
-        icon: "none",
-      });
-    },
-  },
+    // 根据不同的数据结构进行处理
+    if (response && response.rows && Array.isArray(response.rows.list)) {
+      dataArray = response.rows.list;
+    } else if (response && response.rows && Array.isArray(response.rows)) {
+      dataArray = response.rows;
+    } else if (response && Array.isArray(response)) {
+      dataArray = response;
+    } else {
+      console.warn("API返回的数据格式不正确:", response);
+      dataArray = [];
+    }
+
+    merchantData.value = dataArray;
+    console.log("处理后的商家数据:", merchantData.value);
+
+    // 获取数据后初始化瀑布流
+    initWaterfall();
+  } catch (error) {
+    console.error("获取商家数据失败:", error);
+    merchantData.value = [];
+    uni.showToast({
+      title: "获取数据失败",
+      icon: "none",
+    });
+  } finally {
+    loading.value = false;
+  }
 };
+
+// 初始化瀑布流
+const initWaterfall = () => {
+  // 重置列数据
+  columns.value = [[], []];
+  columnHeights.value = [0, 0];
+
+  // 确保 merchantData.value 是数组
+  if (!Array.isArray(merchantData.value)) {
+    console.warn("merchantData.value is not an array:", merchantData.value);
+    return;
+  }
+
+  // 分配数据到列
+  merchantData.value.forEach((item) => {
+    // 找到高度最小的列
+    const minHeightIndex =
+      columnHeights.value[0] <= columnHeights.value[1] ? 0 : 1;
+    // 添加到对应列
+    columns.value[minHeightIndex].push(item);
+    // 模拟高度（实际项目中应该根据图片实际高度计算）
+    const estimatedHeight = getEstimatedHeight(item);
+    columnHeights.value[minHeightIndex] += estimatedHeight;
+  });
+};
+
+// 估算卡片高度
+const getEstimatedHeight = (item) => {
+  // 根据不同的内容类型返回不同的估算高度
+  // 实际项目中应该根据图片加载后的实际高度
+  const baseHeight = 200;
+  const randomHeight = Math.random() * 150 + 100;
+  return baseHeight + randomHeight;
+};
+
+// 图片加载完成
+const onImageLoad = (itemId, columnIndex, itemIndex) => {
+  // 图片加载完成后可以获取实际高度并重新计算布局
+  console.log("Image loaded:", itemId);
+};
+
+// 处理卡片点击
+const handleCardClick = (item) => {
+  console.log("Card clicked:", item);
+  // 可以跳转到详情页或执行其他操作
+  uni.showToast({
+    title: item.merchantName,
+    icon: "none",
+  });
+};
+
+// 组件挂载时获取数据
+onMounted(() => {
+  fetchMerchantData();
+});
 </script>
 
 <style lang="scss" scoped>
