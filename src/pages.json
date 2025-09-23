@@ -63,6 +63,13 @@
         "navigationBarTitleText": "团队亮相",
         "navigationBarBackgroundColor": "#ffffff"
       }
+    },
+    {
+      "path": "pages/productservice/index",
+      "style": {
+        "navigationBarTitleText": "产品服务",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
     }
   ],
   "globalStyle": {
@@ -84,13 +91,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/clientevaluation/index",
-        "iconPath": "static/customer.png",
-        "selectedIconPath": "static/customerActive.png",
-        "text": "客户说"
-      },
-      {
-        "pagePath": "pages/serve/index",
+        "pagePath": "pages/productservice/index",
         "iconPath": "static/serve.png",
         "selectedIconPath": "static/serveActive.png",
         "text": "服务"

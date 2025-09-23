@@ -124,7 +124,7 @@
 }
 .swiper-container.data-v-46fe8b1b {
   width: 100%;
-  height: 935rpx;
+  height: 391rpx;
 }
 .swiper-item.data-v-46fe8b1b {
   position: relative;
@@ -159,20 +159,17 @@
   text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.5);
 }
 
-/**品牌故事 */
+/**线上获客 */
 .brand-story.data-v-46fe8b1b {
   background: #ffffff;
-  padding: 80rpx 48rpx;
+  padding: 80rpx 26rpx;
   color: #000000;
-  position: relative;
+  margin-top: 80rpx;
 }
 .brand-story-title.data-v-46fe8b1b {
   font-size: 40rpx;
   font-weight: bold;
-}
-.brand-story-content.data-v-46fe8b1b {
-  font-size: 26rpx;
-  margin: 24rpx 0 81rpx 0;
+  text-align: center;
 }
 .brand-story-decoration.data-v-46fe8b1b {
   position: absolute;
@@ -180,17 +177,34 @@
   top: 16rpx;
   z-index: 0;
 }
+.brand-story-content.data-v-46fe8b1b {
+  width: 698rpx;
+  height: 380rpx;
+}
+.brand-story-content image.data-v-46fe8b1b {
+  width: 100%;
+  height: 100%;
+  margin-top: 38rpx;
+}
 
 /**团队亮相 */
 .teamappearance.data-v-46fe8b1b {
-  padding: 40rpx 0;
+  padding: 80rpx 0;
 }
 .teamappearance-title.data-v-46fe8b1b {
   color: #000000;
   font-size: 40rpx;
   font-weight: bold;
-  margin-bottom: 30rpx;
-  padding: 0 26rpx;
+  margin-bottom: 38rpx;
+  text-align: center;
+}
+.teamappearance-item-image.data-v-46fe8b1b {
+  width: 440rpx;
+  height: 260rpx;
+}
+.teamappearance-item-image image.data-v-46fe8b1b {
+  width: 100%;
+  height: 100%;
 }
 .teamappearance-content.data-v-46fe8b1b {
   display: flex;
@@ -208,28 +222,23 @@
   scrollbar-width: none;
 }
 .teamappearance-item.data-v-46fe8b1b {
-  background: #ffffff;
+  background: #f7f7f7;
   border-radius: 20rpx;
   flex-shrink: 0;
-  width: 650rpx;
+  width: 440rpx;
   margin-right: 20rpx;
 }
 .teamappearance-item.data-v-46fe8b1b:last-child {
   margin-right: 26rpx;
 }
-.teamappearance-item-title.data-v-46fe8b1b {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #000000;
-  margin: 24rpx 30rpx 0 30rpx;
-}
 .teamappearance-item-content.data-v-46fe8b1b {
-  padding: 24rpx 30rpx 76rpx 24rpx;
+  padding: 18rpx 18rpx;
+  color: #3d3d3d;
+  font-size: 22rpx;
 }
 .certificate.data-v-46fe8b1b {
   background: #ffffff;
-  padding: 80rpx 0;
-  margin-top: 80rpx;
+  padding: 30rpx 0;
 }
 .certificate-title.data-v-46fe8b1b {
   font-size: 40rpx;
@@ -279,7 +288,6 @@
 /**合作商 */
 .businesspartner.data-v-46fe8b1b {
   padding: 80rpx 0;
-  margin-top: 80rpx;
 }
 .businesspartner-list.data-v-46fe8b1b {
   margin-top: 40rpx;
@@ -318,4 +326,31 @@
   height: 100%;
   -o-object-fit: contain;
      object-fit: contain;
+}
+
+/**系统服务 */
+.systemservice.data-v-46fe8b1b {
+  margin-top: 100rpx;
+}
+.systemservice-title.data-v-46fe8b1b {
+  color: #000000;
+  font-size: 40rpx;
+  font-weight: bold;
+  text-align: center;
+}
+.exhibition.data-v-46fe8b1b {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+}
+.exhibition1.data-v-46fe8b1b {
+  text-align: center;
+  margin-top: 38rpx;
+}
+.exhibition-title.data-v-46fe8b1b {
+  color: #3d3d3d;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-top: 24rpx;
 }

@@ -109,9 +109,6 @@ const _sfc_main = {
     const onBannerClick = (item, index) => {
       console.log("Banner clicked:", item, index);
     };
-    const handleContactClick = () => {
-      console.log("Contact clicked");
-    };
     common_vendor.onPageScroll((e) => {
       showHeaderBg.value = e.scrollTop > 50;
     });
@@ -143,24 +140,20 @@ const _sfc_main = {
             c: common_vendor.o(($event) => goToSlide(index), index)
           };
         }),
-        e: common_vendor.o(handleContactClick),
-        f: common_vendor.o(handleContactClick),
-        g: common_vendor.o(handleContactClick),
-        h: common_vendor.f(teamList.value, (team, index, i0) => {
+        e: common_vendor.f(teamList.value, (team, index, i0) => {
           return {
             a: team.image,
-            b: common_vendor.t(team.title),
-            c: common_vendor.t(team.content),
-            d: index
+            b: common_vendor.t(team.content),
+            c: index
           };
         }),
-        i: common_vendor.f(certificateList.value, (certificate, index, i0) => {
+        f: common_vendor.f(certificateList.value, (certificate, index, i0) => {
           return {
             a: certificate.image,
             b: index
           };
         }),
-        j: common_vendor.f(businessPartnerList.value, (partner, index, i0) => {
+        g: common_vendor.f(businessPartnerList.value, (partner, index, i0) => {
           return {
             a: partner.image,
             b: index

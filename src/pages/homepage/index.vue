@@ -64,7 +64,7 @@
           天天拓客是一家集网络营销、导客软件开发、互联网服务于一体的创新科技公司。核心团队服务于全国400多家服务行业媒体公司。历经一年的技术研发与沉淀，形成针对中小企业行业营销的线上流量整体解决方案。
         </text>
       </view>
-      <view class="company-btn">
+      <!-- <view class="company-btn">
         <button class="contact-btn" @click="handleContactClick">
           <image
             src="http://cdn.xiaodingdang1.com/2025/09/12/82c65b95ac1e4e29bc18d3efd67b0933.png"
@@ -80,53 +80,77 @@
             src="http://cdn.xiaodingdang1.com/2025/09/12/29846ffbc5d54aaca318f5b1723fffff.png"
           ></image>
         </button>
-      </view>
+      </view> -->
     </view>
     <view class="brand-story">
       <view class="brand-story-title">品牌故事</view>
-      <view class="brand-story-content"
-        >我们为什么专注月子中心赛道？我们的使命是什么？</view
-      >
-      <image
-        src="http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png"
-        style="width: 100%; height: 498rpx; z-index: 999"
-      ></image>
-      <image
-        src="http://cdn.xiaodingdang1.com/2025/09/17/dff756b4214e4fdb94a2a803a38a16fa.png"
-        style="width: 400rpx; height: 400rpx"
-        class="brand-story-decoration"
-      ></image>
-    </view>
-    <view class="teamappearance">
-      <view class="teamappearance-title">团队亮相</view>
-      <view class="teamappearance-content">
-        <view
-          v-for="(team, index) in teamList"
-          :key="index"
-          class="teamappearance-item"
-        >
-          <image
-            :src="team.image"
-            style="width: 100%; height: 650rpx; border-radius: 20rpx"
-          ></image>
-          <view class="teamappearance-item-title">{{ team.title }}</view>
-          <view class="teamappearance-item-content">{{ team.content }}</view>
-          <view></view>
+      <view class="brand-story-content">
+        <image
+          src="http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png"
+        ></image>
+      </view>
+      <view class="systemservice">
+        <view class="systemservice-title">系统服务</view>
+        <view class="exhibition">
+          <view class="exhibition1">
+            <image
+              src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
+              style="width: 330rpx; height: 330rpx"
+            ></image>
+            <view class="exhibition-title">抖音获客</view>
+          </view>
+          <view class="exhibition1">
+            <image
+              src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
+              style="width: 330rpx; height: 330rpx"
+            ></image>
+            <view class="exhibition-title">签单系统</view>
+          </view>
+          <view class="exhibition1">
+            <image
+              src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
+              style="width: 330rpx; height: 330rpx"
+            ></image>
+            <view class="exhibition-title">排房系统</view>
+          </view>
+          <view class="exhibition1">
+            <image
+              src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
+              style="width: 330rpx; height: 330rpx"
+            ></image>
+            <view class="exhibition-title">管理系统</view>
+          </view>
+        </view>
+      </view>
+      <view class="teamappearance">
+        <view class="teamappearance-title">公司动态</view>
+        <view class="teamappearance-content">
+          <view
+            v-for="(team, index) in teamList"
+            :key="index"
+            class="teamappearance-item"
+          >
+            <view class="teamappearance-item-image">
+              <image :src="team.image"></image>
+            </view>
+            <view class="teamappearance-item-content">{{ team.content }}</view>
+          </view>
+        </view>
+      </view>
+      <view class="certificate">
+        <view class="certificate-title">荣誉证书</view>
+        <view class="certificate-list">
+          <view
+            v-for="(certificate, index) in certificateList"
+            :key="index"
+            class="certificate-item"
+          >
+            <image :src="certificate.image" mode="aspectFit"></image>
+          </view>
         </view>
       </view>
     </view>
-    <view class="certificate">
-      <view class="certificate-title">荣誉证书</view>
-      <view class="certificate-list">
-        <view
-          v-for="(certificate, index) in certificateList"
-          :key="index"
-          class="certificate-item"
-        >
-          <image :src="certificate.image" mode="aspectFit"></image>
-        </view>
-      </view>
-    </view>
+
     <view class="businesspartner">
       <view class="certificate-title">合作商家</view>
       <view class="businesspartner-list">
@@ -413,7 +437,7 @@ onPageScroll((e) => {
 
 .swiper-container {
   width: 100%;
-  height: 935rpx;
+  height: 391rpx;
 }
 
 .swiper-item {
@@ -451,20 +475,17 @@ onPageScroll((e) => {
   line-height: 1.4;
   text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.5);
 }
-/**品牌故事 */
+/**线上获客 */
 .brand-story {
   background: #ffffff;
-  padding: 80rpx 48rpx;
+  padding: 80rpx 26rpx;
   color: #000000;
-  position: relative;
+  margin-top: 80rpx;
 }
 .brand-story-title {
   font-size: 40rpx;
   font-weight: bold;
-}
-.brand-story-content {
-  font-size: 26rpx;
-  margin: 24rpx 0 81rpx 0;
+  text-align: center;
 }
 .brand-story-decoration {
   position: absolute;
@@ -472,16 +493,33 @@ onPageScroll((e) => {
   top: 16rpx;
   z-index: 0;
 }
+.brand-story-content {
+  width: 698rpx;
+  height: 380rpx;
+}
+.brand-story-content image {
+  width: 100%;
+  height: 100%;
+  margin-top: 38rpx;
+}
 /**团队亮相 */
 .teamappearance {
-  padding: 40rpx 0;
+  padding: 80rpx 0;
 }
 .teamappearance-title {
   color: #000000;
   font-size: 40rpx;
   font-weight: bold;
-  margin-bottom: 30rpx;
-  padding: 0 26rpx;
+  margin-bottom: 38rpx;
+  text-align: center;
+}
+.teamappearance-item-image {
+  width: 440rpx;
+  height: 260rpx;
+}
+.teamappearance-item-image image {
+  width: 100%;
+  height: 100%;
 }
 .teamappearance-content {
   display: flex;
@@ -498,28 +536,23 @@ onPageScroll((e) => {
   scrollbar-width: none;
 }
 .teamappearance-item {
-  background: #ffffff;
+  background: #f7f7f7;
   border-radius: 20rpx;
   flex-shrink: 0;
-  width: 650rpx;
+  width: 440rpx;
   margin-right: 20rpx;
   &:last-child {
     margin-right: 26rpx;
   }
 }
-.teamappearance-item-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #000000;
-  margin: 24rpx 30rpx 0 30rpx;
-}
 .teamappearance-item-content {
-  padding: 24rpx 30rpx 76rpx 24rpx;
+  padding: 18rpx 18rpx;
+  color: #3d3d3d;
+  font-size: 22rpx;
 }
 .certificate {
   background: #ffffff;
-  padding: 80rpx 0;
-  margin-top: 80rpx;
+  padding: 30rpx 0;
 }
 .certificate-title {
   font-size: 40rpx;
@@ -567,7 +600,6 @@ onPageScroll((e) => {
 /**合作商 */
 .businesspartner {
   padding: 80rpx 0;
-  margin-top: 80rpx;
 }
 .businesspartner-list {
   margin-top: 40rpx;
@@ -605,5 +637,31 @@ onPageScroll((e) => {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+/**系统服务 */
+.systemservice {
+  margin-top: 100rpx;
+}
+.systemservice-title {
+  color: #000000;
+  font-size: 40rpx;
+  font-weight: bold;
+  text-align: center;
+}
+.exhibition {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+}
+.exhibition1 {
+  text-align: center;
+  margin-top: 38rpx;
+}
+.exhibition-title {
+  color: #3d3d3d;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-top: 24rpx;
 }
 </style>

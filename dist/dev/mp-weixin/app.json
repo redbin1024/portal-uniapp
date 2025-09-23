@@ -8,7 +8,8 @@
     "pages/case/index",
     "pages/casedetails/index",
     "pages/waterfall-demo/index",
-    "pages/teamIntroduction/index"
+    "pages/teamIntroduction/index",
+    "pages/productservice/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -29,13 +30,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/clientevaluation/index",
-        "iconPath": "static/customer.png",
-        "selectedIconPath": "static/customerActive.png",
-        "text": "客户说"
-      },
-      {
-        "pagePath": "pages/serve/index",
+        "pagePath": "pages/productservice/index",
         "iconPath": "static/serve.png",
         "selectedIconPath": "static/serveActive.png",
         "text": "服务"
