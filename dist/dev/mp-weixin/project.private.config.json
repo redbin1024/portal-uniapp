@@ -3,11 +3,53 @@
 		"miniprogram": {
 			"list": [
 				{
-					"name": "pages/productservice/index",
-					"pathName": "pages/productservice/index",
+					"name": "pages/case/index",
+					"pathName": "pages/case/index",
 					"query": "",
 					"scene": null,
 					"launchMode": "default"
+				},
+				{
+					"name": "pages/cooperationcase/index",
+					"pathName": "pages/cooperationcase/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/recentdetails/index",
+					"pathName": "pages/recentdetails/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/recentUpdates/index",
+					"pathName": "pages/recentUpdates/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/cooperationcase/index",
+					"pathName": "pages/cooperationcase/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/cooperationcase/index",
+					"pathName": "pages/cooperationcase/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/productservice/index",
+					"pathName": "pages/productservice/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
 				}
 			]
 		}

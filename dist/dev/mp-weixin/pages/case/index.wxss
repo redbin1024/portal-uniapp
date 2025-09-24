@@ -9,15 +9,88 @@
   border-radius: 16rpx;
   height: 270rpx;
   padding: 0 24rpx;
+  padding-top: 40rpx;
   margin-bottom: 62rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
   position: relative;
+  /* 初始状态 - 隐藏和向下偏移 */
+  opacity: 0;
+  transform: translateY(80rpx) scale(0.85);
+  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation-fill-mode: both;
+}
+
+/* 动画激活状态 - 增强弹出效果 */
+.list-item.animate-up.data-v-2786c006 {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: bounceInUp-2786c006 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 弹跳向上动画关键帧 */
+@keyframes bounceInUp-2786c006 {
+0% {
+    opacity: 0;
+    transform: translateY(80rpx) scale(0.85);
+}
+20% {
+    opacity: 0.6;
+    transform: translateY(-20rpx) scale(1.08);
+}
+40% {
+    opacity: 0.8;
+    transform: translateY(12rpx) scale(0.95);
+}
+60% {
+    opacity: 0.95;
+    transform: translateY(-8rpx) scale(1.03);
+}
+80% {
+    opacity: 1;
+    transform: translateY(4rpx) scale(0.98);
+}
+100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
 }
 .image-container.data-v-2786c006 {
   flex-shrink: 0;
   margin-right: 24rpx;
   position: relative;
   top: -36rpx; /* 图片高出列表50rpx */
+  /* 为图片容器添加增强的弹出动画效果 */
+  opacity: 0;
+  transform: translateY(40rpx) scale(0.7) rotate(-5deg);
+  transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s;
+}
+.list-item.animate-up .image-container.data-v-2786c006 {
+  opacity: 1;
+  transform: translateY(-36rpx) scale(1) rotate(0deg);
+  animation: imagePopIn-2786c006 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s;
+}
+
+/* 图片弹入动画 */
+@keyframes imagePopIn-2786c006 {
+0% {
+    opacity: 0;
+    transform: translateY(40rpx) scale(0.7) rotate(-5deg);
+}
+30% {
+    opacity: 0.8;
+    transform: translateY(-50rpx) scale(1.15) rotate(2deg);
+}
+60% {
+    opacity: 1;
+    transform: translateY(-30rpx) scale(0.95) rotate(-1deg);
+}
+80% {
+    transform: translateY(-40rpx) scale(1.05) rotate(0.5deg);
+}
+100% {
+    opacity: 1;
+    transform: translateY(-36rpx) scale(1) rotate(0deg);
+}
 }
 .item-image.data-v-2786c006 {
   width: 214rpx;
@@ -31,6 +104,39 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  /* 为内容容器添加增强的弹出动画效果 */
+  opacity: 0;
+  transform: translateY(50rpx) translateX(30rpx) scale(0.9);
+  transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s;
+}
+.list-item.animate-up .content-container.data-v-2786c006 {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+  animation: contentSlideIn-2786c006 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s;
+}
+
+/* 内容滑入动画 */
+@keyframes contentSlideIn-2786c006 {
+0% {
+    opacity: 0;
+    transform: translateY(50rpx) translateX(30rpx) scale(0.9);
+}
+25% {
+    opacity: 0.7;
+    transform: translateY(-10rpx) translateX(-5rpx) scale(1.05);
+}
+50% {
+    opacity: 0.9;
+    transform: translateY(8rpx) translateX(3rpx) scale(0.98);
+}
+75% {
+    opacity: 1;
+    transform: translateY(-3rpx) translateX(-1rpx) scale(1.01);
+}
+100% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+}
 }
 .title.data-v-2786c006 {
   height: 80rpx;
@@ -39,10 +145,38 @@
   font-weight: 600;
   color: #333333;
   margin-bottom: 12rpx;
+  /* 为标题添加单独的动画效果 */
+  transform: translateY(20rpx);
+  opacity: 0;
+  transition: all 0.6s ease-out 0.4s;
+}
+.list-item.animate-up .title.data-v-2786c006 {
+  transform: translateY(0);
+  opacity: 1;
 }
 .description.data-v-2786c006 {
   font-size: 22rpx;
   color: #7e7f80;
   line-height: 1.5;
   word-break: break-all;
+  /* 为描述文字添加单独的动画效果 */
+  transform: translateY(20rpx);
+  opacity: 0;
+  transition: all 0.6s ease-out 0.5s;
+}
+.list-item.animate-up .description.data-v-2786c006 {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* 添加悬停效果增强交互性 */
+.list-item.animate-up.data-v-2786c006:hover {
+  transform: translateY(-8rpx) scale(1.02);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 添加点击效果 */
+.list-item.animate-up.data-v-2786c006:active {
+  transform: translateY(-4rpx) scale(0.98);
+  transition: all 0.1s ease-out;
 }

@@ -1,0 +1,99 @@
+
+.rotate-carousel.data-v-394d6a52 {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  perspective: 5000rpx;
+}
+.carousel-container.data-v-394d6a52 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease-out;
+  overflow: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+.carousel-item.data-v-394d6a52 {
+  position: absolute;
+  width: 520rpx;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  margin-left: -260rpx;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  backface-visibility: visible;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50% -155rpx;
+  opacity: 1;
+  will-change: transform, opacity, z-index;
+  pointer-events: none;
+  perspective: 1000rpx;
+  transform-box: preserve-3d;
+}
+.carousel-item-content.data-v-394d6a52 {
+  width: 100%;
+  height: 100%;
+  border-radius: 20rpx;
+  box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  pointer-events: auto;
+  transform: translateZ(1px);
+}
+
+/* 确保插槽的直接子元素(常见类型)能正确显示并填充 */
+.carousel-item-content.data-v-394d6a52  > view,
+.carousel-item-content.data-v-394d6a52  > image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 保留对 image 的特定样式 */
+.carousel-item-content.data-v-394d6a52 image {
+  -o-object-fit: cover;
+     object-fit: cover; /* 确保图片覆盖 */
+}
+.carousel-indicators.data-v-394d6a52 {
+  position: absolute;
+  bottom: 6rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16rpx;
+  z-index: 9999;
+  pointer-events: auto;
+  backface-visibility: visible;
+  transform-style: preserve-3d;
+  flex-wrap: nowrap; /* 显式禁止换行 */
+}
+.indicator-dot.data-v-394d6a52 {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  transition: all 0.5s ease;
+  cursor: pointer;
+  box-shadow: 0 0 4rpx rgba(0, 0, 0, 0.2);
+}
+.indicator-dot.active.data-v-394d6a52 {
+  background-color: #ffffff;
+  transform: scale(1.2);
+}
+.indicator-line.data-v-394d6a52 {
+  width: 24rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+  background-color: rgba(255, 255, 255, 0.7);
+  transition: all 0.5s ease;
+  cursor: pointer;
+  box-shadow: 0 0 4rpx rgba(0, 0, 0, 0.2);
+}
+.indicator-line.active.data-v-394d6a52 {
+  width: 32rpx;
+  background-color: #ffffff;
+}

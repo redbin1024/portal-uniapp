@@ -9,8 +9,12 @@ if (!Math) {
   "./pages/clientevaluation/index.js";
   "./pages/case/index.js";
   "./pages/casedetails/index.js";
+  "./pages/waterfall-demo/index.js";
   "./pages/teamIntroduction/index.js";
   "./pages/productservice/index.js";
+  "./pages/cooperationcase/index.js";
+  "./pages/recentUpdates/index.js";
+  "./pages/recentdetails/index.js";
 }
 const _sfc_main = {
   name: "App",

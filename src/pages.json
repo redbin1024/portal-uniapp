@@ -70,6 +70,27 @@
         "navigationBarTitleText": "产品服务",
         "navigationBarBackgroundColor": "#ffffff"
       }
+    },
+    {
+      "path": "pages/cooperationcase/index",
+      "style": {
+        "navigationBarTitleText": "合作案例",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/recentUpdates/index",
+      "style": {
+        "navigationBarTitleText": "最近动态",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/recentdetails/index",
+      "style": {
+        "navigationBarTitleText": "最近动态",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
     }
   ],
   "globalStyle": {
@@ -97,7 +118,7 @@
         "text": "服务"
       },
       {
-        "pagePath": "pages/case/index",
+        "pagePath": "pages/cooperationcase/index",
         "iconPath": "static/case.png",
         "selectedIconPath": "static/caseActive.png",
         "text": "案例"

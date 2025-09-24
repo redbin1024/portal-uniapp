@@ -550,6 +550,7 @@ onPageScroll((e) => {
   color: #3d3d3d;
   font-size: 22rpx;
 }
+
 .certificate {
   background: #ffffff;
   padding: 30rpx 0;

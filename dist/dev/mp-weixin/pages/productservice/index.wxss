@@ -41,6 +41,7 @@
   flex-wrap: wrap;
   justify-content: space-around;
   width: 100%;
+  padding-bottom: 50rpx;
 }
 .exhibition1.data-v-46391859 {
   text-align: center;
@@ -51,4 +52,8 @@
   font-size: 32rpx;
   font-weight: bold;
   margin-top: 24rpx;
+}
+.right-img.data-v-46391859 {
+  width: 42rpx;
+  height: 8rpx;
 }

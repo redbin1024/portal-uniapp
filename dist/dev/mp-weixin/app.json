@@ -9,7 +9,10 @@
     "pages/casedetails/index",
     "pages/waterfall-demo/index",
     "pages/teamIntroduction/index",
-    "pages/productservice/index"
+    "pages/productservice/index",
+    "pages/cooperationcase/index",
+    "pages/recentUpdates/index",
+    "pages/recentdetails/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -36,7 +39,7 @@
         "text": "服务"
       },
       {
-        "pagePath": "pages/case/index",
+        "pagePath": "pages/cooperationcase/index",
         "iconPath": "static/case.png",
         "selectedIconPath": "static/caseActive.png",
         "text": "案例"

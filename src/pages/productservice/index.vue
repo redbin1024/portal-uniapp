@@ -2,7 +2,10 @@
   <view class="main">
     <view class="head">
       <view class="left-title">线上获客</view>
-      <view>签单系统</view>
+      <image
+        src="http://cdn.xiaodingdang1.com/2025/09/24/64d13bbac4424748b870ac3ad288bfb4.png"
+        class="right-img"
+      ></image>
     </view>
     <view class="offrule">
       <view class="offrule1"></view>
@@ -14,7 +17,10 @@
     </view>
     <view class="head">
       <view class="left-title">系统服务</view>
-      <view>签单系统</view>
+      <image
+        src="http://cdn.xiaodingdang1.com/2025/09/24/64d13bbac4424748b870ac3ad288bfb4.png"
+        class="right-img"
+      ></image>
     </view>
     <view class="offrule">
       <view class="offrule1"></view>
@@ -101,6 +107,7 @@ export default {
   flex-wrap: wrap;
   justify-content: space-around;
   width: 100%;
+  padding-bottom: 50rpx;
 }
 .exhibition1 {
   text-align: center;
@@ -111,5 +118,9 @@ export default {
   font-size: 32rpx;
   font-weight: bold;
   margin-top: 24rpx;
+}
+.right-img {
+  width: 42rpx;
+  height: 8rpx;
 }
 </style>
