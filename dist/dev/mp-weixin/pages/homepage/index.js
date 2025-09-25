@@ -3,6 +3,84 @@ const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   __name: "index",
   setup(__props) {
+    const buttonsVisible = common_vendor.ref(false);
+    const titleVisible = common_vendor.ref(false);
+    const headContentVisible = common_vendor.ref({});
+    const content1Visible = common_vendor.ref([]);
+    common_vendor.onMounted(() => {
+      setTimeout(() => {
+        buttonsVisible.value = true;
+      }, 400);
+      setTimeout(() => {
+        checkTitleVisibility();
+        checkHeadContentVisibility();
+        checkContent1Visibility();
+        checkImageVisibility();
+      }, 100);
+    });
+    common_vendor.ref([]);
+    const checkTitleVisibility = () => {
+      if (titleVisible.value) {
+        return;
+      }
+      const query = common_vendor.index.createSelectorQuery();
+      query.selectAll(".winthecustomer-title").boundingClientRect((rects) => {
+        if (rects && rects.length > 0) {
+          rects.forEach((rect, index) => {
+            common_vendor.index.getSystemInfo({
+              success: (res) => {
+                const windowHeight = res.windowHeight;
+                if (rect.top < windowHeight * 0.85 && rect.bottom > 0 && !titleVisible.value) {
+                  setTimeout(() => {
+                    titleVisible.value = true;
+                  }, index * 300);
+                }
+              }
+            });
+          });
+        }
+      }).exec();
+    };
+    const checkHeadContentVisibility = () => {
+      const query = common_vendor.index.createSelectorQuery();
+      query.selectAll(".headContent").boundingClientRect((rects) => {
+        if (rects && rects.length > 0) {
+          rects.forEach((rect, index) => {
+            common_vendor.index.getSystemInfo({
+              success: (res) => {
+                const windowHeight = res.windowHeight;
+                if (rect.top < windowHeight * 0.8 && rect.bottom > 0) {
+                  setTimeout(() => {
+                    headContentVisible.value[index] = true;
+                  }, index * 300);
+                }
+              }
+            });
+          });
+        }
+      }).exec();
+    };
+    const checkContent1Visibility = () => {
+      const query = common_vendor.index.createSelectorQuery();
+      query.selectAll(".winthecustomer-content1").boundingClientRect((rects) => {
+        if (rects && rects.length > 0) {
+          rects.forEach((rect, index) => {
+            common_vendor.index.getSystemInfo({
+              success: (res) => {
+                const windowHeight = res.windowHeight;
+                if (rect.top < windowHeight * 1 && rect.bottom > 0) {
+                  setTimeout(() => {
+                    if (!content1Visible.value[index]) {
+                      content1Visible.value[index] = true;
+                    }
+                  }, index * 200);
+                }
+              }
+            });
+          });
+        }
+      }).exec();
+    };
     const bannerList = common_vendor.ref([
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png",
@@ -109,8 +187,15 @@ const _sfc_main = {
     const onBannerClick = (item, index) => {
       console.log("Banner clicked:", item, index);
     };
+    const handleContactClick = () => {
+      console.log("Contact clicked");
+    };
     common_vendor.onPageScroll((e) => {
       showHeaderBg.value = e.scrollTop > 50;
+      checkTitleVisibility();
+      checkHeadContentVisibility();
+      checkContent1Visibility();
+      checkImageVisibility();
     });
     return (_ctx, _cache) => {
       return {
@@ -140,20 +225,40 @@ const _sfc_main = {
             c: common_vendor.o(($event) => goToSlide(index), index)
           };
         }),
-        e: common_vendor.f(teamList.value, (team, index, i0) => {
+        e: buttonsVisible.value ? 1 : "",
+        f: buttonsVisible.value ? 1 : "",
+        g: common_vendor.o(handleContactClick),
+        h: buttonsVisible.value ? 1 : "",
+        i: buttonsVisible.value ? 1 : "",
+        j: common_vendor.o(handleContactClick),
+        k: buttonsVisible.value ? 1 : "",
+        l: buttonsVisible.value ? 1 : "",
+        m: common_vendor.o(handleContactClick),
+        n: titleVisible.value ? 1 : "",
+        o: titleVisible.value ? 1 : "",
+        p: common_vendor.f([1, 2, 3, 4, 5, 6], (item, index, i0) => {
+          return {
+            a: index,
+            b: content1Visible.value[index] ? 1 : ""
+          };
+        }),
+        q: headContentVisible.value[0] ? 1 : "",
+        r: common_vendor.f(teamList.value, (team, index, i0) => {
           return {
             a: team.image,
             b: common_vendor.t(team.content),
             c: index
           };
         }),
-        f: common_vendor.f(certificateList.value, (certificate, index, i0) => {
+        s: headContentVisible.value[1] ? 1 : "",
+        t: common_vendor.f(certificateList.value, (certificate, index, i0) => {
           return {
             a: certificate.image,
             b: index
           };
         }),
-        g: common_vendor.f(businessPartnerList.value, (partner, index, i0) => {
+        v: headContentVisible.value[2] ? 1 : "",
+        w: common_vendor.f(businessPartnerList.value, (partner, index, i0) => {
           return {
             a: partner.image,
             b: index

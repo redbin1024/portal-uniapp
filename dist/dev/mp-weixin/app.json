@@ -12,7 +12,10 @@
     "pages/productservice/index",
     "pages/cooperationcase/index",
     "pages/recentUpdates/index",
-    "pages/recentdetails/index"
+    "pages/recentdetails/index",
+    "pages/productservicenew/index",
+    "pages/customer/index",
+    "pages/dynamicdetails/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -33,16 +36,22 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/productservice/index",
+        "pagePath": "pages/productservicenew/index",
         "iconPath": "static/serve.png",
         "selectedIconPath": "static/serveActive.png",
-        "text": "服务"
+        "text": "产品服务"
       },
       {
         "pagePath": "pages/cooperationcase/index",
         "iconPath": "static/case.png",
         "selectedIconPath": "static/caseActive.png",
-        "text": "案例"
+        "text": "合作案例"
+      },
+      {
+        "pagePath": "pages/clientevaluation/index",
+        "iconPath": "static/customer.png",
+        "selectedIconPath": "static/customerActive.png",
+        "text": "动态"
       }
     ]
   },

@@ -3,7 +3,7 @@
     <!-- 瀑布流内容区域 -->
     <view class="waterfall-container">
       <!-- 固定头部区域 -->
-      <view class="fixed-header">
+      <!-- <view class="fixed-header">
         <view class="header-content">
           <text class="main-title">真实合作商家 </text>
           <view class="chat-icon">
@@ -15,7 +15,7 @@
           </view>
         </view>
         <text class="sub-title">看看他们的评价吧~</text>
-      </view>
+      </view> -->
       <view
         class="waterfall-column"
         v-for="(column, columnIndex) in columns"
@@ -149,11 +149,8 @@ const onImageLoad = (itemId, columnIndex, itemIndex) => {
 
 // 处理卡片点击
 const handleCardClick = (item) => {
-  console.log("Card clicked:", item);
-  // 可以跳转到详情页或执行其他操作
-  uni.showToast({
-    title: item.merchantName,
-    icon: "none",
+  uni.navigateTo({
+    url: "/",
   });
 };
 
@@ -243,8 +240,6 @@ onMounted(() => {
   display: flex;
   padding: 0 16rpx;
   gap: 16rpx;
-  margin-top: 140rpx;
-
   .waterfall-column {
     flex: 1;
     display: flex;

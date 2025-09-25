@@ -1,0 +1,7 @@
+
+.content-img {
+  width: 750rpx;
+}
+.content-img image {
+  width: 100%;
+}

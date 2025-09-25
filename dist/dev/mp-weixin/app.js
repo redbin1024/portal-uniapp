@@ -15,6 +15,9 @@ if (!Math) {
   "./pages/cooperationcase/index.js";
   "./pages/recentUpdates/index.js";
   "./pages/recentdetails/index.js";
+  "./pages/productservicenew/index.js";
+  "./pages/customer/index.js";
+  "./pages/dynamicdetails/index.js";
 }
 const _sfc_main = {
   name: "App",

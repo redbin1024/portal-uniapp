@@ -91,7 +91,6 @@
   display: flex;
   padding: 0 16rpx;
   gap: 16rpx;
-  margin-top: 140rpx;
 }
 .waterfall-container .waterfall-column.data-v-dbba45b8 {
   flex: 1;

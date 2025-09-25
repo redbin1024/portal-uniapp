@@ -84,10 +84,8 @@ const _sfc_main = {
       console.log("Image loaded:", itemId);
     };
     const handleCardClick = (item) => {
-      console.log("Card clicked:", item);
-      common_vendor.index.showToast({
-        title: item.merchantName,
-        icon: "none"
+      common_vendor.index.navigateTo({
+        url: "/"
       });
     };
     common_vendor.onMounted(() => {
@@ -108,7 +106,7 @@ const _sfc_main = {
                 e: item.avatar,
                 f: common_vendor.t(item.nodeName),
                 g: item.id,
-                h: common_vendor.o(($event) => handleCardClick(item), item.id)
+                h: common_vendor.o(($event) => handleCardClick(), item.id)
               });
             }),
             b: columnIndex

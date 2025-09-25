@@ -109,10 +109,36 @@
   margin: 0;
   border: none !important;
   background: transparent;
+  transform: scale(0);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 .contact-btn image.data-v-46fe8b1b {
   width: 80rpx;
   height: 80rpx;
+}
+
+/* 按钮弹出动画 */
+.btn-animate.data-v-46fe8b1b {
+  transform: scale(1) !important;
+  opacity: 1 !important;
+}
+.btn-delay-1.data-v-46fe8b1b {
+  transition-delay: 0.1s;
+}
+.btn-delay-2.data-v-46fe8b1b {
+  transition-delay: 0.3s;
+}
+.btn-delay-3.data-v-46fe8b1b {
+  transition-delay: 0.5s;
+}
+
+/* 按钮悬停效果 */
+.contact-btn.data-v-46fe8b1b:hover {
+  transform: scale(1.1);
+}
+.btn-animate.data-v-46fe8b1b:hover {
+  transform: scale(1.1) !important;
 }
 
 /* 轮播图样式 */
@@ -162,7 +188,6 @@
 /**线上获客 */
 .brand-story.data-v-46fe8b1b {
   background: #ffffff;
-  padding: 80rpx 26rpx;
   color: #000000;
   margin-top: 80rpx;
 }
@@ -195,8 +220,8 @@
   color: #000000;
   font-size: 40rpx;
   font-weight: bold;
-  margin-bottom: 38rpx;
   text-align: center;
+  margin: 0 20rpx;
 }
 .teamappearance-item-image.data-v-46fe8b1b {
   width: 440rpx;
@@ -212,6 +237,7 @@
   scroll-behavior: smooth;
   padding: 0 26rpx;
   gap: 20rpx;
+  margin-top: 38rpx;
   /* 隐藏滚动条 */
 }
 .teamappearance-content.data-v-46fe8b1b::-webkit-scrollbar {
@@ -239,6 +265,7 @@
 .certificate.data-v-46fe8b1b {
   background: #ffffff;
   padding: 30rpx 0;
+  margin-top: 38rpx;
 }
 .certificate-title.data-v-46fe8b1b {
   font-size: 40rpx;
@@ -353,4 +380,197 @@
   font-size: 32rpx;
   font-weight: bold;
   margin-top: 24rpx;
+}
+
+/**线上获客 */
+.winthecustomer.data-v-46fe8b1b {
+  margin-top: 60rpx;
+}
+.winthecustomer-head.data-v-46fe8b1b {
+  height: 152rpx;
+  background: url("http://cdn.xiaodingdang1.com/2025/09/25/7cf1afc487d04a8d834b1bc6aac793b6.png") no-repeat center;
+  background-size: cover;
+  display: flex;
+}
+.winthecustomer-head1.data-v-46fe8b1b {
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  margin-left: 26rpx;
+}
+@keyframes popIn-46fe8b1b {
+0% {
+    transform: scale(0);
+    opacity: 0;
+}
+50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+}
+100% {
+    transform: scale(1);
+    opacity: 1;
+}
+}
+.winthecustomer-title.data-v-46fe8b1b {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 40rpx;
+  margin-left: 22rpx;
+  opacity: 0;
+  transform: translateY(-30rpx) scale(0.8);
+  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.title-fade-in.data-v-46fe8b1b {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+  animation: slowFadeInUp-46fe8b1b 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-fill-mode: forwards;
+}
+@keyframes slowFadeInUp-46fe8b1b {
+0% {
+    opacity: 0;
+    transform: translateY(-30rpx) scale(0.8);
+}
+25% {
+    opacity: 0.3;
+    transform: translateY(-15rpx) scale(0.9);
+}
+50% {
+    opacity: 0.6;
+    transform: translateY(-5rpx) scale(0.95);
+}
+75% {
+    opacity: 0.85;
+    transform: translateY(2rpx) scale(1.02);
+}
+100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+}
+.winthecustomer-line.data-v-46fe8b1b {
+  background: linear-gradient(to bottom, #dfebfb 30%, #ffffff 70%);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  margin-top: -60rpx;
+  padding: 38rpx 0 50rpx 0;
+  width: 100%;
+  text-align: center;
+}
+.winthecustomer-line image.data-v-46fe8b1b {
+  width: 698rpx;
+  height: 380rpx;
+  border-radius: 20rpx;
+}
+.winthecustomer-content.data-v-46fe8b1b {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background: linear-gradient(to bottom, #dfebfb 30%, #ffffff 70%);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  margin-top: -60rpx;
+  padding-bottom: 50rpx;
+}
+.winthecustomer-content1.data-v-46fe8b1b {
+  width: 350rpx;
+  background: #f2f6ff;
+  margin-top: 38rpx;
+  opacity: 0;
+  transform: translateX(-60rpx);
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.content1-animate.data-v-46fe8b1b {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  animation: fadeInLeft-46fe8b1b 0.8s;
+}
+@keyframes fadeInLeft-46fe8b1b {
+0% {
+    opacity: 0;
+    transform: translateX(-60rpx);
+}
+100% {
+    opacity: 1;
+    transform: translateX(0);
+}
+}
+.winthecustomer-content1 image.data-v-46fe8b1b {
+  width: 350rpx;
+  height: 350rpx;
+  border-radius: 20rpx;
+}
+.winthecustomer-content2.data-v-46fe8b1b {
+  width: 350rpx;
+  padding: 20rpx 0;
+  background: #f2f6ff;
+  color: #3d3d3d;
+  font-size: 32rpx;
+  text-align: center;
+  border-bottom-left-radius: 20rpx;
+  border-bottom-right-radius: 20rpx;
+}
+.headContent.data-v-46fe8b1b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20rpx);
+  transition: all 0.6s ease-out;
+}
+.headContent.headContent-animate.data-v-46fe8b1b {
+  opacity: 1;
+  transform: translateY(0);
+}
+.headLeft.data-v-46fe8b1b {
+  width: 142rpx;
+  height: 5rpx;
+  background: linear-gradient(90deg, rgba(216, 216, 216, 0) 0%, rgba(51, 51, 51, 0.5) 100%);
+  border-radius: 0rpx 0rpx 0rpx 0rpx;
+}
+.headRight.data-v-46fe8b1b {
+  width: 142rpx;
+  height: 5rpx;
+  background: linear-gradient(90deg, rgba(51, 51, 51, 0.5) 0%, rgba(216, 216, 216, 0) 100%);
+  border-radius: 0rpx 0rpx 0rpx 0rpx;
+}
+.introduce.data-v-46fe8b1b {
+  background: #ffffff;
+  padding: 63rpx 44rpx;
+  display: flex;
+  justify-content: space-between;
+}
+.introduce-title1.data-v-46fe8b1b {
+  color: #3d3d3d;
+  font-size: 21rpx;
+  font-weight: bold;
+}
+.introduce-title2.data-v-46fe8b1b {
+  color: #000000;
+  font-size: 18rpx;
+  margin-top: 8rpx;
+}
+.introduce-title3.data-v-46fe8b1b {
+  border: 1rpx solid #e2e2e2;
+  margin: 24rpx 0;
+}
+.introduce-title4.data-v-46fe8b1b {
+  color: #000000;
+  font-size: 21rpx;
+}
+.introduce-container5.data-v-46fe8b1b {
+  text-align: center;
+}
+.introduce-container5 image.data-v-46fe8b1b {
+  width: 152rpx;
+  height: 152rpx;
+}
+.introduce-container6.data-v-46fe8b1b {
+  color: #000000;
+  font-size: 18rpx;
+  margin-top: 18rpx;
+}
+wx-button.data-v-46fe8b1b {
+  border: none !important;
 }

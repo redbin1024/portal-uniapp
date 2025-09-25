@@ -64,32 +64,101 @@
           天天拓客是一家集网络营销、导客软件开发、互联网服务于一体的创新科技公司。核心团队服务于全国400多家服务行业媒体公司。历经一年的技术研发与沉淀，形成针对中小企业行业营销的线上流量整体解决方案。
         </text>
       </view>
-      <!-- <view class="company-btn">
-        <button class="contact-btn" @click="handleContactClick">
+      <view class="company-btn">
+        <button
+          class="contact-btn"
+          :class="{
+            'btn-animate': buttonsVisible,
+            'btn-delay-1': buttonsVisible,
+          }"
+          @click="handleContactClick"
+        >
           <image
             src="http://cdn.xiaodingdang1.com/2025/09/12/82c65b95ac1e4e29bc18d3efd67b0933.png"
           ></image>
         </button>
-        <button class="contact-btn" @click="handleContactClick">
+        <button
+          class="contact-btn"
+          :class="{
+            'btn-animate': buttonsVisible,
+            'btn-delay-2': buttonsVisible,
+          }"
+          @click="handleContactClick"
+        >
           <image
             src="http://cdn.xiaodingdang1.com/2025/09/12/3f38644e6fec4136958afa513bd8c96c.png"
           ></image>
         </button>
-        <button class="contact-btn" @click="handleContactClick">
+        <button
+          class="contact-btn"
+          :class="{
+            'btn-animate': buttonsVisible,
+            'btn-delay-3': buttonsVisible,
+          }"
+          @click="handleContactClick"
+        >
           <image
             src="http://cdn.xiaodingdang1.com/2025/09/12/29846ffbc5d54aaca318f5b1723fffff.png"
           ></image>
         </button>
-      </view> -->
+      </view>
+    </view>
+    <view class="winthecustomer">
+      <view class="winthecustomer-head">
+        <view class="winthecustomer-head1">
+          <image
+            src="http://cdn.xiaodingdang1.com/2025/09/25/f938be0b9c4e417d8a35a0e441fc8962.png"
+            style="width: 50rpx; height: 50rpx"
+          ></image>
+          <view
+            class="winthecustomer-title"
+            :class="{ 'title-fade-in': titleVisible }"
+            >线上获客</view
+          >
+        </view>
+      </view>
+      <view class="winthecustomer-line">
+        <image
+          src="http://cdn.xiaodingdang1.com/2025/09/25/86d0493187254bbb9969aeca66046f29.png"
+        ></image>
+      </view>
+    </view>
+    <view class="winthecustomer">
+      <view class="winthecustomer-head">
+        <view class="winthecustomer-head1">
+          <image
+            src="http://cdn.xiaodingdang1.com/2025/09/25/1f1fa1d642064970832273565705bff0.png"
+            style="width: 50rpx; height: 50rpx"
+          ></image>
+          <view
+            class="winthecustomer-title"
+            :class="{ 'title-fade-in': titleVisible }"
+            >系统服务</view
+          >
+        </view>
+      </view>
+      <view class="winthecustomer-content">
+        <view
+          class="winthecustomer-content1"
+          v-for="(item, index) in [1, 2, 3, 4, 5, 6]"
+          :key="index"
+          :class="{ 'content1-animate': content1Visible[index] }"
+        >
+          <image
+            src="http://cdn.xiaodingdang1.com/2025/09/25/20c54857feda44eba2d1cd3eb1f9603c.png"
+          ></image>
+          <view class="winthecustomer-content2">谈单系统</view>
+        </view>
+      </view>
     </view>
     <view class="brand-story">
-      <view class="brand-story-title">品牌故事</view>
+      <!-- <view class="brand-story-title">品牌故事</view>
       <view class="brand-story-content">
         <image
           src="http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png"
         ></image>
-      </view>
-      <view class="systemservice">
+      </view> -->
+      <!-- <view class="systemservice">
         <view class="systemservice-title">系统服务</view>
         <view class="exhibition">
           <view class="exhibition1">
@@ -121,9 +190,16 @@
             <view class="exhibition-title">管理系统</view>
           </view>
         </view>
-      </view>
+      </view> -->
       <view class="teamappearance">
-        <view class="teamappearance-title">公司动态</view>
+        <view
+          class="headContent"
+          :class="{ 'headContent-animate': headContentVisible[0] }"
+        >
+          <view class="headLeft"></view>
+          <view class="teamappearance-title">公司动态</view>
+          <view class="headRight"></view>
+        </view>
         <view class="teamappearance-content">
           <view
             v-for="(team, index) in teamList"
@@ -137,8 +213,17 @@
           </view>
         </view>
       </view>
+    </view>
+    <view class="brand-story">
       <view class="certificate">
-        <view class="certificate-title">荣誉证书</view>
+        <view
+          class="headContent"
+          :class="{ 'headContent-animate': headContentVisible[1] }"
+        >
+          <view class="headLeft"></view>
+          <view class="teamappearance-title">荣誉证书</view>
+          <view class="headRight"></view>
+        </view>
         <view class="certificate-list">
           <view
             v-for="(certificate, index) in certificateList"
@@ -150,9 +235,15 @@
         </view>
       </view>
     </view>
-
     <view class="businesspartner">
-      <view class="certificate-title">合作商家</view>
+      <view
+        class="headContent"
+        :class="{ 'headContent-animate': headContentVisible[2] }"
+      >
+        <view class="headLeft"></view>
+        <view class="teamappearance-title">合作商家</view>
+        <view class="headRight"></view>
+      </view>
       <view class="businesspartner-list">
         <view
           v-for="(partner, index) in businessPartnerList"
@@ -163,12 +254,144 @@
         </view>
       </view>
     </view>
+    <view class="introduce">
+      <view class="introduce-container">
+        <view class="introduce-title1">天天拓客</view>
+        <view class="introduce-title2">湖南省长沙市芙蓉区壹号座品A座613</view>
+        <view class="introduce-title3"></view>
+        <view class="introduce-title4">电话：073169557550</view>
+      </view>
+      <view class="introduce-container5">
+        <image
+          src="http://cdn.xiaodingdang1.com/2025/09/25/95725c97c3b24d469b529453c3206b7e.png"
+        ></image>
+        <view class="introduce-container6">扫码添加微信</view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { onPageScroll } from "@dcloudio/uni-app";
+
+// 按钮动画状态
+const buttonsVisible = ref(false);
+// 标题动画状态
+const titleVisible = ref(false);
+// headContent 动画状态
+const headContentVisible = ref({});
+// winthecustomer-content1 动画状态
+const content1Visible = ref([]);
+
+// 页面加载完成后触发按钮动画
+onMounted(() => {
+  setTimeout(() => {
+    buttonsVisible.value = true;
+  }, 400); // 延迟400ms开始动画
+
+  // 初始化时检查标题是否在视窗内
+  setTimeout(() => {
+    checkTitleVisibility();
+    checkHeadContentVisibility();
+    checkContent1Visibility();
+    checkImageVisibility();
+  }, 100);
+});
+
+// 图片弹出动画状态
+const imagePopVisible = ref([]);
+
+// 检查标题是否在视窗内的函数 - 适配 uni-app
+const checkTitleVisibility = () => {
+  // 如果动画已经触发过，就不再检查
+  if (titleVisible.value) {
+    return;
+  }
+
+  // 使用 uni.createSelectorQuery 来获取元素位置信息
+  const query = uni.createSelectorQuery();
+  query
+    .selectAll(".winthecustomer-title")
+    .boundingClientRect((rects) => {
+      if (rects && rects.length > 0) {
+        rects.forEach((rect, index) => {
+          // 获取系统信息来获取窗口高度
+          uni.getSystemInfo({
+            success: (res) => {
+              const windowHeight = res.windowHeight;
+              // 当元素进入视窗时触发动画，提前触发点，增加延迟让动画更自然
+              if (
+                rect.top < windowHeight * 0.85 &&
+                rect.bottom > 0 &&
+                !titleVisible.value
+              ) {
+                // 添加延迟让每个标题依次出现
+                setTimeout(() => {
+                  titleVisible.value = true;
+                }, index * 300); // 每个标题间隔300ms
+              }
+            },
+          });
+        });
+      }
+    })
+    .exec();
+};
+
+// 检查 headContent 是否在视窗内的函数
+const checkHeadContentVisibility = () => {
+  const query = uni.createSelectorQuery();
+  query
+    .selectAll(".headContent")
+    .boundingClientRect((rects) => {
+      if (rects && rects.length > 0) {
+        rects.forEach((rect, index) => {
+          uni.getSystemInfo({
+            success: (res) => {
+              const windowHeight = res.windowHeight;
+              // 当元素进入视窗时触发动画
+              if (rect.top < windowHeight * 0.8 && rect.bottom > 0) {
+                // 为每个 headContent 元素添加动画效果
+                setTimeout(() => {
+                  headContentVisible.value[index] = true;
+                }, index * 300); // 每个元素间隔300ms
+              }
+            },
+          });
+        });
+      }
+    })
+    .exec();
+};
+
+// 检查 winthecustomer-content1 是否在视窗内的函数
+const checkContent1Visibility = () => {
+  const query = uni.createSelectorQuery();
+  query
+    .selectAll(".winthecustomer-content1")
+    .boundingClientRect((rects) => {
+      if (rects && rects.length > 0) {
+        rects.forEach((rect, index) => {
+          uni.getSystemInfo({
+            success: (res) => {
+              const windowHeight = res.windowHeight;
+              // 当元素进入视窗时触发动画
+              if (rect.top < windowHeight * 1 && rect.bottom > 0) {
+                // 为每个 content1 元素添加动画效果
+                setTimeout(() => {
+                  if (!content1Visible.value[index]) {
+                    content1Visible.value[index] = true;
+                  }
+                }, index * 200); // 每个元素间隔200ms
+              }
+            },
+          });
+        });
+      }
+    })
+    .exec();
+};
 
 // 轮播图数据
 const bannerList = ref([
@@ -321,6 +544,14 @@ const handleContactClick = () => {
 
 onPageScroll((e) => {
   showHeaderBg.value = e.scrollTop > 50;
+  // 滚动时检查标题可见性
+  checkTitleVisibility();
+  // 滚动时检查 headContent 可见性
+  checkHeadContentVisibility();
+  // 滚动时检查 content1 可见性
+  checkContent1Visibility();
+  // 滚动时检查图片可见性
+  checkImageVisibility();
 });
 </script>
 
@@ -421,10 +652,40 @@ onPageScroll((e) => {
   margin: 0;
   border: none !important;
   background: transparent;
+  transform: scale(0);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 .contact-btn image {
   width: 80rpx;
   height: 80rpx;
+}
+
+/* 按钮弹出动画 */
+.btn-animate {
+  transform: scale(1) !important;
+  opacity: 1 !important;
+}
+
+.btn-delay-1 {
+  transition-delay: 0.1s;
+}
+
+.btn-delay-2 {
+  transition-delay: 0.3s;
+}
+
+.btn-delay-3 {
+  transition-delay: 0.5s;
+}
+
+/* 按钮悬停效果 */
+.contact-btn:hover {
+  transform: scale(1.1);
+}
+
+.btn-animate:hover {
+  transform: scale(1.1) !important;
 }
 
 /* 轮播图样式 */
@@ -478,7 +739,7 @@ onPageScroll((e) => {
 /**线上获客 */
 .brand-story {
   background: #ffffff;
-  padding: 80rpx 26rpx;
+  // padding: 80rpx 26rpx;
   color: #000000;
   margin-top: 80rpx;
 }
@@ -510,8 +771,8 @@ onPageScroll((e) => {
   color: #000000;
   font-size: 40rpx;
   font-weight: bold;
-  margin-bottom: 38rpx;
   text-align: center;
+  margin: 0 20rpx;
 }
 .teamappearance-item-image {
   width: 440rpx;
@@ -527,6 +788,7 @@ onPageScroll((e) => {
   scroll-behavior: smooth;
   padding: 0 26rpx;
   gap: 20rpx;
+  margin-top: 38rpx;
 
   /* 隐藏滚动条 */
   &::-webkit-scrollbar {
@@ -554,6 +816,7 @@ onPageScroll((e) => {
 .certificate {
   background: #ffffff;
   padding: 30rpx 0;
+  margin-top: 38rpx;
 }
 .certificate-title {
   font-size: 40rpx;
@@ -664,5 +927,215 @@ onPageScroll((e) => {
   font-size: 32rpx;
   font-weight: bold;
   margin-top: 24rpx;
+}
+/**线上获客 */
+.winthecustomer {
+  margin-top: 60rpx;
+}
+.winthecustomer-head {
+  height: 152rpx;
+  background: url("http://cdn.xiaodingdang1.com/2025/09/25/7cf1afc487d04a8d834b1bc6aac793b6.png")
+    no-repeat center;
+  background-size: cover;
+  display: flex;
+}
+.winthecustomer-head1 {
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  margin-left: 26rpx;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.winthecustomer-title {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 40rpx;
+  margin-left: 22rpx;
+  opacity: 0;
+  transform: translateY(-30rpx) scale(0.8);
+  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.title-fade-in {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+  animation: slowFadeInUp 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slowFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(-30rpx) scale(0.8);
+  }
+  25% {
+    opacity: 0.3;
+    transform: translateY(-15rpx) scale(0.9);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-5rpx) scale(0.95);
+  }
+  75% {
+    opacity: 0.85;
+    transform: translateY(2rpx) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.winthecustomer-line {
+  background: linear-gradient(to bottom, #dfebfb 30%, #ffffff 70%);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  margin-top: -60rpx;
+  padding: 38rpx 0 50rpx 0;
+  width: 100%;
+  text-align: center;
+}
+.winthecustomer-line image {
+  width: 698rpx;
+  height: 380rpx;
+  border-radius: 20rpx;
+}
+.winthecustomer-content {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background: linear-gradient(to bottom, #dfebfb 30%, #ffffff 70%);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  margin-top: -60rpx;
+  padding-bottom: 50rpx;
+}
+.winthecustomer-content1 {
+  width: 350rpx;
+  background: #f2f6ff;
+  margin-top: 38rpx;
+  opacity: 0;
+  transform: translateX(-60rpx);
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.content1-animate {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  animation: fadeInLeft 0.8s;
+}
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-60rpx);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.winthecustomer-content1 image {
+  width: 350rpx;
+  height: 350rpx;
+  border-radius: 20rpx;
+}
+.winthecustomer-content2 {
+  width: 350rpx;
+  padding: 20rpx 0;
+  background: #f2f6ff;
+  color: #3d3d3d;
+  font-size: 32rpx;
+  text-align: center;
+  border-bottom-left-radius: 20rpx;
+  border-bottom-right-radius: 20rpx;
+}
+
+.headContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20rpx);
+  transition: all 0.6s ease-out;
+}
+
+.headContent.headContent-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+.headLeft {
+  width: 142rpx;
+  height: 5rpx;
+  background: linear-gradient(
+    90deg,
+    rgba(216, 216, 216, 0) 0%,
+    rgba(51, 51, 51, 0.5) 100%
+  );
+  border-radius: 0rpx 0rpx 0rpx 0rpx;
+}
+.headRight {
+  width: 142rpx;
+  height: 5rpx;
+  background: linear-gradient(
+    90deg,
+    rgba(51, 51, 51, 0.5) 0%,
+    rgba(216, 216, 216, 0) 100%
+  );
+  border-radius: 0rpx 0rpx 0rpx 0rpx;
+}
+
+.introduce {
+  background: #ffffff;
+  padding: 63rpx 44rpx;
+  display: flex;
+  justify-content: space-between;
+}
+.introduce-title1 {
+  color: #3d3d3d;
+  font-size: 21rpx;
+  font-weight: bold;
+}
+.introduce-title2 {
+  color: #000000;
+  font-size: 18rpx;
+  margin-top: 8rpx;
+}
+.introduce-title3 {
+  border: 1rpx solid #e2e2e2;
+  margin: 24rpx 0;
+}
+.introduce-title4 {
+  color: #000000;
+  font-size: 21rpx;
+}
+.introduce-container5 {
+  text-align: center;
+}
+.introduce-container5 image {
+  width: 152rpx;
+  height: 152rpx;
+}
+.introduce-container6 {
+  color: #000000;
+  font-size: 18rpx;
+  margin-top: 18rpx;
+}
+
+wx-button {
+  border: none !important;
 }
 </style>
