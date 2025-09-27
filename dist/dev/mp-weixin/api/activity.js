@@ -21,8 +21,24 @@ function getActivityDetail(activityId) {
     activityId
   });
 }
-function getFeedPostPage(params = {}) {
-  return utils_request.get("mp/feed_post/get_feed_post_page", __spreadValues({}, params));
+function getEnterpriseList(params = {}) {
+  return utils_request.get("/mp/tk/enterprise/list", __spreadValues({}, params));
+}
+function getServiceList(params = {}) {
+  return utils_request.get("/mp/tk/service/list", __spreadValues({}, params));
+}
+function getCompanyNewsList(params = {}) {
+  return utils_request.get("/mp/tk/companyNews/list", __spreadValues({}, params));
+}
+function getcaseList(params = {}) {
+  return utils_request.get("/mp/tk/case/list", __spreadValues({}, params));
+}
+function getsuccessCaseList(params = {}) {
+  return utils_request.get("/mp/tk/successCase/list", __spreadValues({}, params));
 }
 exports.getActivityDetail = getActivityDetail;
-exports.getFeedPostPage = getFeedPostPage;
+exports.getCompanyNewsList = getCompanyNewsList;
+exports.getEnterpriseList = getEnterpriseList;
+exports.getServiceList = getServiceList;
+exports.getcaseList = getcaseList;
+exports.getsuccessCaseList = getsuccessCaseList;

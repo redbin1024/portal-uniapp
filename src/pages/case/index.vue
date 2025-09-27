@@ -3,136 +3,177 @@
     <view
       class="list-item"
       :class="{ 'animate-up': animatedItems[index] }"
-      v-for="(item, index) in listData"
+      v-for="(item, index) in successCaseList"
       :key="index"
       :style="{ backgroundColor: getBackgroundColor(index) }"
       @click="navigateToDetail(item)"
     >
       <view class="image-container">
-        <image class="item-image" :src="item.image" mode="aspectFill"></image>
+        <image
+          class="item-image"
+          :src="item.caseImages[0]"
+          mode="aspectFill"
+        ></image>
       </view>
       <view class="content-container">
-        <view class="title">{{ item.title }}</view>
-        <view class="description">{{ item.description }}</view>
+        <view class="title">{{ item.customerName }}</view>
+        <view class="description">{{ item.caseValue }}</view>
       </view>
     </view>
   </view>
 </template>
 
-<script>
-export default {
-  name: "CaseDetails",
-  data() {
-    return {
-      listData: [
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-      ],
-      animatedItems: [],
-    };
-  },
-  mounted() {
-    this.initAnimation();
-  },
-  onPageScroll(e) {
-    this.handleScroll(e);
-  },
-  methods: {
-    navigateToDetail() {
-      uni.navigateTo({
-        url: "/pages/casedetails/index",
-      });
-    },
-    getBackgroundColor(index) {
-      const colors = ["#FFEFEB", "#DFF1FF", "#EDF1FF", "#DAF9FF"];
-      return colors[index % 4];
-    },
-    // 初始化动画 - 页面进入时的弹出效果
-    initAnimation() {
-      this.$nextTick(() => {
-        // 延迟执行，让页面先渲染
-        setTimeout(() => {
-          this.listData.forEach((_, index) => {
-            setTimeout(() => {
-              this.$set(this.animatedItems, index, true);
-            }, index * 150); // 每个item延迟150ms，形成依次弹出的效果
-          });
-        }, 200);
-      });
-    },
-    // 处理滚动事件
-    handleScroll(e) {
-      const scrollTop = e.scrollTop;
+<script setup>
+import { ref, reactive, onMounted, nextTick, getCurrentInstance } from "vue";
+import { getsuccessCaseList } from "@/api/activity.js";
 
-      // 获取所有list-item的位置信息
-      uni
-        .createSelectorQuery()
-        .in(this)
-        .selectAll(".list-item")
-        .boundingClientRect((rects) => {
-          if (rects) {
-            rects.forEach((rect, index) => {
-              // 当item进入视窗时触发动画
-              if (
-                rect.top < uni.getSystemInfoSync().windowHeight * 0.8 &&
-                rect.bottom > 0
-              ) {
-                if (!this.animatedItems[index]) {
-                  this.$set(this.animatedItems, index, true);
-                }
-              }
-            });
+// 获取当前实例
+const instance = getCurrentInstance();
+
+// 响应式数据
+const successCaseList = ref([]);
+const animatedItems = ref([]);
+
+const listData = reactive([
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+]);
+
+// 方法
+const fetchsuccessCaseList = async (response) => {
+  try {
+    const result = await getsuccessCaseList({
+      pageSize: 20,
+      pageNum: 1,
+    });
+    console.log("企业列表数据:", result);
+    if (result && result.rows && result.rows.length > 0) {
+      successCaseList.value = result.rows;
+    }
+  } catch (error) {
+    console.error("获取成功案例列表失败:", error);
+  }
+};
+
+const navigateToDetail = () => {
+  uni.navigateTo({
+    url: "/pages/casedetails/index",
+  });
+};
+
+const getBackgroundColor = (index) => {
+  const colors = ["#FFEFEB", "#DFF1FF", "#EDF1FF", "#DAF9FF"];
+  return colors[index % 4];
+};
+
+// 初始化动画 - 页面进入时的弹出效果
+const initAnimation = () => {
+  nextTick(() => {
+    // 延迟执行，让页面先渲染
+    setTimeout(() => {
+      successCaseList.value.forEach((_, index) => {
+        setTimeout(() => {
+          animatedItems.value[index] = true;
+        }, index * 150); // 每个item延迟150ms，形成依次弹出的效果
+      });
+    }, 200);
+  });
+};
+
+// 处理滚动事件
+const handleScroll = (e) => {
+  const scrollTop = e.scrollTop;
+
+  // 获取所有list-item的位置信息
+  uni
+    .createSelectorQuery()
+    .in(instance)
+    .selectAll(".list-item")
+    .boundingClientRect((rects) => {
+      if (rects) {
+        rects.forEach((rect, index) => {
+          // 当item进入视窗时触发动画
+          if (
+            rect.top < uni.getSystemInfoSync().windowHeight * 0.8 &&
+            rect.bottom > 0
+          ) {
+            if (!animatedItems.value[index]) {
+              animatedItems.value[index] = true;
+            }
           }
-        })
-        .exec();
-    },
+        });
+      }
+    })
+    .exec();
+};
+
+// 生命周期
+onMounted(() => {
+  initAnimation();
+  fetchsuccessCaseList();
+});
+
+// 导出页面滚动事件处理函数，供uni-app页面使用
+defineExpose({
+  onPageScroll: handleScroll,
+});
+</script>
+
+<script>
+// 页面配置和生命周期钩子（uni-app特有）
+export default {
+  onPageScroll(e) {
+    // 调用setup中定义的handleScroll方法
+    if (this.$refs && this.$refs.handleScroll) {
+      this.$refs.handleScroll(e);
+    }
   },
 };
 </script>

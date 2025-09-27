@@ -421,6 +421,18 @@ export function upload(url, filePath, options = {}) {
       header,
       success: (response) => {
         try {
+          // 检查响应数据是否为空或无效
+          if (!response.data || response.data.trim() === '') {
+            console.error('上传响应数据为空')
+            showError('上传失败，服务器响应为空')
+            reject({
+              code: -1,
+              message: '上传失败，服务器响应为空',
+              data: null
+            })
+            return
+          }
+          
           const data = JSON.parse(response.data)
           if (data.code === REQUEST_STATUS.SUCCESS) {
             resolve(data)
@@ -430,7 +442,14 @@ export function upload(url, filePath, options = {}) {
           }
         } catch (error) {
           console.error('上传响应解析失败：', error)
-          reject(error)
+          console.error('原始响应数据：', response.data)
+          showError('上传失败，响应数据格式错误')
+          reject({
+            code: -1,
+            message: '上传失败，响应数据格式错误',
+            data: null,
+            originalError: error
+          })
         }
       },
       fail: (error) => {

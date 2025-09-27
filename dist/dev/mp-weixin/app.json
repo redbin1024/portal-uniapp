@@ -15,7 +15,8 @@
     "pages/recentdetails/index",
     "pages/productservicenew/index",
     "pages/customer/index",
-    "pages/dynamicdetails/index"
+    "pages/dynamicdetails/index",
+    "pages/api-test/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",

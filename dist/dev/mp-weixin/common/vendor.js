@@ -6867,34 +6867,6 @@ function vFor(source, renderItem) {
   }
   return ret;
 }
-function renderSlot(name, props = {}, key) {
-  const instance = getCurrentInstance();
-  const { parent, isMounted, ctx: { $scope } } = instance;
-  const vueIds = ($scope.properties || $scope.props).uI;
-  if (!vueIds) {
-    return;
-  }
-  if (!parent && !isMounted) {
-    onMounted(() => {
-      renderSlot(name, props, key);
-    }, instance);
-    return;
-  }
-  const invoker = findScopedSlotInvoker(vueIds, instance);
-  if (invoker) {
-    invoker(name, props, key);
-  }
-}
-function findScopedSlotInvoker(vueId, instance) {
-  let parent = instance.parent;
-  while (parent) {
-    const invokers = parent.$ssi;
-    if (invokers && invokers[vueId]) {
-      return invokers[vueId];
-    }
-    parent = parent.parent;
-  }
-}
 function stringifyStyle(value) {
   if (isString(value)) {
     return value;
@@ -6913,7 +6885,6 @@ function stringify(styles) {
 }
 const o = (value, key) => vOn(value, key);
 const f = (source, renderItem) => vFor(source, renderItem);
-const r = (name, props, key) => renderSlot(name, props, key);
 const s = (value) => stringifyStyle(value);
 const e = (target, ...sources) => extend(target, ...sources);
 const n = (value) => normalizeClass(value);
@@ -7759,18 +7730,25 @@ const createSubpackageApp = initCreateSubpackageApp();
 const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
   !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
 };
+const onShow = /* @__PURE__ */ createHook(ON_SHOW);
+const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
 const onPageScroll = /* @__PURE__ */ createHook(ON_PAGE_SCROLL);
 exports._export_sfc = _export_sfc;
 exports.createSSRApp = createSSRApp;
 exports.e = e;
 exports.f = f;
+exports.getCurrentInstance = getCurrentInstance;
 exports.index = index;
 exports.n = n;
+exports.nextTick$1 = nextTick$1;
 exports.o = o;
+exports.onBeforeUnmount = onBeforeUnmount;
+exports.onLoad = onLoad;
 exports.onMounted = onMounted;
 exports.onPageScroll = onPageScroll;
+exports.onShow = onShow;
 exports.p = p;
-exports.r = r;
+exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
 exports.s = s;

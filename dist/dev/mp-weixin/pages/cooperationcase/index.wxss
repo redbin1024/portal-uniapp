@@ -189,83 +189,24 @@ text.data-v-fc420d75 {
   border-radius: 16rpx;
   height: 270rpx;
   padding: 0 24rpx;
-  margin-bottom: 32rpx;
+  margin-bottom: 62rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  /* 保留 overflow: hidden 用于图片效果，但确保不影响页面滚动 */
-  overflow: hidden;
-  /* 初始状态：隐藏在下方，增加更大的偏移和旋转效果 */
-  transform: translateY(120rpx) scale(0.9);
+  /* 初始状态 - 与winthecustomer-content1相同的动画效果 */
   opacity: 0;
-  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* 动画激活状态 */
-.list-item.animate-up.data-v-fc420d75 {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-/* 为图片容器添加额外的动画效果 */
-.list-item .image-container.data-v-fc420d75 {
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s;
-  transform: translateY(40rpx) scale(0.95);
-}
-.list-item.animate-up .image-container.data-v-fc420d75 {
-  transform: translateY(-36rpx) scale(1); /* 恢复原来的位置并添加缩放效果 */
-}
-
-/* 为内容容器添加渐入和滑入效果 */
-.list-item .content-container.data-v-fc420d75 {
-  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.25s;
-  opacity: 0;
-  transform: translateX(30rpx);
-}
-.list-item.animate-up .content-container.data-v-fc420d75 {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* 为标题添加单独的动画效果 */
-.list-item .title.data-v-fc420d75 {
-  transition: all 0.6s ease-out 0.4s;
   transform: translateY(20rpx);
-  opacity: 0;
+  transition: all 0.6s ease-out;
 }
-.list-item.animate-up .title.data-v-fc420d75 {
-  transform: translateY(0);
+.list-item.list-item-animate.data-v-fc420d75 {
   opacity: 1;
-}
-
-/* 为描述文字添加单独的动画效果 */
-.list-item .description.data-v-fc420d75 {
-  transition: all 0.6s ease-out 0.5s;
-  transform: translateY(20rpx);
-  opacity: 0;
-}
-.list-item.animate-up .description.data-v-fc420d75 {
   transform: translateY(0);
-  opacity: 1;
-}
-
-/* 添加悬停效果增强交互性 */
-.list-item.animate-up.data-v-fc420d75:hover {
-  transform: translateY(-8rpx) scale(1.02);
-  box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.15);
-}
-
-/* 添加点击效果 */
-.list-item.animate-up.data-v-fc420d75:active {
-  transform: translateY(-4rpx) scale(0.98);
-  transition: all 0.1s ease-out;
 }
 .image-container.data-v-fc420d75 {
   flex-shrink: 0;
   margin-right: 24rpx;
   position: relative;
-  top: -40rpx; /* 图片高出列表40rpx */
 }
 .item-image.data-v-fc420d75 {
   width: 214rpx;
@@ -273,6 +214,8 @@ text.data-v-fc420d75 {
   border-radius: 20rpx;
   background-color: #f0f0f0;
   border: 3rpx solid #ffffff;
+  position: relative;
+  top: -30rpx;
 }
 .content-container.data-v-fc420d75 {
   flex: 1;
@@ -282,7 +225,7 @@ text.data-v-fc420d75 {
 }
 .title.data-v-fc420d75 {
   height: 80rpx;
-  line-height: 80rpx;
+  line-height: 90rpx;
   font-size: 40rpx;
   font-weight: 600;
   color: #000000;

@@ -32,7 +32,7 @@
     {
       "path": "pages/clientevaluation/index",
       "style": {
-        "navigationBarTitleText": "客户怎么说",
+        "navigationBarTitleText": "动态",
         "navigationBarBackgroundColor": "#ffffff"
       }
     },
@@ -110,6 +110,13 @@
       "path": "pages/dynamicdetails/index",
       "style": {
         "navigationBarTitleText": "动态",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/api-test/index",
+      "style": {
+        "navigationBarTitleText": "API测试",
         "navigationBarBackgroundColor": "#ffffff"
       }
     }

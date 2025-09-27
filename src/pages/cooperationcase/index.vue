@@ -5,18 +5,18 @@
     enable-back-to-top="true"
     @scroll="onScroll"
   >
-    <view class="slideshow">
-      <blur-swiper
-        :list="slideshowData"
-        height="800rpx"
-        :autoplay="true"
-        :interval="4000"
-        :showIndicator="true"
-        :gap="50"
-        @change="onSlideshowChange"
-        @itemClick="onSlideshowClick"
-      />
-    </view>
+    <VearCarousel
+      :img-list="imgList"
+      url-key="url"
+      :show-title="true"
+      @selected="selectedBanner"
+      @video-play="onVideoPlay"
+      @video-pause="onVideoPause"
+      @video-ended="onVideoEnded"
+      @video-error="onVideoError"
+      @fullscreen-change="onFullscreenChange"
+      @pause-all-videos="onPauseAllVideos"
+    />
     <view class="dynamic">
       <view class="dynamic-title">最近动态</view>
       <view class="dynamic-title1">关注正在发生的故事</view>
@@ -24,7 +24,7 @@
       <view class="dynamic-content">
         <view
           class="dynamic-item"
-          v-for="(item, index) in dynamicData"
+          v-for="(item, index) in companyNewsList"
           :key="index"
         >
           <!-- 左边内容 -->
@@ -34,9 +34,9 @@
               'animate-fade-in-left': visibleDynamicItems.includes(index),
             }"
           >
-            <view class="dynamic-date">{{ item.date }}</view>
-            <view class="dynamic-text1">{{ item.date }}</view>
-            <view class="dynamic-text">{{ item.content }}</view>
+            <view class="dynamic-date">{{ item.createTime }}</view>
+            <view class="dynamic-text1">{{ item.newsTitle }}</view>
+            <view class="dynamic-text">{{ item.newsContent }}</view>
           </view>
 
           <!-- 中间步骤条 -->
@@ -47,7 +47,7 @@
             ></view>
             <view
               class="step-line"
-              v-if="index < dynamicData.length - 1"
+              v-if="index < companyNewsList.length - 1"
               :id="'step-line-' + index"
             ></view>
           </view>
@@ -61,7 +61,7 @@
           >
             <image
               class="dynamic-image"
-              :src="item.image"
+              :src="item.newsImages[0]"
               mode="aspectFill"
             ></image>
           </view>
@@ -78,18 +78,22 @@
       <view class="container-title">成功案例</view>
       <view
         class="list-item"
-        v-for="(item, index) in listData"
+        v-for="(item, index) in successCaseList"
         :key="index"
-        :class="{ 'animate-up': visibleItems.includes(index) }"
+        :class="{ 'list-item-animate': visibleListItems[index] }"
         :style="{ backgroundColor: getBackgroundColor(index) }"
         @click="navigateToDetail(item)"
       >
         <view class="image-container">
-          <image class="item-image" :src="item.image" mode="aspectFit"></image>
+          <image
+            class="item-image"
+            :src="item.caseImages[0]"
+            mode="aspectFit"
+          ></image>
         </view>
         <view class="content-container">
-          <view class="title">{{ item.title }}</view>
-          <view class="description">{{ item.description }}</view>
+          <view class="title">{{ item.customerName }}</view>
+          <view class="description">{{ item.caseValue }}</view>
         </view>
       </view>
       <!-- 查看更多按钮 -->
@@ -101,293 +105,391 @@
   </scroll-view>
 </template>
 
-<script>
-import { onPageScroll } from "@dcloudio/uni-app";
+<script setup>
+import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
+import { onPageScroll, onLoad, onShow } from "@dcloudio/uni-app";
 import hbxwRotateCarousel from "@/uni_modules/hbxw-rotate-carousel/components/hbxw-rotate-carousel/hbxw-rotate-carousel.vue";
 import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
+import {
+  getcaseList,
+  getCompanyNewsList,
+  getsuccessCaseList,
+} from "@/api/activity.js";
+import VearCarousel from "@/components/vear-carousel/vear-carousel.vue";
 
-export default {
-  name: "CaseDetails",
-  components: {
-    "hbxw-rotate-carousel": hbxwRotateCarousel,
-    "blur-swiper": BlurSwiper,
+// 响应式数据
+const visibleDynamicItems = ref([]); // 用于控制动态内容项的动画
+const visibleListItems = ref([]); // 用于控制list-item的动画
+const scrollTimer = ref(null); // 滚动节流定时器
+const observer = ref(null); // 观察器引用
+const caseList = ref([]);
+const imgList = ref([]);
+const companyNewsList = ref([]);
+const successCaseList = ref([]);
+const slideshowData = reactive([
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
+    title: "专业团队服务",
+    description: "为您提供专业的技术解决方案",
   },
-  data() {
-    return {
-      visibleItems: [], // 用于控制哪些列表项显示动画
-      visibleDynamicItems: [], // 用于控制动态内容项的动画
-      scrollTimer: null, // 滚动节流定时器
-      slideshowData: [
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
-          title: "专业团队服务",
-          description: "为您提供专业的技术解决方案",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
-          title: "创新技术应用",
-          description: "运用最新技术为客户创造价值",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "优质服务保障",
-          description: "全程跟踪服务，确保项目成功",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "优质服务保障",
-          description: "全程跟踪服务，确保项目成功",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "优质服务保障",
-          description: "全程跟踪服务，确保项目成功",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "优质服务保障",
-          description: "全程跟踪服务，确保项目成功",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "优质服务保障",
-          description: "全程跟踪服务，确保项目成功",
-        },
-      ],
-      dynamicData: [
-        {
-          date: "2024.09.20",
-          content:
-            "成功完成东方幸福国际母婴会所项目，为客户提供了完整的数字化解决方案，包括小程序开发、后台管理系统等。",
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
-        },
-        {
-          date: "2024.09.15",
-          content:
-            "启动新的电商平台项目，为客户打造全新的线上购物体验，集成支付、物流、客服等多项功能。",
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
-        },
-        {
-          date: "2024.09.10",
-          content:
-            "完成企业官网改版升级，采用响应式设计，提升用户体验和品牌形象展示效果。",
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        },
-        {
-          date: "2024.09.05",
-          content:
-            "与多家知名企业达成合作协议，将为其提供定制化的软件开发服务和技术咨询。",
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
-        },
-        {
-          date: "2024.08.30",
-          content:
-            "团队技术培训完成，全面提升开发能力，为客户提供更优质的技术服务。",
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
-        },
-      ],
-      listData: [
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-        {
-          image:
-            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-          title: "东方幸福国际母婴会所",
-          description:
-            "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
-        },
-      ],
-    };
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
+    title: "创新技术应用",
+    description: "运用最新技术为客户创造价值",
   },
-  mounted() {
-    this.initScrollAnimation();
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "优质服务保障",
+    description: "全程跟踪服务，确保项目成功",
   },
-  onLoad() {
-    // 页面加载时初始化动画
-    this.initScrollAnimation();
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "优质服务保障",
+    description: "全程跟踪服务，确保项目成功",
   },
-  onShow() {
-    // 页面显示时重新初始化动画
-    this.initScrollAnimation();
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "优质服务保障",
+    description: "全程跟踪服务，确保项目成功",
   },
-  methods: {
-    // 跳转到最近动态页面
-    goToRecentUpdates() {
-      uni.navigateTo({
-        url: "/pages/recentUpdates/index",
-      });
-    },
-    goToCooperationcase() {
-      uni.navigateTo({
-        url: "/pages/case/index",
-      });
-    },
-    // scroll-view 滚动事件处理
-    onScroll(e) {
-      this.handleScroll();
-    },
-
-    // 初始化滚动动画
-    initScrollAnimation() {
-      // 初始检查已在视口内的元素
-      this.$nextTick(() => {
-        setTimeout(() => {
-          this.handleScroll();
-        }, 100);
-      });
-    },
-
-    // 处理滚动事件（添加节流优化）
-    handleScroll() {
-      // 节流处理，避免频繁执行
-      if (this.scrollTimer) {
-        clearTimeout(this.scrollTimer);
-      }
-
-      this.scrollTimer = setTimeout(() => {
-        try {
-          const systemInfo = uni.getSystemInfoSync();
-          const windowHeight = systemInfo.windowHeight;
-
-          // 获取页面滚动信息 - 成功案例列表
-          uni
-            .createSelectorQuery()
-            .in(this)
-            .selectAll(".list-item")
-            .boundingClientRect((rects) => {
-              if (rects && rects.length > 0) {
-                rects.forEach((rect, index) => {
-                  // 检查元素是否进入视口（提前150px触发动画，让动画更早开始）
-                  if (rect.top < windowHeight - 50 && rect.top > -rect.height) {
-                    // 每次进入视口都触发动画
-                    if (!this.visibleItems.includes(index)) {
-                      // 添加延迟，让动画更自然，每个元素延迟递增
-                      setTimeout(() => {
-                        if (!this.visibleItems.includes(index)) {
-                          this.visibleItems.push(index);
-                          console.log("触发列表项动画:", index);
-                        }
-                      }, index * 80); // 每个元素延迟80ms，让动画更快
-                    }
-                  }
-                });
-              }
-            })
-            .exec();
-
-          // 获取页面滚动信息 - 动态内容项
-          uni
-            .createSelectorQuery()
-            .in(this)
-            .selectAll(".dynamic-item")
-            .boundingClientRect((rects) => {
-              if (rects && rects.length > 0) {
-                rects.forEach((rect, index) => {
-                  // 检查元素是否进入视口（提前100px触发动画）
-                  if (rect.top < windowHeight - 50 && rect.top > -rect.height) {
-                    if (!this.visibleDynamicItems.includes(index)) {
-                      // 添加延迟，让左右动画错开
-                      setTimeout(() => {
-                        if (!this.visibleDynamicItems.includes(index)) {
-                          this.visibleDynamicItems.push(index);
-                          console.log("触发动态项动画:", index);
-                        }
-                      }, index * 120); // 每个元素延迟120ms
-                    }
-                  }
-                });
-              }
-            })
-            .exec();
-        } catch (error) {
-          console.error("滚动动画处理错误:", error);
-        }
-      }, 16); // 减少节流时间，提高响应性
-    },
-
-    navigateToDetail() {
-      uni.navigateTo({
-        url: "/pages/casedetails/index",
-      });
-    },
-    getBackgroundColor(index) {
-      const colors = ["#FFEFEB", "#DFF1FF", "#EDF1FF", "#DAF9FF"];
-      return colors[index % 4];
-    },
-    // 轮播图点击事件
-    onSlideshowClick(event) {
-      console.log("轮播图点击:", event);
-      // 可以在这里添加点击后的逻辑，比如跳转到详情页
-    },
-    // 轮播图切换事件
-    onSlideshowChange(event) {
-      console.log("轮播图切换:", event);
-      // 可以在这里添加切换后的逻辑，比如更新当前索引
-    },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "优质服务保障",
+    description: "全程跟踪服务，确保项目成功",
   },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "优质服务保障",
+    description: "全程跟踪服务，确保项目成功",
+  },
+]);
 
-  // 页面销毁时清理监听器和定时器
-  beforeDestroy() {
-    if (this.observer) {
-      this.observer.disconnect();
+const dynamicData = reactive([
+  {
+    date: "2024.09.20",
+    content:
+      "成功完成东方幸福国际母婴会所项目，为客户提供了完整的数字化解决方案，包括小程序开发、后台管理系统等。",
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
+  },
+  {
+    date: "2024.09.15",
+    content:
+      "启动新的电商平台项目，为客户打造全新的线上购物体验，集成支付、物流、客服等多项功能。",
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
+  },
+  {
+    date: "2024.09.10",
+    content:
+      "完成企业官网改版升级，采用响应式设计，提升用户体验和品牌形象展示效果。",
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+  },
+  {
+    date: "2024.09.05",
+    content:
+      "与多家知名企业达成合作协议，将为其提供定制化的软件开发服务和技术咨询。",
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
+  },
+  {
+    date: "2024.08.30",
+    content: "团队技术培训完成，全面提升开发能力，为客户提供更优质的技术服务。",
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
+  },
+]);
+
+const listData = reactive([
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+  {
+    image:
+      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+    title: "东方幸福国际母婴会所",
+    description:
+      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+  },
+]);
+
+// 方法定义
+//查询公司动态列表
+const fetchsuccessCaseList = async () => {
+  try {
+    const response = await getsuccessCaseList({
+      pageSize: 4,
+      pageNum: 1,
+    });
+    console.log("企业列表数据:", response);
+    if (
+      response &&
+      response.rows &&
+      Array.isArray(response.rows) &&
+      response.rows.length > 0
+    ) {
+      successCaseList.value = response.rows;
     }
-    if (this.scrollTimer) {
-      clearTimeout(this.scrollTimer);
-    }
-  },
+  } catch (error) {
+    console.error("获取企业列表失败:", error);
+    uni.showToast({
+      title: "获取企业列表失败",
+      icon: "none",
+    });
+  }
 };
+//查询公司动态列表
+const fetchCompanyNewsList = async () => {
+  try {
+    const response = await getCompanyNewsList({
+      pageSize: 4,
+      pageNum: 1,
+      type: 1,
+    });
+    console.log("企业列表数据:", response);
+    if (
+      response &&
+      response.rows &&
+      Array.isArray(response.rows) &&
+      response.rows.length > 0
+    ) {
+      companyNewsList.value = response.rows;
+    }
+  } catch (error) {
+    console.error("获取企业列表失败:", error);
+    uni.showToast({
+      title: "获取企业列表失败",
+      icon: "none",
+    });
+  }
+};
+//查询商家案例列表
+const fetchcaseList = async () => {
+  try {
+    const response = await getcaseList({
+      pageSize: 10,
+      pageNum: 1,
+    });
+    console.log("案例列表数据:", response);
+    if (response && response.rows) {
+      let data = response.rows;
+      let slideshowData = [];
+      data.forEach((res, index) => {
+        // 检查是否有视频，如果有则添加视频类型的数据
+        if (res.caseImages && res.caseImages.length > 0) {
+          slideshowData.push({
+            type: "video",
+            url: res.caseImages[0],
+            src: res.caseImages[0],
+            poster:
+              res.caseImages && res.caseImages[0] ? res.caseImages[0] : "",
+            title: res.caseName || "",
+            description: res.caseDescription || "",
+            id: res.id || index,
+            autoplay: false,
+            loop: false,
+            muted: true, // 默认静音自动播放
+            controls: true,
+            showFullscreenBtn: true,
+            caseTitle: res.caseTitle,
+          });
+        } else if (res.caseImages && res.caseImages.length > 0) {
+          // 如果没有视频，则使用图片
+          slideshowData.push({
+            type: "image",
+            url: res.caseImages[0],
+            src: res.caseImages[0],
+            title: res.caseName || "",
+            description: res.caseDescription || "",
+            id: res.id || index,
+            caseTitle: res.caseTitle,
+          });
+        }
+      });
+      console.log("案例轮播数据:", slideshowData);
+      caseList.value = slideshowData;
+      // 将案例数据传递给 carousel 组件
+      imgList.value = slideshowData;
+    }
+  } catch (error) {
+    console.error("获取案例列表失败:", error);
+    uni.showToast({
+      title: "获取案例列表失败",
+      icon: "none",
+    });
+  }
+};
+// 跳转到最近动态页面
+const goToRecentUpdates = () => {
+  uni.navigateTo({
+    url: "/pages/recentUpdates/index",
+  });
+};
+
+const goToCooperationcase = () => {
+  uni.navigateTo({
+    url: "/pages/case/index",
+  });
+};
+
+// scroll-view 滚动事件处理
+const onScroll = (e) => {
+  // 滚动时检查list-item可见性
+  checkListItemVisibility();
+  // 滚动时检查dynamic-item可见性
+  checkDynamicItemVisibility();
+};
+
+// 检查list-item是否在视窗内的函数
+const checkListItemVisibility = () => {
+  const query = uni.createSelectorQuery();
+  query
+    .selectAll(".list-item")
+    .boundingClientRect((rects) => {
+      if (rects && rects.length > 0) {
+        rects.forEach((rect, index) => {
+          uni.getSystemInfo({
+            success: (res) => {
+              const windowHeight = res.windowHeight;
+              // 当元素进入视窗时触发动画，提前触发点让动画更自然
+              if (rect.top < windowHeight * 0.85 && rect.bottom > 0) {
+                // 为每个list-item元素添加动画效果
+                setTimeout(() => {
+                  if (!visibleListItems.value[index]) {
+                    visibleListItems.value[index] = true;
+                  }
+                }, index * 150); // 每个元素间隔150ms，让动画更流畅
+              }
+            },
+          });
+        });
+      }
+    })
+    .exec();
+};
+
+// 检查dynamic-item是否在视窗内的函数
+const checkDynamicItemVisibility = () => {
+  const query = uni.createSelectorQuery();
+  query
+    .selectAll(".dynamic-item")
+    .boundingClientRect((rects) => {
+      if (rects && rects.length > 0) {
+        rects.forEach((rect, index) => {
+          uni.getSystemInfo({
+            success: (res) => {
+              const windowHeight = res.windowHeight;
+              // 当元素进入视窗时触发动画，提前触发点让动画更自然
+              if (rect.top < windowHeight * 0.85 && rect.bottom > 0) {
+                // 为每个dynamic-item元素添加动画效果
+                setTimeout(() => {
+                  if (!visibleDynamicItems.value.includes(index)) {
+                    visibleDynamicItems.value.push(index);
+                  }
+                }, index * 200); // 每个元素间隔200ms，让动画更流畅
+              }
+            },
+          });
+        });
+      }
+    })
+    .exec();
+};
+
+// const navigateToDetail = (item) => {
+//   uni.navigateTo({
+//     url: "/pages/casedetails/index",
+//   });
+// };
+
+const getBackgroundColor = (index) => {
+  const colors = ["#FFEFEB", "#DFF1FF", "#EDF1FF", "#DAF9FF"];
+  return colors[index % 4];
+};
+
+// 轮播图点击事件
+const onSlideshowClick = (event) => {
+  console.log("轮播图点击:", event);
+  // 可以在这里添加点击后的逻辑，比如跳转到详情页
+};
+
+// 轮播图切换事件
+const onSlideshowChange = (event) => {
+  console.log("轮播图切换:", event);
+  // 可以在这里添加切换后的逻辑，比如更新当前索引
+};
+
+// 生命周期钩子
+onMounted(() => {
+  // 初始化时检查list-item可见性
+  setTimeout(() => {
+    checkListItemVisibility();
+    checkDynamicItemVisibility();
+  }, 100);
+  fetchcaseList(); // 暂时注释掉，因为当前页面主要显示服务信息
+  fetchCompanyNewsList();
+  fetchsuccessCaseList();
+});
+
+onBeforeUnmount(() => {
+  if (observer.value) {
+    observer.value.disconnect();
+  }
+  if (scrollTimer.value) {
+    clearTimeout(scrollTimer.value);
+  }
+});
+
+// uni-app 生命周期
+onLoad(() => {});
+onShow(() => {});
 </script>
 
 <style scoped>
@@ -597,88 +699,26 @@ text {
   border-radius: 16rpx;
   height: 270rpx;
   padding: 0 24rpx;
-  margin-bottom: 32rpx;
+  margin-bottom: 62rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  /* 保留 overflow: hidden 用于图片效果，但确保不影响页面滚动 */
-  overflow: hidden;
-  /* 初始状态：隐藏在下方，增加更大的偏移和旋转效果 */
-  transform: translateY(120rpx) scale(0.9);
+  /* 初始状态 - 与winthecustomer-content1相同的动画效果 */
   opacity: 0;
-  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* 动画激活状态 */
-.list-item.animate-up {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-/* 为图片容器添加额外的动画效果 */
-.list-item .image-container {
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s;
-  transform: translateY(40rpx) scale(0.95);
-}
-
-.list-item.animate-up .image-container {
-  transform: translateY(-36rpx) scale(1); /* 恢复原来的位置并添加缩放效果 */
-}
-
-/* 为内容容器添加渐入和滑入效果 */
-.list-item .content-container {
-  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.25s;
-  opacity: 0;
-  transform: translateX(30rpx);
-}
-
-.list-item.animate-up .content-container {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* 为标题添加单独的动画效果 */
-.list-item .title {
-  transition: all 0.6s ease-out 0.4s;
   transform: translateY(20rpx);
-  opacity: 0;
+  transition: all 0.6s ease-out;
 }
 
-.list-item.animate-up .title {
-  transform: translateY(0);
+.list-item.list-item-animate {
   opacity: 1;
-}
-
-/* 为描述文字添加单独的动画效果 */
-.list-item .description {
-  transition: all 0.6s ease-out 0.5s;
-  transform: translateY(20rpx);
-  opacity: 0;
-}
-
-.list-item.animate-up .description {
   transform: translateY(0);
-  opacity: 1;
-}
-
-/* 添加悬停效果增强交互性 */
-.list-item.animate-up:hover {
-  transform: translateY(-8rpx) scale(1.02);
-  box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.15);
-}
-
-/* 添加点击效果 */
-.list-item.animate-up:active {
-  transform: translateY(-4rpx) scale(0.98);
-  transition: all 0.1s ease-out;
 }
 
 .image-container {
   flex-shrink: 0;
   margin-right: 24rpx;
   position: relative;
-  top: -40rpx; /* 图片高出列表40rpx */
 }
 
 .item-image {
@@ -687,6 +727,8 @@ text {
   border-radius: 20rpx;
   background-color: #f0f0f0;
   border: 3rpx solid #ffffff;
+  position: relative;
+  top: -30rpx;
 }
 
 .content-container {
@@ -698,7 +740,7 @@ text {
 
 .title {
   height: 80rpx;
-  line-height: 80rpx;
+  line-height: 90rpx;
   font-size: 40rpx;
   font-weight: 600;
   color: #000000;

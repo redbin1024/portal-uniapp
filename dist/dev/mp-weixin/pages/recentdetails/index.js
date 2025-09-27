@@ -1,35 +1,31 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const _sfc_main = {
-  name: "RecentUpdates",
-  data() {
-    return {
-      updateList: [
-        {
-          date: "2024-01-15",
-          title: "月子中心一般为生产母亲",
-          description: "月子中心一般为生产母亲提供专业产后恢复（即坐月子）服务的场所，也称为月子会所",
-          image: "http://cdn.xiaodingdang1.com/2025/09/24/0f0d79a3bc9c4bb999418531047e1af4.jpg"
-        },
-        {
-          date: "2024-01-10",
-          title: "月子中心一般为生产母亲",
-          description: "月子中心一般为生产母亲提供专业产后恢复（即坐月子）服务的场所，也称为月子会所",
-          image: "http://cdn.xiaodingdang1.com/2025/09/24/0f0d79a3bc9c4bb999418531047e1af4.jpg"
-        },
-        {
-          date: "2024-01-05",
-          title: "月子中心一般为生产母亲",
-          description: "月子中心一般为生产母亲提供专业产后恢复（即坐月子）服务的场所，也称为月子会所",
-          image: "http://cdn.xiaodingdang1.com/2025/09/24/0f0d79a3bc9c4bb999418531047e1af4.jpg"
-        }
-      ]
+const _sfc_main = /* @__PURE__ */ Object.assign({
+  name: "RecentDetails"
+}, {
+  __name: "index",
+  setup(__props) {
+    const detailData = common_vendor.ref({});
+    const getPageParams = () => {
+      const pages = getCurrentPages();
+      const currentPage = pages[pages.length - 1];
+      if (currentPage.options && currentPage.options.item) {
+        const decodedItem = decodeURIComponent(currentPage.options.item);
+        let detailDatas = JSON.parse(decodedItem);
+        detailData.value = detailDatas;
+      }
     };
-  },
-  methods: {}
-};
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return {};
-}
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-eede22fe"]]);
+    common_vendor.onMounted(() => {
+      getPageParams();
+    });
+    return (_ctx, _cache) => {
+      return {
+        a: common_vendor.t(detailData.value.newsTitle),
+        b: detailData.value.newsImages[0],
+        c: common_vendor.t(detailData.value.newDetails)
+      };
+    };
+  }
+});
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-eede22fe"]]);
 wx.createPage(MiniProgramPage);

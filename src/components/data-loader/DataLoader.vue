@@ -1,4 +1,3 @@
-·
 <template>
   <view class="data-loader">
     <!-- 加载状态 -->

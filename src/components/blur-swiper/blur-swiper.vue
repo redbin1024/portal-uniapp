@@ -15,7 +15,48 @@
         @click="handleSlideClick(item, index)"
       >
         <view class="slide-content">
-          <image class="slide-image" :src="item.image" mode="aspectFill" />
+          <!-- 根据类型显示图片或视频 -->
+          <image
+            v-if="!item.type || item.type === 'image'"
+            class="slide-image"
+            :src="item.image || item.src"
+            mode="aspectFill"
+          />
+          <!-- 视频封面显示 -->
+          <view v-else-if="item.type === 'video'" class="video-container">
+            <video
+              :id="'video-' + index"
+              class="video-cover-container"
+              :src="item.video || item.src"
+              :controls="item.controls !== false"
+              :poster="getVideoCover(item)"
+              :show-center-play-btn="item.showCenterPlayBtn !== false"
+              :show-play-btn="item.showPlayBtn !== false"
+              :enable-play-gesture="item.enablePlayGesture !== false"
+              :object-fit="item.objectFit || 'contain'"
+              :muted="item.muted || false"
+              :autoplay="item.autoplay || false"
+              :loop="item.loop || false"
+              :show-fullscreen-btn="item.showFullscreenBtn !== false"
+              @play="handleVideoPlay"
+              @pause="handleVideoPause"
+              @ended="handleVideoEnded"
+              @error="handleVideoError"
+              @loadedmetadata="handleVideoLoaded"
+              @fullscreenchange="handleFullscreenChange"
+            />
+            <!-- 自定义播放按钮覆盖层 - 只在需要时显示 -->
+            <view
+              v-if="index === currentIndex"
+              class="video-play-overlay"
+              @click="handleVideoClick(item, index)"
+            >
+              <view class="play-button">
+                <view class="play-icon"></view>
+              </view>
+            </view>
+          </view>
+
           <view class="slide-overlay">
             <view class="slide-title">{{ item.title }}</view>
             <view class="slide-description">{{ item.description }}</view>
@@ -79,13 +120,29 @@ export default {
       touchStartY: 0,
       timer: null,
       isTransitioning: false,
+      playingVideoIndex: -1, // 当前播放视频的索引
     };
   },
   mounted() {
     this.startAutoplay();
+    console.log("BlurSwiper mounted, list:", this.list);
+    // 检查视频数据
+    this.list.forEach((item, index) => {
+      if (item.type === "video") {
+        console.log(`视频项 ${index}:`, {
+          src: item.video || item.src,
+          poster: item.poster,
+          type: item.type,
+          controls: item.controls,
+          muted: item.muted,
+          autoplay: item.autoplay,
+        });
+      }
+    });
   },
   beforeDestroy() {
     this.stopAutoplay();
+    this.stopAllVideos();
   },
   methods: {
     // 获取每个滑块的样式
@@ -213,6 +270,9 @@ export default {
       if (index === this.currentIndex || this.isTransitioning) return;
       this.isTransitioning = true;
 
+      // 停止当前播放的视频
+      this.stopAllVideos();
+
       this.currentIndex = index;
       this.$emit("change", {
         index: this.currentIndex,
@@ -230,9 +290,40 @@ export default {
     // 处理滑块点击
     handleSlideClick(item, index) {
       if (index === this.currentIndex) {
+        // 如果是当前激活的滑块，进行预览
+        if (item.type === "video") {
+          // 视频类型：全屏播放
+          this.handleVideoClick(item, index);
+        } else {
+          // 图片类型：图片预览
+          this.previewImage(item);
+        }
+        // 同时触发 itemClick 事件，让父组件也能处理
         this.$emit("itemClick", { item, index });
       } else {
+        // 如果不是当前激活的滑块，切换到该滑块
         this.goToSlide(index);
+      }
+    },
+
+    // 图片预览功能
+    previewImage(item) {
+      const imageUrl = item.image || item.src;
+      if (imageUrl) {
+        uni.previewImage({
+          urls: [imageUrl],
+          current: imageUrl,
+          success: () => {
+            console.log("图片预览成功");
+          },
+          fail: (err) => {
+            console.error("图片预览失败:", err);
+            uni.showToast({
+              title: "图片预览失败",
+              icon: "none",
+            });
+          },
+        });
       }
     },
 
@@ -250,6 +341,197 @@ export default {
       if (this.timer) {
         clearInterval(this.timer);
         this.timer = null;
+      }
+    },
+
+    // 视频播放事件
+    handleVideoPlay(e) {
+      // 视频开始播放时暂停自动轮播
+      this.stopAutoplay();
+      this.playingVideoIndex = this.currentIndex;
+      this.$emit("videoPlay", e);
+    },
+
+    // 视频暂停事件
+    handleVideoPause(e) {
+      // 视频暂停时恢复自动轮播
+      this.startAutoplay();
+      this.playingVideoIndex = -1;
+      this.$emit("videoPause", e);
+    },
+
+    // 视频播放结束事件
+    handleVideoEnded(e) {
+      // 视频播放结束时恢复自动轮播
+      this.startAutoplay();
+      this.playingVideoIndex = -1;
+      this.$emit("videoEnded", e);
+    },
+
+    // 视频错误事件
+    handleVideoError(e) {
+      console.error("视频播放错误:", e);
+      console.error("错误详情:", {
+        errMsg: e.detail?.errMsg || e.errMsg,
+        errCode: e.detail?.errCode || e.errCode,
+        target: e.target,
+        currentTarget: e.currentTarget,
+      });
+      this.playingVideoIndex = -1;
+      this.$emit("videoError", e);
+      uni.showToast({
+        title: "视频播放出错: " + (e.detail?.errMsg || e.errMsg || "未知错误"),
+        icon: "none",
+        duration: 3000,
+      });
+    },
+
+    // 视频加载完成事件
+    handleVideoLoaded(e) {
+      console.log("视频加载完成:", e);
+      this.$emit("videoLoaded", e);
+    },
+
+    // 视频全屏状态变化事件
+    handleFullscreenChange(e) {
+      console.log("视频全屏状态变化:", e);
+      this.$emit("fullscreenChange", e);
+    },
+
+    // 获取视频封面图片
+    getVideoCover(item) {
+      // 优先使用 poster，然后是 image，最后是默认占位图
+      if (item.poster && item.poster.trim()) {
+        return item.poster;
+      }
+      if (item.image && item.image.trim()) {
+        return item.image;
+      }
+      // 如果没有封面图，返回空字符串让视频显示第一帧
+      return "";
+    },
+
+    // 获取默认视频封面（兼容安卓设备）
+    getDefaultVideoCover() {
+      // 使用简单的base64编码的灰色PNG图片，确保在安卓设备上能正常显示
+      // 这是一个1x1像素的灰色PNG图片，非常小且兼容性好
+      return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+    },
+
+    // 处理封面图片加载错误
+    handleCoverError(e) {
+      console.warn("视频封面加载失败:", e);
+      // 当封面加载失败时，可以设置一个备用图片
+      const target = e.target || e.currentTarget;
+      if (target) {
+        target.src = this.getFallbackCover();
+      }
+    },
+
+    // 获取备用封面
+    getFallbackCover() {
+      // 使用简单的灰色占位图，确保在所有设备上都能正常显示
+      return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+    },
+
+    // 获取视频第一帧（备用方案，如果没有poster）
+    getVideoFirstFrame(videoUrl) {
+      // 这里可以实现视频第一帧提取逻辑
+      // 由于uni-app限制，这里返回默认占位图
+      return this.getDefaultVideoCover();
+    },
+
+    // 视频点击事件 - 全屏预览
+    handleVideoClick(item, index) {
+      console.log("视频点击事件触发:", { item, index });
+
+      // 触发视频点击事件
+      this.$emit("videoClick", { item, index });
+
+      // 使用 uni-app 的视频全屏 API
+      if (item.video || item.src) {
+        try {
+          const videoId = "video-" + index;
+          console.log("尝试创建视频上下文:", videoId);
+
+          const videoContext = uni.createVideoContext(videoId, this);
+          if (videoContext) {
+            console.log("视频上下文创建成功");
+
+            // 直接请求全屏播放
+            videoContext.requestFullScreen({
+              direction: 0, // 0: 正常竖向, 90: 屏幕逆时针90度, -90: 屏幕顺时针90度
+              success: () => {
+                console.log("视频全屏成功");
+                // 全屏成功后再播放
+                setTimeout(() => {
+                  videoContext.play();
+                }, 200);
+              },
+              fail: (err) => {
+                console.error("视频全屏失败:", err);
+                // 如果全屏失败，尝试直接播放
+                videoContext.play();
+                uni.showToast({
+                  title: "视频全屏失败，尝试直接播放",
+                  icon: "none",
+                });
+              },
+            });
+          } else {
+            console.error("无法创建视频上下文，videoId:", videoId);
+            // 尝试使用原生视频播放
+            this.fallbackVideoPlay(item);
+          }
+        } catch (error) {
+          console.error("视频播放异常:", error);
+          // 尝试使用原生视频播放
+          this.fallbackVideoPlay(item);
+        }
+      }
+    },
+
+    // 备用视频播放方法
+    fallbackVideoPlay(item) {
+      const videoUrl = item.video || item.src;
+      if (videoUrl) {
+        // 使用 uni.previewMedia 作为备用方案
+        uni.previewMedia({
+          sources: [
+            {
+              url: videoUrl,
+              type: "video",
+              poster: item.poster || item.image,
+            },
+          ],
+          success: () => {
+            console.log("备用视频播放成功");
+          },
+          fail: (err) => {
+            console.error("备用视频播放失败:", err);
+            uni.showToast({
+              title: "视频播放失败",
+              icon: "none",
+            });
+          },
+        });
+      }
+    },
+
+    // 停止所有视频播放
+    stopAllVideos() {
+      if (this.playingVideoIndex >= 0) {
+        try {
+          const videoId = "video-" + this.playingVideoIndex;
+          const videoContext = uni.createVideoContext(videoId, this);
+          if (videoContext) {
+            videoContext.pause();
+            console.log("停止视频播放:", videoId);
+          }
+        } catch (error) {
+          console.error("停止视频播放失败:", error);
+        }
+        this.playingVideoIndex = -1;
       }
     },
   },
@@ -278,21 +560,6 @@ export default {
   height: 720rpx;
   border-radius: 20rpx;
   overflow: hidden;
-  cursor: pointer;
-  will-change: transform, opacity;
-}
-
-.swiper-slide:not(.active) .slide-content::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  pointer-events: none;
 }
 
 .slide-content {
@@ -307,7 +574,6 @@ export default {
 .slide-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 
 .slide-overlay {
@@ -329,21 +595,11 @@ export default {
   font-size: 28rpx;
   font-weight: bold;
   margin-bottom: 8rpx;
-  line-height: 1.2;
 }
 
 .slide-description {
   font-size: 22rpx;
   opacity: 0.9;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.swiper-slide.active .slide-content {
-  box-shadow: 0 12rpx 48rpx rgba(0, 0, 0, 0.4);
 }
 
 .swiper-indicators {
@@ -362,7 +618,6 @@ export default {
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.5);
   transition: all 0.3s ease;
-  cursor: pointer;
 }
 
 .indicator-dot.active {
@@ -370,7 +625,53 @@ export default {
   transform: scale(1.2);
 }
 
-.indicator-dot:hover {
-  background-color: rgba(255, 255, 255, 0.8);
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.video-cover-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  display: block;
+}
+
+.video-play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.play-button {
+  width: 120rpx;
+  height: 120rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.3);
+}
+
+.play-icon {
+  width: 0;
+  height: 0;
+  border-left: 30rpx solid #333;
+  border-top: 20rpx solid transparent;
+  border-bottom: 20rpx solid transparent;
+  margin-left: 8rpx;
 }
 </style>

@@ -1,50 +1,112 @@
 <template>
   <view class="client-evaluation-page">
-    <!-- 瀑布流内容区域 -->
-    <view class="waterfall-container">
-      <!-- 固定头部区域 -->
-      <!-- <view class="fixed-header">
-        <view class="header-content">
-          <text class="main-title">真实合作商家 </text>
-          <view class="chat-icon">
-            <view class="chat-bubble">
-              <view class="dot"></view>
-              <view class="dot"></view>
-              <view class="dot"></view>
+    <!-- 固定头部 -->
+    <!-- <view class="fixed-header">
+      <view class="header-content">
+        <text class="main-title">客户评价</text>
+        <view class="chat-icon">
+          <view class="chat-bubble">
+            <view class="dot"></view>
+            <view class="dot"></view>
+            <view class="dot"></view>
+          </view>
+        </view>
+      </view>
+      <text class="sub-title">真实客户反馈与评价</text>
+    </view> -->
+
+    <!-- 内容区域 -->
+    <view class="content-area">
+      <!-- 加载状态 -->
+      <view v-if="loading" class="loading-container">
+        <text class="loading-text">加载中...</text>
+      </view>
+
+      <!-- 瀑布流列表 -->
+      <view v-else class="waterfall-container">
+        <!-- 左列 -->
+        <view class="waterfall-column">
+          <view
+            v-for="(item, index) in columns[0]"
+            :key="`left-${item.id || item.newsId || index}`"
+            class="card-item"
+            @tap="handleCardClick(item)"
+          >
+            <view class="image-wrapper">
+              <!-- 图片 -->
+              <image
+                v-if="!isVideo(item.newsImages)"
+                :src="item.newsImages[0] || '/static/video-placeholder.png'"
+                class="main-image"
+                mode="aspectFill"
+                @load="onImageLoad(item.id || item.newsId, 0, index)"
+                @tap.stop="handleMediaClick(item, 'image')"
+              />
+
+              <!-- 视频 -->
+              <video
+                v-else
+                :src="item.newsImages[0]"
+                class="main-video"
+                :poster="item.videoPoster || '/static/video-placeholder.png'"
+                @loadedmetadata="onVideoLoad(item.id || item.newsId, 0, index)"
+                @tap.stop="handleMediaClick(item, 'video')"
+              >
+                <view class="media-type-indicator">
+                  <view class="play-icon">
+                    <text class="play-symbol">▶</text>
+                  </view>
+                </view>
+              </video>
+            </view>
+
+            <!-- 标题信息 -->
+            <view class="info-bar">
+              <text class="card-title">{{ item.newsTitle || "暂无标题" }}</text>
             </view>
           </view>
         </view>
-        <text class="sub-title">看看他们的评价吧~</text>
-      </view> -->
-      <view
-        class="waterfall-column"
-        v-for="(column, columnIndex) in columns"
-        :key="columnIndex"
-      >
-        <view
-          class="card-item"
-          v-for="(item, index) in column"
-          :key="item.id"
-          @click="handleCardClick(item)"
-        >
-          <!-- 主图区域 -->
-          <view class="image-wrapper">
-            <image
-              :src="item.contentPhotos[0]"
-              mode="widthFix"
-              class="main-image"
-              @load="onImageLoad(item.id, columnIndex, index)"
-            />
-            <!-- 图片上的覆盖文字 -->
-            <view v-if="item.overlayText" class="overlay-text">
-              {{ item.overlayText }}
-            </view>
-          </view>
 
-          <!-- 信息栏 -->
-          <view class="info-bar">
-            <image :src="item.avatar" class="avatar" />
-            <text class="merchant-name">{{ item.nodeName }}</text>
+        <!-- 右列 -->
+        <view class="waterfall-column">
+          <view
+            v-for="(item, index) in columns[1]"
+            :key="`right-${item.id || item.newsId || index}`"
+            class="card-item"
+            @tap="handleCardClick(item)"
+          >
+            <view class="image-wrapper">
+              <!-- 图片 -->
+              <image
+                v-if="!isVideo(item.newsImages)"
+                :src="item.newsImages || '/static/video-placeholder.png'"
+                class="main-image"
+                mode="aspectFill"
+                @load="onImageLoad(item.id || item.newsId, 1, index)"
+                @tap.stop="handleMediaClick(item, 'image')"
+              />
+
+              <!-- 视频 -->
+              <video
+                v-else
+                :src="item.newsImages"
+                class="main-video"
+                :poster="item.videoPoster || '/static/video-placeholder.png'"
+                @loadedmetadata="onVideoLoad(item.id || item.newsId, 1, index)"
+                @tap.stop="handleMediaClick(item, 'video')"
+              >
+                <view class="media-type-indicator">
+                  <view class="play-icon">
+                    <text class="play-symbol">▶</text>
+                  </view>
+                </view>
+              </video>
+            </view>
+
+            <!-- 标题信息 -->
+            <view class="info-bar">
+              <text class="card-title">{{ item.newsTitle || "暂无标题" }}</text>
+            </view>
           </view>
         </view>
       </view>
@@ -54,8 +116,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { getFeedPostPage } from "@/api/activity.js";
-
+import { getCompanyNewsList } from "@/api/activity.js";
 // 响应式数据
 const columns = ref([[], []]);
 const columnHeights = ref([0, 0]);
@@ -68,9 +129,10 @@ const merchantData = ref([]);
 const fetchMerchantData = async () => {
   try {
     loading.value = true;
-    const response = await getFeedPostPage({
+    const response = await getCompanyNewsList({
       pageSize: 10,
       pageNum: 1,
+      type: 2,
     });
 
     console.log("API响应数据:", response);
@@ -79,8 +141,8 @@ const fetchMerchantData = async () => {
     let dataArray = [];
 
     // 根据不同的数据结构进行处理
-    if (response && response.rows && Array.isArray(response.rows.list)) {
-      dataArray = response.rows.list;
+    if (response && response.rows && Array.isArray(response.rows)) {
+      dataArray = response.rows;
     } else if (response && response.rows && Array.isArray(response.rows)) {
       dataArray = response.rows;
     } else if (response && Array.isArray(response)) {
@@ -141,16 +203,67 @@ const getEstimatedHeight = (item) => {
   return baseHeight + randomHeight;
 };
 
+// 判断是否为视频文件
+const isVideo = (url) => {
+  if (!url || typeof url !== "string") return false;
+  const videoExtensions = [
+    ".mp4",
+    ".avi",
+    ".mov",
+    ".wmv",
+    ".flv",
+    ".webm",
+    ".m4v",
+  ];
+  const lowerUrl = url.toLowerCase();
+  return videoExtensions.some((ext) => lowerUrl.includes(ext));
+};
+
 // 图片加载完成
 const onImageLoad = (itemId, columnIndex, itemIndex) => {
   // 图片加载完成后可以获取实际高度并重新计算布局
   console.log("Image loaded:", itemId);
 };
 
+// 视频加载完成
+const onVideoLoad = (itemId, columnIndex, itemIndex) => {
+  // 视频元数据加载完成后可以获取实际高度并重新计算布局
+  console.log("Video loaded:", itemId);
+};
+
+// 处理媒体点击（图片或视频）
+const handleMediaClick = (item, mediaType) => {
+  console.log("Media clicked:", mediaType, item);
+
+  if (mediaType === "video") {
+    // 处理视频点击 - 可以播放视频或跳转到视频详情页
+    // 这里可以添加视频播放逻辑
+    uni.showModal({
+      title: "视频播放",
+      content: "点击了视频内容",
+      showCancel: false,
+    });
+  } else {
+    // 处理图片点击 - 可以预览图片或跳转到详情页
+    const imageUrl = item.newsImages || "";
+    if (imageUrl) {
+      uni.previewImage({
+        urls: [imageUrl],
+        current: imageUrl,
+      });
+    }
+  }
+};
+
 // 处理卡片点击
 const handleCardClick = (item) => {
+  console.log("Card clicked:", item);
+  // 根据实际需求跳转到对应的详情页面
+  // 例如跳转到动态详情页面
   uni.navigateTo({
-    url: "/",
+    url: `/pages/dynamicdetails/index?id=${
+      item.id || item.newsId || ""
+    }&title=${encodeURIComponent(item.newsTitle || "")}`,
   });
 };
 
@@ -235,11 +348,29 @@ onMounted(() => {
   }
 }
 
+// 内容区域
+.content-area {
+  padding-top: 20rpx; // 为固定头部留出空间
+}
+
+// 加载状态
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100rpx 0;
+
+  .loading-text {
+    font-size: 28rpx;
+    color: #999999;
+  }
+}
+
 // 瀑布流容器
 .waterfall-container {
   display: flex;
-  padding: 0 16rpx;
   gap: 16rpx;
+
   .waterfall-column {
     flex: 1;
     display: flex;
@@ -263,12 +394,48 @@ onMounted(() => {
 
   .image-wrapper {
     position: relative;
-    width: 100%;
+    width: 330rpx; // 设置图片宽度为330rpx
+    height: 600rpx; // 设置图片高度为600rpx
     overflow: hidden;
 
     .main-image {
       width: 100%;
+      height: 100%;
       display: block;
+    }
+
+    .main-video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background-color: #000;
+    }
+
+    .media-type-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .play-icon {
+      width: 80rpx;
+      height: 80rpx;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10rpx);
+      border: 2rpx solid rgba(255, 255, 255, 0.3);
+    }
+
+    .play-symbol {
+      color: #ffffff;
+      font-size: 32rpx;
+      margin-left: 4rpx; /* 微调播放符号位置 */
     }
 
     .overlay-text {
@@ -295,6 +462,17 @@ onMounted(() => {
     display: flex;
     align-items: center;
     padding: 20rpx;
+
+    .card-title {
+      width: 330rpx; // 设置标题宽度为330rpx
+      height: 60rpx; // 设置标题高度为60rpx
+      font-size: 26rpx;
+      color: #333333;
+      line-height: 60rpx; // 设置行高等于高度，实现垂直居中
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
     .avatar {
       width: 48rpx;

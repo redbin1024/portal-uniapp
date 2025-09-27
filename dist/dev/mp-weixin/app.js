@@ -18,6 +18,7 @@ if (!Math) {
   "./pages/productservicenew/index.js";
   "./pages/customer/index.js";
   "./pages/dynamicdetails/index.js";
+  "./pages/api-test/index.js";
 }
 const _sfc_main = {
   name: "App",

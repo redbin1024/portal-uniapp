@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API调试测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result {
+            background: #f5f5f5;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>API调试测试页面</h1>
+    
+    <div class="test-section">
+        <h3>1. 测试API基础配置</h3>
+        <button onclick="testConfig()">测试配置</button>
+        <div id="config-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>2. 测试网络连接</h3>
+        <button onclick="testNetwork()">测试网络</button>
+        <div id="network-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>3. 测试API请求</h3>
+        <button onclick="testAPI()">测试API</button>
+        <div id="api-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>4. 模拟uni-app请求</h3>
+        <button onclick="testUniRequest()">测试uni请求</button>
+        <div id="uni-result" class="result"></div>
+    </div>
+
+    <script>
+        // 模拟uni对象
+        const uni = {
+            request: function(options) {
+                return new Promise((resolve, reject) => {
+                    fetch(options.url, {
+                        method: options.method || 'GET',
+                        headers: options.header || {},
+                        body: options.data ? JSON.stringify(options.data) : undefined
+                    })
+                    .then(response => {
+                        return response.json().then(data => ({
+                            statusCode: response.status,
+                            data: data,
+                            header: Object.fromEntries(response.headers.entries())
+                        }));
+                    })
+                    .then(result => {
+                        if (options.success) options.success(result);
+                        resolve(result);
+                    })
+                    .catch(error => {
+                        if (options.fail) options.fail(error);
+                        reject(error);
+                    })
+                    .finally(() => {
+                        if (options.complete) options.complete();
+                    });
+                });
+            },
+            showLoading: function(options) {
+                console.log('Loading:', options.title);
+            },
+            hideLoading: function() {
+                console.log('Hide loading');
+            },
+            showToast: function(options) {
+                console.log('Toast:', options.title);
+            }
+        };
+
+        function testConfig() {
+            const result = document.getElementById('config-result');
+            const config = {
+                baseURL: 'https://test-api.xiaodingdang1.com/',
+                debug: true,
+                timeout: 30000
+            };
+            result.textContent = `配置信息：\n${JSON.stringify(config, null, 2)}`;
+            result.className = 'result success';
+        }
+
+        function testNetwork() {
+            const result = document.getElementById('network-result');
+            result.textContent = '正在测试网络连接...';
+            result.className = 'result';
+
+            fetch('https://test-api.xiaodingdang1.com/', {
+                method: 'GET',
+                mode: 'cors'
+            })
+            .then(response => {
+                result.textContent = `网络连接成功！\n状态码: ${response.status}\n状态文本: ${response.statusText}`;
+                result.className = 'result success';
+            })
+            .catch(error => {
+                result.textContent = `网络连接失败：\n${error.message}\n\n可能的原因：\n1. CORS跨域问题\n2. 网络连接问题\n3. 服务器不可达`;
+                result.className = 'result error';
+            });
+        }
+
+        function testAPI() {
+            const result = document.getElementById('api-result');
+            result.textContent = '正在测试API请求...';
+            result.className = 'result';
+
+            const apiUrl = 'https://test-api.xiaodingdang1.com/mp/tk/successCase/list';
+            const params = new URLSearchParams({
+                pageSize: '10',
+                pageNum: '1'
+            });
+
+            fetch(`${apiUrl}?${params}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-App-Version': '1.0.0'
+                },
+                mode: 'cors'
+            })
+            .then(response => {
+                return response.text().then(text => {
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        data = text;
+                    }
+                    return {
+                        status: response.status,
+                        statusText: response.statusText,
+                        data: data
+                    };
+                });
+            })
+            .then(response => {
+                result.textContent = `API请求结果：\n状态码: ${response.status}\n响应数据: ${JSON.stringify(response.data, null, 2)}`;
+                if (response.status === 200) {
+                    result.className = 'result success';
+                } else {
+                    result.className = 'result error';
+                }
+            })
+            .catch(error => {
+                result.textContent = `API请求失败：\n${error.message}`;
+                result.className = 'result error';
+            });
+        }
+
+        function testUniRequest() {
+            const result = document.getElementById('uni-result');
+            result.textContent = '正在使用uni.request测试...';
+            result.className = 'result';
+
+            const baseURL = 'https://test-api.xiaodingdang1.com/';
+            const url = 'mp/tk/successCase/list';
+            const params = {
+                pageSize: 10,
+                pageNum: 1
+            };
+
+            // 构建完整URL
+            const queryString = Object.keys(params)
+                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+                .join('&');
+            const fullUrl = baseURL + url + '?' + queryString;
+
+            uni.request({
+                url: fullUrl,
+                method: 'GET',
+                header: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-App-Version': '1.0.0'
+                },
+                success: (response) => {
+                    result.textContent = `uni.request成功：\n状态码: ${response.statusCode}\n响应数据: ${JSON.stringify(response.data, null, 2)}`;
+                    if (response.statusCode === 200) {
+                        result.className = 'result success';
+                    } else {
+                        result.className = 'result error';
+                    }
+                },
+                fail: (error) => {
+                    result.textContent = `uni.request失败：\n${JSON.stringify(error, null, 2)}`;
+                    result.className = 'result error';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

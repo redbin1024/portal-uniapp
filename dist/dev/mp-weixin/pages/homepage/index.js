@@ -1,5 +1,26 @@
 "use strict";
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 const common_vendor = require("../../common/vendor.js");
+const api_activity = require("../../api/activity.js");
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -7,6 +28,62 @@ const _sfc_main = {
     const titleVisible = common_vendor.ref(false);
     const headContentVisible = common_vendor.ref({});
     const content1Visible = common_vendor.ref([]);
+    const fetchCompanyNewsList = () => __async(this, null, function* () {
+      try {
+        const response = yield api_activity.getCompanyNewsList({
+          pageSize: 10,
+          pageNum: 1,
+          type: 0
+        });
+        console.log("企业列表数据:", response);
+        if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
+          companyNewsList.value = response.rows;
+        }
+      } catch (error) {
+        console.error("获取企业列表失败:", error);
+        common_vendor.index.showToast({
+          title: "获取企业列表失败",
+          icon: "none"
+        });
+      }
+    });
+    const fetchServiceList = () => __async(this, null, function* () {
+      try {
+        const response = yield api_activity.getServiceList({
+          pageSize: 10,
+          pageNum: 1
+        });
+        console.log("企业列表数据:", response);
+        if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
+          serviceList.value = response.rows[0];
+          serviceLists.value = response.rows.slice(1);
+        }
+      } catch (error) {
+        console.error("获取企业列表失败:", error);
+        common_vendor.index.showToast({
+          title: "获取企业列表失败",
+          icon: "none"
+        });
+      }
+    });
+    const fetchEnterpriseList = () => __async(this, null, function* () {
+      try {
+        const response = yield api_activity.getEnterpriseList({
+          pageSize: 10,
+          pageNum: 1
+        });
+        console.log("企业列表数据:", response);
+        if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
+          enterpriseList.value = response.rows[0];
+        }
+      } catch (error) {
+        console.error("获取企业列表失败:", error);
+        common_vendor.index.showToast({
+          title: "获取企业列表失败",
+          icon: "none"
+        });
+      }
+    });
     common_vendor.onMounted(() => {
       setTimeout(() => {
         buttonsVisible.value = true;
@@ -17,8 +94,11 @@ const _sfc_main = {
         checkContent1Visibility();
         checkImageVisibility();
       }, 100);
+      fetchEnterpriseList();
+      fetchServiceList();
+      fetchCompanyNewsList();
     });
-    common_vendor.ref([]);
+    const imagePopVisible = common_vendor.ref([]);
     const checkTitleVisibility = () => {
       if (titleVisible.value) {
         return;
@@ -68,12 +148,12 @@ const _sfc_main = {
             common_vendor.index.getSystemInfo({
               success: (res) => {
                 const windowHeight = res.windowHeight;
-                if (rect.top < windowHeight * 1 && rect.bottom > 0) {
+                if (rect.top < windowHeight * 0.85 && rect.bottom > 0) {
                   setTimeout(() => {
                     if (!content1Visible.value[index]) {
                       content1Visible.value[index] = true;
                     }
-                  }, index * 200);
+                  }, index * 150);
                 }
               }
             });
@@ -81,7 +161,28 @@ const _sfc_main = {
         }
       }).exec();
     };
-    const bannerList = common_vendor.ref([
+    const checkImageVisibility = () => {
+      const query = common_vendor.index.createSelectorQuery();
+      query.selectAll(".certificate-item, .businesspartner-item, .teamappearance-item").boundingClientRect((rects) => {
+        if (rects && rects.length > 0) {
+          rects.forEach((rect, index) => {
+            common_vendor.index.getSystemInfo({
+              success: (res) => {
+                const windowHeight = res.windowHeight;
+                if (rect.top < windowHeight * 0.9 && rect.bottom > 0) {
+                  setTimeout(() => {
+                    if (!imagePopVisible.value[index]) {
+                      imagePopVisible.value[index] = true;
+                    }
+                  }, index * 100);
+                }
+              }
+            });
+          });
+        }
+      }).exec();
+    };
+    common_vendor.ref([
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png",
         title: "专业团队",
@@ -98,7 +199,7 @@ const _sfc_main = {
         desc: "运用最新技术为客户创造价值"
       }
     ]);
-    const teamList = common_vendor.ref([
+    common_vendor.ref([
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/17/e7c6eb7643134423ab31c7726397b807.png",
         title: "销售部",
@@ -120,7 +221,7 @@ const _sfc_main = {
         content: "专业的市场推广团队，深谙市场营销策略，具备敏锐的市场洞察力，为公司业务拓展提供强有力的支持。"
       }
     ]);
-    const certificateList = common_vendor.ref([
+    common_vendor.ref([
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/18/fd0961babb634f3b9fefb2f9ad8c0855.png",
         name: "优秀企业证书"
@@ -142,7 +243,7 @@ const _sfc_main = {
         name: "客户满意奖"
       }
     ]);
-    const businessPartnerList = common_vendor.ref([
+    common_vendor.ref([
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/18/cc70bc251d644d78866a0ad1e0ba546c.png",
         name: "合作伙伴1"
@@ -176,19 +277,98 @@ const _sfc_main = {
         name: "合作伙伴5"
       }
     ]);
+    const enterpriseList = common_vendor.ref([]);
+    const serviceList = common_vendor.ref([]);
+    const serviceLists = common_vendor.ref([]);
+    const companyNewsList = common_vendor.ref([]);
     const currentIndex = common_vendor.ref(0);
     const showHeaderBg = common_vendor.ref(false);
     const onSwiperChange = (e) => {
       currentIndex.value = e.detail.current;
     };
-    const goToSlide = (index) => {
-      currentIndex.value = index;
+    const showPreview = common_vendor.ref(false);
+    const previewMedia = common_vendor.ref({
+      src: "",
+      type: "image",
+      // 'image' 或 'video'
+      index: 0
+    });
+    const isVideo = (url) => {
+      if (!url)
+        return false;
+      const videoExtensions = [
+        ".mp4",
+        ".webm",
+        ".ogg",
+        ".mov",
+        ".avi",
+        ".wmv",
+        ".flv",
+        ".mkv"
+      ];
+      const urlLower = url.toLowerCase();
+      return videoExtensions.some((ext) => urlLower.includes(ext));
     };
-    const onBannerClick = (item, index) => {
-      console.log("Banner clicked:", item, index);
+    const getVideoPoster = (videoUrl) => {
+      return videoUrl.replace(
+        /\.(mp4|webm|ogg|mov|avi|wmv|flv|mkv)$/i,
+        "_poster.jpg"
+      );
+    };
+    const onMediaClick = (item, index, type) => {
+      console.log("Media clicked:", item, index, type);
+      previewMedia.value = {
+        src: item,
+        type,
+        index
+      };
+      showPreview.value = true;
+    };
+    const closePreview = () => {
+      showPreview.value = false;
+    };
+    const prevMedia = () => {
+      const currentIndex2 = previewMedia.value.index;
+      const newIndex = currentIndex2 > 0 ? currentIndex2 - 1 : enterpriseList.value.bannerImages.length - 1;
+      const newSrc = enterpriseList.value.bannerImages[newIndex];
+      previewMedia.value = {
+        src: newSrc,
+        type: isVideo(newSrc) ? "video" : "image",
+        index: newIndex
+      };
+    };
+    const nextMedia = () => {
+      const currentIndex2 = previewMedia.value.index;
+      const newIndex = currentIndex2 < enterpriseList.value.bannerImages.length - 1 ? currentIndex2 + 1 : 0;
+      const newSrc = enterpriseList.value.bannerImages[newIndex];
+      previewMedia.value = {
+        src: newSrc,
+        type: isVideo(newSrc) ? "video" : "image",
+        index: newIndex
+      };
     };
     const handleContactClick = () => {
       console.log("Contact clicked");
+    };
+    const getFirstRowCertificates = (certificates) => {
+      if (!certificates || !Array.isArray(certificates))
+        return [];
+      return certificates.filter((_, index) => index % 2 === 0);
+    };
+    const getSecondRowCertificates = (certificates) => {
+      if (!certificates || !Array.isArray(certificates))
+        return [];
+      return certificates.filter((_, index) => index % 2 === 1);
+    };
+    const getFirstRowPartners = (partners) => {
+      if (!partners || !Array.isArray(partners))
+        return [];
+      return partners.filter((_, index) => index % 2 === 0);
+    };
+    const getSecondRowPartners = (partners) => {
+      if (!partners || !Array.isArray(partners))
+        return [];
+      return partners.filter((_, index) => index % 2 === 1);
     };
     common_vendor.onPageScroll((e) => {
       showHeaderBg.value = e.scrollTop > 50;
@@ -198,73 +378,119 @@ const _sfc_main = {
       checkImageVisibility();
     });
     return (_ctx, _cache) => {
-      return {
-        a: showHeaderBg.value ? 1 : "",
-        b: common_vendor.f(bannerList.value, (item, index, i0) => {
+      var _a, _b, _c, _d, _e, _f;
+      return common_vendor.e({
+        a: common_vendor.t(enterpriseList.value.enterpriseName),
+        b: showHeaderBg.value ? 1 : "",
+        c: common_vendor.f(enterpriseList.value.bannerImages, (item, index, i0) => {
           return common_vendor.e({
-            a: item.image,
-            b: common_vendor.o(($event) => onBannerClick(item, index), index),
-            c: item.title || item.desc
-          }, item.title || item.desc ? common_vendor.e({
-            d: item.title
-          }, item.title ? {
-            e: common_vendor.t(item.title)
-          } : {}, {
-            f: item.desc
-          }, item.desc ? {
-            g: common_vendor.t(item.desc)
-          } : {}) : {}, {
+            a: isVideo(item)
+          }, isVideo(item) ? {
+            b: item,
+            c: getVideoPoster(item),
+            d: common_vendor.o(($event) => onMediaClick(item, index, "video"), index),
+            e: common_vendor.o(($event) => onMediaClick(item, index, "video"), index)
+          } : {
+            f: item,
+            g: common_vendor.o(($event) => onMediaClick(item, index, "image"), index)
+          }, {
             h: index
           });
         }),
-        c: common_vendor.o(onSwiperChange),
-        d: common_vendor.f(bannerList.value, (item, index, i0) => {
-          return {
-            a: index,
-            b: currentIndex.value === index ? 1 : "",
-            c: common_vendor.o(($event) => goToSlide(index), index)
-          };
-        }),
-        e: buttonsVisible.value ? 1 : "",
-        f: buttonsVisible.value ? 1 : "",
-        g: common_vendor.o(handleContactClick),
+        d: common_vendor.o(onSwiperChange),
+        e: common_vendor.t(enterpriseList.value.enterpriseName),
+        f: common_vendor.t(enterpriseList.value.enterpriseDescription),
+        g: buttonsVisible.value ? 1 : "",
         h: buttonsVisible.value ? 1 : "",
-        i: buttonsVisible.value ? 1 : "",
-        j: common_vendor.o(handleContactClick),
+        i: common_vendor.o(handleContactClick),
+        j: buttonsVisible.value ? 1 : "",
         k: buttonsVisible.value ? 1 : "",
-        l: buttonsVisible.value ? 1 : "",
-        m: common_vendor.o(handleContactClick),
-        n: titleVisible.value ? 1 : "",
-        o: titleVisible.value ? 1 : "",
-        p: common_vendor.f([1, 2, 3, 4, 5, 6], (item, index, i0) => {
+        l: common_vendor.o(handleContactClick),
+        m: buttonsVisible.value ? 1 : "",
+        n: buttonsVisible.value ? 1 : "",
+        o: common_vendor.o(handleContactClick),
+        p: titleVisible.value ? 1 : "",
+        q: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
+      }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) ? {
+        r: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+      } : {}, {
+        s: titleVisible.value ? 1 : "",
+        t: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
-            a: index,
-            b: content1Visible.value[index] ? 1 : ""
+            a: item.serviceImage,
+            b: common_vendor.t(item.serviceName),
+            c: index,
+            d: content1Visible.value[index] ? 1 : ""
           };
         }),
-        q: headContentVisible.value[0] ? 1 : "",
-        r: common_vendor.f(teamList.value, (team, index, i0) => {
+        v: headContentVisible.value[0] ? 1 : "",
+        w: common_vendor.f(companyNewsList.value, (team, index, i0) => {
+          var _a2, _b2, _c2;
+          return common_vendor.e({
+            a: (_a2 = team.newsImages) == null ? void 0 : _a2[0]
+          }, ((_b2 = team.newsImages) == null ? void 0 : _b2[0]) ? {
+            b: (_c2 = team.newsImages) == null ? void 0 : _c2[0]
+          } : {}, {
+            c: common_vendor.t(team.newsTitle),
+            d: index
+          });
+        }),
+        x: headContentVisible.value[1] ? 1 : "",
+        y: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
-            a: team.image,
-            b: common_vendor.t(team.content),
-            c: index
+            a: certificate,
+            b: "row1-" + index
           };
         }),
-        s: headContentVisible.value[1] ? 1 : "",
-        t: common_vendor.f(certificateList.value, (certificate, index, i0) => {
+        z: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+      }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
+        A: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
-            a: certificate.image,
-            b: index
-          };
-        }),
-        v: headContentVisible.value[2] ? 1 : "",
-        w: common_vendor.f(businessPartnerList.value, (partner, index, i0) => {
-          return {
-            a: partner.image,
-            b: index
+            a: certificate,
+            b: "row2-" + index
           };
         })
-      };
+      } : {}, {
+        B: headContentVisible.value[2] ? 1 : "",
+        C: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+          return {
+            a: partner,
+            b: "row1-" + index
+          };
+        }),
+        D: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
+      }, getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0 ? {
+        E: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+          return {
+            a: partner,
+            b: "row2-" + index
+          };
+        })
+      } : {}, {
+        F: showPreview.value
+      }, showPreview.value ? common_vendor.e({
+        G: common_vendor.o(closePreview),
+        H: enterpriseList.value.bannerImages && enterpriseList.value.bannerImages.length > 1
+      }, enterpriseList.value.bannerImages && enterpriseList.value.bannerImages.length > 1 ? {
+        I: common_vendor.o(prevMedia)
+      } : {}, {
+        J: enterpriseList.value.bannerImages && enterpriseList.value.bannerImages.length > 1
+      }, enterpriseList.value.bannerImages && enterpriseList.value.bannerImages.length > 1 ? {
+        K: common_vendor.o(nextMedia)
+      } : {}, {
+        L: previewMedia.value.type === "video"
+      }, previewMedia.value.type === "video" ? {
+        M: previewMedia.value.src,
+        N: getVideoPoster(previewMedia.value.src)
+      } : {
+        O: previewMedia.value.src
+      }, {
+        P: common_vendor.t(previewMedia.value.index + 1),
+        Q: common_vendor.t(enterpriseList.value.bannerImages ? enterpriseList.value.bannerImages.length : 0),
+        R: common_vendor.o(() => {
+        }),
+        S: common_vendor.o(closePreview)
+      }) : {});
     };
   }
 };

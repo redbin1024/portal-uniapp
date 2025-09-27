@@ -2,6 +2,6 @@
   "navigationBarTitleText": "合作案例",
   "navigationBarBackgroundColor": "#ffffff",
   "usingComponents": {
-    "blur-swiper": "../../components/blur-swiper/blur-swiper"
+    "vear-carousel": "../../components/vear-carousel/vear-carousel"
   }
 }

@@ -31,14 +31,15 @@ const _sfc_main = {
     const fetchMerchantData = () => __async(this, null, function* () {
       try {
         loading.value = true;
-        const response = yield api_activity.getFeedPostPage({
+        const response = yield api_activity.getCompanyNewsList({
           pageSize: 10,
-          pageNum: 1
+          pageNum: 1,
+          type: 2
         });
         console.log("API响应数据:", response);
         let dataArray = [];
-        if (response && response.rows && Array.isArray(response.rows.list)) {
-          dataArray = response.rows.list;
+        if (response && response.rows && Array.isArray(response.rows)) {
+          dataArray = response.rows;
         } else if (response && response.rows && Array.isArray(response.rows)) {
           dataArray = response.rows;
         } else if (response && Array.isArray(response)) {
@@ -80,39 +81,95 @@ const _sfc_main = {
       const randomHeight = Math.random() * 150 + 100;
       return baseHeight + randomHeight;
     };
+    const isVideo = (url) => {
+      if (!url || typeof url !== "string")
+        return false;
+      const videoExtensions = [
+        ".mp4",
+        ".avi",
+        ".mov",
+        ".wmv",
+        ".flv",
+        ".webm",
+        ".m4v"
+      ];
+      const lowerUrl = url.toLowerCase();
+      return videoExtensions.some((ext) => lowerUrl.includes(ext));
+    };
     const onImageLoad = (itemId, columnIndex, itemIndex) => {
       console.log("Image loaded:", itemId);
     };
+    const onVideoLoad = (itemId, columnIndex, itemIndex) => {
+      console.log("Video loaded:", itemId);
+    };
+    const handleMediaClick = (item, mediaType) => {
+      console.log("Media clicked:", mediaType, item);
+      if (mediaType === "video") {
+        common_vendor.index.showModal({
+          title: "视频播放",
+          content: "点击了视频内容",
+          showCancel: false
+        });
+      } else {
+        const imageUrl = item.newsImages || "";
+        if (imageUrl) {
+          common_vendor.index.previewImage({
+            urls: [imageUrl],
+            current: imageUrl
+          });
+        }
+      }
+    };
     const handleCardClick = (item) => {
+      console.log("Card clicked:", item);
       common_vendor.index.navigateTo({
-        url: "/"
+        url: `/pages/dynamicdetails/index?id=${item.id || item.newsId || ""}&title=${encodeURIComponent(item.newsTitle || "")}`
       });
     };
     common_vendor.onMounted(() => {
       fetchMerchantData();
     });
     return (_ctx, _cache) => {
-      return {
-        a: common_vendor.f(columns.value, (column, columnIndex, i0) => {
-          return {
-            a: common_vendor.f(column, (item, index, i1) => {
-              return common_vendor.e({
-                a: item.contentPhotos[0],
-                b: common_vendor.o(($event) => onImageLoad(item.id), item.id),
-                c: item.overlayText
-              }, item.overlayText ? {
-                d: common_vendor.t(item.overlayText)
-              } : {}, {
-                e: item.avatar,
-                f: common_vendor.t(item.nodeName),
-                g: item.id,
-                h: common_vendor.o(($event) => handleCardClick(), item.id)
-              });
-            }),
-            b: columnIndex
-          };
+      return common_vendor.e({
+        a: loading.value
+      }, loading.value ? {} : {
+        b: common_vendor.f(columns.value[0], (item, index, i0) => {
+          return common_vendor.e({
+            a: !isVideo(item.newsImages)
+          }, !isVideo(item.newsImages) ? {
+            b: item.newsImages[0] || "/static/video-placeholder.png",
+            c: common_vendor.o(($event) => onImageLoad(item.id || item.newsId), `left-${item.id || item.newsId || index}`),
+            d: common_vendor.o(($event) => handleMediaClick(item, "image"), `left-${item.id || item.newsId || index}`)
+          } : {
+            e: item.newsImages[0],
+            f: item.videoPoster || "/static/video-placeholder.png",
+            g: common_vendor.o(($event) => onVideoLoad(item.id || item.newsId), `left-${item.id || item.newsId || index}`),
+            h: common_vendor.o(($event) => handleMediaClick(item, "video"), `left-${item.id || item.newsId || index}`)
+          }, {
+            i: common_vendor.t(item.newsTitle || "暂无标题"),
+            j: `left-${item.id || item.newsId || index}`,
+            k: common_vendor.o(($event) => handleCardClick(item), `left-${item.id || item.newsId || index}`)
+          });
+        }),
+        c: common_vendor.f(columns.value[1], (item, index, i0) => {
+          return common_vendor.e({
+            a: !isVideo(item.newsImages)
+          }, !isVideo(item.newsImages) ? {
+            b: item.newsImages || "/static/video-placeholder.png",
+            c: common_vendor.o(($event) => onImageLoad(item.id || item.newsId), `right-${item.id || item.newsId || index}`),
+            d: common_vendor.o(($event) => handleMediaClick(item, "image"), `right-${item.id || item.newsId || index}`)
+          } : {
+            e: item.newsImages,
+            f: item.videoPoster || "/static/video-placeholder.png",
+            g: common_vendor.o(($event) => onVideoLoad(item.id || item.newsId), `right-${item.id || item.newsId || index}`),
+            h: common_vendor.o(($event) => handleMediaClick(item, "video"), `right-${item.id || item.newsId || index}`)
+          }, {
+            i: common_vendor.t(item.newsTitle || "暂无标题"),
+            j: `right-${item.id || item.newsId || index}`,
+            k: common_vendor.o(($event) => handleCardClick(item), `right-${item.id || item.newsId || index}`)
+          });
         })
-      };
+      });
     };
   }
 };

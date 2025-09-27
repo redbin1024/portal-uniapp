@@ -23,3 +23,58 @@ export function getFeedPostPage(params = {}) {
     ...params
   })
 }
+/**
+ * 
+ * @param {查询企业基础信息列表}   
+ * @returns 
+ */
+export function getEnterpriseList(params = {}) {
+  return get('/mp/tk/enterprise/list', {
+    ...params
+  })
+}
+
+/**
+ * 
+ * @param {查询服务信息列表}   
+ * @returns 
+ */
+export function getServiceList(params = {}) {
+  return get('/mp/tk/service/list', {
+    ...params
+  })
+}
+
+/**
+ * 
+ * @param {查询公司动态列表}   
+ * @returns 
+ */
+export function getCompanyNewsList(params = {}) {
+  return get('/mp/tk/companyNews/list', {
+    ...params
+  })
+}
+
+
+/**
+ * 
+ * @param {查询商家案例列表}   
+ * @returns 
+ */
+export function getcaseList(params = {}) {
+  return get('/mp/tk/case/list', {
+    ...params
+  })
+}
+
+/**
+ * 
+ * @param {查询商家案例列表}   
+ * @returns 
+ */
+export function getsuccessCaseList(params = {}) {
+  return get('/mp/tk/successCase/list', {
+    ...params
+  })
+}

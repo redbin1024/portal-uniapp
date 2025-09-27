@@ -9,7 +9,7 @@
             mode="aspectFit"
           />
         </view>
-        <view class="title">天天拓客</view>
+        <view class="title">{{ enterpriseList.enterpriseName }}</view>
       </view>
     </view>
     <view class="container">
@@ -28,79 +28,102 @@
           @change="onSwiperChange"
         >
           <swiper-item
-            v-for="(item, index) in bannerList"
+            v-for="(item, index) in enterpriseList.bannerImages"
             :key="index"
             class="swiper-item"
           >
-            <image
-              :src="item.image"
-              class="banner-image"
-              mode="aspectFill"
-              @click="onBannerClick(item, index)"
-            />
-            <view class="banner-content" v-if="item.title || item.desc">
-              <view class="banner-title" v-if="item.title">{{
-                item.title
-              }}</view>
-              <view class="banner-desc" v-if="item.desc">{{ item.desc }}</view>
+            <!-- 判断是图片还是视频 -->
+            <view v-if="isVideo(item)" class="media-container">
+              <video
+                :src="item"
+                class="banner-video"
+                controls
+                :poster="getVideoPoster(item)"
+                @click="onMediaClick(item, index, 'video')"
+              />
+              <view
+                class="media-overlay"
+                @click="onMediaClick(item, index, 'video')"
+              >
+                <view class="play-icon">
+                  <image
+                    src="http://cdn.xiaodingdang1.com/2025/09/27/f347d91f0cca43c6955ba7f001b56a92.png"
+                  ></image>
+                </view>
+              </view>
+            </view>
+            <view v-else class="media-container">
+              <image
+                :src="item"
+                class="banner-image"
+                mode="aspectFill"
+                @click="onMediaClick(item, index, 'image')"
+              />
+              <!-- <view
+                class="preview-icon"
+                @click="onMediaClick(item, index, 'image')"
+              >
+                <text class="icon-text">🔍</text>
+              </view> -->
             </view>
           </swiper-item>
         </swiper>
-
-        <!-- 自定义指示器 -->
-        <view class="custom-indicators">
-          <view
-            v-for="(item, index) in bannerList"
-            :key="index"
-            class="indicator-dot"
-            :class="{ active: currentIndex === index }"
-            @click="goToSlide(index)"
-          ></view>
+      </view>
+      <view>
+        <view class="company-banner">
+          <view class="company-info">
+            <text class="company-title">{{
+              enterpriseList.enterpriseName
+            }}</text>
+            <text class="company-desc">
+              {{ enterpriseList.enterpriseDescription }}
+            </text>
+          </view>
+          <view class="company-btn">
+            <view class="company-btn1">
+              <button
+                class="contact-btn"
+                :class="{
+                  'btn-animate': buttonsVisible,
+                  'btn-delay-1': buttonsVisible,
+                }"
+                @click="handleContactClick"
+              >
+                <image
+                  src="http://cdn.xiaodingdang1.com/2025/09/27/a51f8b4f36a54f4385c0a695ab191a77.png"
+                ></image>
+              </button>
+            </view>
+            <view class="company-btn1">
+              <button
+                class="contact-btn"
+                :class="{
+                  'btn-animate': buttonsVisible,
+                  'btn-delay-2': buttonsVisible,
+                }"
+                @click="handleContactClick"
+              >
+                <image
+                  src="http://cdn.xiaodingdang1.com/2025/09/27/41563146d6c54148a0e1b9f80ca4c1c1.png"
+                ></image>
+              </button>
+            </view>
+            <view class="company-btn1">
+              <button
+                class="contact-btn"
+                :class="{
+                  'btn-animate': buttonsVisible,
+                  'btn-delay-3': buttonsVisible,
+                }"
+                @click="handleContactClick"
+              >
+                <image
+                  src="http://cdn.xiaodingdang1.com/2025/09/27/8669297789b34a3d9848db137bd084fb.png"
+                ></image>
+              </button>
+            </view>
+          </view>
         </view>
-      </view>
-      <view class="company-info">
-        <text class="company-title">天天拓客</text>
-        <text class="company-desc">
-          天天拓客是一家集网络营销、导客软件开发、互联网服务于一体的创新科技公司。核心团队服务于全国400多家服务行业媒体公司。历经一年的技术研发与沉淀，形成针对中小企业行业营销的线上流量整体解决方案。
-        </text>
-      </view>
-      <view class="company-btn">
-        <button
-          class="contact-btn"
-          :class="{
-            'btn-animate': buttonsVisible,
-            'btn-delay-1': buttonsVisible,
-          }"
-          @click="handleContactClick"
-        >
-          <image
-            src="http://cdn.xiaodingdang1.com/2025/09/12/82c65b95ac1e4e29bc18d3efd67b0933.png"
-          ></image>
-        </button>
-        <button
-          class="contact-btn"
-          :class="{
-            'btn-animate': buttonsVisible,
-            'btn-delay-2': buttonsVisible,
-          }"
-          @click="handleContactClick"
-        >
-          <image
-            src="http://cdn.xiaodingdang1.com/2025/09/12/3f38644e6fec4136958afa513bd8c96c.png"
-          ></image>
-        </button>
-        <button
-          class="contact-btn"
-          :class="{
-            'btn-animate': buttonsVisible,
-            'btn-delay-3': buttonsVisible,
-          }"
-          @click="handleContactClick"
-        >
-          <image
-            src="http://cdn.xiaodingdang1.com/2025/09/12/29846ffbc5d54aaca318f5b1723fffff.png"
-          ></image>
-        </button>
       </view>
     </view>
     <view class="winthecustomer">
@@ -119,7 +142,9 @@
       </view>
       <view class="winthecustomer-line">
         <image
-          src="http://cdn.xiaodingdang1.com/2025/09/25/86d0493187254bbb9969aeca66046f29.png"
+          :src="serviceList?.serviceImage?.[0]"
+          v-if="serviceList?.serviceImage?.[0]"
+          mode="white"
         ></image>
       </view>
     </view>
@@ -140,14 +165,12 @@
       <view class="winthecustomer-content">
         <view
           class="winthecustomer-content1"
-          v-for="(item, index) in [1, 2, 3, 4, 5, 6]"
+          v-for="(item, index) in serviceLists"
           :key="index"
           :class="{ 'content1-animate': content1Visible[index] }"
         >
-          <image
-            src="http://cdn.xiaodingdang1.com/2025/09/25/20c54857feda44eba2d1cd3eb1f9603c.png"
-          ></image>
-          <view class="winthecustomer-content2">谈单系统</view>
+          <image :src="item.serviceImage"></image>
+          <view class="winthecustomer-content2">{{ item.serviceName }}</view>
         </view>
       </view>
     </view>
@@ -202,14 +225,19 @@
         </view>
         <view class="teamappearance-content">
           <view
-            v-for="(team, index) in teamList"
+            v-for="(team, index) in companyNewsList"
             :key="index"
             class="teamappearance-item"
           >
             <view class="teamappearance-item-image">
-              <image :src="team.image"></image>
+              <image
+                :src="team.newsImages?.[0]"
+                v-if="team.newsImages?.[0]"
+              ></image>
             </view>
-            <view class="teamappearance-item-content">{{ team.content }}</view>
+            <view class="teamappearance-item-content">{{
+              team.newsTitle
+            }}</view>
           </view>
         </view>
       </view>
@@ -225,12 +253,37 @@
           <view class="headRight"></view>
         </view>
         <view class="certificate-list">
-          <view
-            v-for="(certificate, index) in certificateList"
-            :key="index"
-            class="certificate-item"
-          >
-            <image :src="certificate.image" mode="aspectFit"></image>
+          <view class="certificate-scroll-container">
+            <view class="certificate-double-row">
+              <view class="certificate-row">
+                <view
+                  v-for="(certificate, index) in getFirstRowCertificates(
+                    enterpriseList.honorCertificates
+                  )"
+                  :key="'row1-' + index"
+                  class="certificate-item"
+                >
+                  <image :src="certificate" mode="aspectFit"></image>
+                </view>
+              </view>
+              <view
+                class="certificate-row"
+                v-if="
+                  getSecondRowCertificates(enterpriseList.honorCertificates)
+                    .length > 0
+                "
+              >
+                <view
+                  v-for="(certificate, index) in getSecondRowCertificates(
+                    enterpriseList.honorCertificates
+                  )"
+                  :key="'row2-' + index"
+                  class="certificate-item"
+                >
+                  <image :src="certificate" mode="aspectFit"></image>
+                </view>
+              </view>
+            </view>
           </view>
         </view>
       </view>
@@ -245,12 +298,32 @@
         <view class="headRight"></view>
       </view>
       <view class="businesspartner-list">
+        <view class="businesspartner-row">
+          <view
+            v-for="(partner, index) in getFirstRowPartners(
+              enterpriseList.cooperationMerchants
+            )"
+            :key="'row1-' + index"
+            class="businesspartner-item"
+          >
+            <image :src="partner" mode="aspectFit"></image>
+          </view>
+        </view>
         <view
-          v-for="(partner, index) in businessPartnerList"
-          :key="index"
-          class="businesspartner-item"
+          class="businesspartner-row"
+          v-if="
+            getSecondRowPartners(enterpriseList.cooperationMerchants).length > 0
+          "
         >
-          <image :src="partner.image" mode="aspectFit"></image>
+          <view
+            v-for="(partner, index) in getSecondRowPartners(
+              enterpriseList.cooperationMerchants
+            )"
+            :key="'row2-' + index"
+            class="businesspartner-item"
+          >
+            <image :src="partner" mode="aspectFit"></image>
+          </view>
         </view>
       </view>
     </view>
@@ -268,12 +341,77 @@
         <view class="introduce-container6">扫码添加微信</view>
       </view>
     </view>
+
+    <!-- 媒体预览模态框 -->
+    <view v-if="showPreview" class="media-preview-modal" @click="closePreview">
+      <view class="preview-container" @click.stop>
+        <!-- 关闭按钮 -->
+        <view class="close-btn" @click="closePreview">
+          <text>✕</text>
+        </view>
+
+        <!-- 导航按钮 -->
+        <view
+          class="nav-btn prev-btn"
+          @click="prevMedia"
+          v-if="
+            enterpriseList.bannerImages &&
+            enterpriseList.bannerImages.length > 1
+          "
+        >
+          <text>‹</text>
+        </view>
+        <view
+          class="nav-btn next-btn"
+          @click="nextMedia"
+          v-if="
+            enterpriseList.bannerImages &&
+            enterpriseList.bannerImages.length > 1
+          "
+        >
+          <text>›</text>
+        </view>
+
+        <!-- 媒体内容 -->
+        <view class="preview-content">
+          <video
+            v-if="previewMedia.type === 'video'"
+            :src="previewMedia.src"
+            class="preview-video"
+            controls
+            :poster="getVideoPoster(previewMedia.src)"
+          />
+          <image
+            v-else
+            :src="previewMedia.src"
+            class="preview-image"
+            mode="aspectFit"
+          />
+        </view>
+
+        <!-- 媒体信息 -->
+        <view class="media-info">
+          <text class="media-counter"
+            >{{ previewMedia.index + 1 }} /
+            {{
+              enterpriseList.bannerImages
+                ? enterpriseList.bannerImages.length
+                : 0
+            }}</text
+          >
+        </view>
+      </view>
+    </view>
   </view>
 </template>
-
 <script setup>
 import { ref, onMounted } from "vue";
 import { onPageScroll } from "@dcloudio/uni-app";
+import {
+  getEnterpriseList,
+  getServiceList,
+  getCompanyNewsList,
+} from "@/api/activity.js";
 
 // 按钮动画状态
 const buttonsVisible = ref(false);
@@ -283,6 +421,80 @@ const titleVisible = ref(false);
 const headContentVisible = ref({});
 // winthecustomer-content1 动画状态
 const content1Visible = ref([]);
+//查询公司动态列表
+const fetchCompanyNewsList = async () => {
+  try {
+    const response = await getCompanyNewsList({
+      pageSize: 10,
+      pageNum: 1,
+      type: 0,
+    });
+    console.log("企业列表数据:", response);
+    if (
+      response &&
+      response.rows &&
+      Array.isArray(response.rows) &&
+      response.rows.length > 0
+    ) {
+      companyNewsList.value = response.rows;
+    }
+  } catch (error) {
+    console.error("获取企业列表失败:", error);
+    uni.showToast({
+      title: "获取企业列表失败",
+      icon: "none",
+    });
+  }
+};
+//查询服务信息列表
+const fetchServiceList = async () => {
+  try {
+    const response = await getServiceList({
+      pageSize: 10,
+      pageNum: 1,
+    });
+    console.log("企业列表数据:", response);
+    if (
+      response &&
+      response.rows &&
+      Array.isArray(response.rows) &&
+      response.rows.length > 0
+    ) {
+      serviceList.value = response.rows[0];
+      serviceLists.value = response.rows.slice(1);
+    }
+  } catch (error) {
+    console.error("获取企业列表失败:", error);
+    uni.showToast({
+      title: "获取企业列表失败",
+      icon: "none",
+    });
+  }
+};
+// 获取企业列表数据
+const fetchEnterpriseList = async () => {
+  try {
+    const response = await getEnterpriseList({
+      pageSize: 10,
+      pageNum: 1,
+    });
+    console.log("企业列表数据:", response);
+    if (
+      response &&
+      response.rows &&
+      Array.isArray(response.rows) &&
+      response.rows.length > 0
+    ) {
+      enterpriseList.value = response.rows[0];
+    }
+  } catch (error) {
+    console.error("获取企业列表失败:", error);
+    uni.showToast({
+      title: "获取企业列表失败",
+      icon: "none",
+    });
+  }
+};
 
 // 页面加载完成后触发按钮动画
 onMounted(() => {
@@ -297,6 +509,13 @@ onMounted(() => {
     checkContent1Visibility();
     checkImageVisibility();
   }, 100);
+
+  // 获取企业列表数据
+  fetchEnterpriseList();
+  //查询服务信息列表
+  fetchServiceList();
+  //查询公司动态列表
+  fetchCompanyNewsList();
 });
 
 // 图片弹出动画状态
@@ -376,14 +595,42 @@ const checkContent1Visibility = () => {
           uni.getSystemInfo({
             success: (res) => {
               const windowHeight = res.windowHeight;
-              // 当元素进入视窗时触发动画
-              if (rect.top < windowHeight * 1 && rect.bottom > 0) {
+              // 当元素进入视窗时触发动画，提前触发点让动画更自然
+              if (rect.top < windowHeight * 0.85 && rect.bottom > 0) {
                 // 为每个 content1 元素添加动画效果
                 setTimeout(() => {
                   if (!content1Visible.value[index]) {
                     content1Visible.value[index] = true;
                   }
-                }, index * 200); // 每个元素间隔200ms
+                }, index * 150); // 每个元素间隔150ms，让动画更流畅
+              }
+            },
+          });
+        });
+      }
+    })
+    .exec();
+};
+
+// 检查图片是否在视窗内的函数
+const checkImageVisibility = () => {
+  const query = uni.createSelectorQuery();
+  query
+    .selectAll(".certificate-item, .businesspartner-item, .teamappearance-item")
+    .boundingClientRect((rects) => {
+      if (rects && rects.length > 0) {
+        rects.forEach((rect, index) => {
+          uni.getSystemInfo({
+            success: (res) => {
+              const windowHeight = res.windowHeight;
+              // 当元素进入视窗时触发动画
+              if (rect.top < windowHeight * 0.9 && rect.bottom > 0) {
+                // 为每个图片元素添加动画效果
+                setTimeout(() => {
+                  if (!imagePopVisible.value[index]) {
+                    imagePopVisible.value[index] = true;
+                  }
+                }, index * 100); // 每个元素间隔100ms
               }
             },
           });
@@ -520,6 +767,13 @@ const businessPartnerList = ref([
   },
 ]);
 
+// 企业列表数据
+const enterpriseList = ref([]);
+//查询服务信息列表
+const serviceList = ref([]);
+const serviceLists = ref([]);
+//查询公司动态列表
+const companyNewsList = ref([]);
 // 轮播图相关
 const currentIndex = ref(0);
 
@@ -534,12 +788,112 @@ const goToSlide = (index) => {
   currentIndex.value = index;
 };
 
-const onBannerClick = (item, index) => {
-  console.log("Banner clicked:", item, index);
+// 媒体预览相关状态
+const showPreview = ref(false);
+const previewMedia = ref({
+  src: "",
+  type: "image", // 'image' 或 'video'
+  index: 0,
+});
+
+// 判断是否为视频文件
+const isVideo = (url) => {
+  if (!url) return false;
+  const videoExtensions = [
+    ".mp4",
+    ".webm",
+    ".ogg",
+    ".mov",
+    ".avi",
+    ".wmv",
+    ".flv",
+    ".mkv",
+  ];
+  const urlLower = url.toLowerCase();
+  return videoExtensions.some((ext) => urlLower.includes(ext));
+};
+
+// 获取视频封面图
+const getVideoPoster = (videoUrl) => {
+  // 这里可以返回视频的封面图，如果没有可以返回默认图片
+  return videoUrl.replace(
+    /\.(mp4|webm|ogg|mov|avi|wmv|flv|mkv)$/i,
+    "_poster.jpg"
+  );
+};
+
+// 媒体点击事件
+const onMediaClick = (item, index, type) => {
+  console.log("Media clicked:", item, index, type);
+  previewMedia.value = {
+    src: item,
+    type: type,
+    index: index,
+  };
+  showPreview.value = true;
+};
+
+// 关闭预览
+const closePreview = () => {
+  showPreview.value = false;
+};
+
+// 切换到上一个媒体
+const prevMedia = () => {
+  const currentIndex = previewMedia.value.index;
+  const newIndex =
+    currentIndex > 0
+      ? currentIndex - 1
+      : enterpriseList.value.bannerImages.length - 1;
+  const newSrc = enterpriseList.value.bannerImages[newIndex];
+  previewMedia.value = {
+    src: newSrc,
+    type: isVideo(newSrc) ? "video" : "image",
+    index: newIndex,
+  };
+};
+
+// 切换到下一个媒体
+const nextMedia = () => {
+  const currentIndex = previewMedia.value.index;
+  const newIndex =
+    currentIndex < enterpriseList.value.bannerImages.length - 1
+      ? currentIndex + 1
+      : 0;
+  const newSrc = enterpriseList.value.bannerImages[newIndex];
+  previewMedia.value = {
+    src: newSrc,
+    type: isVideo(newSrc) ? "video" : "image",
+    index: newIndex,
+  };
 };
 
 const handleContactClick = () => {
   console.log("Contact clicked");
+};
+
+// 获取第一排证书数据
+const getFirstRowCertificates = (certificates) => {
+  if (!certificates || !Array.isArray(certificates)) return [];
+  return certificates.filter((_, index) => index % 2 === 0);
+};
+
+// 获取第二排证书数据
+const getSecondRowCertificates = (certificates) => {
+  if (!certificates || !Array.isArray(certificates)) return [];
+  return certificates.filter((_, index) => index % 2 === 1);
+};
+
+// 获取第一排合作商家数据
+const getFirstRowPartners = (partners) => {
+  if (!partners || !Array.isArray(partners)) return [];
+  return partners.filter((_, index) => index % 2 === 0);
+};
+
+// 获取第二排合作商家数据
+const getSecondRowPartners = (partners) => {
+  if (!partners || !Array.isArray(partners)) return [];
+  return partners.filter((_, index) => index % 2 === 1);
 };
 
 onPageScroll((e) => {
@@ -561,7 +915,6 @@ onPageScroll((e) => {
   min-height: 100vh;
 }
 .container {
-  padding: 0 26rpx;
 }
 
 .header {
@@ -618,8 +971,21 @@ onPageScroll((e) => {
   overflow: hidden;
 }
 
+// .company-banner {
+//   background-image: url("http://cdn.xiaodingdang1.com/2025/09/27/9838f69dbc1c4ded945f24358ae5424e.jpg");
+//   background-size: cover;
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   padding: 60rpx 0;
+//   width: 100%;
+// }
+
 .company-info {
-  margin-top: 60rpx;
+  // background: rgba(255, 255, 255, 0.9);
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  margin: 0 26rpx;
+  backdrop-filter: blur(10rpx);
 }
 
 .company-title {
@@ -640,10 +1006,16 @@ onPageScroll((e) => {
 
 /* 按钮样式 */
 .company-btn {
+  width: 60%;
   display: flex;
   margin-top: 80rpx;
-  padding-bottom: 60rpx;
-  justify-content: space-around;
+  justify-content: space-between;
+  margin: 60rpx auto;
+}
+.company-btn1 {
+  display: flex;
+  justify-content: center;
+  width: 20%;
 }
 .contact-btn {
   width: 80rpx;
@@ -651,10 +1023,18 @@ onPageScroll((e) => {
   padding: 0;
   margin: 0;
   border: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
   background: transparent;
   transform: scale(0);
   opacity: 0;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+
+.contact-btn::after {
+  border: none !important;
 }
 .contact-btn image {
   width: 80rpx;
@@ -690,21 +1070,23 @@ onPageScroll((e) => {
 
 /* 轮播图样式 */
 .slideshow {
-  border-radius: 20rpx;
+  border-radius: 32rpx;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+  padding: 26rpx 26rpx;
 }
 
 .swiper-container {
   width: 100%;
   height: 391rpx;
+  border-radius: 32rpx;
 }
 
 .swiper-item {
   position: relative;
   width: 100%;
   height: 100%;
+  border-radius: 32rpx;
 }
 
 .banner-image {
@@ -827,11 +1209,12 @@ onPageScroll((e) => {
 }
 .certificate-list {
   margin-top: 40rpx;
-  display: flex;
+  padding: 0 0 0 49rpx;
+}
+
+.certificate-scroll-container {
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 0 49rpx;
-  gap: 20rpx;
 
   /* 隐藏滚动条 */
   &::-webkit-scrollbar {
@@ -840,14 +1223,24 @@ onPageScroll((e) => {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.certificate-double-row {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+
+.certificate-row {
+  display: flex;
+  // gap: 20rpx;
+}
+
 .certificate-item {
   border: 1rpx solid #eeeeee;
-  border-radius: 12rpx;
   width: 239rpx;
   height: 265rpx;
   flex-shrink: 0;
   background: #ffffff;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -867,13 +1260,9 @@ onPageScroll((e) => {
 }
 .businesspartner-list {
   margin-top: 40rpx;
-  display: flex;
+  padding: 0 49rpx;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 0 49rpx;
-  gap: 20rpx;
-  justify-content: center;
-  scroll-snap-type: x mandatory;
 
   /* 隐藏滚动条 */
   &::-webkit-scrollbar {
@@ -882,12 +1271,23 @@ onPageScroll((e) => {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.businesspartner-row {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+  width: max-content;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .businesspartner-item {
   border-radius: 20rpx;
   width: 216rpx;
   height: 88rpx;
   flex-shrink: 0;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -1017,44 +1417,37 @@ onPageScroll((e) => {
 }
 .winthecustomer-content {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 20rpx;
   background: linear-gradient(to bottom, #dfebfb 30%, #ffffff 70%);
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
   margin-top: -60rpx;
-  padding-bottom: 50rpx;
+  padding: 0 26rpx 50rpx 26rpx;
 }
 .winthecustomer-content1 {
-  width: 350rpx;
+  width: calc(50% - 10rpx);
   background: #f2f6ff;
   margin-top: 38rpx;
   opacity: 0;
-  transform: translateX(-60rpx);
-  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform: translateY(20rpx);
+  transition: all 0.6s ease-out;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
 }
 .content1-animate {
-  opacity: 1 !important;
-  transform: translateX(0) !important;
-  animation: fadeInLeft 0.8s;
-}
-@keyframes fadeInLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-60rpx);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  opacity: 1;
+  transform: translateY(0);
 }
 .winthecustomer-content1 image {
-  width: 350rpx;
+  width: 100%;
   height: 350rpx;
-  border-radius: 20rpx;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
 }
 .winthecustomer-content2 {
-  width: 350rpx;
+  width: 100%;
   padding: 20rpx 0;
   background: #f2f6ff;
   color: #3d3d3d;
@@ -1137,5 +1530,214 @@ onPageScroll((e) => {
 
 wx-button {
   border: none !important;
+}
+
+/* 媒体容器样式 */
+.media-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.banner-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.play-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.play-icon image {
+  width: 100%;
+  height: 100%;
+}
+
+.preview-icon {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-text {
+  font-size: 20rpx;
+  color: white;
+}
+
+/* 媒体预览模态框样式 */
+.media-preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-container {
+  position: relative;
+  width: 90%;
+  height: 90%;
+  max-width: 1200px;
+  max-height: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  cursor: pointer;
+}
+
+.close-btn text {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  cursor: pointer;
+}
+
+.nav-btn text {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.prev-btn {
+  left: 20px;
+}
+
+.next-btn {
+  right: 20px;
+}
+
+.preview-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.preview-video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.media-info {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 8px 16px;
+  border-radius: 20px;
+  z-index: 10001;
+}
+
+.media-counter {
+  color: white;
+  font-size: 14px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .preview-container {
+    width: 95%;
+    height: 95%;
+  }
+
+  .close-btn {
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+  }
+
+  .close-btn text {
+    font-size: 18px;
+  }
+
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav-btn text {
+    font-size: 20px;
+  }
+
+  .prev-btn {
+    left: 10px;
+  }
+
+  .next-btn {
+    right: 10px;
+  }
+
+  .media-info {
+    bottom: 10px;
+  }
 }
 </style>
