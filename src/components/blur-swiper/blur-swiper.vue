@@ -667,8 +667,8 @@ export default {
 }
 
 .play-icon {
-  width: 0;
-  height: 0;
+  width: 30rpx;
+  height: 30rpx;
   border-left: 30rpx solid #333;
   border-top: 20rpx solid transparent;
   border-bottom: 20rpx solid transparent;

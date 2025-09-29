@@ -7,28 +7,16 @@
           :class="{ active: activeTab === 0 }"
           @click="switchTab(0)"
         >
-          <image
-            :src="
-              activeTab === 0
-                ? 'http://cdn.xiaodingdang1.com/2025/09/25/7c516c90b157468c8edbbaf68cb83934.png'
-                : 'http://cdn.xiaodingdang1.com/2025/09/25/edccf81f026f4b6f9e840aa44464722e.png'
-            "
-            class="tab-icon"
-          />
+          <text class="tab-text">案例展示</text>
+          <view class="tab-line" v-if="activeTab === 0"></view>
         </view>
         <view
           class="tab-item"
           :class="{ active: activeTab === 1 }"
           @click="switchTab(1)"
         >
-          <image
-            :src="
-              activeTab === 1
-                ? 'http://cdn.xiaodingdang1.com/2025/09/25/250cd94c9cf64e5cb0c0dec53715acdc.png'
-                : 'http://cdn.xiaodingdang1.com/2025/09/25/ee13d09dee5d4323b111d0f6f2af4705.png'
-            "
-            class="tab-icon"
-          />
+          <text class="tab-text">服务项目</text>
+          <view class="tab-line" v-if="activeTab === 1"></view>
         </view>
       </view>
       <view class="first" v-if="activeTab == 0">
@@ -240,8 +228,26 @@ const onVideoError = (e) => {
   });
 };
 
-const onFullscreenChange = (e) => {
-  console.log("视频全屏状态变化:", e);
+const onFullscreenChange = (e, index, isEnteringFullscreen) => {
+  console.log(
+    "视频全屏状态变化:",
+    e,
+    "索引:",
+    index,
+    "进入全屏:",
+    isEnteringFullscreen
+  );
+
+  if (isEnteringFullscreen) {
+    console.log("视频进入全屏模式，已取消静音");
+    uni.showToast({
+      title: "全屏播放已开启声音",
+      icon: "none",
+      duration: 1500,
+    });
+  } else {
+    console.log("视频退出全屏模式，已恢复静音");
+  }
 };
 
 const onPauseAllVideos = () => {
@@ -284,10 +290,9 @@ const processContent = (content) => {
 }
 .headTab {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   padding: 20rpx;
-  gap: 40rpx;
   background: #fff;
 }
 
@@ -295,26 +300,40 @@ const processContent = (content) => {
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
+  padding: 20rpx 0;
 }
 
-.tab-item.active {
-  transform: scale(1.1);
-  background: transparent;
+.tab-text {
+  font-size: 36rpx;
+  color: #000000;
+  transition: color 0.3s ease;
 }
 
-.tab-icon {
-  width: 330rpx;
-  height: 115rpx;
-  object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+.tab-item.active .tab-text {
+  color: #000000;
+  font-weight: bold;
+}
+
+.tab-line {
+  width: 60rpx;
+  height: 6rpx;
+  background: #000000;
+  border-radius: 2rpx;
+  margin-top: 10rpx;
+  animation: lineSlide 0.3s ease;
+}
+
+@keyframes lineSlide {
+  from {
+    width: 0;
+  }
+  to {
+    width: 60rpx;
+  }
 }
 .slideshow {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -341,7 +360,7 @@ const processContent = (content) => {
 .winthecustomer-content1 {
   width: 48%;
   background: #f2f6ff;
-  margin-top: 38rpx;
+  margin-bottom: 38rpx;
 }
 .winthecustomer-content1 image {
   width: 100%;

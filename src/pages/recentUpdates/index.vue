@@ -1,5 +1,9 @@
 <template>
   <view class="main">
+    <!-- 加载状态 -->
+    <view v-if="loading" class="loading-container">
+      <text class="loading-text">加载中...</text>
+    </view>
     <view
       class="update-item"
       v-for="(item, index) in companyNewsList"
@@ -9,11 +13,15 @@
       <view class="content">
         <view class="date">{{ item.createTime }}</view>
         <view class="title">{{ item.newsTitle }}</view>
-        <view class="description">{{ item.newsTitle }}</view>
+        <view class="description">{{ item.newsContent }}</view>
       </view>
       <view class="image">
         <image :src="item.newsImages[0]" mode="aspectFill"></image>
       </view>
+    </view>
+    <!-- 加载更多状态 -->
+    <view v-if="loadingMore" class="loading-more-container">
+      <text class="loading-more-text">加载更多中...</text>
     </view>
   </view>
 </template>
@@ -21,6 +29,17 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getCompanyNewsList } from "@/api/activity.js";
+import {
+  onLoad,
+  onReady,
+  onShow,
+  onHide,
+  onUnload,
+  onReachBottom,
+  onPageScroll,
+  onShareAppMessage,
+  onShareTimeline,
+} from "@dcloudio/uni-app";
 // 定义组件名称（可选）
 defineOptions({
   name: "RecentUpdates",
@@ -29,30 +48,63 @@ defineOptions({
 onMounted(() => {
   fetchCompanyNewsList();
 });
+const loading = ref(false);
+const loadingMore = ref(false);
 const companyNewsList = ref([]);
+const types = ref([]);
+const pageNum = ref(1);
+onReachBottom(() => {
+  if (types.value == 1) {
+    pageNum.value += 1;
+    fetchCompanyNewsList();
+  }
+});
 //查询公司动态列表
 const fetchCompanyNewsList = async () => {
   try {
+    // 只有第一页时才显示全局loading，加载更多时使用loadingMore
+    if (pageNum.value === 1) {
+      loading.value = true;
+    } else {
+      loadingMore.value = true;
+    }
     const response = await getCompanyNewsList({
-      pageSize: 20,
-      pageNum: 1,
+      pageSize: 10,
+      pageNum: pageNum.value,
       type: 1,
     });
     console.log("企业列表数据:", response);
-    if (
-      response &&
-      response.rows &&
-      Array.isArray(response.rows) &&
-      response.rows.length > 0
-    ) {
-      companyNewsList.value = response.rows;
+    // 确保返回的数据是数组格式
+    let dataArray = [];
+    // 根据不同的数据结构进行处理
+    if (response && response.rows && Array.isArray(response.rows)) {
+      dataArray = response.rows;
+    } else if (response && response.data && Array.isArray(response.data)) {
+      dataArray = response.data;
+    } else if (response && Array.isArray(response)) {
+      dataArray = response;
+    } else {
+      console.warn("API返回的数据格式不正确:", response);
+      dataArray = [];
     }
+    // 处理分页数据
+    if (pageNum.value == 1) {
+      companyNewsList.value = dataArray;
+    } else {
+      companyNewsList.value = companyNewsList.value.concat(dataArray);
+    }
+
+    // 判断是否还有更多数据
+    types.value = dataArray.length >= 10 ? 1 : 2;
   } catch (error) {
     console.error("获取企业列表失败:", error);
     uni.showToast({
       title: "获取企业列表失败",
       icon: "none",
     });
+  } finally {
+    loading.value = false;
+    loadingMore.value = false;
   }
 };
 // 响应式数据
@@ -92,11 +144,30 @@ const next = (item) => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .main {
   padding: 20rpx;
 }
-
+.loading-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40rpx 0;
+  .loading-more-text {
+    font-size: 24rpx;
+    color: #999999;
+  }
+}
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100rpx 0;
+  .loading-text {
+    font-size: 28rpx;
+    color: #999999;
+  }
+}
 .update-item {
   display: flex;
   align-items: center;

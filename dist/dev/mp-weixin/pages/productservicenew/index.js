@@ -157,8 +157,25 @@ const _sfc_main = {
         icon: "none"
       });
     };
-    const onFullscreenChange = (e) => {
-      console.log("视频全屏状态变化:", e);
+    const onFullscreenChange = (e, index, isEnteringFullscreen) => {
+      console.log(
+        "视频全屏状态变化:",
+        e,
+        "索引:",
+        index,
+        "进入全屏:",
+        isEnteringFullscreen
+      );
+      if (isEnteringFullscreen) {
+        console.log("视频进入全屏模式，已取消静音");
+        common_vendor.index.showToast({
+          title: "全屏播放已开启声音",
+          icon: "none",
+          duration: 1500
+        });
+      } else {
+        console.log("视频退出全屏模式，已恢复静音");
+      }
     };
     const onPauseAllVideos = () => {
       console.log("暂停所有视频");
@@ -182,10 +199,12 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: activeTab.value === 0 ? "http://cdn.xiaodingdang1.com/2025/09/25/7c516c90b157468c8edbbaf68cb83934.png" : "http://cdn.xiaodingdang1.com/2025/09/25/edccf81f026f4b6f9e840aa44464722e.png",
+        a: activeTab.value === 0
+      }, activeTab.value === 0 ? {} : {}, {
         b: activeTab.value === 0 ? 1 : "",
         c: common_vendor.o(($event) => switchTab(0)),
-        d: activeTab.value === 1 ? "http://cdn.xiaodingdang1.com/2025/09/25/250cd94c9cf64e5cb0c0dec53715acdc.png" : "http://cdn.xiaodingdang1.com/2025/09/25/ee13d09dee5d4323b111d0f6f2af4705.png",
+        d: activeTab.value === 1
+      }, activeTab.value === 1 ? {} : {}, {
         e: activeTab.value === 1 ? 1 : "",
         f: common_vendor.o(($event) => switchTab(1)),
         g: activeTab.value == 0

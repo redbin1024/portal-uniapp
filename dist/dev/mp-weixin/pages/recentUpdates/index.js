@@ -29,24 +29,56 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
     common_vendor.onMounted(() => {
       fetchCompanyNewsList();
     });
+    const loading = common_vendor.ref(false);
+    const loadingMore = common_vendor.ref(false);
     const companyNewsList = common_vendor.ref([]);
+    const types = common_vendor.ref([]);
+    const pageNum = common_vendor.ref(1);
+    common_vendor.onReachBottom(() => {
+      if (types.value == 1) {
+        pageNum.value += 1;
+        fetchCompanyNewsList();
+      }
+    });
     const fetchCompanyNewsList = () => __async(this, null, function* () {
       try {
+        if (pageNum.value === 1) {
+          loading.value = true;
+        } else {
+          loadingMore.value = true;
+        }
         const response = yield api_activity.getCompanyNewsList({
-          pageSize: 20,
-          pageNum: 1,
+          pageSize: 10,
+          pageNum: pageNum.value,
           type: 1
         });
         console.log("企业列表数据:", response);
-        if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
-          companyNewsList.value = response.rows;
+        let dataArray = [];
+        if (response && response.rows && Array.isArray(response.rows)) {
+          dataArray = response.rows;
+        } else if (response && response.data && Array.isArray(response.data)) {
+          dataArray = response.data;
+        } else if (response && Array.isArray(response)) {
+          dataArray = response;
+        } else {
+          console.warn("API返回的数据格式不正确:", response);
+          dataArray = [];
         }
+        if (pageNum.value == 1) {
+          companyNewsList.value = dataArray;
+        } else {
+          companyNewsList.value = companyNewsList.value.concat(dataArray);
+        }
+        types.value = dataArray.length >= 10 ? 1 : 2;
       } catch (error) {
         console.error("获取企业列表失败:", error);
         common_vendor.index.showToast({
           title: "获取企业列表失败",
           icon: "none"
         });
+      } finally {
+        loading.value = false;
+        loadingMore.value = false;
       }
     });
     common_vendor.ref([
@@ -76,20 +108,24 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
       });
     };
     return (_ctx, _cache) => {
-      return {
-        a: common_vendor.f(companyNewsList.value, (item, index, i0) => {
+      return common_vendor.e({
+        a: loading.value
+      }, loading.value ? {} : {}, {
+        b: common_vendor.f(companyNewsList.value, (item, index, i0) => {
           return {
             a: common_vendor.t(item.createTime),
             b: common_vendor.t(item.newsTitle),
-            c: common_vendor.t(item.newsTitle),
+            c: common_vendor.t(item.newsContent),
             d: item.newsImages[0],
             e: index,
             f: common_vendor.o(($event) => next(item), index)
           };
-        })
-      };
+        }),
+        c: loadingMore.value
+      }, loadingMore.value ? {} : {});
     };
   }
 });
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-9b5f4591"]]);
+_sfc_main.__runtimeHooks = 7;
 wx.createPage(MiniProgramPage);

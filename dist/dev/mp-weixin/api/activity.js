@@ -16,11 +16,6 @@ var __spreadValues = (a, b) => {
   return a;
 };
 const utils_request = require("../utils/request.js");
-function getActivityDetail(activityId) {
-  return utils_request.get("mp/club/activity_detail", {
-    activityId
-  });
-}
 function getEnterpriseList(params = {}) {
   return utils_request.get("/mp/tk/enterprise/list", __spreadValues({}, params));
 }
@@ -36,7 +31,6 @@ function getcaseList(params = {}) {
 function getsuccessCaseList(params = {}) {
   return utils_request.get("/mp/tk/successCase/list", __spreadValues({}, params));
 }
-exports.getActivityDetail = getActivityDetail;
 exports.getCompanyNewsList = getCompanyNewsList;
 exports.getEnterpriseList = getEnterpriseList;
 exports.getServiceList = getServiceList;

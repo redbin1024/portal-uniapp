@@ -10,13 +10,14 @@ text.data-v-fc420d75 {
   max-width: 100vw;
   height: 100vh;
   /* scroll-view 需要固定高度才能滚动 */
+  margin-top: 30rpx;
 }
 
 /**最近动态 */
 .dynamic.data-v-fc420d75 {
   background: #ffffff;
   padding: 60rpx 28rpx;
-  margin: 80rpx 0;
+  margin: 50rpx 0;
 }
 .dynamic-title.data-v-fc420d75 {
   font-size: 40rpx;
@@ -45,9 +46,17 @@ text.data-v-fc420d75 {
   width: 100%;
   /* 移除 overflow: hidden，避免影响滚动 */
   box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.dynamic-item.data-v-fc420d75:hover {
+  transform: translateY(-2rpx);
+}
+.dynamic-item.data-v-fc420d75:active {
+  transform: translateY(0);
+  opacity: 0.8;
 }
 .dynamic-left.data-v-fc420d75 {
-  padding-right: 20rpx;
   width: 50%;
   flex-shrink: 0;
   box-sizing: border-box;
@@ -102,12 +111,12 @@ text.data-v-fc420d75 {
   /* margin: 0 20rpx; */
   position: relative;
   flex: 0 0 auto;
-  width: 10%;
+  width: 15%;
 }
 .step-dot.data-v-fc420d75 {
   width: 20rpx;
   height: 20rpx;
-  border-radius: 50%;
+  border-radius: 45%;
   background-color: #007aff;
   border: 3rpx solid #ffffff;
   box-shadow: 0 0 0 2rpx #007aff;
@@ -278,7 +287,15 @@ text.data-v-fc420d75 {
   margin: 40rpx 26rpx 0;
   padding: 20rpx 0;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  opacity: 0;
+  transform: translateY(20rpx);
+  transition: all 0.6s ease-out;
+}
+
+/* 当按钮显示时的动画效果 */
+.view-more-btn.view-more-animate.data-v-fc420d75 {
+  opacity: 1;
+  transform: translateY(0);
 }
 .view-more-btn.data-v-fc420d75:active {
   opacity: 0.7;

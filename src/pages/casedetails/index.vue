@@ -12,61 +12,45 @@
   </view>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
 import { getActivityDetail } from "@/api/activity.js";
 
-export default {
-  name: "CaseDetails",
-  data() {
-    return {
-      richText: "",
-      loading: false,
-      error: null,
-      activityId: null,
-    };
-  },
-  onLoad(options) {
-    // 从页面参数中获取活动ID
-    this.activityId = "1951194533574815746";
-    this.loadActivityDetail();
-  },
-  methods: {
-    async loadActivityDetail() {
-      try {
-        this.loading = true;
-        this.error = null;
+// 定义响应式数据
+const richText = ref("");
+const loading = ref(false);
+const error = ref(null);
+const activityId = ref("1951194533574815746");
 
-        const response = await getActivityDetail(this.activityId);
+// 处理内容的函数
+const processContent = (content) => {
+  // 处理图片样式
+  richText.value = content
+    .replace(/<img[^>]*>/gi, function (match, capture) {
+      return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
+    })
+    .replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
+};
 
-        if (response && response.data) {
-          // 假设接口返回的数据结构中包含 content 字段
-          const content = response.data.content || response.data.detail || "";
-          this.processContent(content);
-        } else {
-          throw new Error("获取活动详情失败");
-        }
-      } catch (err) {
-        console.error("获取活动详情失败:", err);
-        this.error = err.message || "获取活动详情失败，请稍后重试";
-        // 出错时显示默认内容
-        this.setDefaultContent();
-      } finally {
-        this.loading = false;
-      }
-    },
+// uni-app 页面加载生命周期
+onLoad((options) => {
+  // 从页面参数中获取活动ID
+  getPageParams();
+});
+// 获取页面参数
+const getPageParams = () => {
+  // 获取页面实例
+  const pages = getCurrentPages();
+  const currentPage = pages[pages.length - 1];
 
-    processContent(content) {
-      // 处理图片样式
-      this.richText = content
-        .replace(/<img[^>]*>/gi, function (match, capture) {
-          return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
-        })
-        .replace(
-          /\<img/gi,
-          '<img style="width:100%;height:auto;display:block;"'
-        );
-    },
-  },
+  // 获取页面参数
+  if (currentPage.options && currentPage.options.item) {
+    // 先解码URL编码的参数
+    const decodedItem = decodeURIComponent(currentPage.options.item);
+    let detailDatas = JSON.parse(decodedItem);
+    processContent(detailDatas.caseDetails);
+  }
 };
 </script>
 

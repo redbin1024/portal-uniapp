@@ -26,6 +26,7 @@
           class="dynamic-item"
           v-for="(item, index) in companyNewsList"
           :key="index"
+          @click="navigateToRecentDetails(item)"
         >
           <!-- 左边内容 -->
           <view
@@ -68,7 +69,12 @@
         </view>
       </view>
       <!-- 查看更多按钮 -->
-      <view class="view-more-btn" @click="goToRecentUpdates">
+      <view
+        class="view-more-btn"
+        :class="{ 'view-more-animate': showDynamicViewMoreBtn }"
+        v-show="showDynamicViewMoreBtn"
+        @click="goToRecentUpdates"
+      >
         <text class="view-more-text">查看更多</text>
         <text class="arrow-right">→</text>
       </view>
@@ -97,7 +103,12 @@
         </view>
       </view>
       <!-- 查看更多按钮 -->
-      <view class="view-more-btn" @click="goToCooperationcase">
+      <view
+        class="view-more-btn"
+        :class="{ 'view-more-animate': showCaseViewMoreBtn }"
+        v-show="showCaseViewMoreBtn"
+        @click="goToCooperationcase"
+      >
         <text class="view-more-text">查看更多</text>
         <text class="arrow-right">→</text>
       </view>
@@ -122,6 +133,8 @@ const visibleDynamicItems = ref([]); // 用于控制动态内容项的动画
 const visibleListItems = ref([]); // 用于控制list-item的动画
 const scrollTimer = ref(null); // 滚动节流定时器
 const observer = ref(null); // 观察器引用
+const showDynamicViewMoreBtn = ref(false); // 控制动态内容查看更多按钮显示
+const showCaseViewMoreBtn = ref(false); // 控制案例查看更多按钮显示
 const caseList = ref([]);
 const imgList = ref([]);
 const companyNewsList = ref([]);
@@ -138,30 +151,6 @@ const slideshowData = reactive([
       "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
     title: "创新技术应用",
     description: "运用最新技术为客户创造价值",
-  },
-  {
-    image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-    title: "优质服务保障",
-    description: "全程跟踪服务，确保项目成功",
-  },
-  {
-    image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-    title: "优质服务保障",
-    description: "全程跟踪服务，确保项目成功",
-  },
-  {
-    image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-    title: "优质服务保障",
-    description: "全程跟踪服务，确保项目成功",
-  },
-  {
-    image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-    title: "优质服务保障",
-    description: "全程跟踪服务，确保项目成功",
   },
   {
     image:
@@ -366,6 +355,17 @@ const fetchcaseList = async () => {
     });
   }
 };
+/**
+ * 跳转到最近动态详情页面并传递item数据
+ */
+const navigateToRecentDetails = (item) => {
+  uni.navigateTo({
+    url:
+      "/pages/recentdetails/index?item=" +
+      encodeURIComponent(JSON.stringify(item)),
+  });
+};
+
 // 跳转到最近动态页面
 const goToRecentUpdates = () => {
   uni.navigateTo({
@@ -405,6 +405,14 @@ const checkListItemVisibility = () => {
                   if (!visibleListItems.value[index]) {
                     visibleListItems.value[index] = true;
                   }
+                  // 检查是否所有案例项都已显示
+                  const visibleCount =
+                    visibleListItems.value.filter(Boolean).length;
+                  if (visibleCount === successCaseList.value.length) {
+                    setTimeout(() => {
+                      showCaseViewMoreBtn.value = true;
+                    }, 500); // 延迟500ms显示按钮，让动画更自然
+                  }
                 }, index * 150); // 每个元素间隔150ms，让动画更流畅
               }
             },
@@ -433,6 +441,15 @@ const checkDynamicItemVisibility = () => {
                   if (!visibleDynamicItems.value.includes(index)) {
                     visibleDynamicItems.value.push(index);
                   }
+                  // 当所有动态内容项都显示完成后，显示查看更多按钮
+                  if (
+                    visibleDynamicItems.value.length ===
+                    companyNewsList.value.length
+                  ) {
+                    setTimeout(() => {
+                      showDynamicViewMoreBtn.value = true;
+                    }, 500); // 延迟500ms显示按钮，让动画更自然
+                  }
                 }, index * 200); // 每个元素间隔200ms，让动画更流畅
               }
             },
@@ -443,11 +460,13 @@ const checkDynamicItemVisibility = () => {
     .exec();
 };
 
-// const navigateToDetail = (item) => {
-//   uni.navigateTo({
-//     url: "/pages/casedetails/index",
-//   });
-// };
+const navigateToDetail = (item) => {
+  uni.navigateTo({
+    url:
+      "/pages/casedetails/index?item=" +
+      encodeURIComponent(JSON.stringify(item)),
+  });
+};
 
 const getBackgroundColor = (index) => {
   const colors = ["#FFEFEB", "#DFF1FF", "#EDF1FF", "#DAF9FF"];
@@ -505,13 +524,14 @@ text {
   max-width: 100vw;
   height: 100vh;
   /* scroll-view 需要固定高度才能滚动 */
+  margin-top: 30rpx;
 }
 
 /**最近动态 */
 .dynamic {
   background: #ffffff;
   padding: 60rpx 28rpx;
-  margin: 80rpx 0;
+  margin: 50rpx 0;
 }
 
 .dynamic-title {
@@ -543,10 +563,20 @@ text {
   width: 100%;
   /* 移除 overflow: hidden，避免影响滚动 */
   box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dynamic-item:hover {
+  transform: translateY(-2rpx);
+}
+
+.dynamic-item:active {
+  transform: translateY(0);
+  opacity: 0.8;
 }
 
 .dynamic-left {
-  padding-right: 20rpx;
   width: 50%;
   flex-shrink: 0;
   box-sizing: border-box;
@@ -605,13 +635,13 @@ text {
   /* margin: 0 20rpx; */
   position: relative;
   flex: 0 0 auto;
-  width: 10%;
+  width: 15%;
 }
 
 .step-dot {
   width: 20rpx;
   height: 20rpx;
-  border-radius: 50%;
+  border-radius: 45%;
   background-color: #007aff;
   border: 3rpx solid #ffffff;
   box-shadow: 0 0 0 2rpx #007aff;
@@ -799,7 +829,15 @@ text {
   margin: 40rpx 26rpx 0;
   padding: 20rpx 0;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  opacity: 0;
+  transform: translateY(20rpx);
+  transition: all 0.6s ease-out;
+}
+
+/* 当按钮显示时的动画效果 */
+.view-more-btn.view-more-animate {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .view-more-btn:active {

@@ -50,7 +50,7 @@ const _sfc_main = {
     const fetchServiceList = () => __async(this, null, function* () {
       try {
         const response = yield api_activity.getServiceList({
-          pageSize: 10,
+          pageSize: 5,
           pageNum: 1
         });
         console.log("企业列表数据:", response);
@@ -287,6 +287,7 @@ const _sfc_main = {
       currentIndex.value = e.detail.current;
     };
     const showPreview = common_vendor.ref(false);
+    const isVideoFullscreen = common_vendor.ref(false);
     const previewMedia = common_vendor.ref({
       src: "",
       type: "image",
@@ -325,7 +326,27 @@ const _sfc_main = {
       showPreview.value = true;
     };
     const closePreview = () => {
+      if (isVideoFullscreen.value) {
+        return;
+      }
       showPreview.value = false;
+    };
+    const onFullscreenChange = (e) => {
+      console.log("视频全屏状态变化:", e);
+      const isEnteringFullscreen = !!(e && e.detail && (e.detail.fullScreen || e.detail.fullscreen));
+      isVideoFullscreen.value = isEnteringFullscreen;
+      if (isEnteringFullscreen) {
+        console.log("视频进入全屏，保持showPreview显示");
+      } else {
+        console.log("视频退出全屏");
+      }
+    };
+    const handlePreviewModalClick = (e) => {
+      if (isVideoFullscreen.value) {
+        console.log("视频全屏中，不关闭预览");
+        return;
+      }
+      closePreview();
     };
     const prevMedia = () => {
       const currentIndex2 = previewMedia.value.index;
@@ -347,8 +368,46 @@ const _sfc_main = {
         index: newIndex
       };
     };
-    const handleContactClick = () => {
-      console.log("Contact clicked");
+    const handlePhoneCall = () => {
+      console.log("Phone call clicked");
+      common_vendor.index.makePhoneCall({
+        phoneNumber: "073169557550",
+        // 使用页面中显示的电话号码
+        success: () => {
+          console.log("拨打电话成功");
+        },
+        fail: (err) => {
+          console.error("拨打电话失败:", err);
+          common_vendor.index.showToast({
+            title: "拨打电话失败",
+            icon: "none"
+          });
+        }
+      });
+    };
+    const handleNavigation = () => {
+      console.log("Navigation clicked");
+      common_vendor.index.openLocation({
+        latitude: 28.1941,
+        // 长沙市芙蓉区的大概坐标
+        longitude: 113.0116,
+        name: "天天拓客",
+        address: "湖南省长沙市芙蓉区壹号座品A座613",
+        scale: 18,
+        success: () => {
+          console.log("打开地图成功");
+        },
+        fail: (err) => {
+          console.error("打开地图失败:", err);
+          common_vendor.index.showToast({
+            title: "打开地图失败",
+            icon: "none"
+          });
+        }
+      });
+    };
+    const handleCustomerServiceClick = () => {
+      console.log("Customer service clicked");
     };
     const getFirstRowCertificates = (certificates) => {
       if (!certificates || !Array.isArray(certificates))
@@ -387,14 +446,13 @@ const _sfc_main = {
             a: isVideo(item)
           }, isVideo(item) ? {
             b: item,
-            c: getVideoPoster(item),
-            d: common_vendor.o(($event) => onMediaClick(item, index, "video"), index),
-            e: common_vendor.o(($event) => onMediaClick(item, index, "video"), index)
+            c: common_vendor.o(($event) => onMediaClick(item, index, "video"), index),
+            d: common_vendor.o(($event) => onMediaClick(item, index, "video"), index)
           } : {
-            f: item,
-            g: common_vendor.o(($event) => onMediaClick(item, index, "image"), index)
+            e: item,
+            f: common_vendor.o(($event) => onMediaClick(item, index, "image"), index)
           }, {
-            h: index
+            g: index
           });
         }),
         d: common_vendor.o(onSwiperChange),
@@ -402,20 +460,19 @@ const _sfc_main = {
         f: common_vendor.t(enterpriseList.value.enterpriseDescription),
         g: buttonsVisible.value ? 1 : "",
         h: buttonsVisible.value ? 1 : "",
-        i: common_vendor.o(handleContactClick),
+        i: common_vendor.o(handlePhoneCall),
         j: buttonsVisible.value ? 1 : "",
         k: buttonsVisible.value ? 1 : "",
-        l: common_vendor.o(handleContactClick),
+        l: common_vendor.o(handleNavigation),
         m: buttonsVisible.value ? 1 : "",
         n: buttonsVisible.value ? 1 : "",
-        o: common_vendor.o(handleContactClick),
-        p: titleVisible.value ? 1 : "",
-        q: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
+        o: titleVisible.value ? 1 : "",
+        p: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) ? {
-        r: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+        q: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
-        s: titleVisible.value ? 1 : "",
-        t: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        r: titleVisible.value ? 1 : "",
+        s: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage,
             b: common_vendor.t(item.serviceName),
@@ -423,8 +480,8 @@ const _sfc_main = {
             d: content1Visible.value[index] ? 1 : ""
           };
         }),
-        v: headContentVisible.value[0] ? 1 : "",
-        w: common_vendor.f(companyNewsList.value, (team, index, i0) => {
+        t: headContentVisible.value[0] ? 1 : "",
+        v: common_vendor.f(companyNewsList.value, (team, index, i0) => {
           var _a2, _b2, _c2;
           return common_vendor.e({
             a: (_a2 = team.newsImages) == null ? void 0 : _a2[0]
@@ -435,62 +492,57 @@ const _sfc_main = {
             d: index
           });
         }),
-        x: headContentVisible.value[1] ? 1 : "",
-        y: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        w: headContentVisible.value[1] ? 1 : "",
+        x: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row1-" + index
           };
         }),
-        z: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        y: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        A: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        z: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        B: headContentVisible.value[2] ? 1 : "",
-        C: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+        A: headContentVisible.value[2] ? 1 : "",
+        B: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
           return {
             a: partner,
             b: "row1-" + index
           };
         }),
-        D: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
+        C: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
       }, getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0 ? {
-        E: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+        D: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
           return {
             a: partner,
             b: "row2-" + index
           };
         })
       } : {}, {
-        F: showPreview.value
+        E: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        G: common_vendor.o(closePreview),
-        H: enterpriseList.value.bannerImages && enterpriseList.value.bannerImages.length > 1
-      }, enterpriseList.value.bannerImages && enterpriseList.value.bannerImages.length > 1 ? {
-        I: common_vendor.o(prevMedia)
-      } : {}, {
-        J: enterpriseList.value.bannerImages && enterpriseList.value.bannerImages.length > 1
-      }, enterpriseList.value.bannerImages && enterpriseList.value.bannerImages.length > 1 ? {
-        K: common_vendor.o(nextMedia)
-      } : {}, {
-        L: previewMedia.value.type === "video"
+        F: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        M: previewMedia.value.src,
-        N: getVideoPoster(previewMedia.value.src)
+        G: previewMedia.value.src,
+        H: getVideoPoster(previewMedia.value.src),
+        I: common_vendor.o(onFullscreenChange),
+        J: "preview-video-" + previewMedia.value.index
       } : {
-        O: previewMedia.value.src
+        K: previewMedia.value.src
       }, {
-        P: common_vendor.t(previewMedia.value.index + 1),
-        Q: common_vendor.t(enterpriseList.value.bannerImages ? enterpriseList.value.bannerImages.length : 0),
-        R: common_vendor.o(() => {
-        }),
-        S: common_vendor.o(closePreview)
-      }) : {});
+        L: common_vendor.o(prevMedia),
+        M: common_vendor.o(nextMedia),
+        N: isVideoFullscreen.value ? 1 : "",
+        O: common_vendor.o(handlePreviewModalClick)
+      }) : {}, {
+        P: common_vendor.o(handleCustomerServiceClick),
+        Q: showPreview.value ? 1 : ""
+      });
     };
   }
 };

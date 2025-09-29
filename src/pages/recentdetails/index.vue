@@ -5,7 +5,7 @@
       <image :src="detailData.newsImages[0]"></image>
     </view>
     <view class="content">
-      {{ detailData.newDetails }}
+      {{ detailData.newsContent }}
     </view>
   </view>
 </template>

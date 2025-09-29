@@ -34,6 +34,16 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
     const instance = common_vendor.getCurrentInstance();
     const successCaseList = common_vendor.ref([]);
     const animatedItems = common_vendor.ref([]);
+    const loading = common_vendor.ref(false);
+    const loadingMore = common_vendor.ref(false);
+    const types = common_vendor.ref([]);
+    const pageNum = common_vendor.ref(1);
+    common_vendor.onReachBottom(() => {
+      if (types.value == 1) {
+        pageNum.value += 1;
+        fetchsuccessCaseList();
+      }
+    });
     common_vendor.reactive([
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
@@ -71,23 +81,44 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
         description: "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。"
       }
     ]);
-    const fetchsuccessCaseList = (response) => __async(this, null, function* () {
+    const fetchsuccessCaseList = () => __async(this, null, function* () {
       try {
-        const result = yield api_activity.getsuccessCaseList({
-          pageSize: 20,
-          pageNum: 1
-        });
-        console.log("企业列表数据:", result);
-        if (result && result.rows && result.rows.length > 0) {
-          successCaseList.value = result.rows;
+        if (pageNum.value === 1) {
+          loading.value = true;
+        } else {
+          loadingMore.value = true;
         }
+        const response = yield api_activity.getsuccessCaseList({
+          pageSize: 10,
+          pageNum: pageNum.value
+        });
+        let dataArray = [];
+        if (response && response.rows && Array.isArray(response.rows)) {
+          dataArray = response.rows;
+        } else if (response && response.data && Array.isArray(response.data)) {
+          dataArray = response.data;
+        } else if (response && Array.isArray(response)) {
+          dataArray = response;
+        } else {
+          console.warn("API返回的数据格式不正确:", response);
+          dataArray = [];
+        }
+        if (pageNum.value == 1) {
+          successCaseList.value = dataArray;
+        } else {
+          successCaseList.value = successCaseList.value.concat(dataArray);
+        }
+        types.value = dataArray.length >= 10 ? 1 : 2;
       } catch (error) {
         console.error("获取成功案例列表失败:", error);
+      } finally {
+        loading.value = false;
+        loadingMore.value = false;
       }
     });
-    const navigateToDetail = () => {
+    const navigateToDetail = (item) => {
       common_vendor.index.navigateTo({
-        url: "/pages/casedetails/index"
+        url: "/pages/casedetails/index?item=" + encodeURIComponent(JSON.stringify(item))
       });
     };
     const getBackgroundColor = (index) => {
@@ -127,8 +158,10 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
       onPageScroll: handleScroll
     });
     return (_ctx, _cache) => {
-      return {
-        a: common_vendor.f(successCaseList.value, (item, index, i0) => {
+      return common_vendor.e({
+        a: loading.value
+      }, loading.value ? {} : {}, {
+        b: common_vendor.f(successCaseList.value, (item, index, i0) => {
           return {
             a: item.caseImages[0],
             b: common_vendor.t(item.customerName),
@@ -136,13 +169,14 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
             d: animatedItems.value[index] ? 1 : "",
             e: index,
             f: getBackgroundColor(index),
-            g: common_vendor.o(($event) => navigateToDetail(), index)
+            g: common_vendor.o(($event) => navigateToDetail(item), index)
           };
-        })
-      };
+        }),
+        c: loadingMore.value
+      }, loadingMore.value ? {} : {});
     };
   }
 });
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-2786c006"]]);
-_sfc_main.__runtimeHooks = 1;
+_sfc_main.__runtimeHooks = 7;
 wx.createPage(MiniProgramPage);

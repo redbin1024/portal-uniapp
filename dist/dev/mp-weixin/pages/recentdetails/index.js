@@ -22,7 +22,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
       return {
         a: common_vendor.t(detailData.value.newsTitle),
         b: detailData.value.newsImages[0],
-        c: common_vendor.t(detailData.value.newDetails)
+        c: common_vendor.t(detailData.value.newsContent)
       };
     };
   }

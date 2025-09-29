@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安卓视频修复验证</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .fix-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 10px auto;
+        }
+        .fixed-video {
+            width: 100%;
+            display: block;
+            background-color: #000;
+            object-fit: contain;
+            -webkit-object-fit: contain;
+            max-width: 100%;
+            max-height: 100%;
+            overflow: hidden;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #666; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .device-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .fix-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .fix-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .fix-list li {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        .code {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 安卓视频播放修复验证</h1>
+        
+        <div class="device-info">
+            <h3>设备信息</h3>
+            <p><strong>用户代理:</strong> <span id="userAgent"></span></p>
+            <p><strong>是否安卓设备:</strong> <span id="isAndroid"></span></p>
+            <p><strong>屏幕尺寸:</strong> <span id="screenSize"></span></p>
+        </div>
+
+        <div class="fix-section">
+            <h2>修复后的视频播放</h2>
+            <p>使用了完整的安卓兼容性属性配置：</p>
+            <div class="video-container">
+                <video 
+                    id="fixedVideo"
+                    class="fixed-video"
+                    poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNGNhZjUwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7kuJzmraPlm7rlrprlkI48L3RleHQ+PC9zdmc+"
+                    controls
+                    preload="metadata"
+                    playsinline
+                    webkit-playsinline
+                    x5-video-player-type="h5"
+                    x5-video-player-fullscreen="true"
+                    x5-video-orientation="portrait"
+                    x5-playsinline="true"
+                    x5-video-ignore-metadata="true"
+                    object-fit="contain"
+                >
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+            </div>
+            <div id="videoStatus" class="status info">视频已加载，点击播放按钮测试</div>
+        </div>
+
+        <div class="fix-section">
+            <h2>修复内容说明</h2>
+            <div class="fix-list">
+                <h3>HTML 属性修复：</h3>
+                <ul>
+                    <li>✅ 添加了 <span class="code">x5-playsinline="true"</span> - 腾讯X5内核内联播放</li>
+                    <li>✅ 添加了 <span class="code">x5-video-ignore-metadata="true"</span> - 忽略视频元数据</li>
+                    <li>✅ 确保 <span class="code">x5-video-orientation="portrait"</span> 拼写正确</li>
+                    <li>✅ 保留了 <span class="code">playsinline</span> 和 <span class="code">webkit-playsinline</span></li>
+                    <li>✅ 添加了 <span class="code">object-fit="contain"</span> 属性</li>
+                </ul>
+            </div>
+            
+            <div class="fix-list">
+                <h3>CSS 样式优化：</h3>
+                <ul>
+                    <li>✅ 添加了 <span class="code">object-fit: contain</span> 和 <span class="code">-webkit-object-fit: contain</span></li>
+                    <li>✅ 添加了硬件加速：<span class="code">transform: translateZ(0)</span></li>
+                    <li>✅ 添加了 <span class="code">backface-visibility: hidden</span> 优化渲染</li>
+                    <li>✅ 设置了 <span class="code">overflow: hidden</span> 防止溢出</li>
+                </ul>
+            </div>
+
+            <div class="fix-list">
+                <h3>JavaScript 功能增强：</h3>
+                <ul>
+                    <li>✅ 添加了 <span class="code">onVideoError</span> 错误处理函数</li>
+                    <li>✅ 添加了 <span class="code">onVideoCanPlay</span> 播放就绪处理</li>
+                    <li>✅ 修复了 <span class="code">isVideo</span> 函数支持数组类型参数</li>
+                    <li>✅ 完善了视频事件监听和错误提示</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fix-section">
+            <h2>测试建议</h2>
+            <div class="fix-list">
+                <ul>
+                    <li>🔍 在安卓手机的微信浏览器中测试</li>
+                    <li>🔍 在安卓手机的QQ浏览器中测试</li>
+                    <li>🔍 在安卓手机的Chrome浏览器中测试</li>
+                    <li>🔍 测试不同格式的视频文件（MP4、WebM等）</li>
+                    <li>🔍 测试不同分辨率的视频</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 显示设备信息
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        document.getElementById('isAndroid').textContent = /Android/i.test(navigator.userAgent) ? '是' : '否';
+        document.getElementById('screenSize').textContent = `${screen.width} x ${screen.height}`;
+
+        // 视频事件监听
+        const video = document.getElementById('fixedVideo');
+        const status = document.getElementById('videoStatus');
+
+        video.addEventListener('loadedmetadata', function() {
+            status.className = 'status success';
+            status.textContent = '✅ 视频元数据加载成功，可以播放';
+        });
+
+        video.addEventListener('canplay', function() {
+            status.className = 'status success';
+            status.textContent = '✅ 视频准备就绪，可以正常播放';
+        });
+
+        video.addEventListener('error', function(e) {
+            status.className = 'status error';
+            status.textContent = '❌ 视频加载失败: ' + (e.message || '未知错误');
+        });
+
+        video.addEventListener('play', function() {
+            console.log('视频开始播放');
+        });
+
+        video.addEventListener('pause', function() {
+            console.log('视频暂停');
+        });
+
+        // 页面加载完成后的提示
+        window.addEventListener('load', function() {
+            console.log('安卓视频修复验证页面已加载');
+            if (/Android/i.test(navigator.userAgent)) {
+                console.log('✅ 检测到安卓设备，修复应该生效');
+            } else {
+                console.log('ℹ️ 非安卓设备，但修复不会影响正常播放');
+            }
+        });
+    </script>
+</body>
+</html>

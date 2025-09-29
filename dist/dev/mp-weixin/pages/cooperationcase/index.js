@@ -32,6 +32,8 @@ const _sfc_main = {
     const visibleListItems = common_vendor.ref([]);
     const scrollTimer = common_vendor.ref(null);
     const observer = common_vendor.ref(null);
+    const showDynamicViewMoreBtn = common_vendor.ref(false);
+    const showCaseViewMoreBtn = common_vendor.ref(false);
     const caseList = common_vendor.ref([]);
     const imgList = common_vendor.ref([]);
     const companyNewsList = common_vendor.ref([]);
@@ -46,26 +48,6 @@ const _sfc_main = {
         image: "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
         title: "创新技术应用",
         description: "运用最新技术为客户创造价值"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        title: "优质服务保障",
-        description: "全程跟踪服务，确保项目成功"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        title: "优质服务保障",
-        description: "全程跟踪服务，确保项目成功"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        title: "优质服务保障",
-        description: "全程跟踪服务，确保项目成功"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        title: "优质服务保障",
-        description: "全程跟踪服务，确保项目成功"
       },
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
@@ -226,6 +208,11 @@ const _sfc_main = {
         });
       }
     });
+    const navigateToRecentDetails = (item) => {
+      common_vendor.index.navigateTo({
+        url: "/pages/recentdetails/index?item=" + encodeURIComponent(JSON.stringify(item))
+      });
+    };
     const goToRecentUpdates = () => {
       common_vendor.index.navigateTo({
         url: "/pages/recentUpdates/index"
@@ -253,6 +240,12 @@ const _sfc_main = {
                     if (!visibleListItems.value[index]) {
                       visibleListItems.value[index] = true;
                     }
+                    const visibleCount = visibleListItems.value.filter(Boolean).length;
+                    if (visibleCount === successCaseList.value.length) {
+                      setTimeout(() => {
+                        showCaseViewMoreBtn.value = true;
+                      }, 500);
+                    }
                   }, index * 150);
                 }
               }
@@ -274,6 +267,11 @@ const _sfc_main = {
                     if (!visibleDynamicItems.value.includes(index)) {
                       visibleDynamicItems.value.push(index);
                     }
+                    if (visibleDynamicItems.value.length === companyNewsList.value.length) {
+                      setTimeout(() => {
+                        showDynamicViewMoreBtn.value = true;
+                      }, 500);
+                    }
                   }, index * 200);
                 }
               }
@@ -281,6 +279,11 @@ const _sfc_main = {
           });
         }
       }).exec();
+    };
+    const navigateToDetail = (item) => {
+      common_vendor.index.navigateTo({
+        url: "/pages/casedetails/index?item=" + encodeURIComponent(JSON.stringify(item))
+      });
     };
     const getBackgroundColor = (index) => {
       const colors = ["#FFEFEB", "#DFF1FF", "#EDF1FF", "#DAF9FF"];
@@ -334,11 +337,14 @@ const _sfc_main = {
           } : {}, {
             h: item.newsImages[0],
             i: visibleDynamicItems.value.includes(index) ? 1 : "",
-            j: index
+            j: index,
+            k: common_vendor.o(($event) => navigateToRecentDetails(item), index)
           });
         }),
-        j: common_vendor.o(goToRecentUpdates),
-        k: common_vendor.f(successCaseList.value, (item, index, i0) => {
+        j: showDynamicViewMoreBtn.value ? 1 : "",
+        k: showDynamicViewMoreBtn.value,
+        l: common_vendor.o(goToRecentUpdates),
+        m: common_vendor.f(successCaseList.value, (item, index, i0) => {
           return {
             a: item.caseImages[0],
             b: common_vendor.t(item.customerName),
@@ -346,11 +352,13 @@ const _sfc_main = {
             d: index,
             e: visibleListItems.value[index] ? 1 : "",
             f: getBackgroundColor(index),
-            g: common_vendor.o(($event) => _ctx.navigateToDetail(item), index)
+            g: common_vendor.o(($event) => navigateToDetail(item), index)
           };
         }),
-        l: common_vendor.o(goToCooperationcase),
-        m: common_vendor.o(onScroll)
+        n: showCaseViewMoreBtn.value ? 1 : "",
+        o: showCaseViewMoreBtn.value,
+        p: common_vendor.o(goToCooperationcase),
+        q: common_vendor.o(onScroll)
       };
     };
   }

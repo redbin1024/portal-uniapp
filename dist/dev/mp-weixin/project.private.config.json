@@ -3,16 +3,23 @@
 		"miniprogram": {
 			"list": [
 				{
-					"name": "pages/clientevaluation/index",
-					"pathName": "pages/clientevaluation/index",
+					"name": "pages/cooperationcase/index",
+					"pathName": "pages/cooperationcase/index",
 					"query": "",
 					"scene": null,
 					"launchMode": "default"
 				},
 				{
-					"name": "pages/recentdetails/index",
-					"pathName": "pages/recentdetails/index",
-					"query": "item=%7B%22newsId%22%3A13%2C%22newsTitle%22%3A%22%E6%9C%88%E5%AD%90%E4%B8%AD%E5%BF%83%E4%B8%80%E8%88%AC%E4%B8%BA%E7%94%9F%E4%BA%A7%E6%AF%8D%E4%BA%B2%22%2C%22newsContent%22%3A%22%22%2C%22newsImages%22%3A%5B%22http%3A%2F%2Fcdn.xiaodingdang1.com%2F2025%2F09%2F27%2F4c1794fa637e41aaa9c61bfa3667375f.png%22%5D%2C%22newDetails%22%3A%22%E4%B8%93%E4%B8%9A%E4%BA%A7%E5%90%8E%E6%81%A2%E5%A4%8D%EF%BC%88%E5%8D%B3%E5%9D%90%E6%9C%88%E5%AD%90%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%9C%BA%E6%89%80%EF%BC%8C%E4%B9%9F%E7%A7%B0%E4%B8%BA%E6%9C%88%E5%AD%90%E4%BC%9A%E6%89%80...%22%2C%22type%22%3A1%2C%22createTime%22%3A%222025-09-27%2000%3A00%3A00%22%2C%22createBy%22%3A%221%22%2C%22updateBy%22%3A%221%22%2C%22updateTime%22%3A%222025-09-27%2000%3A00%3A00%22%7D",
+					"name": "pages/case/index",
+					"pathName": "pages/case/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/case/index",
+					"pathName": "pages/case/index",
+					"query": "",
 					"launchMode": "default",
 					"scene": null
 				},
@@ -24,8 +31,15 @@
 					"scene": null
 				},
 				{
-					"name": "pages/case/index",
-					"pathName": "pages/case/index",
+					"name": "pages/clientevaluation/index",
+					"pathName": "pages/clientevaluation/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/clientevaluation/index",
+					"pathName": "pages/clientevaluation/index",
 					"query": "",
 					"launchMode": "default",
 					"scene": null

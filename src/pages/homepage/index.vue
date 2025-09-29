@@ -1,5 +1,5 @@
 <template>
-  <view class="main">
+  <view class="main" :class="{ 'no-scroll': showPreview }">
     <view class="header" :class="{ 'header-with-bg': showHeaderBg }">
       <view class="title-wrapper">
         <view class="headLogo">
@@ -38,18 +38,17 @@
                 :src="item"
                 class="banner-video"
                 controls
-                :poster="getVideoPoster(item)"
                 @click="onMediaClick(item, index, 'video')"
               />
               <view
                 class="media-overlay"
                 @click="onMediaClick(item, index, 'video')"
               >
-                <view class="play-icon">
+                <!-- <view class="play-icon">
                   <image
-                    src="http://cdn.xiaodingdang1.com/2025/09/27/f347d91f0cca43c6955ba7f001b56a92.png"
+                    src="http://cdn.xiaodingdang1.com/2025/09/29/e0672146e9f640ff97debb0b896d2d77.png"
                   ></image>
-                </view>
+                </view> -->
               </view>
             </view>
             <view v-else class="media-container">
@@ -87,7 +86,7 @@
                   'btn-animate': buttonsVisible,
                   'btn-delay-1': buttonsVisible,
                 }"
-                @click="handleContactClick"
+                @click="handlePhoneCall"
               >
                 <image
                   src="http://cdn.xiaodingdang1.com/2025/09/27/a51f8b4f36a54f4385c0a695ab191a77.png"
@@ -101,7 +100,7 @@
                   'btn-animate': buttonsVisible,
                   'btn-delay-2': buttonsVisible,
                 }"
-                @click="handleContactClick"
+                @click="handleNavigation"
               >
                 <image
                   src="http://cdn.xiaodingdang1.com/2025/09/27/41563146d6c54148a0e1b9f80ca4c1c1.png"
@@ -115,7 +114,7 @@
                   'btn-animate': buttonsVisible,
                   'btn-delay-3': buttonsVisible,
                 }"
-                @click="handleContactClick"
+                open-type="share"
               >
                 <image
                   src="http://cdn.xiaodingdang1.com/2025/09/27/8669297789b34a3d9848db137bd084fb.png"
@@ -130,7 +129,7 @@
       <view class="winthecustomer-head">
         <view class="winthecustomer-head1">
           <image
-            src="http://cdn.xiaodingdang1.com/2025/09/25/f938be0b9c4e417d8a35a0e441fc8962.png"
+            src="http://cdn.xiaodingdang1.com/2025/09/29/0e9ee0c847c048809e8e5d520cbc7fa2.png"
             style="width: 50rpx; height: 50rpx"
           ></image>
           <view
@@ -152,7 +151,7 @@
       <view class="winthecustomer-head">
         <view class="winthecustomer-head1">
           <image
-            src="http://cdn.xiaodingdang1.com/2025/09/25/1f1fa1d642064970832273565705bff0.png"
+            src="http://cdn.xiaodingdang1.com/2025/09/29/91ec3c9320a946c3a2cb84795b82cf82.png"
             style="width: 50rpx; height: 50rpx"
           ></image>
           <view
@@ -342,65 +341,54 @@
       </view>
     </view>
 
-    <!-- 媒体预览模态框 -->
-    <view v-if="showPreview" class="media-preview-modal" @click="closePreview">
-      <view class="preview-container" @click.stop>
-        <!-- 关闭按钮 -->
-        <view class="close-btn" @click="closePreview">
-          <text>✕</text>
-        </view>
-
-        <!-- 导航按钮 -->
-        <view
-          class="nav-btn prev-btn"
-          @click="prevMedia"
-          v-if="
-            enterpriseList.bannerImages &&
-            enterpriseList.bannerImages.length > 1
-          "
-        >
-          <text>‹</text>
-        </view>
-        <view
-          class="nav-btn next-btn"
-          @click="nextMedia"
-          v-if="
-            enterpriseList.bannerImages &&
-            enterpriseList.bannerImages.length > 1
-          "
-        >
-          <text>›</text>
-        </view>
-
-        <!-- 媒体内容 -->
-        <view class="preview-content">
-          <video
-            v-if="previewMedia.type === 'video'"
-            :src="previewMedia.src"
-            class="preview-video"
-            controls
-            :poster="getVideoPoster(previewMedia.src)"
-          />
-          <image
-            v-else
-            :src="previewMedia.src"
-            class="preview-image"
-            mode="aspectFit"
-          />
-        </view>
-
-        <!-- 媒体信息 -->
-        <view class="media-info">
-          <text class="media-counter"
-            >{{ previewMedia.index + 1 }} /
-            {{
-              enterpriseList.bannerImages
-                ? enterpriseList.bannerImages.length
-                : 0
-            }}</text
-          >
+    <!-- 全屏预览组件 -->
+    <view
+      v-if="showPreview"
+      class="preview-modal"
+      :class="{ 'video-fullscreen': isVideoFullscreen }"
+      @click="handlePreviewModalClick"
+    >
+      <!-- 媒体内容 -->
+      <view class="preview-content">
+        <video
+          v-if="previewMedia.type === 'video'"
+          :src="previewMedia.src"
+          class="preview-video"
+          controls
+          autoplay
+          :poster="getVideoPoster(previewMedia.src)"
+          :show-fullscreen-btn="true"
+          @fullscreenchange="onFullscreenChange"
+          :id="'preview-video-' + previewMedia.index"
+        />
+        <image
+          v-else
+          :src="previewMedia.src"
+          class="preview-image"
+          mode="aspectFit"
+        />
+        <view class="arrows">
+          <view class="leftarrows" @click.stop="prevMedia"
+            ><image
+              src="http://cdn.xiaodingdang1.com/2025/09/29/936dbb6c2ac74e06a550872104bd2231.png"
+            ></image
+          ></view>
+          <view class="rightarrows" @click.stop="nextMedia"
+            ><image
+              src="http://cdn.xiaodingdang1.com/2025/09/29/3a9d97e8cbf947aaa810020e259a23b8.png"
+            ></image
+          ></view>
         </view>
       </view>
+    </view>
+
+    <!-- 客服按钮 -->
+    <view class="customer-service-btn">
+      <image
+        src="http://cdn.xiaodingdang1.com/2025/09/29/84932e513ebd49d093825177c28edf83.png"
+        mode="aspectFit"
+        @click="handleCustomerServiceClick"
+      />
     </view>
   </view>
 </template>
@@ -450,7 +438,7 @@ const fetchCompanyNewsList = async () => {
 const fetchServiceList = async () => {
   try {
     const response = await getServiceList({
-      pageSize: 10,
+      pageSize: 5,
       pageNum: 1,
     });
     console.log("企业列表数据:", response);
@@ -790,6 +778,7 @@ const goToSlide = (index) => {
 
 // 媒体预览相关状态
 const showPreview = ref(false);
+const isVideoFullscreen = ref(false);
 const previewMedia = ref({
   src: "",
   type: "image", // 'image' 或 'video'
@@ -835,7 +824,39 @@ const onMediaClick = (item, index, type) => {
 
 // 关闭预览
 const closePreview = () => {
+  // 如果视频正在全屏，不关闭预览
+  if (isVideoFullscreen.value) {
+    return;
+  }
   showPreview.value = false;
+};
+
+// 处理视频全屏状态变化
+const onFullscreenChange = (e) => {
+  console.log("视频全屏状态变化:", e);
+  const isEnteringFullscreen = !!(
+    e &&
+    e.detail &&
+    (e.detail.fullScreen || e.detail.fullscreen)
+  );
+
+  isVideoFullscreen.value = isEnteringFullscreen;
+
+  if (isEnteringFullscreen) {
+    console.log("视频进入全屏，保持showPreview显示");
+  } else {
+    console.log("视频退出全屏");
+  }
+};
+
+// 处理预览模态框点击事件
+const handlePreviewModalClick = (e) => {
+  // 如果视频正在全屏，不关闭预览
+  if (isVideoFullscreen.value) {
+    console.log("视频全屏中，不关闭预览");
+    return;
+  }
+  closePreview();
 };
 
 // 切换到上一个媒体
@@ -868,8 +889,64 @@ const nextMedia = () => {
   };
 };
 
+// 跳转到指定媒体
+const goToMedia = (index) => {
+  const newSrc = enterpriseList.value.bannerImages[index];
+  previewMedia.value = {
+    src: newSrc,
+    type: isVideo(newSrc) ? "video" : "image",
+    index: index,
+  };
+};
+
+// 打电话功能
+const handlePhoneCall = () => {
+  console.log("Phone call clicked");
+  uni.makePhoneCall({
+    phoneNumber: "073169557550", // 使用页面中显示的电话号码
+    success: () => {
+      console.log("拨打电话成功");
+    },
+    fail: (err) => {
+      console.error("拨打电话失败:", err);
+      uni.showToast({
+        title: "拨打电话失败",
+        icon: "none",
+      });
+    },
+  });
+};
+
+// 定位导航功能
+const handleNavigation = () => {
+  console.log("Navigation clicked");
+  uni.openLocation({
+    latitude: 28.1941, // 长沙市芙蓉区的大概坐标
+    longitude: 113.0116,
+    name: "天天拓客",
+    address: "湖南省长沙市芙蓉区壹号座品A座613",
+    scale: 18,
+    success: () => {
+      console.log("打开地图成功");
+    },
+    fail: (err) => {
+      console.error("打开地图失败:", err);
+      uni.showToast({
+        title: "打开地图失败",
+        icon: "none",
+      });
+    },
+  });
+};
+
 const handleContactClick = () => {
   console.log("Contact clicked");
+};
+
+// 客服按钮点击事件
+const handleCustomerServiceClick = () => {
+  console.log("Customer service clicked");
+  // 这里可以添加客服相关的逻辑，比如跳转到客服页面或打开客服对话框
 };
 
 // 获取第一排证书数据
@@ -913,6 +990,13 @@ onPageScroll((e) => {
 .main {
   background-color: #f7f7f7;
   min-height: 100vh;
+}
+
+.main.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+  position: fixed;
+  width: 100%;
 }
 .container {
 }
@@ -1232,11 +1316,15 @@ onPageScroll((e) => {
 
 .certificate-row {
   display: flex;
-  // gap: 20rpx;
+  gap: 0;
+  margin-bottom: 20rpx;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .certificate-item {
-  border: 1rpx solid #eeeeee;
   width: 239rpx;
   height: 265rpx;
   flex-shrink: 0;
@@ -1244,6 +1332,9 @@ onPageScroll((e) => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  margin-right: 20rpx;
 
   &:last-child {
     margin-right: 49rpx;
@@ -1334,7 +1425,7 @@ onPageScroll((e) => {
 }
 .winthecustomer-head {
   height: 152rpx;
-  background: url("http://cdn.xiaodingdang1.com/2025/09/25/7cf1afc487d04a8d834b1bc6aac793b6.png")
+  background: url("http://cdn.xiaodingdang1.com/2025/09/29/cf10e300f6854bff82f62c1c899450f3.png")
     no-repeat center;
   background-size: cover;
   display: flex;
@@ -1362,7 +1453,7 @@ onPageScroll((e) => {
 }
 
 .winthecustomer-title {
-  color: #ffffff;
+  color: #000000;
   font-weight: bold;
   font-size: 40rpx;
   margin-left: 22rpx;
@@ -1402,7 +1493,7 @@ onPageScroll((e) => {
 }
 
 .winthecustomer-line {
-  background: linear-gradient(to bottom, #dfebfb 30%, #ffffff 70%);
+  background: linear-gradient(to bottom, #f6f6f6 30%, #ffffff 70%);
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
   margin-top: -60rpx;
@@ -1420,7 +1511,7 @@ onPageScroll((e) => {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20rpx;
-  background: linear-gradient(to bottom, #dfebfb 30%, #ffffff 70%);
+  background: linear-gradient(to bottom, #f6f6f6 30%, #ffffff 70%);
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
   margin-top: -60rpx;
@@ -1590,154 +1681,64 @@ wx-button {
   color: white;
 }
 
-/* 媒体预览模态框样式 */
-.media-preview-modal {
+/* 全屏预览样式 */
+
+.preview-modal {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 1000;
 }
 
-.preview-container {
-  position: relative;
-  width: 90%;
-  height: 90%;
-  max-width: 1200px;
-  max-height: 800px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* 视频全屏时可调整z-index，防止被原生全屏遮挡 */
+.preview-modal.video-fullscreen {
+  z-index: 9998;
 }
-
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10001;
-  cursor: pointer;
-}
-
-.close-btn text {
-  color: white;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10001;
-  cursor: pointer;
-}
-
-.nav-btn text {
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.prev-btn {
-  left: 20px;
-}
-
-.next-btn {
-  right: 20px;
-}
-
 .preview-content {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
 }
-
-.preview-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
 .preview-video {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+.preview-image {
+  width: 100%;
+  height: 100%;
+}
+.arrows {
+  position: fixed;
+  top: 50%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.leftarrows image {
+  width: 100rpx;
+  height: 100rpx;
+}
+.rightarrows image {
+  width: 100rpx;
+  height: 100rpx;
 }
 
-.media-info {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 8px 16px;
-  border-radius: 20px;
-  z-index: 10001;
+/* 客服按钮样式 */
+.customer-service-btn {
+  position: fixed;
+  right: 0;
+  bottom: 200rpx;
+  width: 160rpx;
+  height: 160rpx;
+  z-index: 999;
+  cursor: pointer;
 }
 
-.media-counter {
-  color: white;
-  font-size: 14px;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .preview-container {
-    width: 95%;
-    height: 95%;
-  }
-
-  .close-btn {
-    top: 10px;
-    right: 10px;
-    width: 35px;
-    height: 35px;
-  }
-
-  .close-btn text {
-    font-size: 18px;
-  }
-
-  .nav-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .nav-btn text {
-    font-size: 20px;
-  }
-
-  .prev-btn {
-    left: 10px;
-  }
-
-  .next-btn {
-    right: 10px;
-  }
-
-  .media-info {
-    bottom: 10px;
-  }
+.customer-service-btn image {
+  width: 160rpx;
+  height: 160rpx;
 }
 </style>
