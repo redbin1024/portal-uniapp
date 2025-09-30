@@ -227,6 +227,7 @@
             v-for="(team, index) in companyNewsList"
             :key="index"
             class="teamappearance-item"
+            @click="goToDetails(team)"
           >
             <view class="teamappearance-item-image">
               <image
@@ -483,7 +484,16 @@ const fetchEnterpriseList = async () => {
     });
   }
 };
-
+/**
+ * 跳转到公司动态详情页面并传递item数据
+ */
+const goToDetails = (item) => {
+  uni.navigateTo({
+    url:
+      "/pages/firmdynamicdetails/index?item=" +
+      encodeURIComponent(JSON.stringify(item)),
+  });
+};
 // 页面加载完成后触发按钮动画
 onMounted(() => {
   setTimeout(() => {
@@ -1312,13 +1322,12 @@ onPageScroll((e) => {
   display: flex;
   flex-direction: column;
   width: max-content;
+  border: 1rpx solid #eeeeee;
 }
 
 .certificate-row {
   display: flex;
   gap: 0;
-  margin-bottom: 20rpx;
-
   &:last-child {
     margin-bottom: 0;
   }
@@ -1332,10 +1341,6 @@ onPageScroll((e) => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-radius: 8rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-  margin-right: 20rpx;
-
   &:last-child {
     margin-right: 49rpx;
   }

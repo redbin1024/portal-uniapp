@@ -25,7 +25,7 @@
 /* 文章场景相关 */
 .client-evaluation-page.data-v-dbba45b8 {
   min-height: 100vh;
-  background-color: #f7f7f7;
+  background-color: #f0f0f0;
   padding-bottom: 20rpx;
 }
 .fixed-header.data-v-dbba45b8 {
@@ -87,9 +87,6 @@
   color: #999999;
   margin-left: 4rpx;
 }
-.content-area.data-v-dbba45b8 {
-  padding: 20rpx;
-}
 .loading-container.data-v-dbba45b8 {
   display: flex;
   justify-content: center;
@@ -110,11 +107,23 @@
   font-size: 24rpx;
   color: #999999;
 }
+.listData.data-v-dbba45b8 {
+  background: #ffffff;
+  margin-top: 32rpx;
+}
+.listData .listData-title.data-v-dbba45b8 {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #000000;
+  padding-top: 42rpx;
+  padding-left: 21rpx;
+}
 .waterfall-container .waterfall-column.data-v-dbba45b8 {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
+  padding-top: 32rpx;
 }
 .card-item.data-v-dbba45b8 {
   background-color: #ffffff;
@@ -122,7 +131,7 @@
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   margin-bottom: 20rpx;
-  width: 48%;
+  width: 46%;
 }
 .card-item.data-v-dbba45b8:active {
   transform: scale(0.98);
@@ -305,4 +314,60 @@
     max-width: 750px;
     margin: 0 auto;
 }
+}
+.teamappearance.data-v-dbba45b8 {
+  background: #ffffff;
+  padding: 19rpx 0 32rpx 32rpx;
+}
+.teamappearance-content.data-v-dbba45b8 {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 20rpx;
+  /* 隐藏滚动条 */
+}
+.teamappearance-content.data-v-dbba45b8::-webkit-scrollbar {
+  display: none;
+}
+.teamappearance-content.data-v-dbba45b8 {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.teamappearance-item.data-v-dbba45b8 {
+  background: #f7f7f7;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+  width: 528rpx;
+  margin-right: 20rpx;
+}
+.teamappearance-item.data-v-dbba45b8:last-child {
+  margin-right: 26rpx;
+}
+.teamappearance-item-content.data-v-dbba45b8 {
+  padding: 18rpx 18rpx;
+}
+.teamappearance-item-content1.data-v-dbba45b8 {
+  color: #000000;
+  font-size: 28rpx;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 24rpx;
+}
+.teamappearance-item-content2.data-v-dbba45b8 {
+  color: #535353;
+  font-size: 26rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 14rpx;
+}
+.teamappearance-item-image.data-v-dbba45b8 {
+  width: 528rpx;
+  height: 260rpx;
+}
+.teamappearance-item-image image.data-v-dbba45b8 {
+  width: 100%;
+  height: 100%;
 }

@@ -35,7 +35,7 @@
               'animate-fade-in-left': visibleDynamicItems.includes(index),
             }"
           >
-            <view class="dynamic-date">{{ item.createTime }}</view>
+            <view class="dynamic-date">{{ formatDate(item.createTime) }}</view>
             <view class="dynamic-text1">{{ item.newsTitle }}</view>
             <view class="dynamic-text">{{ item.newsContent }}</view>
           </view>
@@ -369,7 +369,7 @@ const navigateToRecentDetails = (item) => {
 // 跳转到最近动态页面
 const goToRecentUpdates = () => {
   uni.navigateTo({
-    url: "/pages/recentUpdates/index",
+    url: "/pages/recentUpdatesnew/index",
   });
 };
 
@@ -505,6 +505,12 @@ onBeforeUnmount(() => {
     clearTimeout(scrollTimer.value);
   }
 });
+
+// 格式化日期，只显示年月日
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  return dateStr.split(" ")[0];
+};
 
 // uni-app 生命周期
 onLoad(() => {});
@@ -730,7 +736,6 @@ text {
   height: 270rpx;
   padding: 0 24rpx;
   margin-bottom: 62rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
   position: relative;
   width: 100%;
   box-sizing: border-box;

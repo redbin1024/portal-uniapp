@@ -1,0 +1,1 @@
+<view class="main data-v-b023a030"><view class="title data-v-b023a030">{{a}}</view><view class="image data-v-b023a030"><image class="data-v-b023a030" src="{{b}}"></image></view><view class="content data-v-b023a030">{{c}}</view></view>

@@ -167,14 +167,11 @@ export default {
 .waterfall-container {
   display: flex;
   justify-content: space-between;
-  gap: 20rpx;
 }
 
 .waterfall-column {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
 }
 
 .waterfall-item {
@@ -224,7 +221,7 @@ export default {
 }
 
 /* 响应式设计 */
-@media screen and (max-width: 750rpx) {
+/* @media screen and (max-width: 750rpx) {
   .waterfall-container {
     gap: 15rpx;
   }
@@ -236,5 +233,5 @@ export default {
   .item-content {
     padding: 15rpx;
   }
-}
+} */
 </style>

@@ -15,10 +15,12 @@ if (!Math) {
   "./pages/cooperationcase/index.js";
   "./pages/recentUpdates/index.js";
   "./pages/recentdetails/index.js";
+  "./pages/recentUpdatesnew/index.js";
   "./pages/productservicenew/index.js";
   "./pages/customer/index.js";
   "./pages/dynamicdetails/index.js";
   "./pages/api-test/index.js";
+  "./pages/firmdynamicdetails/index.js";
 }
 const _sfc_main = {
   name: "App",

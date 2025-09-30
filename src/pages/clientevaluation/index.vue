@@ -9,53 +9,88 @@
 
       <!-- 瀑布流列表 -->
       <view v-else class="waterfall-container">
+        <view class="teamappearance">
+          <view class="teamappearance-content">
+            <view
+              v-for="(team, index) in columnsList"
+              :key="index"
+              class="teamappearance-item"
+              @tap="handleCardClick(team)"
+            >
+              <view class="teamappearance-item-image">
+                <image
+                  :src="
+                    Array.isArray(team.newsImages)
+                      ? team.newsImages[0]
+                      : team.newsImages
+                  "
+                  v-if="team.newsImages?.[0]"
+                  @load="onImageLoad(team.id || team.newsId, 0, index)"
+                  @tap.stop="handleMediaClick(team, 'image')"
+                ></image>
+              </view>
+              <view class="teamappearance-item-content">
+                <view class="teamappearance-item-content1">{{
+                  team.newsTitle
+                }}</view>
+                <view class="teamappearance-item-content2">{{
+                  team.newsTitle
+                }}</view>
+              </view>
+            </view>
+          </view>
+        </view>
         <!-- 左列 -->
-        <view class="waterfall-column">
-          <view
-            v-for="(item, index) in columns"
-            :key="`left-${item.id || item.newsId || index}`"
-            class="card-item"
-          >
-            <view class="image-wrapper">
-              <!-- 视频 -->
-              <video
-                :id="`video-${item.id || item.newsId}`"
-                :src="item.newsImages[0]"
-                class="main-video"
-                controls
-                preload="metadata"
-                playsinline
-                webkit-playsinline
-                x5-video-player-type="h5"
-                x5-video-player-fullscreen="true"
-                x5-video-orientation="portrait"
-                x5-playsinline="true"
-                x5-video-ignore-metadata="true"
-                object-fit="contain"
-                :show-fullscreen-btn="true"
-                :show-play-btn="true"
-                :show-center-play-btn="true"
-                :enable-play-gesture="true"
-                :poster="item.poster || ''"
-                @loadedmetadata="onVideoLoad(item.id || item.newsId, 0, index)"
-                @error="onVideoError(item.id || item.newsId, 0, index)"
-                @canplay="onVideoCanPlay(item.id || item.newsId, 0, index)"
-                @tap.stop="handleVideoTap"
-                @fullscreenchange="onVideoFullscreenChange"
-                @play="onVideoPlay"
-                @pause="onVideoPause"
-                @ended="onVideoEnded"
-                @click="onVideoClick"
-              >
-                <!-- <view class="media-type-indicator">
+        <view class="listData">
+          <view class="listData-title">精选视频</view>
+          <view class="waterfall-column">
+            <view
+              v-for="(item, index) in columns"
+              :key="`left-${item.id || item.newsId || index}`"
+              class="card-item"
+            >
+              <view class="image-wrapper">
+                <!-- 视频 -->
+                <video
+                  :id="`video-${item.id || item.newsId}`"
+                  :src="item.newsImages[0]"
+                  class="main-video"
+                  controls
+                  preload="metadata"
+                  playsinline
+                  webkit-playsinline
+                  x5-video-player-type="h5"
+                  x5-video-player-fullscreen="true"
+                  x5-video-orientation="portrait"
+                  x5-playsinline="true"
+                  x5-video-ignore-metadata="true"
+                  object-fit="contain"
+                  :show-fullscreen-btn="true"
+                  :show-play-btn="true"
+                  :show-center-play-btn="true"
+                  :enable-play-gesture="true"
+                  :poster="item.poster || ''"
+                  @loadedmetadata="
+                    onVideoLoad(item.id || item.newsId, 0, index)
+                  "
+                  @error="onVideoError(item.id || item.newsId, 0, index)"
+                  @canplay="onVideoCanPlay(item.id || item.newsId, 0, index)"
+                  @tap.stop="handleVideoTap"
+                  @fullscreenchange="onVideoFullscreenChange"
+                  @play="onVideoPlay"
+                  @pause="onVideoPause"
+                  @ended="onVideoEnded"
+                  @click="onVideoClick"
+                >
+                  <!-- <view class="media-type-indicator">
                   <view class="play-icon">
                     <text class="play-symbol">▶</text>
                   </view>
                 </view> -->
-              </video>
+                </video>
 
-              <!-- 全屏退出按钮 -->
-              <!-- <view
+                <!-- 全屏退出按钮 -->
+                <!-- <view
                 v-if="
                   currentFullscreenVideoId === `video-${item.id || item.newsId}`
                 "
@@ -65,28 +100,32 @@
                 <text class="exit-icon">✕</text>
               </view> -->
 
-              <!-- 调试信息 - 临时显示 -->
-              <view v-if="currentFullscreenVideoId" class="debug-info">
-                <text>全屏ID: {{ currentFullscreenVideoId }}</text>
-                <text>当前ID: video-{{ item.id || item.newsId }}</text>
+                <!-- 调试信息 - 临时显示 -->
+                <view v-if="currentFullscreenVideoId" class="debug-info">
+                  <text>全屏ID: {{ currentFullscreenVideoId }}</text>
+                  <text>当前ID: video-{{ item.id || item.newsId }}</text>
+                </view>
+                <!-- 全屏遮罩层，点击可退出全屏 -->
+                <view
+                  v-if="
+                    currentFullscreenVideoId ===
+                    `video-${item.id || item.newsId}`
+                  "
+                  class="fullscreen-overlay"
+                  @tap.stop="exitFullscreen"
+                >
+                </view>
               </view>
-              <!-- 全屏遮罩层，点击可退出全屏 -->
-              <view
-                v-if="
-                  currentFullscreenVideoId === `video-${item.id || item.newsId}`
-                "
-                class="fullscreen-overlay"
-                @tap.stop="exitFullscreen"
-              >
+              <!-- 标题信息 -->
+              <view class="info-bar">
+                <text class="card-title">{{
+                  item.newsTitle || "暂无标题"
+                }}</text>
               </view>
-            </view>
-            <!-- 标题信息 -->
-            <view class="info-bar">
-              <text class="card-title">{{ item.newsTitle || "暂无标题" }}</text>
             </view>
           </view>
         </view>
-        <view class="waterfall-column">
+        <!-- <view class="waterfall-column">
           <view
             v-for="(item, index) in columnsList"
             :key="`left-${item.id || item.newsId || index}`"
@@ -94,7 +133,6 @@
             @tap="handleCardClick(item)"
           >
             <view class="image-wrapper">
-              <!-- 图片 -->
               <image
                 :src="
                   Array.isArray(item.newsImages)
@@ -107,12 +145,11 @@
                 @tap.stop="handleMediaClick(item, 'image')"
               />
             </view>
-            <!-- 标题信息 -->
             <view class="info-bar">
               <text class="card-title">{{ item.newsTitle || "暂无标题" }}</text>
             </view>
           </view>
-        </view>
+        </view> -->
       </view>
 
       <!-- 加载更多状态 -->
@@ -201,7 +238,7 @@ const fetchMerchantData1 = async () => {
     }
 
     const response = await getCompanyNewsList({
-      pageSize: 10,
+      pageSize: 20,
       pageNum: pageNum.value,
       type: 3,
     });
@@ -797,7 +834,7 @@ onUnload(() => {
 <style lang="scss" scoped>
 .client-evaluation-page {
   min-height: 100vh;
-  background-color: #f7f7f7;
+  background-color: #f0f0f0;
   padding-bottom: 20rpx;
 }
 
@@ -871,7 +908,6 @@ onUnload(() => {
 
 // 内容区域
 .content-area {
-  padding: 20rpx;
 }
 
 // 加载状态
@@ -897,14 +933,25 @@ onUnload(() => {
     color: #999999;
   }
 }
-
+.listData {
+  background: #ffffff;
+  margin-top: 32rpx;
+  .listData-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #000000;
+    padding-top: 42rpx;
+    padding-left: 21rpx;
+  }
+}
 // 瀑布流容器
 .waterfall-container {
   .waterfall-column {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
+    padding-top: 32rpx;
   }
 }
 
@@ -915,7 +962,7 @@ onUnload(() => {
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   margin-bottom: 20rpx;
-  width: 48%;
+  width: 46%;
   &:active {
     transform: scale(0.98);
     box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
@@ -1127,5 +1174,59 @@ onUnload(() => {
     max-width: 750px;
     margin: 0 auto;
   }
+}
+.teamappearance {
+  background: #ffffff;
+  padding: 19rpx 0 32rpx 32rpx;
+}
+.teamappearance-content {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 20rpx;
+  /* 隐藏滚动条 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.teamappearance-item {
+  background: #f7f7f7;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+  width: 528rpx;
+  margin-right: 20rpx;
+  &:last-child {
+    margin-right: 26rpx;
+  }
+}
+.teamappearance-item-content {
+  padding: 18rpx 18rpx;
+}
+.teamappearance-item-content1 {
+  color: #000000;
+  font-size: 28rpx;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 24rpx;
+}
+.teamappearance-item-content2 {
+  color: #535353;
+  font-size: 26rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 14rpx;
+}
+.teamappearance-item-image {
+  width: 528rpx;
+  height: 260rpx;
+}
+.teamappearance-item-image image {
+  width: 100%;
+  height: 100%;
 }
 </style>

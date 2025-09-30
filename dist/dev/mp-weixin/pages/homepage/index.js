@@ -84,6 +84,11 @@ const _sfc_main = {
         });
       }
     });
+    const goToDetails = (item) => {
+      common_vendor.index.navigateTo({
+        url: "/pages/firmdynamicdetails/index?item=" + encodeURIComponent(JSON.stringify(item))
+      });
+    };
     common_vendor.onMounted(() => {
       setTimeout(() => {
         buttonsVisible.value = true;
@@ -489,7 +494,8 @@ const _sfc_main = {
             b: (_c2 = team.newsImages) == null ? void 0 : _c2[0]
           } : {}, {
             c: common_vendor.t(team.newsTitle),
-            d: index
+            d: index,
+            e: common_vendor.o(($event) => goToDetails(team), index)
           });
         }),
         w: headContentVisible.value[1] ? 1 : "",

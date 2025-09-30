@@ -76,7 +76,7 @@ const _sfc_main = {
           loadingMore.value = true;
         }
         const response = yield api_activity.getCompanyNewsList({
-          pageSize: 10,
+          pageSize: 20,
           pageNum: pageNum.value,
           type: 3
         });
@@ -467,7 +467,22 @@ const _sfc_main = {
       return common_vendor.e({
         a: loading.value
       }, loading.value ? {} : {
-        b: common_vendor.f(columns.value, (item, index, i0) => {
+        b: common_vendor.f(columnsList.value, (team, index, i0) => {
+          var _a, _b;
+          return common_vendor.e({
+            a: (_a = team.newsImages) == null ? void 0 : _a[0]
+          }, ((_b = team.newsImages) == null ? void 0 : _b[0]) ? {
+            b: Array.isArray(team.newsImages) ? team.newsImages[0] : team.newsImages,
+            c: common_vendor.o(($event) => onImageLoad(team.id || team.newsId), index),
+            d: common_vendor.o(($event) => handleMediaClick(team, "image"), index)
+          } : {}, {
+            e: common_vendor.t(team.newsTitle),
+            f: common_vendor.t(team.newsTitle),
+            g: index,
+            h: common_vendor.o(($event) => handleCardClick(team), index)
+          });
+        }),
+        c: common_vendor.f(columns.value, (item, index, i0) => {
           return common_vendor.e({
             a: `video-${item.id || item.newsId}`,
             b: item.newsImages[0],
@@ -493,17 +508,7 @@ const _sfc_main = {
             r: `left-${item.id || item.newsId || index}`
           });
         }),
-        c: currentFullscreenVideoId.value,
-        d: common_vendor.f(columnsList.value, (item, index, i0) => {
-          return {
-            a: Array.isArray(item.newsImages) ? item.newsImages[0] : item.newsImages,
-            b: common_vendor.o(($event) => onImageLoad(item.id || item.newsId), `left-${item.id || item.newsId || index}`),
-            c: common_vendor.o(($event) => handleMediaClick(item, "image"), `left-${item.id || item.newsId || index}`),
-            d: common_vendor.t(item.newsTitle || "暂无标题"),
-            e: `left-${item.id || item.newsId || index}`,
-            f: common_vendor.o(($event) => handleCardClick(item), `left-${item.id || item.newsId || index}`)
-          };
-        })
+        d: currentFullscreenVideoId.value
       }, {
         e: loadingMore.value
       }, loadingMore.value ? {} : {});

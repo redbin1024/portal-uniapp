@@ -239,7 +239,7 @@ export default {
 <style scoped lang="scss">
 .container {
   padding: 60rpx 26rpx 20rpx 26rpx;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
 }
 .loading-more-container {
   display: flex;
@@ -268,7 +268,6 @@ export default {
   height: 270rpx;
   padding: 0 24rpx;
   margin-bottom: 62rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
   position: relative;
   width: 100%;
   box-sizing: border-box;

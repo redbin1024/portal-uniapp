@@ -3,11 +3,39 @@
 		"miniprogram": {
 			"list": [
 				{
-					"name": "pages/cooperationcase/index",
-					"pathName": "pages/cooperationcase/index",
+					"name": "pages/recentUpdatesnew/index",
+					"pathName": "pages/recentUpdatesnew/index",
 					"query": "",
 					"scene": null,
 					"launchMode": "default"
+				},
+				{
+					"name": "pages/clientevaluation/index",
+					"pathName": "pages/clientevaluation/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/recentUpdatesnew/index",
+					"pathName": "pages/recentUpdatesnew/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/recentUpdates/index",
+					"pathName": "pages/recentUpdates/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/cooperationcase/index",
+					"pathName": "pages/cooperationcase/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
 				},
 				{
 					"name": "pages/case/index",

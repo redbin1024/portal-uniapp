@@ -13,10 +13,12 @@
     "pages/cooperationcase/index",
     "pages/recentUpdates/index",
     "pages/recentdetails/index",
+    "pages/recentUpdatesnew/index",
     "pages/productservicenew/index",
     "pages/customer/index",
     "pages/dynamicdetails/index",
-    "pages/api-test/index"
+    "pages/api-test/index",
+    "pages/firmdynamicdetails/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",

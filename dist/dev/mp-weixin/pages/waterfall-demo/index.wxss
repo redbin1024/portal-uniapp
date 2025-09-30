@@ -16,13 +16,10 @@
 .waterfall-container.data-v-336331b8 {
   display: flex;
   justify-content: space-between;
-  gap: 20rpx;
 }
 .waterfall-column.data-v-336331b8 {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
 }
 .waterfall-item.data-v-336331b8 {
   background-color: #fff;
@@ -66,14 +63,16 @@
 }
 
 /* 响应式设计 */
-@media screen and (max-width: 750rpx) {
-.waterfall-container.data-v-336331b8 {
+/* @media screen and (max-width: 750rpx) {
+  .waterfall-container {
     gap: 15rpx;
-}
-.waterfall-column.data-v-336331b8 {
+  }
+
+  .waterfall-column {
     gap: 15rpx;
-}
-.item-content.data-v-336331b8 {
+  }
+
+  .item-content {
     padding: 15rpx;
-}
-}
+  }
+} */

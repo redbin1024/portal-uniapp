@@ -93,6 +93,13 @@
       }
     },
     {
+      "path": "pages/recentUpdatesnew/index",
+      "style": {
+        "navigationBarTitleText": "最近动态",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
       "path": "pages/productservicenew/index",
       "style": {
         "navigationBarTitleText": "产品服务",
@@ -117,6 +124,13 @@
       "path": "pages/api-test/index",
       "style": {
         "navigationBarTitleText": "API测试",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/firmdynamicdetails/index",
+      "style": {
+        "navigationBarTitleText": "公司动态",
         "navigationBarBackgroundColor": "#ffffff"
       }
     }

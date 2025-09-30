@@ -316,11 +316,11 @@
   flex-direction: column;
   width: -moz-max-content;
   width: max-content;
+  border: 1rpx solid #eeeeee;
 }
 .certificate-row.data-v-46fe8b1b {
   display: flex;
   gap: 0;
-  margin-bottom: 20rpx;
 }
 .certificate-row.data-v-46fe8b1b:last-child {
   margin-bottom: 0;
@@ -333,9 +333,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-radius: 8rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-  margin-right: 20rpx;
 }
 .certificate-item.data-v-46fe8b1b:last-child {
   margin-right: 49rpx;

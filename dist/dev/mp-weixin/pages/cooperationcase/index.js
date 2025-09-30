@@ -215,7 +215,7 @@ const _sfc_main = {
     };
     const goToRecentUpdates = () => {
       common_vendor.index.navigateTo({
-        url: "/pages/recentUpdates/index"
+        url: "/pages/recentUpdatesnew/index"
       });
     };
     const goToCooperationcase = () => {
@@ -306,6 +306,11 @@ const _sfc_main = {
         clearTimeout(scrollTimer.value);
       }
     });
+    const formatDate = (dateStr) => {
+      if (!dateStr)
+        return "";
+      return dateStr.split(" ")[0];
+    };
     common_vendor.onLoad(() => {
     });
     common_vendor.onShow(() => {
@@ -326,7 +331,7 @@ const _sfc_main = {
         }),
         i: common_vendor.f(companyNewsList.value, (item, index, i0) => {
           return common_vendor.e({
-            a: common_vendor.t(item.createTime),
+            a: common_vendor.t(formatDate(item.createTime)),
             b: common_vendor.t(item.newsTitle),
             c: common_vendor.t(item.newsContent),
             d: visibleDynamicItems.value.includes(index) ? 1 : "",
