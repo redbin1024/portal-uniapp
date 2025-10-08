@@ -3,8 +3,8 @@
     <!-- 轮播图容器 -->
     <swiper
       class="image-container"
-      previous-margin="155rpx"
-      next-margin="155rpx"
+      previous-margin="190rpx"
+      next-margin="190rpx"
       circular
       autoplay
       :duration="300"
@@ -42,6 +42,7 @@
             @ended="onVideoEnded"
             @error="onVideoError"
             @fullscreenchange="onFullscreenChange"
+            @click="onMediaClick(item.src, index, 'video')"
           ></video>
           <!-- 图片内容 -->
           <image
@@ -63,6 +64,46 @@
         </view>
       </swiper-item>
     </swiper>
+    <!-- 全屏预览组件 -->
+    <view
+      v-if="showPreview"
+      class="preview-modal"
+      :class="{ 'video-fullscreen': isFullscreen }"
+      @click="handlePreviewModalClick"
+    >
+      <!-- 媒体内容 -->
+      <view class="preview-content">
+        <video
+          v-if="previewMedia.type === 'video'"
+          :src="previewMedia.src"
+          class="preview-video"
+          controls
+          autoplay
+          :poster="getVideoPoster(previewMedia.src)"
+          :show-fullscreen-btn="true"
+          @fullscreenchange="onFullscreenChange"
+          :id="'preview-video-' + previewMedia.index"
+        />
+        <image
+          v-else
+          :src="previewMedia.src"
+          class="preview-image"
+          mode="aspectFit"
+        />
+        <!-- <view class="arrows">
+          <view class="leftarrows" @click.stop="prevMedia"
+            ><image
+              src="http://cdn.xiaodingdang1.com/2025/09/29/936dbb6c2ac74e06a550872104bd2231.png"
+            ></image
+          ></view>
+          <view class="rightarrows" @click.stop="nextMedia"
+            ><image
+              src="http://cdn.xiaodingdang1.com/2025/09/29/3a9d97e8cbf947aaa810020e259a23b8.png"
+            ></image
+          ></view>
+        </view> -->
+      </view>
+    </view>
   </view>
 </template>
 
@@ -95,6 +136,13 @@ export default {
       currentIndex: 0,
       dontFirstAnimation: true,
       isFullscreen: false,
+      previewMedia: {
+        src: "",
+        type: "image", // 'image' 或 'video'
+        index: 0,
+      },
+      showPreview: false,
+      isVideoFullscreen: false,
     };
   },
   computed: {
@@ -103,6 +151,37 @@ export default {
     },
   },
   methods: {
+    // 关闭预览
+    closePreview() {
+      this.showPreview = false;
+    },
+    // 处理预览模态框点击事件
+    handlePreviewModalClick(e) {
+      this.closePreview();
+    },
+    // 获取视频封面图
+    getVideoPoster(videoUrl) {
+      // 这里可以返回视频的封面图，如果没有可以返回默认图片
+      // 确保videoUrl是字符串再调用replace方法
+      if (typeof videoUrl === "string") {
+        return videoUrl.replace(
+          /\.(mp4|webm|ogg|mov|avi|wmv|flv|mkv)$/i,
+          "_poster.jpg"
+        );
+      }
+      // 如果不是字符串，返回默认封面图或者空字符串
+      return ""; // 或者返回默认封面图URL
+    },
+    // 媒体点击事件
+    onMediaClick(item, index, type) {
+      console.log("Media clicked:", item, index, type);
+      this.previewMedia = {
+        src: item,
+        type: type,
+        index: index,
+      };
+      this.showPreview = true;
+    },
     swiperChange(e) {
       this.dontFirstAnimation = false;
       this.currentIndex = e.detail.current;
@@ -209,21 +288,21 @@ export default {
 
 .image-container {
   width: 100vw;
-  height: 780rpx;
+  height: 580rpx;
   /* 添加安卓兼容性样式 */
   overflow: hidden;
   position: relative;
 }
 
 .item-img {
-  width: 400rpx;
+  width: 350rpx;
   height: 750rpx;
   border-radius: 14rpx;
   animation: to-big 0.3s;
 }
 
 .item-video {
-  width: 400rpx;
+  width: 350rpx;
   height: 750rpx;
   border-radius: 14rpx;
   animation: to-big 0.3s;
@@ -273,10 +352,10 @@ export default {
 }
 
 .item-video-side {
-  width: 400rpx;
+  width: 350rpx;
   height: 750rpx;
   border-radius: 14rpx;
-  animation: to-mini 0.3s;
+  /* animation: to-mini 0.3s; */
 }
 
 .swiper-item-side {
@@ -286,14 +365,14 @@ export default {
   justify-content: center;
   align-items: center;
   /* 安卓兼容性优化 */
-  position: relative;
+  /* position: relative;
   overflow: hidden;
   transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  -webkit-transform: translateZ(0); */
 }
 
 .title-container {
-  width: 400rpx;
+  width: 350rpx;
   height: 140rpx;
   background-color: #fff;
   font-size: 28rpx;
@@ -308,6 +387,9 @@ export default {
   margin-top: -14rpx;
   position: relative;
   z-index: 2;
+  /* 添加边框投影 */
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+  margin-bottom: 10rpx;
 }
 
 .title-active {
@@ -315,8 +397,8 @@ export default {
 }
 
 .title-side {
-  animation: title-to-mini 0.3s;
-  height: 120rpx;
+  /* animation: title-to-mini 0.3s; */
+  /* height: 120rpx; */
 }
 
 .title-text {
@@ -364,5 +446,49 @@ export default {
   to {
     height: 140rpx;
   }
+}
+/* 全屏预览样式 */
+
+.preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+}
+
+/* 视频全屏时可调整z-index，防止被原生全屏遮挡 */
+.preview-modal.video-fullscreen {
+  z-index: 9998;
+}
+.preview-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.preview-video {
+  width: 100%;
+  height: 100%;
+}
+.preview-image {
+  width: 100%;
+  height: 100%;
+}
+.arrows {
+  position: fixed;
+  top: 50%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.leftarrows image {
+  width: 100rpx;
+  height: 100rpx;
+}
+.rightarrows image {
+  width: 100rpx;
+  height: 100rpx;
 }
 </style>

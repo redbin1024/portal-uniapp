@@ -47,6 +47,20 @@ const _sfc_main = {
         });
       }
     });
+    const nextDetile = (item) => {
+      try {
+        const itemStr = JSON.stringify(item);
+        common_vendor.index.navigateTo({
+          url: "/pages/customer/index?item=" + encodeURIComponent(itemStr)
+        });
+      } catch (error) {
+        console.error("序列化参数失败:", error);
+        common_vendor.index.showToast({
+          title: "参数传递失败",
+          icon: "none"
+        });
+      }
+    };
     const fetchServiceList = () => __async(this, null, function* () {
       try {
         const response = yield api_activity.getServiceList({
@@ -84,11 +98,6 @@ const _sfc_main = {
         });
       }
     });
-    const goToDetails = (item) => {
-      common_vendor.index.navigateTo({
-        url: "/pages/firmdynamicdetails/index?item=" + encodeURIComponent(JSON.stringify(item))
-      });
-    };
     common_vendor.onMounted(() => {
       setTimeout(() => {
         buttonsVisible.value = true;
@@ -290,6 +299,15 @@ const _sfc_main = {
     const showHeaderBg = common_vendor.ref(false);
     const onSwiperChange = (e) => {
       currentIndex.value = e.detail.current;
+      const currentItem = enterpriseList.value.bannerImages[currentIndex.value];
+      if (isVideo(currentItem)) {
+        setTimeout(() => {
+          const videoContext = common_vendor.index.createVideoContext(
+            "bannerVideo" + currentIndex.value
+          );
+          videoContext.play();
+        }, 100);
+      }
     };
     const showPreview = common_vendor.ref(false);
     const isVideoFullscreen = common_vendor.ref(false);
@@ -411,6 +429,20 @@ const _sfc_main = {
         }
       });
     };
+    const next = (item) => {
+      try {
+        const itemStr = JSON.stringify(item);
+        common_vendor.index.navigateTo({
+          url: "/pages/customer/index?item=" + encodeURIComponent(itemStr)
+        });
+      } catch (error) {
+        console.error("序列化参数失败:", error);
+        common_vendor.index.showToast({
+          title: "参数传递失败",
+          icon: "none"
+        });
+      }
+    };
     const handleCustomerServiceClick = () => {
       console.log("Customer service clicked");
     };
@@ -450,14 +482,16 @@ const _sfc_main = {
           return common_vendor.e({
             a: isVideo(item)
           }, isVideo(item) ? {
-            b: item,
-            c: common_vendor.o(($event) => onMediaClick(item, index, "video"), index),
-            d: common_vendor.o(($event) => onMediaClick(item, index, "video"), index)
+            b: "bannerVideo" + index,
+            c: item,
+            d: index === currentIndex.value,
+            e: common_vendor.o(($event) => onMediaClick(item, index, "video"), index),
+            f: common_vendor.o(($event) => onMediaClick(item, index, "video"), index)
           } : {
-            e: item,
-            f: common_vendor.o(($event) => onMediaClick(item, index, "image"), index)
+            g: item,
+            h: common_vendor.o(($event) => onMediaClick(item, index, "image"), index)
           }, {
-            g: index
+            i: index
           });
         }),
         d: common_vendor.o(onSwiperChange),
@@ -476,78 +510,67 @@ const _sfc_main = {
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) ? {
         q: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
-        r: titleVisible.value ? 1 : "",
-        s: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        r: common_vendor.o(($event) => nextDetile(serviceList.value)),
+        s: titleVisible.value ? 1 : "",
+        t: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage,
             b: common_vendor.t(item.serviceName),
             c: index,
-            d: content1Visible.value[index] ? 1 : ""
+            d: content1Visible.value[index] ? 1 : "",
+            e: common_vendor.o(($event) => next(item), index)
           };
         }),
-        t: headContentVisible.value[0] ? 1 : "",
-        v: common_vendor.f(companyNewsList.value, (team, index, i0) => {
-          var _a2, _b2, _c2;
-          return common_vendor.e({
-            a: (_a2 = team.newsImages) == null ? void 0 : _a2[0]
-          }, ((_b2 = team.newsImages) == null ? void 0 : _b2[0]) ? {
-            b: (_c2 = team.newsImages) == null ? void 0 : _c2[0]
-          } : {}, {
-            c: common_vendor.t(team.newsTitle),
-            d: index,
-            e: common_vendor.o(($event) => goToDetails(team), index)
-          });
-        }),
-        w: headContentVisible.value[1] ? 1 : "",
-        x: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        v: headContentVisible.value[0] ? 1 : "",
+        w: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row1-" + index
           };
         }),
-        y: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        x: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        z: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        y: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        A: headContentVisible.value[2] ? 1 : "",
-        B: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+        z: headContentVisible.value[1] ? 1 : "",
+        A: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
           return {
             a: partner,
             b: "row1-" + index
           };
         }),
-        C: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
+        B: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
       }, getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0 ? {
-        D: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+        C: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
           return {
             a: partner,
             b: "row2-" + index
           };
         })
       } : {}, {
-        E: showPreview.value
+        D: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        F: previewMedia.value.type === "video"
+        E: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        G: previewMedia.value.src,
-        H: getVideoPoster(previewMedia.value.src),
-        I: common_vendor.o(onFullscreenChange),
-        J: "preview-video-" + previewMedia.value.index
+        F: previewMedia.value.src,
+        G: getVideoPoster(previewMedia.value.src),
+        H: common_vendor.o(onFullscreenChange),
+        I: "preview-video-" + previewMedia.value.index
       } : {
-        K: previewMedia.value.src
+        J: previewMedia.value.src
       }, {
-        L: common_vendor.o(prevMedia),
-        M: common_vendor.o(nextMedia),
-        N: isVideoFullscreen.value ? 1 : "",
-        O: common_vendor.o(handlePreviewModalClick)
+        K: common_vendor.o(prevMedia),
+        L: common_vendor.o(nextMedia),
+        M: isVideoFullscreen.value ? 1 : "",
+        N: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        P: common_vendor.o(handleCustomerServiceClick),
-        Q: showPreview.value ? 1 : ""
+        O: common_vendor.o(handleCustomerServiceClick),
+        P: showPreview.value ? 1 : ""
       });
     };
   }

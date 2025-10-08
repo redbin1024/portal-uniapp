@@ -5,6 +5,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
 }, {
   __name: "index",
   setup(__props) {
+    const richText = common_vendor.ref("");
     const detailData = common_vendor.ref({});
     const getPageParams = () => {
       const pages = getCurrentPages();
@@ -12,8 +13,14 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
       if (currentPage.options && currentPage.options.item) {
         const decodedItem = decodeURIComponent(currentPage.options.item);
         let detailDatas = JSON.parse(decodedItem);
+        processContent(detailDatas.newDetails);
         detailData.value = detailDatas;
       }
+    };
+    const processContent = (content) => {
+      richText.value = content.replace(/<img[^>]*>/gi, function(match, capture) {
+        return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
+      }).replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
     };
     common_vendor.onMounted(() => {
       getPageParams();
@@ -21,8 +28,8 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
     return (_ctx, _cache) => {
       return {
         a: common_vendor.t(detailData.value.newsTitle),
-        b: detailData.value.newsImages[0],
-        c: common_vendor.t(detailData.value.newsContent)
+        b: common_vendor.t(detailData.value.newsContent),
+        c: richText.value
       };
     };
   }

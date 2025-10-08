@@ -18,7 +18,7 @@
               @tap="handleCardClick(team)"
             >
               <view class="teamappearance-item-image">
-                <image
+                <!-- <image
                   :src="
                     Array.isArray(team.newsImages)
                       ? team.newsImages[0]
@@ -27,15 +27,24 @@
                   v-if="team.newsImages?.[0]"
                   @load="onImageLoad(team.id || team.newsId, 0, index)"
                   @tap.stop="handleMediaClick(team, 'image')"
+                ></image> -->
+                <image
+                  :src="
+                    Array.isArray(team.newsImages)
+                      ? team.newsImages[0]
+                      : team.newsImages
+                  "
+                  v-if="team.newsImages?.[0]"
+                  @load="onImageLoad(team.id || team.newsId, 0, index)"
                 ></image>
               </view>
               <view class="teamappearance-item-content">
                 <view class="teamappearance-item-content1">{{
                   team.newsTitle
                 }}</view>
-                <view class="teamappearance-item-content2">{{
+                <!-- <view class="teamappearance-item-content2">{{
                   team.newsTitle
-                }}</view>
+                }}</view> -->
               </view>
             </view>
           </view>
@@ -64,7 +73,7 @@
                   x5-video-orientation="portrait"
                   x5-playsinline="true"
                   x5-video-ignore-metadata="true"
-                  object-fit="contain"
+                  object-fit="cover"
                   :show-fullscreen-btn="true"
                   :show-play-btn="true"
                   :show-center-play-btn="true"
@@ -1211,7 +1220,7 @@ onUnload(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-top: 24rpx;
+  // margin-top: 24rpx;
 }
 .teamappearance-item-content2 {
   color: #535353;

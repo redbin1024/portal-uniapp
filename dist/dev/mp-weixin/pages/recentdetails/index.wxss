@@ -21,7 +21,7 @@
 .content.data-v-eede22fe {
   font-size: 32rpx;
   color: #3d3d3d;
-  margin-top: 48rpx;
+  margin: 48rpx 0;
 }
 .date.data-v-eede22fe {
   font-size: 28rpx;

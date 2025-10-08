@@ -24,13 +24,13 @@ onMounted(() => {
       // 先解码URL编码的参数
       const decodedItem = decodeURIComponent(currentPage.options.item);
       let serviceDescription = JSON.parse(decodedItem);
-      processContent(serviceDescription.newsContent);
+      processContent(serviceDescription.newDetails);
     } catch (e) {
       console.error("解析服务描述参数失败:", e);
       // 如果解析失败，尝试直接使用原始参数
       try {
         let serviceDescription = JSON.parse(currentPage.options.item);
-        processContent(serviceDescription.newsContent);
+        processContent(serviceDescription.newDetails);
       } catch (e2) {
         serviceDescription.value = currentPage.options.item;
       }

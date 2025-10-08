@@ -353,7 +353,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-top: 24rpx;
 }
 .teamappearance-item-content2.data-v-dbba45b8 {
   color: #535353;

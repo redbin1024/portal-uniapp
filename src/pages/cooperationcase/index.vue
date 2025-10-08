@@ -525,19 +525,19 @@ text {
 }
 
 .main {
-  background: #f7f7f7;
+  background: #ffffff;
   width: 100%;
   max-width: 100vw;
   height: 100vh;
   /* scroll-view 需要固定高度才能滚动 */
-  margin-top: 30rpx;
+  padding-top: 40rpx;
 }
 
 /**最近动态 */
 .dynamic {
   background: #ffffff;
   padding: 60rpx 28rpx;
-  margin: 50rpx 0;
+  margin: 40rpx 0;
 }
 
 .dynamic-title {
@@ -583,7 +583,7 @@ text {
 }
 
 .dynamic-left {
-  width: 50%;
+  width: 45%;
   flex-shrink: 0;
   box-sizing: border-box;
   /* 初始状态：从左侧淡入 */

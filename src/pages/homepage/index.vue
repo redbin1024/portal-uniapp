@@ -35,9 +35,12 @@
             <!-- 判断是图片还是视频 -->
             <view v-if="isVideo(item)" class="media-container">
               <video
+                :id="'bannerVideo' + index"
                 :src="item"
                 class="banner-video"
+                :autoplay="index === currentIndex"
                 controls
+                object-fit="cover"
                 @click="onMediaClick(item, index, 'video')"
               />
               <view
@@ -139,7 +142,7 @@
           >
         </view>
       </view>
-      <view class="winthecustomer-line">
+      <view class="winthecustomer-line" @click="nextDetile(serviceList)">
         <image
           :src="serviceList?.serviceImage?.[0]"
           v-if="serviceList?.serviceImage?.[0]"
@@ -167,6 +170,7 @@
           v-for="(item, index) in serviceLists"
           :key="index"
           :class="{ 'content1-animate': content1Visible[index] }"
+          @click="next(item)"
         >
           <image :src="item.serviceImage"></image>
           <view class="winthecustomer-content2">{{ item.serviceName }}</view>
@@ -213,7 +217,7 @@
           </view>
         </view>
       </view> -->
-      <view class="teamappearance">
+      <!-- <view class="teamappearance">
         <view
           class="headContent"
           :class="{ 'headContent-animate': headContentVisible[0] }"
@@ -240,13 +244,13 @@
             }}</view>
           </view>
         </view>
-      </view>
+      </view> -->
     </view>
     <view class="brand-story">
       <view class="certificate">
         <view
           class="headContent"
-          :class="{ 'headContent-animate': headContentVisible[1] }"
+          :class="{ 'headContent-animate': headContentVisible[0] }"
         >
           <view class="headLeft"></view>
           <view class="teamappearance-title">荣誉证书</view>
@@ -291,7 +295,7 @@
     <view class="businesspartner">
       <view
         class="headContent"
-        :class="{ 'headContent-animate': headContentVisible[2] }"
+        :class="{ 'headContent-animate': headContentVisible[1] }"
       >
         <view class="headLeft"></view>
         <view class="teamappearance-title">合作商家</view>
@@ -431,6 +435,20 @@ const fetchCompanyNewsList = async () => {
     console.error("获取企业列表失败:", error);
     uni.showToast({
       title: "获取企业列表失败",
+      icon: "none",
+    });
+  }
+};
+const nextDetile = (item) => {
+  try {
+    const itemStr = JSON.stringify(item);
+    uni.navigateTo({
+      url: "/pages/customer/index?item=" + encodeURIComponent(itemStr),
+    });
+  } catch (error) {
+    console.error("序列化参数失败:", error);
+    uni.showToast({
+      title: "参数传递失败",
       icon: "none",
     });
   }
@@ -780,6 +798,18 @@ const showHeaderBg = ref(false);
 
 const onSwiperChange = (e) => {
   currentIndex.value = e.detail.current;
+
+  // 如果当前项是视频，则自动播放
+  const currentItem = enterpriseList.value.bannerImages[currentIndex.value];
+  if (isVideo(currentItem)) {
+    // 延迟一小段时间确保DOM已更新再播放视频
+    setTimeout(() => {
+      const videoContext = uni.createVideoContext(
+        "bannerVideo" + currentIndex.value
+      );
+      videoContext.play();
+    }, 100);
+  }
 };
 
 const goToSlide = (index) => {
@@ -948,7 +978,20 @@ const handleNavigation = () => {
     },
   });
 };
-
+const next = (item) => {
+  try {
+    const itemStr = JSON.stringify(item);
+    uni.navigateTo({
+      url: "/pages/customer/index?item=" + encodeURIComponent(itemStr),
+    });
+  } catch (error) {
+    console.error("序列化参数失败:", error);
+    uni.showToast({
+      title: "参数传递失败",
+      icon: "none",
+    });
+  }
+};
 const handleContactClick = () => {
   console.log("Contact clicked");
 };
@@ -1080,6 +1123,7 @@ onPageScroll((e) => {
   padding: 40rpx 30rpx;
   margin: 0 26rpx;
   backdrop-filter: blur(10rpx);
+  text-align: center;
 }
 
 .company-title {
@@ -1092,7 +1136,7 @@ onPageScroll((e) => {
 }
 
 .company-desc {
-  font-size: 24rpx;
+  font-size: 28rpx;
   color: #000000;
   text-align: center;
   margin-top: 50rpx;
@@ -1217,7 +1261,7 @@ onPageScroll((e) => {
   background: #ffffff;
   // padding: 80rpx 26rpx;
   color: #000000;
-  margin-top: 80rpx;
+  // margin-top: 80rpx;
 }
 .brand-story-title {
   font-size: 40rpx;
@@ -1292,7 +1336,7 @@ onPageScroll((e) => {
 .certificate {
   background: #ffffff;
   padding: 30rpx 0;
-  margin-top: 38rpx;
+  // margin-top: 38rpx;
 }
 .certificate-title {
   font-size: 40rpx;
@@ -1322,7 +1366,6 @@ onPageScroll((e) => {
   display: flex;
   flex-direction: column;
   width: max-content;
-  border: 1rpx solid #eeeeee;
 }
 
 .certificate-row {
@@ -1426,11 +1469,11 @@ onPageScroll((e) => {
 }
 /**线上获客 */
 .winthecustomer {
-  margin-top: 60rpx;
+  // margin-top: 60rpx;
 }
 .winthecustomer-head {
   height: 152rpx;
-  background: url("http://cdn.xiaodingdang1.com/2025/09/29/cf10e300f6854bff82f62c1c899450f3.png")
+  background: url("http://cdn.xiaodingdang1.com/2025/10/08/423f8b0e1de441c3976ad67950b39860.png")
     no-repeat center;
   background-size: cover;
   display: flex;
@@ -1499,8 +1542,8 @@ onPageScroll((e) => {
 
 .winthecustomer-line {
   background: linear-gradient(to bottom, #f6f6f6 30%, #ffffff 70%);
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
+  // border-top-left-radius: 20rpx;
+  // border-top-right-radius: 20rpx;
   margin-top: -60rpx;
   padding: 38rpx 0 50rpx 0;
   width: 100%;
@@ -1517,20 +1560,19 @@ onPageScroll((e) => {
   flex-wrap: wrap;
   gap: 20rpx;
   background: linear-gradient(to bottom, #f6f6f6 30%, #ffffff 70%);
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
+  // border-top-left-radius: 20rpx;
+  // border-top-right-radius: 20rpx;
   margin-top: -60rpx;
   padding: 0 26rpx 50rpx 26rpx;
 }
 .winthecustomer-content1 {
-  width: calc(50% - 10rpx);
+  width: calc(49% - 10rpx);
   background: #f2f6ff;
   margin-top: 38rpx;
   opacity: 0;
   transform: translateY(20rpx);
   transition: all 0.6s ease-out;
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
+  border-radius: 20rpx;
 }
 .content1-animate {
   opacity: 1;
@@ -1545,7 +1587,7 @@ onPageScroll((e) => {
 .winthecustomer-content2 {
   width: 100%;
   padding: 20rpx 0;
-  background: #f2f6ff;
+  // background: #f2f6ff;
   color: #3d3d3d;
   font-size: 32rpx;
   text-align: center;

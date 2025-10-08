@@ -85,6 +85,7 @@
   padding: 40rpx 30rpx;
   margin: 0 26rpx;
   backdrop-filter: blur(10rpx);
+  text-align: center;
 }
 .company-title.data-v-46fe8b1b {
   display: block;
@@ -95,7 +96,7 @@
   text-align: center;
 }
 .company-desc.data-v-46fe8b1b {
-  font-size: 24rpx;
+  font-size: 28rpx;
   color: #000000;
   text-align: center;
   margin-top: 50rpx;
@@ -210,7 +211,6 @@
 .brand-story.data-v-46fe8b1b {
   background: #ffffff;
   color: #000000;
-  margin-top: 80rpx;
 }
 .brand-story-title.data-v-46fe8b1b {
   font-size: 40rpx;
@@ -286,7 +286,6 @@
 .certificate.data-v-46fe8b1b {
   background: #ffffff;
   padding: 30rpx 0;
-  margin-top: 38rpx;
 }
 .certificate-title.data-v-46fe8b1b {
   font-size: 40rpx;
@@ -316,7 +315,6 @@
   flex-direction: column;
   width: -moz-max-content;
   width: max-content;
-  border: 1rpx solid #eeeeee;
 }
 .certificate-row.data-v-46fe8b1b {
   display: flex;
@@ -420,12 +418,9 @@
 }
 
 /**线上获客 */
-.winthecustomer.data-v-46fe8b1b {
-  margin-top: 60rpx;
-}
 .winthecustomer-head.data-v-46fe8b1b {
   height: 152rpx;
-  background: url("http://cdn.xiaodingdang1.com/2025/09/29/cf10e300f6854bff82f62c1c899450f3.png") no-repeat center;
+  background: url("http://cdn.xiaodingdang1.com/2025/10/08/423f8b0e1de441c3976ad67950b39860.png") no-repeat center;
   background-size: cover;
   display: flex;
 }
@@ -488,8 +483,6 @@
 }
 .winthecustomer-line.data-v-46fe8b1b {
   background: linear-gradient(to bottom, #f6f6f6 30%, #ffffff 70%);
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
   margin-top: -60rpx;
   padding: 38rpx 0 50rpx 0;
   width: 100%;
@@ -506,20 +499,17 @@
   flex-wrap: wrap;
   gap: 20rpx;
   background: linear-gradient(to bottom, #f6f6f6 30%, #ffffff 70%);
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
   margin-top: -60rpx;
   padding: 0 26rpx 50rpx 26rpx;
 }
 .winthecustomer-content1.data-v-46fe8b1b {
-  width: calc(50% - 10rpx);
+  width: calc(49% - 10rpx);
   background: #f2f6ff;
   margin-top: 38rpx;
   opacity: 0;
   transform: translateY(20rpx);
   transition: all 0.6s ease-out;
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
+  border-radius: 20rpx;
 }
 .content1-animate.data-v-46fe8b1b {
   opacity: 1;
@@ -534,7 +524,6 @@
 .winthecustomer-content2.data-v-46fe8b1b {
   width: 100%;
   padding: 20rpx 0;
-  background: #f2f6ff;
   color: #3d3d3d;
   font-size: 32rpx;
   text-align: center;

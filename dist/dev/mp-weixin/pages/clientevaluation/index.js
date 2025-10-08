@@ -323,45 +323,6 @@ const _sfc_main = {
         exitFullscreen();
       }
     };
-    const handleMediaClick = (item, mediaType) => {
-      console.log("Media clicked:", mediaType, item);
-      {
-        let imageUrls = [];
-        let currentUrl = "";
-        if (Array.isArray(item.newsImages)) {
-          imageUrls = item.newsImages.filter(
-            (url) => url && typeof url === "string"
-          );
-          currentUrl = imageUrls[0] || "";
-        } else if (item.newsImages && typeof item.newsImages === "string") {
-          imageUrls = [item.newsImages];
-          currentUrl = item.newsImages;
-        }
-        if (imageUrls.length > 0 && currentUrl) {
-          common_vendor.index.previewImage({
-            urls: imageUrls,
-            current: currentUrl,
-            success: () => {
-              console.log("图片预览成功");
-            },
-            fail: (err) => {
-              console.error("图片预览失败:", err);
-              common_vendor.index.showToast({
-                title: "图片预览失败",
-                icon: "none",
-                duration: 2e3
-              });
-            }
-          });
-        } else {
-          common_vendor.index.showToast({
-            title: "暂无图片可预览",
-            icon: "none",
-            duration: 2e3
-          });
-        }
-      }
-    };
     const handleCardClick = (item) => {
       console.log("Card clicked:", item);
       const itemStr = JSON.stringify(item);
@@ -473,13 +434,11 @@ const _sfc_main = {
             a: (_a = team.newsImages) == null ? void 0 : _a[0]
           }, ((_b = team.newsImages) == null ? void 0 : _b[0]) ? {
             b: Array.isArray(team.newsImages) ? team.newsImages[0] : team.newsImages,
-            c: common_vendor.o(($event) => onImageLoad(team.id || team.newsId), index),
-            d: common_vendor.o(($event) => handleMediaClick(team, "image"), index)
+            c: common_vendor.o(($event) => onImageLoad(team.id || team.newsId), index)
           } : {}, {
-            e: common_vendor.t(team.newsTitle),
-            f: common_vendor.t(team.newsTitle),
-            g: index,
-            h: common_vendor.o(($event) => handleCardClick(team), index)
+            d: common_vendor.t(team.newsTitle),
+            e: index,
+            f: common_vendor.o(($event) => handleCardClick(team), index)
           });
         }),
         c: common_vendor.f(columns.value, (item, index, i0) => {

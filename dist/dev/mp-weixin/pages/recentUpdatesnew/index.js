@@ -150,4 +150,5 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
   }
 });
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-5bab1513"]]);
+_sfc_main.__runtimeHooks = 7;
 wx.createPage(MiniProgramPage);

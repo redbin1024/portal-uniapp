@@ -285,6 +285,10 @@ const processContent = (content) => {
   background-color: #f0f0f0;
   min-height: 100vh;
 }
+.first {
+  padding-top: 40rpx;
+  background: #fff;
+}
 .head {
   background: #f0f0f0;
 }
@@ -292,8 +296,9 @@ const processContent = (content) => {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 20rpx;
+  /* padding: 20rpx; */
   background: #fff;
+  border-bottom: 1rpx solid #f0f0f0;
 }
 
 .tab-item {
@@ -353,6 +358,7 @@ const processContent = (content) => {
   flex-wrap: wrap;
   padding: 0rpx 18rpx 52rpx 18rpx;
   background: #fff;
+  padding-top: 20rpx;
 }
 .winthecustomer-content1:nth-of-type(2n) {
   margin-left: 3%;
@@ -361,6 +367,7 @@ const processContent = (content) => {
   width: 48%;
   background: #f2f6ff;
   margin-bottom: 38rpx;
+  border-radius: 20rpx;
 }
 .winthecustomer-content1 image {
   width: 100%;
@@ -371,12 +378,9 @@ const processContent = (content) => {
 .winthecustomer-content2 {
   width: 100%;
   padding: 20rpx 0;
-  background: #f2f6ff;
   color: #3d3d3d;
   font-size: 32rpx;
   text-align: center;
-  border-bottom-left-radius: 20rpx;
-  border-bottom-right-radius: 20rpx;
 }
 
 .loading-placeholder {

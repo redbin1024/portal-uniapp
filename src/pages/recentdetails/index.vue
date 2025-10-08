@@ -1,18 +1,19 @@
 <template>
   <view class="main">
     <view class="title">{{ detailData.newsTitle }}</view>
-    <view class="image">
+    <!-- <view class="image">
       <image :src="detailData.newsImages[0]"></image>
-    </view>
+    </view> -->
     <view class="content">
       {{ detailData.newsContent }}
     </view>
+    <rich-text class="activity" :nodes="richText" type="text"></rich-text>
   </view>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-
+const richText = ref("");
 // 定义组件名称
 defineOptions({
   name: "RecentDetails",
@@ -32,10 +33,18 @@ const getPageParams = () => {
     // 先解码URL编码的参数
     const decodedItem = decodeURIComponent(currentPage.options.item);
     let detailDatas = JSON.parse(decodedItem);
+    processContent(detailDatas.newDetails);
     detailData.value = detailDatas;
   }
 };
-
+const processContent = (content) => {
+  // 处理图片样式
+  richText.value = content
+    .replace(/<img[^>]*>/gi, function (match, capture) {
+      return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
+    })
+    .replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
+};
 // 页面加载时获取参数
 onMounted(() => {
   getPageParams();
@@ -65,7 +74,7 @@ onMounted(() => {
 .content {
   font-size: 32rpx;
   color: #3d3d3d;
-  margin-top: 48rpx;
+  margin: 48rpx 0;
 }
 .date {
   font-size: 28rpx;

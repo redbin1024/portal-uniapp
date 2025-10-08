@@ -27,7 +27,15 @@ const _sfc_main = {
     return {
       currentIndex: 0,
       dontFirstAnimation: true,
-      isFullscreen: false
+      isFullscreen: false,
+      previewMedia: {
+        src: "",
+        type: "image",
+        // 'image' 或 'video'
+        index: 0
+      },
+      showPreview: false,
+      isVideoFullscreen: false
     };
   },
   computed: {
@@ -36,6 +44,34 @@ const _sfc_main = {
     }
   },
   methods: {
+    // 关闭预览
+    closePreview() {
+      this.showPreview = false;
+    },
+    // 处理预览模态框点击事件
+    handlePreviewModalClick(e) {
+      this.closePreview();
+    },
+    // 获取视频封面图
+    getVideoPoster(videoUrl) {
+      if (typeof videoUrl === "string") {
+        return videoUrl.replace(
+          /\.(mp4|webm|ogg|mov|avi|wmv|flv|mkv)$/i,
+          "_poster.jpg"
+        );
+      }
+      return "";
+    },
+    // 媒体点击事件
+    onMediaClick(item, index, type) {
+      console.log("Media clicked:", item, index, type);
+      this.previewMedia = {
+        src: item,
+        type,
+        index
+      };
+      this.showPreview = true;
+    },
     swiperChange(e) {
       this.dontFirstAnimation = false;
       this.currentIndex = e.detail.current;
@@ -114,7 +150,7 @@ const _sfc_main = {
   }
 };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return {
+  return common_vendor.e({
     a: common_vendor.f($props.imgList, (item, index, i0) => {
       return common_vendor.e({
         a: item.type === "video"
@@ -132,20 +168,34 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         l: common_vendor.o((...args) => $options.onVideoPause && $options.onVideoPause(...args), item[$props.urlKey] || item.id),
         m: common_vendor.o((...args) => $options.onVideoEnded && $options.onVideoEnded(...args), item[$props.urlKey] || item.id),
         n: common_vendor.o((...args) => $options.onVideoError && $options.onVideoError(...args), item[$props.urlKey] || item.id),
-        o: common_vendor.o((...args) => $options.onFullscreenChange && $options.onFullscreenChange(...args), item[$props.urlKey] || item.id)
+        o: common_vendor.o((...args) => $options.onFullscreenChange && $options.onFullscreenChange(...args), item[$props.urlKey] || item.id),
+        p: common_vendor.o(($event) => $options.onMediaClick(item.src, index, "video"), item[$props.urlKey] || item.id)
       } : {
-        p: common_vendor.n($data.currentIndex == index ? "item-img" : "item-img-side"),
-        q: item[$props.urlKey] || item.src,
-        r: common_vendor.s($data.dontFirstAnimation ? "animation: none;" : "")
+        q: common_vendor.n($data.currentIndex == index ? "item-img" : "item-img-side"),
+        r: item[$props.urlKey] || item.src,
+        s: common_vendor.s($data.dontFirstAnimation ? "animation: none;" : "")
       }, {
-        s: common_vendor.t(item.caseTitle),
-        t: common_vendor.n($data.currentIndex == index ? "title-active" : "title-side"),
-        v: common_vendor.n($data.currentIndex == index ? "swiper-item" : "swiper-item-side"),
-        w: item[$props.urlKey] || item.id
+        t: common_vendor.t(item.caseTitle),
+        v: common_vendor.n($data.currentIndex == index ? "title-active" : "title-side"),
+        w: common_vendor.n($data.currentIndex == index ? "swiper-item" : "swiper-item-side"),
+        x: item[$props.urlKey] || item.id
       });
     }),
-    b: common_vendor.o((...args) => $options.swiperChange && $options.swiperChange(...args))
-  };
+    b: common_vendor.o((...args) => $options.swiperChange && $options.swiperChange(...args)),
+    c: $data.showPreview
+  }, $data.showPreview ? common_vendor.e({
+    d: $data.previewMedia.type === "video"
+  }, $data.previewMedia.type === "video" ? {
+    e: $data.previewMedia.src,
+    f: $options.getVideoPoster($data.previewMedia.src),
+    g: common_vendor.o((...args) => $options.onFullscreenChange && $options.onFullscreenChange(...args)),
+    h: "preview-video-" + $data.previewMedia.index
+  } : {
+    i: $data.previewMedia.src
+  }, {
+    j: $data.isFullscreen ? 1 : "",
+    k: common_vendor.o((...args) => $options.handlePreviewModalClick && $options.handlePreviewModalClick(...args))
+  }) : {});
 }
 const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-ea02fb7a"]]);
 wx.createComponent(Component);

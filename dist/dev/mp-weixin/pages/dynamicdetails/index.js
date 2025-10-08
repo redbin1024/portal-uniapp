@@ -12,12 +12,12 @@ const _sfc_main = {
         try {
           const decodedItem = decodeURIComponent(currentPage.options.item);
           let serviceDescription2 = JSON.parse(decodedItem);
-          processContent(serviceDescription2.newsContent);
+          processContent(serviceDescription2.newDetails);
         } catch (e) {
           console.error("解析服务描述参数失败:", e);
           try {
             let serviceDescription2 = JSON.parse(currentPage.options.item);
-            processContent(serviceDescription2.newsContent);
+            processContent(serviceDescription2.newDetails);
           } catch (e2) {
             serviceDescription.value = currentPage.options.item;
           }
