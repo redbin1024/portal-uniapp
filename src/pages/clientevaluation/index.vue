@@ -50,7 +50,7 @@
           </view>
         </view>
         <!-- 左列 -->
-        <view class="listData">
+        <view class="listData" v-if="columns.length > 0">
           <view class="listData-title">精选视频</view>
           <view class="waterfall-column">
             <view
@@ -958,9 +958,9 @@ onUnload(() => {
   .waterfall-column {
     width: 100%;
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
     padding-top: 32rpx;
+    padding: 20rpx 0;
   }
 }
 
@@ -972,6 +972,7 @@ onUnload(() => {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   margin-bottom: 20rpx;
   width: 46%;
+  margin-left: 3%;
   &:active {
     transform: scale(0.98);
     box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);

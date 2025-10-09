@@ -121,9 +121,9 @@
 .waterfall-container .waterfall-column.data-v-dbba45b8 {
   width: 100%;
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
   padding-top: 32rpx;
+  padding: 20rpx 0;
 }
 .card-item.data-v-dbba45b8 {
   background-color: #ffffff;
@@ -132,6 +132,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   margin-bottom: 20rpx;
   width: 46%;
+  margin-left: 3%;
 }
 .card-item.data-v-dbba45b8:active {
   transform: scale(0.98);

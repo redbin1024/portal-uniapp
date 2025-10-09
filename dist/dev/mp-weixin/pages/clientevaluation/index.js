@@ -427,7 +427,7 @@ const _sfc_main = {
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: loading.value
-      }, loading.value ? {} : {
+      }, loading.value ? {} : common_vendor.e({
         b: common_vendor.f(columnsList.value, (team, index, i0) => {
           var _a, _b;
           return common_vendor.e({
@@ -441,7 +441,9 @@ const _sfc_main = {
             f: common_vendor.o(($event) => handleCardClick(team), index)
           });
         }),
-        c: common_vendor.f(columns.value, (item, index, i0) => {
+        c: columns.value.length > 0
+      }, columns.value.length > 0 ? {
+        d: common_vendor.f(columns.value, (item, index, i0) => {
           return common_vendor.e({
             a: `video-${item.id || item.newsId}`,
             b: item.newsImages[0],
@@ -467,9 +469,9 @@ const _sfc_main = {
             r: `left-${item.id || item.newsId || index}`
           });
         }),
-        d: currentFullscreenVideoId.value
-      }, {
-        e: loadingMore.value
+        e: currentFullscreenVideoId.value
+      } : {}), {
+        f: loadingMore.value
       }, loadingMore.value ? {} : {});
     };
   }
