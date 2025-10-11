@@ -125,9 +125,6 @@
   outline: none !important;
   box-shadow: none !important;
   background: transparent;
-  transform: scale(0);
-  opacity: 0;
-  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
 }
 .contact-btn.data-v-46fe8b1b::after {
@@ -138,27 +135,9 @@
   height: 80rpx;
 }
 
-/* 按钮弹出动画 */
-.btn-animate.data-v-46fe8b1b {
-  transform: scale(1) !important;
-  opacity: 1 !important;
-}
-.btn-delay-1.data-v-46fe8b1b {
-  transition-delay: 0.1s;
-}
-.btn-delay-2.data-v-46fe8b1b {
-  transition-delay: 0.3s;
-}
-.btn-delay-3.data-v-46fe8b1b {
-  transition-delay: 0.5s;
-}
-
 /* 按钮悬停效果 */
 .contact-btn.data-v-46fe8b1b:hover {
   transform: scale(1.1);
-}
-.btn-animate.data-v-46fe8b1b:hover {
-  transform: scale(1.1) !important;
 }
 
 /* 轮播图样式 */
@@ -449,37 +428,6 @@
   font-weight: bold;
   font-size: 40rpx;
   margin-left: 22rpx;
-  opacity: 0;
-  transform: translateY(-30rpx) scale(0.8);
-  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-.title-fade-in.data-v-46fe8b1b {
-  opacity: 1 !important;
-  transform: translateY(0) scale(1) !important;
-  animation: slowFadeInUp-46fe8b1b 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  animation-fill-mode: forwards;
-}
-@keyframes slowFadeInUp-46fe8b1b {
-0% {
-    opacity: 0;
-    transform: translateY(-30rpx) scale(0.8);
-}
-25% {
-    opacity: 0.3;
-    transform: translateY(-15rpx) scale(0.9);
-}
-50% {
-    opacity: 0.6;
-    transform: translateY(-5rpx) scale(0.95);
-}
-75% {
-    opacity: 0.85;
-    transform: translateY(2rpx) scale(1.02);
-}
-100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
 }
 .winthecustomer-line.data-v-46fe8b1b {
   background: linear-gradient(to bottom, #f6f6f6 30%, #ffffff 70%);
@@ -506,14 +454,7 @@
   width: calc(49% - 10rpx);
   background: #f2f6ff;
   margin-top: 38rpx;
-  opacity: 0;
-  transform: translateY(20rpx);
-  transition: all 0.6s ease-out;
   border-radius: 20rpx;
-}
-.content1-animate.data-v-46fe8b1b {
-  opacity: 1;
-  transform: translateY(0);
 }
 .winthecustomer-content1 image.data-v-46fe8b1b {
   width: 100%;
@@ -534,13 +475,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transform: translateY(20rpx);
-  transition: all 0.6s ease-out;
-}
-.headContent.headContent-animate.data-v-46fe8b1b {
-  opacity: 1;
-  transform: translateY(0);
 }
 .headLeft.data-v-46fe8b1b {
   width: 142rpx;

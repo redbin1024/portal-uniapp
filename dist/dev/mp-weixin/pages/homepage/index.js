@@ -24,10 +24,9 @@ const api_activity = require("../../api/activity.js");
 const _sfc_main = {
   __name: "index",
   setup(__props) {
-    const buttonsVisible = common_vendor.ref(false);
-    const titleVisible = common_vendor.ref(false);
-    const headContentVisible = common_vendor.ref({});
-    const content1Visible = common_vendor.ref([]);
+    common_vendor.ref(false);
+    common_vendor.ref({});
+    common_vendor.ref([]);
     const fetchCompanyNewsList = () => __async(this, null, function* () {
       try {
         const response = yield api_activity.getCompanyNewsList({
@@ -99,103 +98,10 @@ const _sfc_main = {
       }
     });
     common_vendor.onMounted(() => {
-      setTimeout(() => {
-        buttonsVisible.value = true;
-      }, 400);
-      setTimeout(() => {
-        checkTitleVisibility();
-        checkHeadContentVisibility();
-        checkContent1Visibility();
-        checkImageVisibility();
-      }, 100);
       fetchEnterpriseList();
       fetchServiceList();
       fetchCompanyNewsList();
     });
-    const imagePopVisible = common_vendor.ref([]);
-    const checkTitleVisibility = () => {
-      if (titleVisible.value) {
-        return;
-      }
-      const query = common_vendor.index.createSelectorQuery();
-      query.selectAll(".winthecustomer-title").boundingClientRect((rects) => {
-        if (rects && rects.length > 0) {
-          rects.forEach((rect, index) => {
-            common_vendor.index.getSystemInfo({
-              success: (res) => {
-                const windowHeight = res.windowHeight;
-                if (rect.top < windowHeight * 0.85 && rect.bottom > 0 && !titleVisible.value) {
-                  setTimeout(() => {
-                    titleVisible.value = true;
-                  }, index * 300);
-                }
-              }
-            });
-          });
-        }
-      }).exec();
-    };
-    const checkHeadContentVisibility = () => {
-      const query = common_vendor.index.createSelectorQuery();
-      query.selectAll(".headContent").boundingClientRect((rects) => {
-        if (rects && rects.length > 0) {
-          rects.forEach((rect, index) => {
-            common_vendor.index.getSystemInfo({
-              success: (res) => {
-                const windowHeight = res.windowHeight;
-                if (rect.top < windowHeight * 0.8 && rect.bottom > 0) {
-                  setTimeout(() => {
-                    headContentVisible.value[index] = true;
-                  }, index * 300);
-                }
-              }
-            });
-          });
-        }
-      }).exec();
-    };
-    const checkContent1Visibility = () => {
-      const query = common_vendor.index.createSelectorQuery();
-      query.selectAll(".winthecustomer-content1").boundingClientRect((rects) => {
-        if (rects && rects.length > 0) {
-          rects.forEach((rect, index) => {
-            common_vendor.index.getSystemInfo({
-              success: (res) => {
-                const windowHeight = res.windowHeight;
-                if (rect.top < windowHeight * 0.85 && rect.bottom > 0) {
-                  setTimeout(() => {
-                    if (!content1Visible.value[index]) {
-                      content1Visible.value[index] = true;
-                    }
-                  }, index * 150);
-                }
-              }
-            });
-          });
-        }
-      }).exec();
-    };
-    const checkImageVisibility = () => {
-      const query = common_vendor.index.createSelectorQuery();
-      query.selectAll(".certificate-item, .businesspartner-item, .teamappearance-item").boundingClientRect((rects) => {
-        if (rects && rects.length > 0) {
-          rects.forEach((rect, index) => {
-            common_vendor.index.getSystemInfo({
-              success: (res) => {
-                const windowHeight = res.windowHeight;
-                if (rect.top < windowHeight * 0.9 && rect.bottom > 0) {
-                  setTimeout(() => {
-                    if (!imagePopVisible.value[index]) {
-                      imagePopVisible.value[index] = true;
-                    }
-                  }, index * 100);
-                }
-              }
-            });
-          });
-        }
-      }).exec();
-    };
     common_vendor.ref([
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png",
@@ -467,11 +373,6 @@ const _sfc_main = {
       return partners.filter((_, index) => index % 2 === 1);
     };
     common_vendor.onPageScroll((e) => {
-      showHeaderBg.value = e.scrollTop > 50;
-      checkTitleVisibility();
-      checkHeadContentVisibility();
-      checkContent1Visibility();
-      checkImageVisibility();
     });
     return (_ctx, _cache) => {
       var _a, _b, _c, _d, _e, _f;
@@ -497,80 +398,69 @@ const _sfc_main = {
         d: common_vendor.o(onSwiperChange),
         e: common_vendor.t(enterpriseList.value.enterpriseName),
         f: common_vendor.t(enterpriseList.value.enterpriseDescription),
-        g: buttonsVisible.value ? 1 : "",
-        h: buttonsVisible.value ? 1 : "",
-        i: common_vendor.o(handlePhoneCall),
-        j: buttonsVisible.value ? 1 : "",
-        k: buttonsVisible.value ? 1 : "",
-        l: common_vendor.o(handleNavigation),
-        m: buttonsVisible.value ? 1 : "",
-        n: buttonsVisible.value ? 1 : "",
-        o: titleVisible.value ? 1 : "",
-        p: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
+        g: common_vendor.o(handlePhoneCall),
+        h: common_vendor.o(handleNavigation),
+        i: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) ? {
-        q: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+        j: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
-        r: common_vendor.o(($event) => nextDetile(serviceList.value)),
-        s: titleVisible.value ? 1 : "",
-        t: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        k: common_vendor.o(($event) => nextDetile(serviceList.value)),
+        l: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage,
             b: common_vendor.t(item.serviceName),
             c: index,
-            d: content1Visible.value[index] ? 1 : "",
-            e: common_vendor.o(($event) => next(item), index)
+            d: common_vendor.o(($event) => next(item), index)
           };
         }),
-        v: headContentVisible.value[0] ? 1 : "",
-        w: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        m: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row1-" + index
           };
         }),
-        x: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        n: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        y: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        o: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        z: headContentVisible.value[1] ? 1 : "",
-        A: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+        p: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
           return {
             a: partner,
             b: "row1-" + index
           };
         }),
-        B: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
+        q: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
       }, getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0 ? {
-        C: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+        r: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
           return {
             a: partner,
             b: "row2-" + index
           };
         })
       } : {}, {
-        D: showPreview.value
+        s: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        E: previewMedia.value.type === "video"
+        t: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        F: previewMedia.value.src,
-        G: getVideoPoster(previewMedia.value.src),
-        H: common_vendor.o(onFullscreenChange),
-        I: "preview-video-" + previewMedia.value.index
+        v: previewMedia.value.src,
+        w: getVideoPoster(previewMedia.value.src),
+        x: common_vendor.o(onFullscreenChange),
+        y: "preview-video-" + previewMedia.value.index
       } : {
-        J: previewMedia.value.src
+        z: previewMedia.value.src
       }, {
-        K: common_vendor.o(prevMedia),
-        L: common_vendor.o(nextMedia),
-        M: isVideoFullscreen.value ? 1 : "",
-        N: common_vendor.o(handlePreviewModalClick)
+        A: common_vendor.o(prevMedia),
+        B: common_vendor.o(nextMedia),
+        C: isVideoFullscreen.value ? 1 : "",
+        D: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        O: common_vendor.o(handleCustomerServiceClick),
-        P: showPreview.value ? 1 : ""
+        E: common_vendor.o(handleCustomerServiceClick),
+        F: showPreview.value ? 1 : ""
       });
     };
   }

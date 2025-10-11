@@ -83,42 +83,21 @@
           </view>
           <view class="company-btn">
             <view class="company-btn1">
-              <button
-                class="contact-btn"
-                :class="{
-                  'btn-animate': buttonsVisible,
-                  'btn-delay-1': buttonsVisible,
-                }"
-                @click="handlePhoneCall"
-              >
+              <button class="contact-btn" @click="handlePhoneCall">
                 <image
                   src="http://cdn.xiaodingdang1.com/2025/09/27/a51f8b4f36a54f4385c0a695ab191a77.png"
                 ></image>
               </button>
             </view>
             <view class="company-btn1">
-              <button
-                class="contact-btn"
-                :class="{
-                  'btn-animate': buttonsVisible,
-                  'btn-delay-2': buttonsVisible,
-                }"
-                @click="handleNavigation"
-              >
+              <button class="contact-btn" @click="handleNavigation">
                 <image
                   src="http://cdn.xiaodingdang1.com/2025/09/27/41563146d6c54148a0e1b9f80ca4c1c1.png"
                 ></image>
               </button>
             </view>
             <view class="company-btn1">
-              <button
-                class="contact-btn"
-                :class="{
-                  'btn-animate': buttonsVisible,
-                  'btn-delay-3': buttonsVisible,
-                }"
-                open-type="share"
-              >
+              <button class="contact-btn" open-type="share">
                 <image
                   src="http://cdn.xiaodingdang1.com/2025/09/27/8669297789b34a3d9848db137bd084fb.png"
                 ></image>
@@ -135,11 +114,7 @@
             src="http://cdn.xiaodingdang1.com/2025/09/29/0e9ee0c847c048809e8e5d520cbc7fa2.png"
             style="width: 50rpx; height: 50rpx"
           ></image>
-          <view
-            class="winthecustomer-title"
-            :class="{ 'title-fade-in': titleVisible }"
-            >线上获客</view
-          >
+          <view class="winthecustomer-title">线上获客</view>
         </view>
       </view>
       <view class="winthecustomer-line" @click="nextDetile(serviceList)">
@@ -157,11 +132,7 @@
             src="http://cdn.xiaodingdang1.com/2025/09/29/91ec3c9320a946c3a2cb84795b82cf82.png"
             style="width: 50rpx; height: 50rpx"
           ></image>
-          <view
-            class="winthecustomer-title"
-            :class="{ 'title-fade-in': titleVisible }"
-            >系统服务</view
-          >
+          <view class="winthecustomer-title">系统服务</view>
         </view>
       </view>
       <view class="winthecustomer-content">
@@ -169,7 +140,6 @@
           class="winthecustomer-content1"
           v-for="(item, index) in serviceLists"
           :key="index"
-          :class="{ 'content1-animate': content1Visible[index] }"
           @click="next(item)"
         >
           <image :src="item.serviceImage"></image>
@@ -248,10 +218,7 @@
     </view>
     <view class="brand-story">
       <view class="certificate">
-        <view
-          class="headContent"
-          :class="{ 'headContent-animate': headContentVisible[0] }"
-        >
+        <view class="headContent">
           <view class="headLeft"></view>
           <view class="teamappearance-title">荣誉证书</view>
           <view class="headRight"></view>
@@ -293,10 +260,7 @@
       </view>
     </view>
     <view class="businesspartner">
-      <view
-        class="headContent"
-        :class="{ 'headContent-animate': headContentVisible[1] }"
-      >
+      <view class="headContent">
         <view class="headLeft"></view>
         <view class="teamappearance-title">合作商家</view>
         <view class="headRight"></view>
@@ -406,8 +370,6 @@ import {
   getCompanyNewsList,
 } from "@/api/activity.js";
 
-// 按钮动画状态
-const buttonsVisible = ref(false);
 // 标题动画状态
 const titleVisible = ref(false);
 // headContent 动画状态
@@ -514,18 +476,6 @@ const goToDetails = (item) => {
 };
 // 页面加载完成后触发按钮动画
 onMounted(() => {
-  setTimeout(() => {
-    buttonsVisible.value = true;
-  }, 400); // 延迟400ms开始动画
-
-  // 初始化时检查标题是否在视窗内
-  setTimeout(() => {
-    checkTitleVisibility();
-    checkHeadContentVisibility();
-    checkContent1Visibility();
-    checkImageVisibility();
-  }, 100);
-
   // 获取企业列表数据
   fetchEnterpriseList();
   //查询服务信息列表
@@ -533,128 +483,6 @@ onMounted(() => {
   //查询公司动态列表
   fetchCompanyNewsList();
 });
-
-// 图片弹出动画状态
-const imagePopVisible = ref([]);
-
-// 检查标题是否在视窗内的函数 - 适配 uni-app
-const checkTitleVisibility = () => {
-  // 如果动画已经触发过，就不再检查
-  if (titleVisible.value) {
-    return;
-  }
-
-  // 使用 uni.createSelectorQuery 来获取元素位置信息
-  const query = uni.createSelectorQuery();
-  query
-    .selectAll(".winthecustomer-title")
-    .boundingClientRect((rects) => {
-      if (rects && rects.length > 0) {
-        rects.forEach((rect, index) => {
-          // 获取系统信息来获取窗口高度
-          uni.getSystemInfo({
-            success: (res) => {
-              const windowHeight = res.windowHeight;
-              // 当元素进入视窗时触发动画，提前触发点，增加延迟让动画更自然
-              if (
-                rect.top < windowHeight * 0.85 &&
-                rect.bottom > 0 &&
-                !titleVisible.value
-              ) {
-                // 添加延迟让每个标题依次出现
-                setTimeout(() => {
-                  titleVisible.value = true;
-                }, index * 300); // 每个标题间隔300ms
-              }
-            },
-          });
-        });
-      }
-    })
-    .exec();
-};
-
-// 检查 headContent 是否在视窗内的函数
-const checkHeadContentVisibility = () => {
-  const query = uni.createSelectorQuery();
-  query
-    .selectAll(".headContent")
-    .boundingClientRect((rects) => {
-      if (rects && rects.length > 0) {
-        rects.forEach((rect, index) => {
-          uni.getSystemInfo({
-            success: (res) => {
-              const windowHeight = res.windowHeight;
-              // 当元素进入视窗时触发动画
-              if (rect.top < windowHeight * 0.8 && rect.bottom > 0) {
-                // 为每个 headContent 元素添加动画效果
-                setTimeout(() => {
-                  headContentVisible.value[index] = true;
-                }, index * 300); // 每个元素间隔300ms
-              }
-            },
-          });
-        });
-      }
-    })
-    .exec();
-};
-
-// 检查 winthecustomer-content1 是否在视窗内的函数
-const checkContent1Visibility = () => {
-  const query = uni.createSelectorQuery();
-  query
-    .selectAll(".winthecustomer-content1")
-    .boundingClientRect((rects) => {
-      if (rects && rects.length > 0) {
-        rects.forEach((rect, index) => {
-          uni.getSystemInfo({
-            success: (res) => {
-              const windowHeight = res.windowHeight;
-              // 当元素进入视窗时触发动画，提前触发点让动画更自然
-              if (rect.top < windowHeight * 0.85 && rect.bottom > 0) {
-                // 为每个 content1 元素添加动画效果
-                setTimeout(() => {
-                  if (!content1Visible.value[index]) {
-                    content1Visible.value[index] = true;
-                  }
-                }, index * 150); // 每个元素间隔150ms，让动画更流畅
-              }
-            },
-          });
-        });
-      }
-    })
-    .exec();
-};
-
-// 检查图片是否在视窗内的函数
-const checkImageVisibility = () => {
-  const query = uni.createSelectorQuery();
-  query
-    .selectAll(".certificate-item, .businesspartner-item, .teamappearance-item")
-    .boundingClientRect((rects) => {
-      if (rects && rects.length > 0) {
-        rects.forEach((rect, index) => {
-          uni.getSystemInfo({
-            success: (res) => {
-              const windowHeight = res.windowHeight;
-              // 当元素进入视窗时触发动画
-              if (rect.top < windowHeight * 0.9 && rect.bottom > 0) {
-                // 为每个图片元素添加动画效果
-                setTimeout(() => {
-                  if (!imagePopVisible.value[index]) {
-                    imagePopVisible.value[index] = true;
-                  }
-                }, index * 100); // 每个元素间隔100ms
-              }
-            },
-          });
-        });
-      }
-    })
-    .exec();
-};
 
 // 轮播图数据
 const bannerList = ref([
@@ -1026,17 +854,7 @@ const getSecondRowPartners = (partners) => {
   return partners.filter((_, index) => index % 2 === 1);
 };
 
-onPageScroll((e) => {
-  showHeaderBg.value = e.scrollTop > 50;
-  // 滚动时检查标题可见性
-  checkTitleVisibility();
-  // 滚动时检查 headContent 可见性
-  checkHeadContentVisibility();
-  // 滚动时检查 content1 可见性
-  checkContent1Visibility();
-  // 滚动时检查图片可见性
-  checkImageVisibility();
-});
+onPageScroll((e) => {});
 </script>
 
 <style lang="scss" scoped>
@@ -1165,9 +983,6 @@ onPageScroll((e) => {
   outline: none !important;
   box-shadow: none !important;
   background: transparent;
-  transform: scale(0);
-  opacity: 0;
-  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
 }
 
@@ -1179,31 +994,9 @@ onPageScroll((e) => {
   height: 80rpx;
 }
 
-/* 按钮弹出动画 */
-.btn-animate {
-  transform: scale(1) !important;
-  opacity: 1 !important;
-}
-
-.btn-delay-1 {
-  transition-delay: 0.1s;
-}
-
-.btn-delay-2 {
-  transition-delay: 0.3s;
-}
-
-.btn-delay-3 {
-  transition-delay: 0.5s;
-}
-
 /* 按钮悬停效果 */
 .contact-btn:hover {
   transform: scale(1.1);
-}
-
-.btn-animate:hover {
-  transform: scale(1.1) !important;
 }
 
 /* 轮播图样式 */
@@ -1505,39 +1298,6 @@ onPageScroll((e) => {
   font-weight: bold;
   font-size: 40rpx;
   margin-left: 22rpx;
-  opacity: 0;
-  transform: translateY(-30rpx) scale(0.8);
-  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.title-fade-in {
-  opacity: 1 !important;
-  transform: translateY(0) scale(1) !important;
-  animation: slowFadeInUp 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  animation-fill-mode: forwards;
-}
-
-@keyframes slowFadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(-30rpx) scale(0.8);
-  }
-  25% {
-    opacity: 0.3;
-    transform: translateY(-15rpx) scale(0.9);
-  }
-  50% {
-    opacity: 0.6;
-    transform: translateY(-5rpx) scale(0.95);
-  }
-  75% {
-    opacity: 0.85;
-    transform: translateY(2rpx) scale(1.02);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
 }
 
 .winthecustomer-line {
@@ -1569,14 +1329,7 @@ onPageScroll((e) => {
   width: calc(49% - 10rpx);
   background: #f2f6ff;
   margin-top: 38rpx;
-  opacity: 0;
-  transform: translateY(20rpx);
-  transition: all 0.6s ease-out;
   border-radius: 20rpx;
-}
-.content1-animate {
-  opacity: 1;
-  transform: translateY(0);
 }
 .winthecustomer-content1 image {
   width: 100%;
@@ -1599,14 +1352,6 @@ onPageScroll((e) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transform: translateY(20rpx);
-  transition: all 0.6s ease-out;
-}
-
-.headContent.headContent-animate {
-  opacity: 1;
-  transform: translateY(0);
 }
 .headLeft {
   width: 142rpx;
