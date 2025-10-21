@@ -1,6 +1,28 @@
 {
   "pages": [
     {
+      "path": "pages/secondary/homepage/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/secondary/winthecustomer/index",
+      "style": {
+        "navigationBarTitleText": "线上获客",
+         "backgroundColor": "#F8F8F8"
+      }
+    },
+    {
+      "path": "pages/secondary/system/index",
+      "style": {
+        "navigationBarTitleText": "系统服务",
+         "backgroundColor": "#F8F8F8"
+      }
+    },
+    {
       "path": "pages/homepage/index",
       "style": {
         "navigationStyle": "custom",
@@ -133,7 +155,15 @@
         "navigationBarTitleText": "公司动态",
         "navigationBarBackgroundColor": "#ffffff"
       }
+    },
+    {
+      "path": "pages/secondary/businesspartner/index",
+      "style": {
+        "navigationBarTitleText": "合作商家",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
     }
+   
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -148,28 +178,22 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/homepage/index",
+        "pagePath": "pages/secondary/homepage/index",
         "iconPath": "static/index.png",
         "selectedIconPath": "static/indexActive.png",
         "text": "首页"
       },
       {
-        "pagePath": "pages/productservicenew/index",
+        "pagePath": "pages/secondary/winthecustomer/index",
         "iconPath": "static/serve.png",
         "selectedIconPath": "static/serveActive.png",
-        "text": "产品服务"
+        "text": "获客"
       },
       {
-        "pagePath": "pages/cooperationcase/index",
+        "pagePath": "pages/secondary/system/index",
         "iconPath": "static/case.png",
         "selectedIconPath": "static/caseActive.png",
-        "text": "合作案例"
-      },
-      {
-        "pagePath": "pages/clientevaluation/index",
-        "iconPath": "static/customer.png",
-        "selectedIconPath": "static/customerActive.png",
-        "text": "动态"
+        "text": "系统"
       }
     ]
   }

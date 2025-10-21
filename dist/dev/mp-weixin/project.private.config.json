@@ -3,11 +3,32 @@
 		"miniprogram": {
 			"list": [
 				{
-					"name": "pages/clientevaluation/index",
-					"pathName": "pages/clientevaluation/index",
+					"name": "pages/secondary/businesspartner/index",
+					"pathName": "pages/secondary/businesspartner/index",
 					"query": "",
 					"scene": null,
 					"launchMode": "default"
+				},
+				{
+					"name": "pages/secondary/businesspartner/index",
+					"pathName": "pages/secondary/businesspartner/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/secondary/system/index",
+					"pathName": "pages/secondary/system/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/secondary/winthecustomer/index",
+					"pathName": "pages/secondary/winthecustomer/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
 				}
 			]
 		}

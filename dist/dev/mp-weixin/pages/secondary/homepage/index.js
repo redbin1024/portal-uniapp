@@ -19,14 +19,42 @@ var __async = (__this, __arguments, generator) => {
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
-const common_vendor = require("../../common/vendor.js");
-const api_activity = require("../../api/activity.js");
+const common_vendor = require("../../../common/vendor.js");
+const api_activity = require("../../../api/activity.js");
 const _sfc_main = {
   __name: "index",
   setup(__props) {
     common_vendor.ref(false);
     common_vendor.ref({});
     common_vendor.ref([]);
+    const caseDataList = common_vendor.ref([]);
+    const viewmore = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/secondary/businesspartner/index"
+      });
+    };
+    const caseList = () => __async(this, null, function* () {
+      try {
+        const response = yield api_activity.getcaseList({
+          pageSize: 9,
+          pageNum: 1
+        });
+        console.log("企业列表数据:", response);
+        if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
+          let data = [];
+          for (let i = 0; i < response.rows.length; i++) {
+            data.push(response.rows[i].caseImages[0]);
+          }
+          caseDataList.value = data;
+        }
+      } catch (error) {
+        console.error("获取企业列表失败:", error);
+        common_vendor.index.showToast({
+          title: "获取企业列表失败",
+          icon: "none"
+        });
+      }
+    });
     const fetchCompanyNewsList = () => __async(this, null, function* () {
       try {
         const response = yield api_activity.getCompanyNewsList({
@@ -48,9 +76,8 @@ const _sfc_main = {
     });
     const nextDetile = (item) => {
       try {
-        const itemStr = JSON.stringify(item);
-        common_vendor.index.navigateTo({
-          url: "/pages/customer/index?item=" + encodeURIComponent(itemStr)
+        common_vendor.index.switchTab({
+          url: "/pages/secondary/winthecustomer/index"
         });
       } catch (error) {
         console.error("序列化参数失败:", error);
@@ -101,6 +128,7 @@ const _sfc_main = {
       fetchEnterpriseList();
       fetchServiceList();
       fetchCompanyNewsList();
+      caseList();
     });
     common_vendor.ref([
       {
@@ -202,19 +230,7 @@ const _sfc_main = {
     const serviceLists = common_vendor.ref([]);
     const companyNewsList = common_vendor.ref([]);
     const currentIndex = common_vendor.ref(0);
-    const showHeaderBg = common_vendor.ref(false);
-    const onSwiperChange = (e) => {
-      currentIndex.value = e.detail.current;
-      const currentItem = enterpriseList.value.bannerImages[currentIndex.value];
-      if (isVideo(currentItem)) {
-        setTimeout(() => {
-          const videoContext = common_vendor.index.createVideoContext(
-            "bannerVideo" + currentIndex.value
-          );
-          videoContext.play();
-        }, 100);
-      }
-    };
+    common_vendor.ref(false);
     const showPreview = common_vendor.ref(false);
     const isVideoFullscreen = common_vendor.ref(false);
     const previewMedia = common_vendor.ref({
@@ -240,6 +256,10 @@ const _sfc_main = {
       return videoExtensions.some((ext) => urlLower.includes(ext));
     };
     const getVideoPoster = (videoUrl) => {
+      if (typeof videoUrl !== "string") {
+        console.warn("videoUrl is not a string:", videoUrl);
+        return "";
+      }
       return videoUrl.replace(
         /\.(mp4|webm|ogg|mov|avi|wmv|flv|mkv)$/i,
         "_poster.jpg"
@@ -279,8 +299,8 @@ const _sfc_main = {
     };
     const prevMedia = () => {
       const currentIndex2 = previewMedia.value.index;
-      const newIndex = currentIndex2 > 0 ? currentIndex2 - 1 : enterpriseList.value.bannerImages.length - 1;
-      const newSrc = enterpriseList.value.bannerImages[newIndex];
+      const newIndex = currentIndex2 > 0 ? currentIndex2 - 1 : caseDataList.value.length - 1;
+      const newSrc = caseDataList.value[newIndex];
       previewMedia.value = {
         src: newSrc,
         type: isVideo(newSrc) ? "video" : "image",
@@ -289,49 +309,21 @@ const _sfc_main = {
     };
     const nextMedia = () => {
       const currentIndex2 = previewMedia.value.index;
-      const newIndex = currentIndex2 < enterpriseList.value.bannerImages.length - 1 ? currentIndex2 + 1 : 0;
-      const newSrc = enterpriseList.value.bannerImages[newIndex];
+      const newIndex = currentIndex2 < caseDataList.value.length - 1 ? currentIndex2 + 1 : 0;
+      const newSrc = caseDataList.value[newIndex];
       previewMedia.value = {
         src: newSrc,
         type: isVideo(newSrc) ? "video" : "image",
         index: newIndex
       };
     };
-    const handlePhoneCall = () => {
-      common_vendor.index.makePhoneCall({
-        phoneNumber: this.enterpriseList.contactPhone,
-        // 使用页面中显示的电话号码
-        success: () => {
-          console.log("拨打电话成功");
-        },
-        fail: (err) => {
-          console.error("拨打电话失败:", err);
-          common_vendor.index.showToast({
-            title: "拨打电话失败",
-            icon: "none"
-          });
-        }
-      });
-    };
-    const handleNavigation = () => {
-      console.log("Navigation clicked");
-      common_vendor.index.openLocation({
-        latitude: 28.1941,
-        // 长沙市芙蓉区的大概坐标
-        longitude: 113.0116,
-        name: "天天拓客",
-        address: "湖南省长沙市芙蓉区壹号座品A座613",
-        scale: 18,
-        success: () => {
-          console.log("打开地图成功");
-        },
-        fail: (err) => {
-          console.error("打开地图失败:", err);
-          common_vendor.index.showToast({
-            title: "打开地图失败",
-            icon: "none"
-          });
-        }
+    const previewSingleImage = (bannerImages) => {
+      let urls = [bannerImages];
+      common_vendor.index.previewImage({
+        urls,
+        current: 0,
+        indicator: "number",
+        loop: false
       });
     };
     const next = (item) => {
@@ -361,50 +353,29 @@ const _sfc_main = {
         return [];
       return certificates.filter((_, index) => index % 2 === 1);
     };
-    const getFirstRowPartners = (partners) => {
-      if (!partners || !Array.isArray(partners))
-        return [];
-      return partners.filter((_, index) => index % 2 === 0);
-    };
-    const getSecondRowPartners = (partners) => {
-      if (!partners || !Array.isArray(partners))
-        return [];
-      return partners.filter((_, index) => index % 2 === 1);
-    };
     common_vendor.onPageScroll((e) => {
     });
     return (_ctx, _cache) => {
       var _a, _b, _c, _d, _e, _f;
       return common_vendor.e({
-        a: common_vendor.t(enterpriseList.value.enterpriseName),
-        b: showHeaderBg.value ? 1 : "",
-        c: common_vendor.f(enterpriseList.value.bannerImages, (item, index, i0) => {
-          return common_vendor.e({
-            a: isVideo(item)
-          }, isVideo(item) ? {
-            b: "bannerVideo" + index,
-            c: item,
-            d: index === currentIndex.value,
-            e: common_vendor.o(($event) => onMediaClick(item, index, "video"), index),
-            f: common_vendor.o(($event) => onMediaClick(item, index, "video"), index)
-          } : {
-            g: item,
-            h: common_vendor.o(($event) => onMediaClick(item, index, "image"), index)
-          }, {
-            i: index
-          });
+        a: common_vendor.f(caseDataList.value, (item, index, i0) => {
+          return {
+            a: "bannerVideo" + index,
+            b: item,
+            c: index === currentIndex.value,
+            d: common_vendor.o(($event) => onMediaClick(item, index, "video"), index),
+            e: index
+          };
         }),
-        d: common_vendor.o(onSwiperChange),
-        e: common_vendor.t(enterpriseList.value.enterpriseName),
-        f: common_vendor.t(enterpriseList.value.enterpriseDescription),
-        g: common_vendor.o(handlePhoneCall),
-        h: common_vendor.o(handleNavigation),
-        i: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
+        b: common_vendor.o(viewmore),
+        c: enterpriseList.value.bannerImages[0],
+        d: common_vendor.o(($event) => previewSingleImage(enterpriseList.value.bannerImages[0])),
+        e: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) ? {
-        j: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+        f: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
-        k: common_vendor.o(($event) => nextDetile(serviceList.value)),
-        l: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        g: common_vendor.o(($event) => nextDetile()),
+        h: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage,
             b: common_vendor.t(item.serviceName),
@@ -412,62 +383,48 @@ const _sfc_main = {
             d: common_vendor.o(($event) => next(item), index)
           };
         }),
-        m: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        i: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row1-" + index
           };
         }),
-        n: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        j: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        o: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        k: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        p: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
-          return {
-            a: partner,
-            b: "row1-" + index
-          };
-        }),
-        q: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
-      }, getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0 ? {
-        r: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
-          return {
-            a: partner,
-            b: "row2-" + index
-          };
-        })
-      } : {}, {
-        s: common_vendor.t(enterpriseList.value.enterpriseName),
-        t: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        v: common_vendor.t(enterpriseList.value.contactPhone),
-        w: enterpriseList.value.qrCode,
-        x: showPreview.value
+        l: common_vendor.t(enterpriseList.value.enterpriseName),
+        m: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        n: common_vendor.t(enterpriseList.value.contactPhone),
+        o: enterpriseList.value.qrCode,
+        p: `url(${enterpriseList.value.enterpriseLogo})`,
+        q: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        y: previewMedia.value.type === "video"
+        r: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        z: previewMedia.value.src,
-        A: getVideoPoster(previewMedia.value.src),
-        B: common_vendor.o(onFullscreenChange),
-        C: "preview-video-" + previewMedia.value.index
+        s: previewMedia.value.src,
+        t: getVideoPoster(previewMedia.value.src),
+        v: common_vendor.o(onFullscreenChange),
+        w: "preview-video-" + previewMedia.value.index
       } : {
-        D: previewMedia.value.src
+        x: previewMedia.value.src
       }, {
-        E: common_vendor.o(prevMedia),
-        F: common_vendor.o(nextMedia),
-        G: isVideoFullscreen.value ? 1 : "",
-        H: common_vendor.o(handlePreviewModalClick)
+        y: common_vendor.o(prevMedia),
+        z: common_vendor.o(nextMedia),
+        A: isVideoFullscreen.value ? 1 : "",
+        B: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        I: common_vendor.o(handleCustomerServiceClick),
-        J: showPreview.value ? 1 : ""
+        C: common_vendor.o(handleCustomerServiceClick),
+        D: showPreview.value ? 1 : ""
       });
     };
   }
 };
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-46fe8b1b"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-24abe20b"]]);
 _sfc_main.__runtimeHooks = 1;
 wx.createPage(MiniProgramPage);

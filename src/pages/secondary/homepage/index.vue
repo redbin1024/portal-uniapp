@@ -1,6 +1,6 @@
 <template>
   <view class="main" :class="{ 'no-scroll': showPreview }">
-    <view class="header" :class="{ 'header-with-bg': showHeaderBg }">
+    <!-- <view class="header" :class="{ 'header-with-bg': showHeaderBg }">
       <view class="title-wrapper">
         <view class="headLogo">
           <image
@@ -11,11 +11,16 @@
         </view>
         <view class="title">{{ enterpriseList.enterpriseName }}</view>
       </view>
-    </view>
-    <view class="container">
-      <view style="height: 200rpx"></view>
+    </view> -->
+    <view
+      class="container"
+      :style="{
+        backgroundImage: `url(${enterpriseList.enterpriseLogo})`,
+      }"
+    >
+      <view style="height: 580rpx"></view>
       <!-- 轮播图组件 -->
-      <view class="slideshow">
+      <!-- <view class="slideshow">
         <swiper
           class="swiper-container"
           :indicator-dots="true"
@@ -32,7 +37,7 @@
             :key="index"
             class="swiper-item"
           >
-            <!-- 判断是图片还是视频 -->
+            判断是图片还是视频
             <view v-if="isVideo(item)" class="media-container">
               <video
                 :id="'bannerVideo' + index"
@@ -47,11 +52,12 @@
                 class="media-overlay"
                 @click="onMediaClick(item, index, 'video')"
               >
-                <!-- <view class="play-icon">
+                注释
+                <view class="play-icon">
                   <image
                     src="http://cdn.xiaodingdang1.com/2025/09/29/e0672146e9f640ff97debb0b896d2d77.png"
                   ></image>
-                </view> -->
+                </view>
               </view>
             </view>
             <view v-else class="media-container">
@@ -61,256 +67,226 @@
                 mode="aspectFill"
                 @click="onMediaClick(item, index, 'image')"
               />
-              <!-- <view
-                class="preview-icon"
-                @click="onMediaClick(item, index, 'image')"
-              >
-                <text class="icon-text">🔍</text>
-              </view> -->
             </view>
           </swiper-item>
         </swiper>
-      </view>
-      <view>
-        <view class="company-banner">
-          <view class="company-info">
-            <text class="company-title">{{
-              enterpriseList.enterpriseName
-            }}</text>
-            <text class="company-desc">
-              {{ enterpriseList.enterpriseDescription }}
-            </text>
-          </view>
-          <view class="company-btn">
-            <view class="company-btn1">
-              <button class="contact-btn" @click="handlePhoneCall">
-                <image
-                  src="http://cdn.xiaodingdang1.com/2025/09/27/a51f8b4f36a54f4385c0a695ab191a77.png"
-                ></image>
-              </button>
-            </view>
-            <view class="company-btn1">
-              <button class="contact-btn" @click="handleNavigation">
-                <image
-                  src="http://cdn.xiaodingdang1.com/2025/09/27/41563146d6c54148a0e1b9f80ca4c1c1.png"
-                ></image>
-              </button>
-            </view>
-            <view class="company-btn1">
-              <button class="contact-btn" open-type="share">
-                <image
-                  src="http://cdn.xiaodingdang1.com/2025/09/27/8669297789b34a3d9848db137bd084fb.png"
-                ></image>
-              </button>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="winthecustomer">
-      <view class="winthecustomer-head">
-        <view class="winthecustomer-head1">
-          <image
-            src="http://cdn.xiaodingdang1.com/2025/09/29/0e9ee0c847c048809e8e5d520cbc7fa2.png"
-            style="width: 50rpx; height: 50rpx"
-          ></image>
-          <view class="winthecustomer-title">线上获客</view>
-        </view>
-      </view>
-      <view class="winthecustomer-line" @click="nextDetile(serviceList)">
-        <image
-          :src="serviceList?.serviceImage?.[0]"
-          v-if="serviceList?.serviceImage?.[0]"
-          mode="white"
-        ></image>
-      </view>
-    </view>
-    <view class="winthecustomer">
-      <view class="winthecustomer-head">
-        <view class="winthecustomer-head1">
-          <image
-            src="http://cdn.xiaodingdang1.com/2025/09/29/91ec3c9320a946c3a2cb84795b82cf82.png"
-            style="width: 50rpx; height: 50rpx"
-          ></image>
-          <view class="winthecustomer-title">系统服务</view>
-        </view>
-      </view>
-      <view class="winthecustomer-content">
-        <view
-          class="winthecustomer-content1"
-          v-for="(item, index) in serviceLists"
-          :key="index"
-          @click="next(item)"
-        >
-          <image :src="item.serviceImage"></image>
-          <view class="winthecustomer-content2">{{ item.serviceName }}</view>
-        </view>
-      </view>
-    </view>
-    <view class="brand-story">
-      <!-- <view class="brand-story-title">品牌故事</view>
-      <view class="brand-story-content">
-        <image
-          src="http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png"
-        ></image>
       </view> -->
-      <!-- <view class="systemservice">
-        <view class="systemservice-title">系统服务</view>
-        <view class="exhibition">
-          <view class="exhibition1">
-            <image
-              src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
-              style="width: 330rpx; height: 330rpx"
-            ></image>
-            <view class="exhibition-title">抖音获客</view>
-          </view>
-          <view class="exhibition1">
-            <image
-              src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
-              style="width: 330rpx; height: 330rpx"
-            ></image>
-            <view class="exhibition-title">签单系统</view>
-          </view>
-          <view class="exhibition1">
-            <image
-              src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
-              style="width: 330rpx; height: 330rpx"
-            ></image>
-            <view class="exhibition-title">排房系统</view>
-          </view>
-          <view class="exhibition1">
-            <image
-              src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
-              style="width: 330rpx; height: 330rpx"
-            ></image>
-            <view class="exhibition-title">管理系统</view>
+      <view class="businesspartnernew">
+        <view class="winthecustomer-head">
+          <view class="winthecustomer-head1">
+            <view class="winthecustomer-title">合作商家</view>
+            <view class="winthecustomer-title1">Partner Merchant</view>
           </view>
         </view>
-      </view> -->
-      <!-- <view class="teamappearance">
-        <view
-          class="headContent"
-          :class="{ 'headContent-animate': headContentVisible[0] }"
-        >
-          <view class="headLeft"></view>
-          <view class="teamappearance-title">公司动态</view>
-          <view class="headRight"></view>
-        </view>
-        <view class="teamappearance-content">
+        <view class="businesspartnernew-content">
           <view
-            v-for="(team, index) in companyNewsList"
+            class="businesspartnernew-item"
+            v-for="(item, index) in caseDataList"
             :key="index"
-            class="teamappearance-item"
-            @click="goToDetails(team)"
           >
-            <view class="teamappearance-item-image">
+            <video
+              :id="'bannerVideo' + index"
+              :src="item"
+              class="banner-video"
+              :autoplay="index === currentIndex"
+              :muted="true"
+              controls
+              object-fit="cover"
+              @click="onMediaClick(item, index, 'video')"
+              style="border-radius: 20rpx"
+            />
+          </view>
+        </view>
+        <view class="viewmore" @click="viewmore">
+          <view>查看更多</view>
+          <view>></view>
+        </view>
+        <view
+          class="businesspartnernew-image"
+          @click="previewSingleImage(enterpriseList.bannerImages[0])"
+        >
+          <image :src="enterpriseList.bannerImages[0]"></image>
+        </view>
+      </view>
+      <view id="win-the-customer">
+        <view class="winthecustomer">
+          <view class="winthecustomer-head">
+            <view class="winthecustomer-head1">
+              <view class="winthecustomer-title">产品服务</view>
+              <view class="winthecustomer-title1">Product Service</view>
+            </view>
+          </view>
+          <view @click="nextDetile()">
+            <view class="winthecustomer-line">
               <image
-                :src="team.newsImages?.[0]"
-                v-if="team.newsImages?.[0]"
+                :src="serviceList?.serviceImage?.[0]"
+                v-if="serviceList?.serviceImage?.[0]"
+                mode="white"
               ></image>
             </view>
-            <view class="teamappearance-item-content">{{
-              team.newsTitle
-            }}</view>
+            <view class="winthecustomer-line-bottom">
+              <view class="winthecustomer-title2">抖音线上获客</view>
+              <view class="winthecustomer-line-bottom1">
+                <view class="winthecustomer-title3">了解详情</view>
+                <image
+                  src="http://cdn.xiaodingdang1.com/2025/10/21/71d280df9062455ca2b23bd5ecda6223.png"
+                  style="width: 24rpx; height: 24rpx"
+                  mode=""
+                />
+              </view>
+            </view>
           </view>
         </view>
-      </view> -->
-    </view>
-    <view class="brand-story">
-      <view class="certificate">
-        <view class="headContent">
-          <view class="headLeft"></view>
-          <view class="teamappearance-title">荣誉证书</view>
-          <view class="headRight"></view>
-        </view>
-        <view class="certificate-list">
-          <view class="certificate-scroll-container">
-            <view class="certificate-double-row">
-              <view class="certificate-row">
-                <view
-                  v-for="(certificate, index) in getFirstRowCertificates(
-                    enterpriseList.honorCertificates
-                  )"
-                  :key="'row1-' + index"
-                  class="certificate-item"
-                >
-                  <image :src="certificate" mode="aspectFit"></image>
+        <view id="winthecustomer">
+          <view class="winthecustomer-content">
+            <view
+              class="winthecustomer-content1"
+              v-for="(item, index) in serviceLists"
+              :key="index"
+              @click="next(item)"
+            >
+              <image :src="item.serviceImage"></image>
+              <view class="winthecustomer-content2">
+                <view class="winthecustomer-content2-1">
+                  {{ item.serviceName }}
                 </view>
+                <view class="winthecustomer-content2-2">了解详情</view>
               </view>
-              <view
-                class="certificate-row"
-                v-if="
-                  getSecondRowCertificates(enterpriseList.honorCertificates)
-                    .length > 0
-                "
-              >
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="brand-story">
+        <!-- <view class="brand-story-title">品牌故事</view>
+        <view class="brand-story-content">
+          <image
+            src="http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png"
+          ></image>
+        </view> -->
+        <!-- <view class="systemservice">
+          <view class="systemservice-title">系统服务</view>
+          <view class="exhibition">
+            <view class="exhibition1">
+              <image
+                src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
+                style="width: 330rpx; height: 330rpx"
+              ></image>
+              <view class="exhibition-title">抖音获客</view>
+            </view>
+            <view class="exhibition1">
+              <image
+                src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
+                style="width: 330rpx; height: 330rpx"
+              ></image>
+              <view class="exhibition-title">签单系统</view>
+            </view>
+            <view class="exhibition1">
+              <image
+                src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
+                style="width: 330rpx; height: 330rpx"
+              ></image>
+              <view class="exhibition-title">排房系统</view>
+            </view>
+            <view class="exhibition1">
+              <image
+                src="http://cdn.xiaodingdang1.com/2025/09/15/a95241417fb6435e8de21a1ce7a5bf48.png"
+                style="width: 330rpx; height: 330rpx"
+              ></image>
+              <view class="exhibition-title">管理系统</view>
+            </view>
+          </view>
+        </view> -->
+        <!-- <view class="teamappearance">
+          <view
+            class="headContent"
+            :class="{ 'headContent-animate': headContentVisible[0] }"
+          >
+            <view class="headLeft"></view>
+            <view class="teamappearance-title">公司动态</view>
+            <view class="headRight"></view>
+          </view>
+          <view class="teamappearance-content">
+            <view
+              v-for="(team, index) in companyNewsList"
+              :key="index"
+              class="teamappearance-item"
+              @click="goToDetails(team)"
+            >
+              <view class="teamappearance-item-image">
+                <image
+                  :src="team.newsImages?.[0]"
+                  v-if="team.newsImages?.[0]"
+                ></image>
+              </view>
+              <view class="teamappearance-item-content">{{
+                team.newsTitle
+              }}</view>
+            </view>
+          </view>
+        </view> -->
+      </view>
+      <view class="brand-story">
+        <view class="certificate">
+          <view class="winthecustomer-head">
+            <view class="winthecustomer-head1">
+              <view class="winthecustomer-title">荣誉证书</view>
+              <view class="winthecustomer-title1">Certificate of Honor</view>
+            </view>
+          </view>
+          <view class="certificate-list">
+            <view class="certificate-scroll-container">
+              <view class="certificate-double-row">
+                <view class="certificate-row">
+                  <view
+                    v-for="(certificate, index) in getFirstRowCertificates(
+                      enterpriseList.honorCertificates
+                    )"
+                    :key="'row1-' + index"
+                    class="certificate-item"
+                  >
+                    <image :src="certificate" mode="aspectFit"></image>
+                  </view>
+                </view>
                 <view
-                  v-for="(certificate, index) in getSecondRowCertificates(
-                    enterpriseList.honorCertificates
-                  )"
-                  :key="'row2-' + index"
-                  class="certificate-item"
+                  class="certificate-row"
+                  v-if="
+                    getSecondRowCertificates(enterpriseList.honorCertificates)
+                      .length > 0
+                  "
                 >
-                  <image :src="certificate" mode="aspectFit"></image>
+                  <view
+                    v-for="(certificate, index) in getSecondRowCertificates(
+                      enterpriseList.honorCertificates
+                    )"
+                    :key="'row2-' + index"
+                    class="certificate-item"
+                  >
+                    <image :src="certificate" mode="aspectFit"></image>
+                  </view>
                 </view>
               </view>
             </view>
           </view>
         </view>
       </view>
-    </view>
-    <view class="businesspartner">
-      <view class="headContent">
-        <view class="headLeft"></view>
-        <view class="teamappearance-title">合作商家</view>
-        <view class="headRight"></view>
-      </view>
-      <view class="businesspartner-list">
-        <view class="businesspartner-row">
-          <view
-            v-for="(partner, index) in getFirstRowPartners(
-              enterpriseList.cooperationMerchants
-            )"
-            :key="'row1-' + index"
-            class="businesspartner-item"
+
+      <view class="introduce">
+        <view class="introduce-container">
+          <view class="introduce-title1">{{
+            enterpriseList.enterpriseName
+          }}</view>
+          <view class="introduce-title2">{{
+            enterpriseList.enterpriseAddress
+          }}</view>
+          <view class="introduce-title3"></view>
+          <view class="introduce-title4"
+            >电话：{{ enterpriseList.contactPhone }}</view
           >
-            <image :src="partner" mode="aspectFit"></image>
-          </view>
         </view>
-        <view
-          class="businesspartner-row"
-          v-if="
-            getSecondRowPartners(enterpriseList.cooperationMerchants).length > 0
-          "
-        >
-          <view
-            v-for="(partner, index) in getSecondRowPartners(
-              enterpriseList.cooperationMerchants
-            )"
-            :key="'row2-' + index"
-            class="businesspartner-item"
-          >
-            <image :src="partner" mode="aspectFit"></image>
-          </view>
+        <view class="introduce-container5">
+          <image :src="enterpriseList.qrCode"></image>
+          <view class="introduce-container6">扫码添加微信</view>
         </view>
-      </view>
-    </view>
-    <view class="introduce">
-      <view class="introduce-container">
-        <view class="introduce-title1">{{
-          enterpriseList.enterpriseName
-        }}</view>
-        <view class="introduce-title2">{{
-          enterpriseList.enterpriseAddress
-        }}</view>
-        <view class="introduce-title3"></view>
-        <view class="introduce-title4"
-          >电话：{{ enterpriseList.contactPhone }}</view
-        >
-      </view>
-      <view class="introduce-container5">
-        <image :src="enterpriseList.qrCode"></image>
-        <view class="introduce-container6">扫码添加微信</view>
       </view>
     </view>
 
@@ -372,6 +348,7 @@ import {
   getEnterpriseList,
   getServiceList,
   getCompanyNewsList,
+  getcaseList,
 } from "@/api/activity.js";
 
 // 标题动画状态
@@ -380,6 +357,41 @@ const titleVisible = ref(false);
 const headContentVisible = ref({});
 // winthecustomer-content1 动画状态
 const content1Visible = ref([]);
+const caseDataList = ref([]);
+//查看更多
+const viewmore = () => {
+  uni.navigateTo({
+    url: "/pages/secondary/businesspartner/index",
+  });
+};
+//查询商家案例列表
+const caseList = async () => {
+  try {
+    const response = await getcaseList({
+      pageSize: 9,
+      pageNum: 1,
+    });
+    console.log("企业列表数据:", response);
+    if (
+      response &&
+      response.rows &&
+      Array.isArray(response.rows) &&
+      response.rows.length > 0
+    ) {
+      let data = [];
+      for (let i = 0; i < response.rows.length; i++) {
+        data.push(response.rows[i].caseImages[0]);
+      }
+      caseDataList.value = data;
+    }
+  } catch (error) {
+    console.error("获取企业列表失败:", error);
+    uni.showToast({
+      title: "获取企业列表失败",
+      icon: "none",
+    });
+  }
+};
 //查询公司动态列表
 const fetchCompanyNewsList = async () => {
   try {
@@ -407,9 +419,12 @@ const fetchCompanyNewsList = async () => {
 };
 const nextDetile = (item) => {
   try {
-    const itemStr = JSON.stringify(item);
-    uni.navigateTo({
-      url: "/pages/customer/index?item=" + encodeURIComponent(itemStr),
+    // const itemStr = JSON.stringify(item);
+    // uni.navigateTo({
+    //   url: "/pages/customer/index?item=" + encodeURIComponent(itemStr),
+    // });
+    uni.switchTab({
+      url: "/pages/secondary/winthecustomer/index",
     });
   } catch (error) {
     console.error("序列化参数失败:", error);
@@ -486,6 +501,7 @@ onMounted(() => {
   fetchServiceList();
   //查询公司动态列表
   fetchCompanyNewsList();
+  caseList();
 });
 
 // 轮播图数据
@@ -632,7 +648,7 @@ const onSwiperChange = (e) => {
   currentIndex.value = e.detail.current;
 
   // 如果当前项是视频，则自动播放
-  const currentItem = enterpriseList.value.bannerImages[currentIndex.value];
+  const currentItem = caseDataList.value[currentIndex.value];
   if (isVideo(currentItem)) {
     // 延迟一小段时间确保DOM已更新再播放视频
     setTimeout(() => {
@@ -676,6 +692,12 @@ const isVideo = (url) => {
 
 // 获取视频封面图
 const getVideoPoster = (videoUrl) => {
+  // 确保 videoUrl 是字符串类型
+  if (typeof videoUrl !== "string") {
+    console.warn("videoUrl is not a string:", videoUrl);
+    return "";
+  }
+
   // 这里可以返回视频的封面图，如果没有可以返回默认图片
   return videoUrl.replace(
     /\.(mp4|webm|ogg|mov|avi|wmv|flv|mkv)$/i,
@@ -692,6 +714,22 @@ const onMediaClick = (item, index, type) => {
     index: index,
   };
   showPreview.value = true;
+};
+
+// 预览企业图片
+const previewBusinessImage = () => {
+  if (
+    enterpriseList.value &&
+    enterpriseList.value.bannerImages &&
+    enterpriseList.value.bannerImages.length > 0
+  ) {
+    previewMedia.value = {
+      src: enterpriseList.value.bannerImages[0],
+      type: "image",
+      index: 0,
+    };
+    showPreview.value = true;
+  }
 };
 
 // 关闭预览
@@ -735,10 +773,8 @@ const handlePreviewModalClick = (e) => {
 const prevMedia = () => {
   const currentIndex = previewMedia.value.index;
   const newIndex =
-    currentIndex > 0
-      ? currentIndex - 1
-      : enterpriseList.value.bannerImages.length - 1;
-  const newSrc = enterpriseList.value.bannerImages[newIndex];
+    currentIndex > 0 ? currentIndex - 1 : caseDataList.value.length - 1;
+  const newSrc = caseDataList.value[newIndex];
   previewMedia.value = {
     src: newSrc,
     type: isVideo(newSrc) ? "video" : "image",
@@ -750,20 +786,27 @@ const prevMedia = () => {
 const nextMedia = () => {
   const currentIndex = previewMedia.value.index;
   const newIndex =
-    currentIndex < enterpriseList.value.bannerImages.length - 1
-      ? currentIndex + 1
-      : 0;
-  const newSrc = enterpriseList.value.bannerImages[newIndex];
+    currentIndex < caseDataList.value.length - 1 ? currentIndex + 1 : 0;
+  const newSrc = caseDataList.value[newIndex];
   previewMedia.value = {
     src: newSrc,
     type: isVideo(newSrc) ? "video" : "image",
     index: newIndex,
   };
 };
-
+//预览大图
+const previewSingleImage = (bannerImages) => {
+  let urls = [bannerImages];
+  uni.previewImage({
+    urls: urls,
+    current: 0,
+    indicator: "number",
+    loop: false,
+  });
+};
 // 跳转到指定媒体
 const goToMedia = (index) => {
-  const newSrc = enterpriseList.value.bannerImages[index];
+  const newSrc = caseDataList.value[index];
   previewMedia.value = {
     src: newSrc,
     type: isVideo(newSrc) ? "video" : "image",
@@ -873,6 +916,11 @@ onPageScroll((e) => {});
   width: 100%;
 }
 .container {
+  width: 100%;
+  height: 600rpx;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .header {
@@ -1130,8 +1178,8 @@ onPageScroll((e) => {});
 }
 
 .certificate {
-  background: #ffffff;
-  padding: 30rpx 0;
+  background: #f4f5fa;
+  padding: 30rpx 26rpx;
   // margin-top: 38rpx;
 }
 .certificate-title {
@@ -1143,7 +1191,6 @@ onPageScroll((e) => {});
 }
 .certificate-list {
   margin-top: 40rpx;
-  padding: 0 0 0 49rpx;
 }
 
 .certificate-scroll-container {
@@ -1180,6 +1227,7 @@ onPageScroll((e) => {});
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  margin: 16rpx 16rpx;
   &:last-child {
     margin-right: 49rpx;
   }
@@ -1264,21 +1312,24 @@ onPageScroll((e) => {});
   margin-top: 24rpx;
 }
 /**线上获客 */
+#win-the-customer {
+  background: linear-gradient(to bottom, #ffffff 30%, #3351e2 70%);
+  padding: 0 24rpx;
+}
+#winthecustomer {
+  margin-top: 88rpx;
+}
 .winthecustomer {
   // margin-top: 60rpx;
 }
 .winthecustomer-head {
-  height: 152rpx;
-  background: url("http://cdn.xiaodingdang1.com/2025/10/08/423f8b0e1de441c3976ad67950b39860.png")
-    no-repeat center;
-  background-size: cover;
   display: flex;
 }
 .winthecustomer-head1 {
-  height: 100rpx;
   display: flex;
   align-items: center;
-  margin-left: 26rpx;
+  justify-content: space-between;
+  width: 100%;
 }
 
 @keyframes popIn {
@@ -1300,33 +1351,60 @@ onPageScroll((e) => {});
   color: #000000;
   font-weight: bold;
   font-size: 40rpx;
-  margin-left: 22rpx;
 }
-
+.winthecustomer-title1 {
+  color: #d6d4d4;
+  font-size: 28rpx;
+}
 .winthecustomer-line {
-  background: linear-gradient(to bottom, #f6f6f6 30%, #ffffff 70%);
   // border-top-left-radius: 20rpx;
   // border-top-right-radius: 20rpx;
-  margin-top: -60rpx;
-  padding: 38rpx 0 50rpx 0;
+  padding: 24rpx 0 0rpx 0;
   width: 100%;
   text-align: center;
+}
+.winthecustomer-line-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 28rpx 28rpx;
+  border-bottom-left-radius: 20rpx;
+  border-bottom-right-radius: 20rpx;
+}
+.winthecustomer-line-bottom1 {
+  display: flex;
+  background: #3552e3;
+  align-items: center;
+  width: 164rpx;
+  height: 56rpx;
+  border-radius: 100rpx;
+  justify-content: center;
+}
+.winthecustomer-title3 {
+  font-size: 24rpx;
+  color: #ffffff;
+}
+.winthecustomer-title2 {
+  color: #000000;
+  font-size: 32rpx;
+  font-weight: bold;
 }
 .winthecustomer-line image {
   width: 698rpx;
   height: 380rpx;
-  border-radius: 20rpx;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
 }
 .winthecustomer-content {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20rpx;
-  background: linear-gradient(to bottom, #f6f6f6 30%, #ffffff 70%);
   // border-top-left-radius: 20rpx;
   // border-top-right-radius: 20rpx;
   margin-top: -60rpx;
-  padding: 0 26rpx 50rpx 26rpx;
+  padding: 0 0rpx 50rpx 0rpx;
 }
 .winthecustomer-content1 {
   width: calc(49% - 10rpx);
@@ -1344,13 +1422,29 @@ onPageScroll((e) => {});
   width: 100%;
   padding: 20rpx 0;
   // background: #f2f6ff;
-  color: #3d3d3d;
-  font-size: 32rpx;
+
   text-align: center;
   border-bottom-left-radius: 20rpx;
   border-bottom-right-radius: 20rpx;
+  display: flex;
+  justify-content: space-between;
 }
-
+.winthecustomer-content2-1 {
+  color: #000000;
+  font-size: 28rpx;
+  margin-left: 24rpx;
+}
+.winthecustomer-content2-2 {
+  width: 112rpx;
+  height: 44rpx;
+  background: #3552e3;
+  border-radius: 100rpx;
+  color: #ffffff;
+  font-size: 20rpx;
+  line-height: 44rpx;
+  text-align: center;
+  margin-right: 24rpx;
+}
 .headContent {
   display: flex;
   align-items: center;
@@ -1535,5 +1629,45 @@ wx-button {
 .customer-service-btn image {
   width: 160rpx;
   height: 160rpx;
+}
+
+/**合作商家 */
+.businesspartnernew {
+  background: #ffffff;
+  margin-top: -20rpx;
+  border-top-right-radius: 52rpx;
+  border-top-left-radius: 52rpx;
+  padding: 46rpx 26rpx;
+}
+.businesspartnernew-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 24rpx;
+}
+.businesspartnernew-item {
+  width: 224rpx;
+  height: 340rpx;
+  border-radius: 20rpx;
+}
+.businesspartnernew-image {
+  width: 100%;
+  height: 1440rpx;
+}
+.businesspartnernew-image image {
+  width: 100%;
+  height: 100%;
+}
+.viewmore {
+  display: flex;
+  justify-content: center;
+  background: #f3f5fb;
+  border-radius: 8rpx;
+  width: 100%;
+  height: 72rpx;
+  color: #313131;
+  font-size: 30rpx;
+  line-height: 72rpx;
+  margin: 28rpx 0 60rpx 0;
 }
 </style>
