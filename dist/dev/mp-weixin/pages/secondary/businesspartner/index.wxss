@@ -36,6 +36,7 @@
   width: 344rpx;
   height: 458rpx;
   border-radius: 20rpx;
+  position: relative;
 }
 .banner-video.data-v-230f088e {
   width: 100%;
@@ -43,21 +44,28 @@
   -o-object-fit: cover;
      object-fit: cover;
 }
+.banner-video.data-v-230f088e::-webkit-media-controls-play-button {
+  width: 24px;
+  height: 24px;
+}
+.banner-video.data-v-230f088e::-webkit-media-controls-panel {
+  background-color: rgba(0, 0, 0, 0.2);
+}
 
 /* 全屏预览样式 */
 .preview-modal.data-v-230f088e {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
+  z-index: 999;
 }
 
 /* 视频全屏时可调整z-index，防止被原生全屏遮挡 */
 .preview-modal.video-fullscreen.data-v-230f088e {
-  z-index: 9998;
+  z-index: 998;
 }
 .preview-content.data-v-230f088e {
   width: 100%;
@@ -86,4 +94,29 @@
 .rightarrows image.data-v-230f088e {
   width: 100rpx;
   height: 100rpx;
+}
+
+/* 自定义播放按钮样式 */
+.custom-play-button.data-v-230f088e {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  border-radius: 50%;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+.custom-play-button.data-v-230f088e:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgb(255, 255, 255);
+}
+.custom-play-button .play-icon.data-v-230f088e {
+  width: 100%;
+  height: 100%;
 }

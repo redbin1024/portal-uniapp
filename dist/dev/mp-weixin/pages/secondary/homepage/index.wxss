@@ -35,7 +35,7 @@
 }
 .container.data-v-24abe20b {
   width: 100%;
-  height: 600rpx;
+  height: 750rpx;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -271,7 +271,7 @@
 }
 .certificate.data-v-24abe20b {
   background: #f4f5fa;
-  padding: 30rpx 26rpx;
+  padding: 40rpx 26rpx;
 }
 .certificate-title.data-v-24abe20b {
   font-size: 40rpx;
@@ -281,7 +281,7 @@
   padding: 0 49rpx;
 }
 .certificate-list.data-v-24abe20b {
-  margin-top: 40rpx;
+  margin-top: 20rpx;
 }
 .certificate-scroll-container.data-v-24abe20b {
   overflow-x: auto;
@@ -317,6 +317,7 @@
   display: flex;
   flex-direction: column;
   margin: 16rpx 16rpx;
+  border-radius: 12rpx;
 }
 .certificate-item.data-v-24abe20b:last-child {
   margin-right: 49rpx;
@@ -326,6 +327,7 @@
   height: 265rpx;
   -o-object-fit: cover;
      object-fit: cover;
+  border-radius: 12rpx;
 }
 
 /**合作商 */
@@ -490,9 +492,9 @@
   padding: 0 0rpx 50rpx 0rpx;
 }
 .winthecustomer-content1.data-v-24abe20b {
-  width: calc(49% - 10rpx);
+  width: calc(49% - 6rpx);
   background: #f2f6ff;
-  margin-top: 38rpx;
+  margin-top: 8rpx;
   border-radius: 20rpx;
 }
 .winthecustomer-content1 image.data-v-24abe20b {
@@ -594,6 +596,23 @@ wx-button.data-v-24abe20b {
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+  /* 隐藏视频控件 */
+  /* 移除所有可能的控制条 */
+}
+.banner-video.data-v-24abe20b ::-webkit-media-controls-panel {
+  display: none !important;
+}
+.banner-video.data-v-24abe20b ::-webkit-media-controls-play-button {
+  display: none !important;
+}
+.banner-video.data-v-24abe20b ::-webkit-media-controls {
+  display: none !important;
+}
+.banner-video video.data-v-24abe20b::-webkit-media-controls {
+  display: none !important;
+}
+.banner-video video.data-v-24abe20b::-webkit-media-controls-start-playback-button {
+  display: none !important;
 }
 .media-overlay.data-v-24abe20b {
   position: absolute;
@@ -608,8 +627,8 @@ wx-button.data-v-24abe20b {
   cursor: pointer;
 }
 .play-icon.data-v-24abe20b {
-  width: 80rpx;
-  height: 80rpx;
+  width: 60rpx;
+  height: 60rpx;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -685,35 +704,41 @@ wx-button.data-v-24abe20b {
 .customer-service-btn.data-v-24abe20b {
   position: fixed;
   right: 0;
-  bottom: 200rpx;
+  bottom: 280rpx;
   width: 160rpx;
   height: 160rpx;
   z-index: 999;
   cursor: pointer;
+  background-color: transparent !important;
+  border: none !important;
 }
 .customer-service-btn image.data-v-24abe20b {
-  width: 160rpx;
-  height: 160rpx;
+  width: 100%;
+  height: 100%;
+}
+wx-button.data-v-24abe20b:after {
+  border: none !important;
 }
 
 /**合作商家 */
 .businesspartnernew.data-v-24abe20b {
   background: #ffffff;
-  margin-top: -20rpx;
   border-top-right-radius: 52rpx;
   border-top-left-radius: 52rpx;
   padding: 46rpx 26rpx;
+  margin-top: 100rpx;
 }
 .businesspartnernew-content.data-v-24abe20b {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 9px;
   margin-top: 24rpx;
 }
 .businesspartnernew-item.data-v-24abe20b {
   width: 224rpx;
   height: 340rpx;
   border-radius: 20rpx;
+  position: relative;
 }
 .businesspartnernew-image.data-v-24abe20b {
   width: 100%;
@@ -729,9 +754,75 @@ wx-button.data-v-24abe20b {
   background: #f3f5fb;
   border-radius: 8rpx;
   width: 100%;
-  height: 72rpx;
+  height: 88rpx;
   color: #313131;
   font-size: 30rpx;
-  line-height: 72rpx;
+  line-height: 88rpx;
   margin: 28rpx 0 60rpx 0;
+}
+
+/* 自定义播放按钮样式 */
+.custom-play-button.data-v-24abe20b {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  border-radius: 50%;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+.custom-play-button.data-v-24abe20b:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgb(255, 255, 255);
+}
+.custom-play-button .play-icon.data-v-24abe20b {
+  width: 100%;
+  height: 100%;
+}
+
+/* 全屏返回按钮样式 */
+.video-fullscreen-back-btn.data-v-24abe20b {
+  position: fixed !important;
+  top: 80rpx !important;
+  left: 40rpx !important;
+  z-index: 999999 !important;
+  width: 80rpx !important;
+  height: 80rpx !important;
+  border-radius: 50% !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  transition: all 0.3s ease;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.3) !important;
+  animation: fadeIn-24abe20b 0.3s ease-in-out;
+  transform: translate3d(0, 0, 0) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+@keyframes fadeIn-24abe20b {
+from {
+    opacity: 0;
+}
+to {
+    opacity: 1;
+}
+}
+.video-fullscreen-back-btn.data-v-24abe20b:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+.video-fullscreen-back-btn .back-icon.data-v-24abe20b {
+  width: 48rpx;
+  height: 48rpx;
+}
+.close-icon.data-v-24abe20b {
+  width: 30rpx;
+  height: 30rpx;
 }

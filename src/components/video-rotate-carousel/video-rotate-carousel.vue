@@ -22,13 +22,18 @@
                 :loop="item.loop"
                 :muted="item.muted"
                 :controls="item.controls"
-                :show-fullscreen-btn="item.showFullscreenBtn"
+                :show-fullscreen-btn="
+                  item.showFullscreenBtn !== undefined
+                    ? item.showFullscreenBtn
+                    : true
+                "
                 class="video-player"
                 @play="onVideoPlay(item, index)"
                 @pause="onVideoPause(item, index)"
                 @ended="onVideoEnded(item, index)"
                 @error="onVideoError(item, index)"
                 @fullscreenchange="onFullscreenChange(item, index)"
+                @click.stop="handleVideoClick(item, index)"
               />
               <view class="video-overlay" v-if="index !== currentIndex">
                 <view class="play-icon">▶</view>
@@ -297,14 +302,43 @@ export default {
       if (index === this.currentIndex) {
         this.$emit("itemClick", { item, index });
 
-        // 如果是视频，切换播放状态
-        if (item.type === "video" && this.videoContexts[index]) {
-          // 这里可以添加播放/暂停逻辑
+        // 如果是视频，但点击事件由视频自己的click处理
+        if (item.type === "video") {
+          // 视频点击由handleVideoClick处理
           this.$emit("videoClick", { item, index });
         }
       } else {
         // 如果点击的不是当前项，则切换到该项
         this.goToIndex(index);
+      }
+    },
+
+    // 处理视频点击事件，实现自动全屏播放
+    handleVideoClick(item, index) {
+      console.log("视频点击事件，索引:", index);
+      const videoContext = this.videoContexts[index];
+
+      if (videoContext) {
+        // 请求全屏播放
+        videoContext.requestFullScreen({
+          direction: 0,
+          success: () => {
+            console.log("视频全屏成功");
+            // 全屏成功后播放视频
+            setTimeout(() => {
+              videoContext.play();
+            }, 200);
+          },
+          fail: (err) => {
+            console.error("视频全屏失败:", err);
+            // 如果全屏失败，尝试直接播放
+            videoContext.play();
+            uni.showToast({
+              title: "视频全屏失败，尝试直接播放",
+              icon: "none",
+            });
+          },
+        });
       }
     },
 

@@ -306,16 +306,16 @@ export default {
 }
 
 .title {
-  height: 80rpx;
-  line-height: 90rpx;
-  font-size: 40rpx;
+  height: 90rpx;
+  line-height: 130rpx;
+  font-size: 34rpx;
   font-weight: 600;
   color: #000000;
   margin-bottom: 12rpx;
 }
 
 .description {
-  font-size: 24rpx;
+  font-size: 28rpx;
   color: #7e7f80;
   line-height: 1.5;
   word-break: break-all;

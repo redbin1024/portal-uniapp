@@ -33,7 +33,7 @@
                 : true
             "
             :controls="item.controls || true"
-            :show-fullscreen-btn="false"
+            :show-fullscreen-btn="true"
             :style="dontFirstAnimation ? 'animation: none;' : ''"
             :object-fit="isFullscreen ? 'contain' : 'cover'"
             :id="'video-' + index"
@@ -42,7 +42,7 @@
             @ended="onVideoEnded"
             @error="onVideoError"
             @fullscreenchange="onFullscreenChange"
-            @click="onMediaClick(item.src, index, 'video')"
+            @click="onVideoClick(index)"
           ></video>
           <!-- 图片内容 -->
           <image

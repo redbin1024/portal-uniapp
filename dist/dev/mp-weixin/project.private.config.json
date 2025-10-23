@@ -3,18 +3,11 @@
 		"miniprogram": {
 			"list": [
 				{
-					"name": "pages/secondary/businesspartner/index",
-					"pathName": "pages/secondary/businesspartner/index",
+					"name": "pages/secondary/winthecustomer/index",
+					"pathName": "pages/secondary/winthecustomer/index",
 					"query": "",
 					"scene": null,
 					"launchMode": "default"
-				},
-				{
-					"name": "pages/secondary/businesspartner/index",
-					"pathName": "pages/secondary/businesspartner/index",
-					"query": "",
-					"launchMode": "default",
-					"scene": null
 				},
 				{
 					"name": "pages/secondary/system/index",
@@ -24,9 +17,37 @@
 					"scene": null
 				},
 				{
-					"name": "pages/secondary/winthecustomer/index",
-					"pathName": "pages/secondary/winthecustomer/index",
+					"name": "pages/secondary/businesspartner/index",
+					"pathName": "pages/secondary/businesspartner/index",
 					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/secondary/businesspartner/index",
+					"pathName": "pages/secondary/businesspartner/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/secondary/index/index",
+					"pathName": "pages/secondary/index/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/customer/index",
+					"pathName": "pages/customer/index",
+					"query": "item=%257B%2522serviceId%2522%253A19%252C%2522serviceName%2522%253A%2522AI%25E6%2599%25BA%25E8%2583%25BD%25E9%2594%2580%25E5%2594%25AE%2522%252C%2522serviceImage%2522%253A%255B%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F16%252F9c7ca2eadc4c4f9db1fc027c686342dd.jpg%2522%255D%252C%2522serviceDescription%2522%253A%2522%253Cp%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F2ab16c311afb475fa953ee1354220527.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F87f47f19a0fc4bd08be4517ed8f44dcf.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F78bf1662a9764627a1d80d1ee9abfbc2.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F6933ca7eeecd45e3a7c82e739a7197af.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F5c1b9703e3c343ca83e2c44e56f4391d.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F9a757997510f41fe9f33156bbaa061f8.jpg%255C%2522%253E%253C%252Fp%253E%2522%252C%2522createBy%2522%253A%25221%2522%252C%2522createTime%2522%253A%25222025-09-27%252016%253A50%253A41%2522%252C%2522updateBy%2522%253A%25221%2522%252C%2522updateTime%2522%253A%25222025-10-22%252015%253A45%253A58%2522%252C%2522sortOrder%2522%253A1%257D",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/customer/index",
+					"pathName": "pages/customer/index",
+					"query": "item=%257B%2522serviceId%2522%253A22%252C%2522serviceName%2522%253A%2522%25E8%25B0%2588%25E5%258D%2595%25E7%25B3%25BB%25E7%25BB%259F%2522%252C%2522serviceImage%2522%253A%255B%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F16%252F9991b7eabc474b2eae16f6ea3055e312.jpg%2522%255D%252C%2522serviceDescription%2522%253A%2522%253Cp%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F2d432e1f01fe404e8e6a17795252d5b4.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252Fccc23716f3aa4e2fa73eb0af1efc53b6.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252Fe8a8389b72ec46f49dbbb9c5afde565a.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252Feedb147a658640249d712fd656139762.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F2eaec0b4195f4128863c210e04b3ba98.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F660d411c37734b6483ad424acb16bca4.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F5549b9ba61b748d68cedcf558d9c8d8a.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F6ac212a5ed504715b54e1bd0b5fded47.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252Fe89a2af4cd4b4b0a9ea22622dda5ea3c.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252Fc7d08ce4b5954f30a8985ec1aea10976.jpg%255C%2522%253E%253Cimg%2520src%253D%255C%2522http%253A%252F%252Fcdn.xiaodingdang1.com%252F2025%252F10%252F08%252F06335074a21a478a8b5110ed9f4c11e0.jpg%255C%2522%253E%253C%252Fp%253E%2522%252C%2522createBy%2522%253A%25221%2522%252C%2522createTime%2522%253A%25222025-09-29%252011%253A49%253A12%2522%252C%2522updateBy%2522%253A%25221%2522%252C%2522updateTime%2522%253A%25222025-10-22%252015%253A44%253A09%2522%252C%2522sortOrder%2522%253A1%257D",
 					"launchMode": "default",
 					"scene": null
 				}

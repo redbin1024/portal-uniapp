@@ -26,6 +26,50 @@ const _sfc_main = {
   setup(__props) {
     const caseDataList = common_vendor.ref([]);
     const showPreview = common_vendor.ref(false);
+    const types = common_vendor.ref("");
+    const pageNum = common_vendor.ref(1);
+    const videoFullscreenIndex = common_vendor.ref(-1);
+    const onVideoFullscreenChange = (e, index) => {
+      console.log("视频全屏状态变化:", e.detail.fullScreen, "索引:", index);
+      if (e.detail.fullScreen) {
+        videoFullscreenIndex.value = index;
+        setTimeout(() => {
+          videoFullscreenIndex.value = index;
+          console.log("第一次更新:", index);
+        }, 100);
+        setTimeout(() => {
+          videoFullscreenIndex.value = index;
+          console.log("第二次更新:", index);
+        }, 300);
+        setTimeout(() => {
+          videoFullscreenIndex.value = index;
+          console.log("第三次更新:", index);
+        }, 500);
+      } else {
+        videoContext.stop();
+        videoFullscreenIndex.value = -1;
+        console.log("退出全屏");
+      }
+    };
+    let videoContext = null;
+    const playVideo = (index) => {
+      for (let i = 0; i < caseDataList.value.length; i++) {
+        if (i !== index) {
+          const otherVideoContext = common_vendor.index.createVideoContext("bannerVideo" + i);
+          otherVideoContext.pause();
+        }
+      }
+      videoContext = common_vendor.index.createVideoContext("bannerVideo" + index);
+      videoContext.play();
+      setTimeout(() => {
+        videoContext.requestFullScreen({ direction: 0 });
+        videoFullscreenIndex.value = index;
+        setTimeout(() => {
+          videoFullscreenIndex.value = index;
+          console.log("强制设置全屏视频索引:", index);
+        }, 200);
+      }, 100);
+    };
     const previewMedia = common_vendor.ref({
       src: "",
       type: "image",
@@ -39,22 +83,6 @@ const _sfc_main = {
       }
       closePreview();
     };
-    const isVideo = (url) => {
-      if (!url)
-        return false;
-      const videoExtensions = [
-        ".mp4",
-        ".webm",
-        ".ogg",
-        ".mov",
-        ".avi",
-        ".wmv",
-        ".flv",
-        ".mkv"
-      ];
-      const urlLower = url.toLowerCase();
-      return videoExtensions.some((ext) => urlLower.includes(ext));
-    };
     const getVideoPoster = (videoUrl) => {
       if (typeof videoUrl !== "string") {
         console.warn("videoUrl is not a string:", videoUrl);
@@ -65,40 +93,35 @@ const _sfc_main = {
         "_poster.jpg"
       );
     };
-    const prevMedia = () => {
-      const currentIndex = previewMedia.value.index;
-      const newIndex = currentIndex > 0 ? currentIndex - 1 : caseDataList.value.length - 1;
-      const newSrc = caseDataList.value[newIndex];
-      previewMedia.value = {
-        src: newSrc,
-        type: isVideo(newSrc) ? "video" : "image",
-        index: newIndex
-      };
-    };
-    const nextMedia = () => {
-      const currentIndex = previewMedia.value.index;
-      const newIndex = currentIndex < caseDataList.value.length - 1 ? currentIndex + 1 : 0;
-      const newSrc = caseDataList.value[newIndex];
-      previewMedia.value = {
-        src: newSrc,
-        type: isVideo(newSrc) ? "video" : "image",
-        index: newIndex
-      };
-    };
+    common_vendor.onReachBottom(() => {
+      if (types.value == 1) {
+        pageNum.value += 1;
+        caseList();
+      }
+    });
     const caseList = () => __async(this, null, function* () {
       try {
         const response = yield api_activity.getcaseList({
-          pageSize: 9,
-          pageNum: 1
+          pageSize: 10,
+          pageNum: pageNum.value
         });
-        console.log("企业列表数据:", response);
-        if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
-          let data = [];
-          for (let i = 0; i < response.rows.length; i++) {
-            data.push(response.rows[i].caseImages[0]);
-          }
-          caseDataList.value = data;
+        let dataArray = [];
+        if (response && response.rows && Array.isArray(response.rows)) {
+          dataArray = response.rows;
+        } else if (response && response.data && Array.isArray(response.data)) {
+          dataArray = response.data;
+        } else if (response && Array.isArray(response)) {
+          dataArray = response;
+        } else {
+          console.warn("API返回的数据格式不正确:", response);
+          dataArray = [];
         }
+        if (pageNum.value == 1) {
+          caseDataList.value = dataArray;
+        } else {
+          caseDataList.value = caseDataList.value.concat(dataArray);
+        }
+        types.value = dataArray.length >= 10 ? 1 : 2;
       } catch (error) {
         console.error("获取企业列表失败:", error);
         common_vendor.index.showToast({
@@ -113,28 +136,22 @@ const _sfc_main = {
       }
       showPreview.value = false;
     };
-    const onMediaClick = (item, index, type) => {
-      console.log("Media clicked:", item, index, type);
-      previewMedia.value = {
-        src: item,
-        type,
-        index
-      };
-      showPreview.value = true;
-    };
     common_vendor.onMounted(() => {
       caseList();
     });
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: common_vendor.f(caseDataList.value, (item, index, i0) => {
-          return {
+          return common_vendor.e({
             a: "bannerVideo" + index,
-            b: item,
-            c: index === _ctx.currentIndex,
-            d: common_vendor.o(($event) => onMediaClick(item, index, "video"), index),
-            e: index
-          };
+            b: item.caseImages[0],
+            c: common_vendor.o(($event) => onVideoFullscreenChange($event, index), index),
+            d: videoFullscreenIndex.value !== index
+          }, videoFullscreenIndex.value !== index ? {
+            e: common_vendor.o(($event) => playVideo(index), index)
+          } : {}, {
+            f: index
+          });
         }),
         b: showPreview.value
       }, showPreview.value ? common_vendor.e({
@@ -147,15 +164,14 @@ const _sfc_main = {
       } : {
         h: previewMedia.value.src
       }, {
-        i: common_vendor.o(prevMedia),
-        j: common_vendor.o(nextMedia),
-        k: _ctx.isVideoFullscreen ? 1 : "",
-        l: common_vendor.o(handlePreviewModalClick)
+        i: _ctx.isVideoFullscreen ? 1 : "",
+        j: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        m: showPreview.value ? 1 : ""
+        k: showPreview.value ? 1 : ""
       });
     };
   }
 };
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-230f088e"]]);
+_sfc_main.__runtimeHooks = 7;
 wx.createPage(MiniProgramPage);

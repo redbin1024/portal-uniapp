@@ -1,6 +1,7 @@
 
 .content-img {
   width: 750rpx;
+  margin-top: 150rpx;
 }
 .content-img image {
   width: 100%;
@@ -14,4 +15,71 @@
 .service-description text {
   font-size: 28rpx;
   color: #333;
+}
+.header {
+  padding: 110rpx 0rpx 30rpx 0rpx;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  transition: background-color 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10rpx);
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+.header-with-bg {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10rpx);
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.headLogo {
+  border-radius: 100rpx;
+  width: 62rpx;
+  height: 62rpx;
+  position: absolute;
+}
+.logo {
+  width: 100%;
+  height: 100%;
+}
+.title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #313131;
+  margin: 0 auto;
+}
+.btns {
+  background: #fff;
+  width: 100%;
+  padding: 20rpx 0 50rpx 0;
+  position: fixed;
+  bottom: 0;
+}
+.btn {
+  background: #2f6cf4;
+  color: #fff;
+  font-size: 32rpx;
+  width: 90vw;
+  height: 88rpx;
+  text-align: center;
+  line-height: 88rpx;
+  border-radius: 20rpx;
+  margin: 20rpx 0 20rpx 5vw;
+}
+.viewmore {
+  display: flex;
+  justify-content: center;
+  background: #f3f5fb;
+  border-radius: 8rpx;
+  width: 100%;
+  height: 72rpx;
+  color: #313131;
+  font-size: 30rpx;
+  line-height: 72rpx;
+  margin: 28rpx 0 60rpx 0;
 }

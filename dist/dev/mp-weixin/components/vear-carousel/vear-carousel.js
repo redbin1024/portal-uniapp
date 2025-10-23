@@ -169,7 +169,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         m: common_vendor.o((...args) => $options.onVideoEnded && $options.onVideoEnded(...args), item[$props.urlKey] || item.id),
         n: common_vendor.o((...args) => $options.onVideoError && $options.onVideoError(...args), item[$props.urlKey] || item.id),
         o: common_vendor.o((...args) => $options.onFullscreenChange && $options.onFullscreenChange(...args), item[$props.urlKey] || item.id),
-        p: common_vendor.o(($event) => $options.onMediaClick(item.src, index, "video"), item[$props.urlKey] || item.id)
+        p: common_vendor.o(($event) => $options.onVideoClick(index), item[$props.urlKey] || item.id)
       } : {
         q: common_vendor.n($data.currentIndex == index ? "item-img" : "item-img-side"),
         r: item[$props.urlKey] || item.src,

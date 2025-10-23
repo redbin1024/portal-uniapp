@@ -41,7 +41,7 @@ text.data-v-d3baa155 {
 .dynamic-item.data-v-d3baa155 {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 90rpx;
+  margin-bottom: 20rpx;
   position: relative;
   min-height: auto;
   width: 100%;
@@ -87,7 +87,20 @@ text.data-v-d3baa155 {
   font-weight: bold;
   transform: translateY(20rpx);
   opacity: 0;
-  transition: all 0.6s ease-out 0.4s;
+  transition: transform 0.6s ease-out 0.4s, opacity 0.6s ease-out 0.4s;
+  display: -webkit-box;
+  display: box;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  line-height: 36rpx;
+  max-height: 72rpx; /* 精确控制为两行的高度 (28rpx字体大小 + 8rpx行间距) * 2 */
+  /* 强制保持两行显示，即使在动画过程中 */
+  height: 72rpx;
 }
 .dynamic-text.data-v-d3baa155 {
   font-size: 24rpx;
@@ -96,6 +109,13 @@ text.data-v-d3baa155 {
   transform: translateY(20rpx);
   opacity: 0;
   transition: all 0.6s ease-out 0.5s;
+  margin-top: 15rpx;
+  /* 添加以下属性使文本显示两行 */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* 左侧内容子元素动画 */
@@ -233,15 +253,15 @@ text.data-v-d3baa155 {
   justify-content: flex-start;
 }
 .title.data-v-d3baa155 {
-  height: 80rpx;
-  line-height: 90rpx;
-  font-size: 40rpx;
+  height: 90rpx;
+  line-height: 130rpx;
+  font-size: 34rpx;
   font-weight: 600;
   color: #000000;
   margin-bottom: 12rpx;
 }
 .description.data-v-d3baa155 {
-  font-size: 24rpx;
+  font-size: 28rpx;
   color: #7e7f80;
   line-height: 1.5;
   word-break: break-all;
@@ -282,10 +302,15 @@ text.data-v-d3baa155 {
 /* 查看更多按钮样式 */
 .view-more-btn.data-v-d3baa155 {
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin: 40rpx 26rpx 0;
-  padding: 20rpx 0;
+  background: #f3f5fb;
+  border-radius: 8rpx;
+  width: 100%;
+  height: 88rpx;
+  color: #313131;
+  font-size: 30rpx;
+  line-height: 88rpx;
+  margin: 0rpx 0 20rpx 0;
   cursor: pointer;
   opacity: 0;
   transform: translateY(20rpx);
@@ -317,15 +342,26 @@ text.data-v-d3baa155 {
 .content-img image.data-v-d3baa155 {
   width: 100%;
 }
-.consult.data-v-d3baa155 {
-  background: #2c80ff;
-  width: 90%;
-  height: 80rpx;
-  border-radius: 8rpx;
-  color: #ffffff;
+.btn.data-v-d3baa155 {
+  background: #2f6cf4;
+  color: #fff;
   font-size: 32rpx;
-  font-weight: bold;
+  width: 90vw;
+  height: 88rpx;
   text-align: center;
-  line-height: 80rpx;
-  margin: 50rpx 0 50rpx 5%;
+  line-height: 88rpx;
+  border-radius: 20rpx;
+  margin: 20rpx 0 20rpx 5vw;
+}
+.viewmore.data-v-d3baa155 {
+  display: flex;
+  justify-content: center;
+  background: #f3f5fb;
+  border-radius: 8rpx;
+  width: 100%;
+  height: 72rpx;
+  color: #313131;
+  font-size: 30rpx;
+  line-height: 72rpx;
+  margin: 28rpx 0 60rpx 0;
 }

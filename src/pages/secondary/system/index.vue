@@ -5,9 +5,10 @@
     </view>
     <view class="videoTitle">
       <view class="videoTitle1">{{ enterpriseList.enterpriseName }}</view>
-      <view class="videoTitle2">{{
-        enterpriseList.enterpriseDescription
-      }}</view>
+      <view
+        class="videoTitle2"
+        v-html="enterpriseList.enterpriseDescription"
+      ></view>
     </view>
     <view class="head">
       <view>

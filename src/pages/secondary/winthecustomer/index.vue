@@ -71,7 +71,7 @@
         </view>
       </view>
       <!-- 查看更多按钮 -->
-      <view
+      <!-- <view
         class="view-more-btn"
         :class="{ 'view-more-animate': showDynamicViewMoreBtn }"
         v-show="showDynamicViewMoreBtn"
@@ -79,11 +79,24 @@
       >
         <text class="view-more-text">查看更多</text>
         <text class="arrow-right">→</text>
+      </view> -->
+      <view
+        class="view-more-btn"
+        :class="{ 'view-more-animate': showDynamicViewMoreBtn }"
+        v-show="showDynamicViewMoreBtn"
+        @click="goToRecentUpdates"
+      >
+        <view>查看更多</view>
+        <view>></view>
       </view>
     </view>
 
     <view class="container">
-      <view class="container-title">成功案例</view>
+      <!-- <view class="container-title">成功案例</view> -->
+      <view class="dynamic-title2" style="margin-bottom: 60rpx">
+        <view class="dynamic-title">商家案例</view>
+        <view class="dynamic-title1">Merchant Case</view>
+      </view>
       <view
         class="list-item"
         v-for="(item, index) in successCaseList"
@@ -105,7 +118,7 @@
         </view>
       </view>
       <!-- 查看更多按钮 -->
-      <view
+      <!-- <view
         class="view-more-btn"
         :class="{ 'view-more-animate': showCaseViewMoreBtn }"
         v-show="showCaseViewMoreBtn"
@@ -113,13 +126,45 @@
       >
         <text class="view-more-text">查看更多</text>
         <text class="arrow-right">→</text>
+      </view> -->
+      <view
+        class="view-more-btn"
+        :class="{ 'view-more-animate': showCaseViewMoreBtn }"
+        v-show="showCaseViewMoreBtn"
+        @click="goToCooperationcase"
+      >
+        <view>查看更多</view>
+        <view>></view>
       </view>
     </view>
     <view class="content-container">
       <view class="content-img">
-        <rich-text class="activity" :nodes="richText" type="text"></rich-text>
+        <rich-text
+          class="activity"
+          :nodes="richText"
+          type="text"
+          @itemclick="onRichTextItemClick"
+        ></rich-text>
       </view>
-      <view class="consult">立即咨询</view>
+      <view class="btn">
+        <button
+          show-message-card="true"
+          open-type="contact"
+          bindcontact="handleContact"
+          style="
+            background: #2f6cf4;
+            color: #fff;
+            font-size: 32rpx;
+            width: 90vw;
+            height: 88rpx;
+            text-align: center;
+            line-height: 85rpx;
+            border-radius: 20rpx;
+          "
+        >
+          联系我们
+        </button>
+      </view>
     </view>
   </scroll-view>
 </template>
@@ -283,14 +328,127 @@ const fetchServiceList = async () => {
   }
 };
 // 方法定义
-const processContent = (content) => {
-  // 处理图片样式
-  richText.value = content
-    .replace(/<img[^>]*>/gi, function (match, capture) {
-      return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
-    })
-    .replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
+// 添加用于存储富文本中图片的数组
+const richTextImages = ref([]);
+
+// 添加图片预览方法
+const handleRichTextTap = (event) => {
+  // 检查点击的是否是图片
+  if (
+    event?.target?.tagName === "IMG" ||
+    event?.currentTarget?.dataset?.tag === "img"
+  ) {
+    // 获取图片在富文本中的索引
+    let index = 0;
+
+    // 尝试从 dataset 获取索引
+    if (event?.target?.dataset?.index !== undefined) {
+      index = parseInt(event.target.dataset.index);
+    } else if (event?.currentTarget?.dataset?.index !== undefined) {
+      index = parseInt(event.currentTarget.dataset.index);
+    } else {
+      // 如果无法从 dataset 获取索引，则尝试通过 src 匹配
+      const src = event?.target?.src || event?.currentTarget?.src;
+      if (src) {
+        const foundIndex = richTextImages.value.findIndex(
+          (imgSrc) => imgSrc === src
+        );
+        if (foundIndex !== -1) {
+          index = foundIndex;
+        } else {
+          // 尝试解码后匹配
+          try {
+            const decodedSrc = decodeURIComponent(src);
+            const decodedIndex = richTextImages.value.findIndex(
+              (imgSrc) => imgSrc === decodedSrc
+            );
+            if (decodedIndex !== -1) {
+              index = decodedIndex;
+            }
+          } catch (e) {
+            console.log("Decode URI failed:", e);
+          }
+        }
+      }
+    }
+
+    // 使用 uni.previewImage 预览图片
+    if (richTextImages.value.length > 0) {
+      uni.previewImage({
+        urls: richTextImages.value,
+        current: index,
+      });
+    }
+  }
 };
+
+// 添加处理富文本中图片点击的函数
+const onRichTextItemClick = (event) => {
+  // 检查点击的是否是图片
+  if (event.detail?.src) {
+    // 查找点击图片在图片数组中的索引
+    const clickedSrc = event.detail.src;
+    let index = richTextImages.value.findIndex(
+      (imgSrc) => imgSrc === clickedSrc
+    );
+
+    // 如果没有找到，尝试解码后再次查找
+    if (index === -1) {
+      try {
+        const decodedSrc = decodeURIComponent(clickedSrc);
+        index = richTextImages.value.findIndex(
+          (imgSrc) => imgSrc === decodedSrc
+        );
+      } catch (e) {
+        console.log("Decode URI failed:", e);
+      }
+    }
+
+    // 如果还是没有找到，则使用默认索引0
+    if (index === -1) {
+      index = 0;
+    }
+
+    // 使用 uni.previewImage 预览图片
+    if (richTextImages.value.length > 0) {
+      uni.previewImage({
+        urls: richTextImages.value,
+        current: index,
+      });
+    }
+  }
+};
+
+// 修改 processContent 方法，在图片标签中添加标识
+const processContent = (content) => {
+  // 提取图片链接
+  const imgSrcRegex = /<img[^>]*src=['"]([^'"]+)['"][^>]*>/gi;
+  let match;
+  const images = [];
+
+  // 提取所有图片链接
+  while ((match = imgSrcRegex.exec(content)) !== null) {
+    console.log("提取到的图片链接:", match[1]);
+    images.push(match[1]);
+  }
+
+  richTextImages.value = images;
+
+  // 处理图片样式并在图片标签中添加标识
+  let imgIndex = 0;
+  richText.value = content.replace(/<img[^>]*>/gi, function (match) {
+    // 移除原有的样式
+    match = match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
+    // 添加索引标识和样式
+    const result = match.replace(
+      /<img/gi,
+      `<img data-index="${imgIndex}" style="width:100%;height:auto;display:block;"`
+    );
+    imgIndex++;
+    return result;
+  });
+};
+
 //查询公司动态列表
 const fetchsuccessCaseList = async () => {
   try {
@@ -315,6 +473,12 @@ const fetchsuccessCaseList = async () => {
     });
   }
 };
+// 文字截取函数
+const truncateText = (text, maxLength) => {
+  if (!text) return "";
+  return text.length > maxLength ? text.substring(0, maxLength) : text;
+};
+
 //查询公司动态列表
 const fetchCompanyNewsList = async () => {
   try {
@@ -330,7 +494,13 @@ const fetchCompanyNewsList = async () => {
       Array.isArray(response.rows) &&
       response.rows.length > 0
     ) {
-      companyNewsList.value = response.rows;
+      // 对数据进行文字截取处理
+      const processedData = response.rows.map((item) => ({
+        ...item,
+        newsTitle: truncateText(item.newsTitle, 21), // 截取23个字符
+        newsContent: truncateText(item.newsContent, 24), // 截取26个字符
+      }));
+      companyNewsList.value = processedData;
     }
   } catch (error) {
     console.error("获取企业列表失败:", error);
@@ -420,6 +590,24 @@ const goToCooperationcase = () => {
   });
 };
 
+// 添加小程序分享给好友功能
+const onShareAppMessage = (res) => {
+  return {
+    title: "合作商家",
+    path: "/pages/secondary/winthecustomer/index",
+    imageUrl: "", // 可以设置默认分享封面图
+  };
+};
+
+// 添加小程序分享到朋友圈功能
+const onShareTimeline = () => {
+  return {
+    title: "合作商家",
+    query: "",
+    imageUrl: "", // 可以设置默认分享封面图
+  };
+};
+
 // scroll-view 滚动事件处理
 const onScroll = (e) => {
   // 滚动时检查list-item可见性
@@ -472,29 +660,19 @@ const checkDynamicItemVisibility = () => {
     .boundingClientRect((rects) => {
       if (rects && rects.length > 0) {
         rects.forEach((rect, index) => {
-          uni.getSystemInfo({
-            success: (res) => {
-              const windowHeight = res.windowHeight;
-              // 当元素进入视窗时触发动画，提前触发点让动画更自然
-              if (rect.top < windowHeight * 0.85 && rect.bottom > 0) {
-                // 为每个dynamic-item元素添加动画效果
-                setTimeout(() => {
-                  if (!visibleDynamicItems.value.includes(index)) {
-                    visibleDynamicItems.value.push(index);
-                  }
-                  // 当所有动态内容项都显示完成后，显示查看更多按钮
-                  if (
-                    visibleDynamicItems.value.length ===
-                    companyNewsList.value.length
-                  ) {
-                    setTimeout(() => {
-                      showDynamicViewMoreBtn.value = true;
-                    }, 500); // 延迟500ms显示按钮，让动画更自然
-                  }
-                }, index * 200); // 每个元素间隔200ms，让动画更流畅
-              }
-            },
-          });
+          setTimeout(() => {
+            if (!visibleDynamicItems.value.includes(index)) {
+              visibleDynamicItems.value.push(index);
+            }
+            // 当所有动态内容项都显示完成后，显示查看更多按钮
+            if (
+              visibleDynamicItems.value.length === companyNewsList.value.length
+            ) {
+              setTimeout(() => {
+                showDynamicViewMoreBtn.value = true;
+              }, 500); // 延迟500ms显示按钮，让动画更自然
+            }
+          }, index * 200); // 每个元素间隔200ms，让动画更流畅
         });
       }
     })
@@ -548,11 +726,12 @@ const onSlideshowChange = (event) => {
 // 生命周期钩子
 onMounted(() => {
   // 初始化时检查list-item可见性
+  // 直接显示所有动态内容项，不依赖滚动检测
   setTimeout(() => {
+    checkDynamicItemVisibility();
     checkListItemVisibility();
-    // 直接显示所有动态内容项，不依赖滚动检测
-    showAllDynamicItems();
-  }, 100);
+  }, 500); // 延迟500ms，确保页面元素已渲染完成
+  showAllDynamicItems();
   fetchcaseList(); // 暂时注释掉，因为当前页面主要显示服务信息
   fetchCompanyNewsList();
   fetchsuccessCaseList();
@@ -626,7 +805,7 @@ text {
 .dynamic-item {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 90rpx;
+  margin-bottom: 20rpx;
   position: relative;
   min-height: auto;
   width: 100%;
@@ -677,7 +856,20 @@ text {
   font-weight: bold;
   transform: translateY(20rpx);
   opacity: 0;
-  transition: all 0.6s ease-out 0.4s;
+  transition: transform 0.6s ease-out 0.4s, opacity 0.6s ease-out 0.4s;
+  display: -webkit-box;
+  display: box;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  line-height: 36rpx;
+  max-height: 72rpx; /* 精确控制为两行的高度 (28rpx字体大小 + 8rpx行间距) * 2 */
+  /* 强制保持两行显示，即使在动画过程中 */
+  height: 72rpx;
 }
 
 .dynamic-text {
@@ -687,6 +879,13 @@ text {
   transform: translateY(20rpx);
   opacity: 0;
   transition: all 0.6s ease-out 0.5s;
+  margin-top: 15rpx;
+  /* 添加以下属性使文本显示两行 */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* 左侧内容子元素动画 */
@@ -837,16 +1036,16 @@ text {
 }
 
 .title {
-  height: 80rpx;
-  line-height: 90rpx;
-  font-size: 40rpx;
+  height: 90rpx;
+  line-height: 130rpx;
+  font-size: 34rpx;
   font-weight: 600;
   color: #000000;
   margin-bottom: 12rpx;
 }
 
 .description {
-  font-size: 24rpx;
+  font-size: 28rpx;
   color: #7e7f80;
   line-height: 1.5;
   word-break: break-all;
@@ -892,10 +1091,15 @@ text {
 /* 查看更多按钮样式 */
 .view-more-btn {
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin: 40rpx 26rpx 0;
-  padding: 20rpx 0;
+  background: #f3f5fb;
+  border-radius: 8rpx;
+  width: 100%;
+  height: 88rpx;
+  color: #313131;
+  font-size: 30rpx;
+  line-height: 88rpx;
+  margin: 0rpx 0 20rpx 0;
   cursor: pointer;
   opacity: 0;
   transform: translateY(20rpx);
@@ -930,16 +1134,27 @@ text {
 .content-img image {
   width: 100%;
 }
-.consult {
-  background: #2c80ff;
-  width: 90%;
-  height: 80rpx;
-  border-radius: 8rpx;
-  color: #ffffff;
+.btn {
+  background: #2f6cf4;
+  color: #fff;
   font-size: 32rpx;
-  font-weight: bold;
+  width: 90vw;
+  height: 88rpx;
   text-align: center;
-  line-height: 80rpx;
-  margin: 50rpx 0 50rpx 5%;
+  line-height: 88rpx;
+  border-radius: 20rpx;
+  margin: 20rpx 0 20rpx 5vw;
+}
+.viewmore {
+  display: flex;
+  justify-content: center;
+  background: #f3f5fb;
+  border-radius: 8rpx;
+  width: 100%;
+  height: 72rpx;
+  color: #313131;
+  font-size: 30rpx;
+  line-height: 72rpx;
+  margin: 28rpx 0 60rpx 0;
 }
 </style>

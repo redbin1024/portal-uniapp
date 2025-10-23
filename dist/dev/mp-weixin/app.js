@@ -25,6 +25,7 @@ if (!Math) {
   "./pages/api-test/index.js";
   "./pages/firmdynamicdetails/index.js";
   "./pages/secondary/businesspartner/index.js";
+  "./pages/secondary/index/index.js";
 }
 const _sfc_main = {
   name: "App",

@@ -44,6 +44,7 @@
                 :src="item"
                 class="banner-video"
                 :autoplay="index === currentIndex"
+                :muted="true"
                 controls
                 object-fit="cover"
                 @click="onMediaClick(item, index, 'video')"
@@ -84,17 +85,42 @@
             v-for="(item, index) in caseDataList"
             :key="index"
           >
-            <video
+            <!-- <video
               :id="'bannerVideo' + index"
               :src="item"
               class="banner-video"
-              :autoplay="index === currentIndex"
-              :muted="true"
+              :autoplay="false"
+              :muted="false"
               controls
               object-fit="cover"
               @click="onMediaClick(item, index, 'video')"
               style="border-radius: 20rpx"
+            /> -->
+            <video
+              :id="'bannerVideo' + index"
+              :src="item"
+              class="banner-video"
+              :autoplay="false"
+              :muted="false"
+              :controls="true"
+              :show-center-play-btn="false"
+              :show-play-btn="false"
+              :show-fullscreen-btn="false"
+              @fullscreenchange="onVideoFullscreenChange($event, index)"
+              style="border-radius: 20rpx"
+              object-fit="cover"
             />
+            <!-- 自定义播放按钮 -->
+            <view
+              v-if="videoFullscreenIndex !== index"
+              class="custom-play-button"
+              @click="playVideo(index)"
+            >
+              <image
+                src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
+                class="play-icon"
+              />
+            </view>
           </view>
         </view>
         <view class="viewmore" @click="viewmore">
@@ -105,7 +131,10 @@
           class="businesspartnernew-image"
           @click="previewSingleImage(enterpriseList.bannerImages[0])"
         >
-          <image :src="enterpriseList.bannerImages[0]"></image>
+          <image
+            :src="enterpriseList.bannerImages[0]"
+            mode="aspectFill"
+          ></image>
         </view>
       </view>
       <view id="win-the-customer">
@@ -316,7 +345,7 @@
           class="preview-image"
           mode="aspectFit"
         />
-        <view class="arrows">
+        <!-- <view class="arrows">
           <view class="leftarrows" @click.stop="prevMedia"
             ><image
               src="http://cdn.xiaodingdang1.com/2025/09/29/936dbb6c2ac74e06a550872104bd2231.png"
@@ -327,17 +356,29 @@
               src="http://cdn.xiaodingdang1.com/2025/09/29/3a9d97e8cbf947aaa810020e259a23b8.png"
             ></image
           ></view>
-        </view>
+        </view> -->
       </view>
     </view>
 
     <!-- 客服按钮 -->
     <view class="customer-service-btn">
-      <image
-        src="http://cdn.xiaodingdang1.com/2025/09/29/84932e513ebd49d093825177c28edf83.png"
-        mode="aspectFit"
-        @click="handleCustomerServiceClick"
-      />
+      <button
+        open-type="contact"
+        style="
+          padding: 0;
+          background: none;
+          width: 160rpx;
+          height: 160rpx;
+          overflow: hidden;
+          cursor: pointer;
+        "
+      >
+        <image
+          src="http://cdn.xiaodingdang1.com/2025/09/29/84932e513ebd49d093825177c28edf83.png"
+          mode="aspectFit"
+          @click="handleCustomerServiceClick"
+        />
+      </button>
     </view>
   </view>
 </template>
@@ -363,6 +404,9 @@ const viewmore = () => {
   uni.navigateTo({
     url: "/pages/secondary/businesspartner/index",
   });
+};
+const handleFullScreenChange = (e) => {
+  console.log("全屏状态改变:", e.detail.fullScreen); // e.detail.fullScreen 为 true 表示进入全屏，为 false 表示退出全屏
 };
 //查询商家案例列表
 const caseList = async () => {
@@ -663,6 +707,71 @@ const onSwiperChange = (e) => {
 const goToSlide = (index) => {
   currentIndex.value = index;
 };
+let videoContext = null;
+// 播放视频
+const playVideo = (index) => {
+  // 暂停所有其他视频
+  for (let i = 0; i < caseDataList.value.length; i++) {
+    if (i !== index) {
+      const otherVideoContext = uni.createVideoContext("bannerVideo" + i);
+      otherVideoContext.pause();
+    }
+  }
+
+  // 播放当前选中的视频并全屏
+  videoContext = uni.createVideoContext("bannerVideo" + index);
+  videoContext.play(); // 先播放视频
+
+  // 延迟进入全屏，确保视频已经开始播放
+  setTimeout(() => {
+    videoContext.requestFullScreen({ direction: 0 });
+    // 设置当前全屏视频索引
+    videoFullscreenIndex.value = index;
+
+    // 再次延迟确保全屏状态已触发
+    setTimeout(() => {
+      videoFullscreenIndex.value = index;
+      console.log("强制设置全屏视频索引:", index);
+    }, 200);
+  }, 100);
+};
+
+// 当前全屏播放的视频索引
+const videoFullscreenIndex = ref(-1);
+
+// 监听视频全屏状态变化
+const onVideoFullscreenChange = (e, index) => {
+  console.log("视频全屏状态变化:", e.detail.fullScreen, "索引:", index);
+  if (e.detail.fullScreen) {
+    // 进入全屏，记录当前视频索引
+    videoFullscreenIndex.value = index;
+    // 多次延迟强制更新视图，确保按钮显示
+    setTimeout(() => {
+      videoFullscreenIndex.value = index;
+      console.log("第一次更新:", index);
+    }, 100);
+    setTimeout(() => {
+      videoFullscreenIndex.value = index;
+      console.log("第二次更新:", index);
+    }, 300);
+    setTimeout(() => {
+      videoFullscreenIndex.value = index;
+      console.log("第三次更新:", index);
+    }, 500);
+  } else {
+    // 退出全屏，重置索引
+    videoContext.stop();
+    videoFullscreenIndex.value = -1;
+    console.log("退出全屏");
+  }
+};
+// 退出视频全屏
+const exitFullscreen = (index) => {
+  videoContext = uni.createVideoContext("bannerVideo" + index);
+  videoContext.exitFullScreen();
+  videoContext.pause();
+  videoFullscreenIndex.value = -1;
+};
 
 // 媒体预览相关状态
 const showPreview = ref(false);
@@ -901,6 +1010,24 @@ const getSecondRowPartners = (partners) => {
 };
 
 onPageScroll((e) => {});
+
+// 添加小程序分享功能
+const onShareAppMessage = (res) => {
+  return {
+    title: enterpriseList.value.enterpriseName || "天天拓客",
+    path: "/pages/secondary/homepage/index",
+    imageUrl: enterpriseList.value.enterpriseLogo || "", // 分享封面图片
+  };
+};
+
+// 添加朋友圈分享功能
+const onShareTimeline = () => {
+  return {
+    title: enterpriseList.value.enterpriseName || "天天拓客",
+    query: "",
+    imageUrl: enterpriseList.value.enterpriseLogo || "",
+  };
+};
 </script>
 
 <style lang="scss" scoped>
@@ -917,7 +1044,7 @@ onPageScroll((e) => {});
 }
 .container {
   width: 100%;
-  height: 600rpx;
+  height: 750rpx;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1179,7 +1306,7 @@ onPageScroll((e) => {});
 
 .certificate {
   background: #f4f5fa;
-  padding: 30rpx 26rpx;
+  padding: 40rpx 26rpx;
   // margin-top: 38rpx;
 }
 .certificate-title {
@@ -1190,7 +1317,7 @@ onPageScroll((e) => {});
   padding: 0 49rpx;
 }
 .certificate-list {
-  margin-top: 40rpx;
+  margin-top: 20rpx;
 }
 
 .certificate-scroll-container {
@@ -1228,6 +1355,7 @@ onPageScroll((e) => {});
   display: flex;
   flex-direction: column;
   margin: 16rpx 16rpx;
+  border-radius: 12rpx;
   &:last-child {
     margin-right: 49rpx;
   }
@@ -1236,6 +1364,7 @@ onPageScroll((e) => {});
   width: 100%;
   height: 265rpx;
   object-fit: cover;
+  border-radius: 12rpx;
 }
 /**合作商 */
 .businesspartner {
@@ -1407,9 +1536,9 @@ onPageScroll((e) => {});
   padding: 0 0rpx 50rpx 0rpx;
 }
 .winthecustomer-content1 {
-  width: calc(49% - 10rpx);
+  width: calc(49% - 6rpx);
   background: #f2f6ff;
-  margin-top: 38rpx;
+  margin-top: 8rpx;
   border-radius: 20rpx;
 }
 .winthecustomer-content1 image {
@@ -1523,6 +1652,23 @@ wx-button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* 隐藏视频控件 */
+  /* 移除所有可能的控制条 */
+  ::-webkit-media-controls-panel {
+    display: none !important;
+  }
+  ::-webkit-media-controls-play-button {
+    display: none !important;
+  }
+  ::-webkit-media-controls {
+    display: none !important;
+  }
+  video::-webkit-media-controls {
+    display: none !important;
+  }
+  video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+  }
 }
 
 .media-overlay {
@@ -1539,8 +1685,8 @@ wx-button {
 }
 
 .play-icon {
-  width: 80rpx;
-  height: 80rpx;
+  width: 60rpx;
+  height: 60rpx;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1619,36 +1765,41 @@ wx-button {
 .customer-service-btn {
   position: fixed;
   right: 0;
-  bottom: 200rpx;
+  bottom: 280rpx;
   width: 160rpx;
   height: 160rpx;
   z-index: 999;
   cursor: pointer;
+  background-color: transparent !important;
+  border: none !important;
 }
 
 .customer-service-btn image {
-  width: 160rpx;
-  height: 160rpx;
+  width: 100%;
+  height: 100%;
 }
-
+wx-button:after {
+  border: none !important;
+}
 /**合作商家 */
 .businesspartnernew {
   background: #ffffff;
-  margin-top: -20rpx;
   border-top-right-radius: 52rpx;
   border-top-left-radius: 52rpx;
   padding: 46rpx 26rpx;
+  margin-top: 100rpx;
 }
 .businesspartnernew-content {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 9px;
   margin-top: 24rpx;
 }
 .businesspartnernew-item {
   width: 224rpx;
   height: 340rpx;
   border-radius: 20rpx;
+  position: relative;
 }
 .businesspartnernew-image {
   width: 100%;
@@ -1664,10 +1815,82 @@ wx-button {
   background: #f3f5fb;
   border-radius: 8rpx;
   width: 100%;
-  height: 72rpx;
+  height: 88rpx;
   color: #313131;
   font-size: 30rpx;
-  line-height: 72rpx;
+  line-height: 88rpx;
   margin: 28rpx 0 60rpx 0;
+}
+
+/* 自定义播放按钮样式 */
+.custom-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  border-radius: 50%;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.custom-play-button:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(255, 255, 255, 1);
+}
+
+.custom-play-button .play-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* 全屏返回按钮样式 */
+.video-fullscreen-back-btn {
+  position: fixed !important;
+  top: 80rpx !important;
+  left: 40rpx !important;
+  z-index: 999999 !important;
+  width: 80rpx !important;
+  height: 80rpx !important;
+  border-radius: 50% !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  transition: all 0.3s ease;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.3) !important;
+  animation: fadeIn 0.3s ease-in-out;
+  transform: translate3d(0, 0, 0) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.video-fullscreen-back-btn:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.video-fullscreen-back-btn .back-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.close-icon {
+  width: 30rpx;
+  height: 30rpx;
 }
 </style>

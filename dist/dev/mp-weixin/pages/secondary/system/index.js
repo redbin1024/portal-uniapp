@@ -174,7 +174,7 @@ const _sfc_main = {
       return {
         a: bannerImages.value,
         b: common_vendor.t(enterpriseList.value.enterpriseName),
-        c: common_vendor.t(enterpriseList.value.enterpriseDescription),
+        c: enterpriseList.value.enterpriseDescription,
         d: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage[0],

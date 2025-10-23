@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "获客工具",
-  "navigationBarBackgroundColor": "#ffffff",
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "",
   "usingComponents": {}
 }

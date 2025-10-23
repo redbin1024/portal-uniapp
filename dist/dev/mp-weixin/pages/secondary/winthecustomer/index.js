@@ -1,4 +1,23 @@
 "use strict";
+var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var __async = (__this, __arguments, generator) => {
   return new Promise((resolve, reject) => {
     var fulfilled = (value) => {
@@ -134,10 +153,54 @@ const _sfc_main = {
         });
       }
     });
+    const richTextImages = common_vendor.ref([]);
+    const onRichTextItemClick = (event) => {
+      var _a;
+      if ((_a = event.detail) == null ? void 0 : _a.src) {
+        const clickedSrc = event.detail.src;
+        let index = richTextImages.value.findIndex(
+          (imgSrc) => imgSrc === clickedSrc
+        );
+        if (index === -1) {
+          try {
+            const decodedSrc = decodeURIComponent(clickedSrc);
+            index = richTextImages.value.findIndex(
+              (imgSrc) => imgSrc === decodedSrc
+            );
+          } catch (e) {
+            console.log("Decode URI failed:", e);
+          }
+        }
+        if (index === -1) {
+          index = 0;
+        }
+        if (richTextImages.value.length > 0) {
+          common_vendor.index.previewImage({
+            urls: richTextImages.value,
+            current: index
+          });
+        }
+      }
+    };
     const processContent = (content) => {
-      richText.value = content.replace(/<img[^>]*>/gi, function(match, capture) {
-        return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
-      }).replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
+      const imgSrcRegex = /<img[^>]*src=['"]([^'"]+)['"][^>]*>/gi;
+      let match;
+      const images = [];
+      while ((match = imgSrcRegex.exec(content)) !== null) {
+        console.log("提取到的图片链接:", match[1]);
+        images.push(match[1]);
+      }
+      richTextImages.value = images;
+      let imgIndex = 0;
+      richText.value = content.replace(/<img[^>]*>/gi, function(match2) {
+        match2 = match2.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
+        const result = match2.replace(
+          /<img/gi,
+          `<img data-index="${imgIndex}" style="width:100%;height:auto;display:block;"`
+        );
+        imgIndex++;
+        return result;
+      });
     };
     const fetchsuccessCaseList = () => __async(this, null, function* () {
       try {
@@ -157,6 +220,11 @@ const _sfc_main = {
         });
       }
     });
+    const truncateText = (text, maxLength) => {
+      if (!text)
+        return "";
+      return text.length > maxLength ? text.substring(0, maxLength) : text;
+    };
     const fetchCompanyNewsList = () => __async(this, null, function* () {
       try {
         const response = yield api_activity.getCompanyNewsList({
@@ -166,7 +234,13 @@ const _sfc_main = {
         });
         console.log("企业列表数据:", response);
         if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
-          companyNewsList.value = response.rows;
+          const processedData = response.rows.map((item) => __spreadProps(__spreadValues({}, item), {
+            newsTitle: truncateText(item.newsTitle, 21),
+            // 截取23个字符
+            newsContent: truncateText(item.newsContent, 24)
+            // 截取26个字符
+          }));
+          companyNewsList.value = processedData;
         }
       } catch (error) {
         console.error("获取企业列表失败:", error);
@@ -279,23 +353,16 @@ const _sfc_main = {
       query.selectAll(".dynamic-item").boundingClientRect((rects) => {
         if (rects && rects.length > 0) {
           rects.forEach((rect, index) => {
-            common_vendor.index.getSystemInfo({
-              success: (res) => {
-                const windowHeight = res.windowHeight;
-                if (rect.top < windowHeight * 0.85 && rect.bottom > 0) {
-                  setTimeout(() => {
-                    if (!visibleDynamicItems.value.includes(index)) {
-                      visibleDynamicItems.value.push(index);
-                    }
-                    if (visibleDynamicItems.value.length === companyNewsList.value.length) {
-                      setTimeout(() => {
-                        showDynamicViewMoreBtn.value = true;
-                      }, 500);
-                    }
-                  }, index * 200);
-                }
+            setTimeout(() => {
+              if (!visibleDynamicItems.value.includes(index)) {
+                visibleDynamicItems.value.push(index);
               }
-            });
+              if (visibleDynamicItems.value.length === companyNewsList.value.length) {
+                setTimeout(() => {
+                  showDynamicViewMoreBtn.value = true;
+                }, 500);
+              }
+            }, index * 200);
           });
         }
       }).exec();
@@ -325,9 +392,10 @@ const _sfc_main = {
     };
     common_vendor.onMounted(() => {
       setTimeout(() => {
+        checkDynamicItemVisibility();
         checkListItemVisibility();
-        showAllDynamicItems();
-      }, 100);
+      }, 500);
+      showAllDynamicItems();
       fetchcaseList();
       fetchCompanyNewsList();
       fetchsuccessCaseList();
@@ -387,11 +455,12 @@ const _sfc_main = {
         g: showCaseViewMoreBtn.value,
         h: common_vendor.o(goToCooperationcase),
         i: richText.value,
-        j: common_vendor.o(onScroll)
+        j: common_vendor.o(onRichTextItemClick),
+        k: common_vendor.o(onScroll)
       };
     };
   }
 };
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-d3baa155"]]);
-_sfc_main.__runtimeHooks = 1;
+_sfc_main.__runtimeHooks = 7;
 wx.createPage(MiniProgramPage);
