@@ -281,6 +281,49 @@ const _sfc_main = {
       // 'image' 或 'video'
       index: 0
     });
+    const handleLongPressQrCode = () => {
+      if (!enterpriseList.value.qrCode) {
+        common_vendor.index.showToast({
+          title: "二维码不存在",
+          icon: "none"
+        });
+        return;
+      }
+      common_vendor.index.downloadFile({
+        url: enterpriseList.value.qrCode,
+        success: (downloadRes) => {
+          if (downloadRes.statusCode === 200) {
+            common_vendor.index.saveImageToPhotosAlbum({
+              filePath: downloadRes.tempFilePath,
+              success: () => {
+                common_vendor.index.showToast({
+                  title: "二维码保存相册成功",
+                  icon: "none",
+                  duration: 1500
+                });
+              },
+              fail: () => {
+                common_vendor.index.showToast({
+                  title: "保存失败，请检查相册权限",
+                  icon: "none"
+                });
+              }
+            });
+          } else {
+            common_vendor.index.showToast({
+              title: "下载失败",
+              icon: "none"
+            });
+          }
+        },
+        fail: () => {
+          common_vendor.index.showToast({
+            title: "下载失败",
+            icon: "none"
+          });
+        }
+      });
+    };
     const getVideoPoster = (videoUrl) => {
       if (typeof videoUrl !== "string") {
         console.warn("videoUrl is not a string:", videoUrl);
@@ -402,23 +445,24 @@ const _sfc_main = {
         m: common_vendor.t(enterpriseList.value.enterpriseAddress),
         n: common_vendor.t(enterpriseList.value.contactPhone),
         o: enterpriseList.value.qrCode,
-        p: `url(${enterpriseList.value.enterpriseLogo})`,
-        q: showPreview.value
+        p: common_vendor.o(handleLongPressQrCode),
+        q: `url(${enterpriseList.value.enterpriseLogo})`,
+        r: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        r: previewMedia.value.type === "video"
+        s: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        s: previewMedia.value.src,
-        t: getVideoPoster(previewMedia.value.src),
-        v: common_vendor.o(onFullscreenChange),
-        w: "preview-video-" + previewMedia.value.index
+        t: previewMedia.value.src,
+        v: getVideoPoster(previewMedia.value.src),
+        w: common_vendor.o(onFullscreenChange),
+        x: "preview-video-" + previewMedia.value.index
       } : {
-        x: previewMedia.value.src
+        y: previewMedia.value.src
       }, {
-        y: isVideoFullscreen.value ? 1 : "",
-        z: common_vendor.o(handlePreviewModalClick)
+        z: isVideoFullscreen.value ? 1 : "",
+        A: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        A: common_vendor.o(handleCustomerServiceClick),
-        B: showPreview.value ? 1 : ""
+        B: common_vendor.o(handleCustomerServiceClick),
+        C: showPreview.value ? 1 : ""
       });
     };
   }

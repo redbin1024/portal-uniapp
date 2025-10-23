@@ -31,6 +31,30 @@ const _sfc_main = {
   name: "App",
   onLaunch: function() {
     console.log("App Launch");
+    const updateManager = common_vendor.index.getUpdateManager();
+    updateManager.onCheckForUpdate(function(res) {
+      if (res.hasUpdate) {
+        console.log("发现新版本");
+      }
+    });
+    updateManager.onUpdateReady(function(res) {
+      common_vendor.index.showModal({
+        title: "更新提示",
+        content: "新版本已经准备好，是否重启应用？",
+        success: function(res2) {
+          if (res2.confirm) {
+            updateManager.applyUpdate();
+          }
+        }
+      });
+    });
+    updateManager.onUpdateFailed(function(res) {
+      common_vendor.index.showModal({
+        title: "更新失败",
+        content: "新版本下载失败，请您删除当前小程序后重新搜索打开。",
+        showCancel: false
+      });
+    });
   },
   onShow: function() {
     console.log("App Show");

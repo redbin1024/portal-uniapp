@@ -313,8 +313,11 @@
           >
         </view>
         <view class="introduce-container5">
-          <image :src="enterpriseList.qrCode"></image>
-          <view class="introduce-container6">扫码添加微信</view>
+          <image
+            :src="enterpriseList.qrCode"
+            @longpress="handleLongPressQrCode"
+          ></image>
+          <view class="introduce-container6">长按识别二维码</view>
         </view>
       </view>
     </view>
@@ -797,6 +800,53 @@ const isVideo = (url) => {
   ];
   const urlLower = url.toLowerCase();
   return videoExtensions.some((ext) => urlLower.includes(ext));
+};
+
+// 处理长按二维码事件
+const handleLongPressQrCode = () => {
+  if (!enterpriseList.value.qrCode) {
+    uni.showToast({
+      title: "二维码不存在",
+      icon: "none",
+    });
+    return;
+  }
+
+  // 提示用户保存二维码
+  uni.downloadFile({
+    url: enterpriseList.value.qrCode,
+    success: (downloadRes) => {
+      if (downloadRes.statusCode === 200) {
+        uni.saveImageToPhotosAlbum({
+          filePath: downloadRes.tempFilePath,
+          success: () => {
+            uni.showToast({
+              title: "二维码保存相册成功",
+              icon: "none",
+              duration: 1500,
+            });
+          },
+          fail: () => {
+            uni.showToast({
+              title: "保存失败，请检查相册权限",
+              icon: "none",
+            });
+          },
+        });
+      } else {
+        uni.showToast({
+          title: "下载失败",
+          icon: "none",
+        });
+      }
+    },
+    fail: () => {
+      uni.showToast({
+        title: "下载失败",
+        icon: "none",
+      });
+    },
+  });
 };
 
 // 获取视频封面图

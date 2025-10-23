@@ -3,11 +3,25 @@
 		"miniprogram": {
 			"list": [
 				{
-					"name": "pages/secondary/winthecustomer/index",
-					"pathName": "pages/secondary/winthecustomer/index",
+					"name": "pages/secondary/homepage/index",
+					"pathName": "pages/secondary/homepage/index",
 					"query": "",
 					"scene": null,
 					"launchMode": "default"
+				},
+				{
+					"name": "pages/secondary/homepage/index",
+					"pathName": "pages/secondary/homepage/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/secondary/winthecustomer/index",
+					"pathName": "pages/secondary/winthecustomer/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
 				},
 				{
 					"name": "pages/secondary/system/index",
