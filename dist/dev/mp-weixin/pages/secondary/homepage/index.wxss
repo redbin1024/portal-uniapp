@@ -474,7 +474,7 @@
 }
 .winthecustomer-title2.data-v-24abe20b {
   color: #000000;
-  font-size: 32rpx;
+  font-size: 34rpx;
   font-weight: bold;
 }
 .winthecustomer-line image.data-v-24abe20b {
@@ -515,7 +515,7 @@
 .winthecustomer-content2-1.data-v-24abe20b {
   color: #000000;
   font-size: 28rpx;
-  margin-left: 24rpx;
+  margin-left: 18rpx;
 }
 .winthecustomer-content2-2.data-v-24abe20b {
   width: 112rpx;
@@ -526,7 +526,7 @@
   font-size: 20rpx;
   line-height: 44rpx;
   text-align: center;
-  margin-right: 24rpx;
+  margin-right: 18rpx;
 }
 .headContent.data-v-24abe20b {
   display: flex;
@@ -768,22 +768,20 @@ wx-button.data-v-24abe20b:after {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-  border-radius: 50%;
-  width: 80rpx;
-  height: 80rpx;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
 }
 .custom-play-button.data-v-24abe20b:hover {
   transform: translate(-50%, -50%) scale(1.1);
   background: rgb(255, 255, 255);
 }
 .custom-play-button .play-icon.data-v-24abe20b {
-  width: 100%;
-  height: 100%;
+  width: 80rpx;
+  height: 80rpx;
 }
 
 /* 全屏返回按钮样式 */

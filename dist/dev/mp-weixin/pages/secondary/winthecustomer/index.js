@@ -360,9 +360,9 @@ const _sfc_main = {
               if (visibleDynamicItems.value.length === companyNewsList.value.length) {
                 setTimeout(() => {
                   showDynamicViewMoreBtn.value = true;
-                }, 500);
+                }, 200);
               }
-            }, index * 200);
+            }, index * 50);
           });
         }
       }).exec();
@@ -394,7 +394,7 @@ const _sfc_main = {
       setTimeout(() => {
         checkDynamicItemVisibility();
         checkListItemVisibility();
-      }, 500);
+      }, 100);
       showAllDynamicItems();
       fetchcaseList();
       fetchCompanyNewsList();

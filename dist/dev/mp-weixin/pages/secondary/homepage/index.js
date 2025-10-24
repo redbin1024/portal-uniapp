@@ -251,6 +251,36 @@ const _sfc_main = {
       }, 100);
     };
     const videoFullscreenIndex = common_vendor.ref(-1);
+    const touchStartX = common_vendor.ref(0);
+    const touchStartY = common_vendor.ref(0);
+    const touchEndX = common_vendor.ref(0);
+    const touchEndY = common_vendor.ref(0);
+    const isDragging = common_vendor.ref(false);
+    const handleTouchStart = (e, index) => {
+      if (videoFullscreenIndex.value !== index)
+        return;
+      isDragging.value = true;
+      touchStartX.value = e.touches[0].clientX;
+      touchStartY.value = e.touches[0].clientY;
+    };
+    const handleTouchMove = (e, index) => {
+      if (videoFullscreenIndex.value !== index || !isDragging.value)
+        return;
+      touchEndX.value = e.touches[0].clientX;
+      touchEndY.value = e.touches[0].clientY;
+    };
+    const handleTouchEnd = (e, index) => {
+      if (videoFullscreenIndex.value !== index || !isDragging.value) {
+        isDragging.value = false;
+        return;
+      }
+      isDragging.value = false;
+      const deltaX = touchEndX.value - touchStartX.value;
+      const deltaY = Math.abs(touchEndY.value - touchStartY.value);
+      if (Math.abs(deltaX) > 50 && deltaY < 30) {
+        exitFullscreen(index);
+      }
+    };
     const onVideoFullscreenChange = (e, index) => {
       console.log("视频全屏状态变化:", e.detail.fullScreen, "索引:", index);
       if (e.detail.fullScreen) {
@@ -272,6 +302,12 @@ const _sfc_main = {
         videoFullscreenIndex.value = -1;
         console.log("退出全屏");
       }
+    };
+    const exitFullscreen = (index) => {
+      videoContext = common_vendor.index.createVideoContext("bannerVideo" + index);
+      videoContext.exitFullScreen();
+      videoContext.pause();
+      videoFullscreenIndex.value = -1;
     };
     const showPreview = common_vendor.ref(false);
     const isVideoFullscreen = common_vendor.ref(false);
@@ -357,15 +393,6 @@ const _sfc_main = {
       }
       closePreview();
     };
-    const previewSingleImage = (bannerImages) => {
-      let urls = [bannerImages];
-      common_vendor.index.previewImage({
-        urls,
-        current: 0,
-        indicator: "number",
-        loop: false
-      });
-    };
     const next = (item) => {
       try {
         const itemStr = JSON.stringify(item);
@@ -403,22 +430,24 @@ const _sfc_main = {
             a: "bannerVideo" + index,
             b: item,
             c: common_vendor.o(($event) => onVideoFullscreenChange($event, index), index),
-            d: videoFullscreenIndex.value !== index
+            d: common_vendor.o(($event) => handleTouchStart($event, index), index),
+            e: common_vendor.o(($event) => handleTouchMove($event, index), index),
+            f: common_vendor.o(($event) => handleTouchEnd($event, index), index),
+            g: videoFullscreenIndex.value !== index
           }, videoFullscreenIndex.value !== index ? {
-            e: common_vendor.o(($event) => playVideo(index), index)
+            h: common_vendor.o(($event) => playVideo(index), index)
           } : {}, {
-            f: index
+            i: index
           });
         }),
         b: common_vendor.o(viewmore),
         c: enterpriseList.value.bannerImages[0],
-        d: common_vendor.o(($event) => previewSingleImage(enterpriseList.value.bannerImages[0])),
-        e: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
+        d: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) ? {
-        f: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+        e: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
-        g: common_vendor.o(($event) => nextDetile()),
-        h: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        f: common_vendor.o(($event) => nextDetile()),
+        g: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage,
             b: common_vendor.t(item.serviceName),
@@ -426,43 +455,43 @@ const _sfc_main = {
             d: common_vendor.o(($event) => next(item), index)
           };
         }),
-        i: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        h: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row1-" + index
           };
         }),
-        j: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        i: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        k: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        j: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        l: common_vendor.t(enterpriseList.value.enterpriseName),
-        m: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        n: common_vendor.t(enterpriseList.value.contactPhone),
-        o: enterpriseList.value.qrCode,
-        p: common_vendor.o(handleLongPressQrCode),
-        q: `url(${enterpriseList.value.enterpriseLogo})`,
-        r: showPreview.value
+        k: common_vendor.t(enterpriseList.value.enterpriseName),
+        l: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        m: common_vendor.t(enterpriseList.value.contactPhone),
+        n: enterpriseList.value.qrCode,
+        o: common_vendor.o(handleLongPressQrCode),
+        p: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
+        q: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        s: previewMedia.value.type === "video"
+        r: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        t: previewMedia.value.src,
-        v: getVideoPoster(previewMedia.value.src),
-        w: common_vendor.o(onFullscreenChange),
-        x: "preview-video-" + previewMedia.value.index
+        s: previewMedia.value.src,
+        t: getVideoPoster(previewMedia.value.src),
+        v: common_vendor.o(onFullscreenChange),
+        w: "preview-video-" + previewMedia.value.index
       } : {
-        y: previewMedia.value.src
+        x: previewMedia.value.src
       }, {
-        z: isVideoFullscreen.value ? 1 : "",
-        A: common_vendor.o(handlePreviewModalClick)
+        y: isVideoFullscreen.value ? 1 : "",
+        z: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        B: common_vendor.o(handleCustomerServiceClick),
-        C: showPreview.value ? 1 : ""
+        A: common_vendor.o(handleCustomerServiceClick),
+        B: showPreview.value ? 1 : ""
       });
     };
   }

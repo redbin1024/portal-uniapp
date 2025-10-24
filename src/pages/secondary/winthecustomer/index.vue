@@ -20,7 +20,7 @@
     <view class="dynamic">
       <view class="dynamic-title2">
         <view class="dynamic-title">最近动态</view>
-        <view class="dynamic-title1">Partner Merchant</view>
+        <view class="dynamic-title1">RECENT UPDATES</view>
       </view>
       <!-- 动态内容区域 -->
       <view class="dynamic-content">
@@ -95,7 +95,7 @@
       <!-- <view class="container-title">成功案例</view> -->
       <view class="dynamic-title2" style="margin-bottom: 60rpx">
         <view class="dynamic-title">商家案例</view>
-        <view class="dynamic-title1">Merchant Case</view>
+        <view class="dynamic-title1">MERCHANT CASE</view>
       </view>
       <view
         class="list-item"
@@ -670,9 +670,9 @@ const checkDynamicItemVisibility = () => {
             ) {
               setTimeout(() => {
                 showDynamicViewMoreBtn.value = true;
-              }, 500); // 延迟500ms显示按钮，让动画更自然
+              }, 200); // 延迟500ms显示按钮，让动画更自然
             }
-          }, index * 200); // 每个元素间隔200ms，让动画更流畅
+          }, index * 50); // 每个元素间隔200ms，让动画更流畅
         });
       }
     })
@@ -730,7 +730,7 @@ onMounted(() => {
   setTimeout(() => {
     checkDynamicItemVisibility();
     checkListItemVisibility();
-  }, 500); // 延迟500ms，确保页面元素已渲染完成
+  }, 100); // 延迟500ms，确保页面元素已渲染完成
   showAllDynamicItems();
   fetchcaseList(); // 暂时注释掉，因为当前页面主要显示服务信息
   fetchCompanyNewsList();

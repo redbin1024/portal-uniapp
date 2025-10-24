@@ -15,7 +15,7 @@
     <view
       class="container"
       :style="{
-        backgroundImage: `url(${enterpriseList.enterpriseLogo})`,
+        backgroundImage: `url(${enterpriseList.enterpriseLogo}?image_process=format,webp)`,
       }"
     >
       <view style="height: 580rpx"></view>
@@ -76,7 +76,7 @@
         <view class="winthecustomer-head">
           <view class="winthecustomer-head1">
             <view class="winthecustomer-title">合作商家</view>
-            <view class="winthecustomer-title1">Partner Merchant</view>
+            <view class="winthecustomer-title1">PARTNER MERCHANT</view>
           </view>
         </view>
         <view class="businesspartnernew-content">
@@ -107,6 +107,9 @@
               :show-play-btn="false"
               :show-fullscreen-btn="false"
               @fullscreenchange="onVideoFullscreenChange($event, index)"
+              @touchstart="handleTouchStart($event, index)"
+              @touchmove="handleTouchMove($event, index)"
+              @touchend="handleTouchEnd($event, index)"
               style="border-radius: 20rpx"
               object-fit="cover"
             />
@@ -127,10 +130,7 @@
           <view>查看更多</view>
           <view>></view>
         </view>
-        <view
-          class="businesspartnernew-image"
-          @click="previewSingleImage(enterpriseList.bannerImages[0])"
-        >
+        <view class="businesspartnernew-image">
           <image
             :src="enterpriseList.bannerImages[0]"
             mode="aspectFill"
@@ -142,7 +142,7 @@
           <view class="winthecustomer-head">
             <view class="winthecustomer-head1">
               <view class="winthecustomer-title">产品服务</view>
-              <view class="winthecustomer-title1">Product Service</view>
+              <view class="winthecustomer-title1">PRODUCT SERVICE</view>
             </view>
           </view>
           <view @click="nextDetile()">
@@ -259,7 +259,7 @@
           <view class="winthecustomer-head">
             <view class="winthecustomer-head1">
               <view class="winthecustomer-title">荣誉证书</view>
-              <view class="winthecustomer-title1">Certificate of Honor</view>
+              <view class="winthecustomer-title1">CERTIFICATE OF HONOR</view>
             </view>
           </view>
           <view class="certificate-list">
@@ -741,6 +741,53 @@ const playVideo = (index) => {
 
 // 当前全屏播放的视频索引
 const videoFullscreenIndex = ref(-1);
+
+// 触摸事件相关变量
+const touchStartX = ref(0);
+const touchStartY = ref(0);
+const touchEndX = ref(0);
+const touchEndY = ref(0);
+const isDragging = ref(false);
+
+// 触摸开始事件
+const handleTouchStart = (e, index) => {
+  // 只有在全屏状态下才处理触摸事件
+  if (videoFullscreenIndex.value !== index) return;
+
+  isDragging.value = true;
+  touchStartX.value = e.touches[0].clientX;
+  touchStartY.value = e.touches[0].clientY;
+};
+
+// 触摸移动事件
+const handleTouchMove = (e, index) => {
+  // 只有在全屏状态下且正在拖动才处理触摸事件
+  if (videoFullscreenIndex.value !== index || !isDragging.value) return;
+
+  touchEndX.value = e.touches[0].clientX;
+  touchEndY.value = e.touches[0].clientY;
+};
+
+// 触摸结束事件
+const handleTouchEnd = (e, index) => {
+  // 只有在全屏状态下才处理触摸事件
+  if (videoFullscreenIndex.value !== index || !isDragging.value) {
+    isDragging.value = false;
+    return;
+  }
+
+  isDragging.value = false;
+
+  // 计算水平滑动距离
+  const deltaX = touchEndX.value - touchStartX.value;
+  const deltaY = Math.abs(touchEndY.value - touchStartY.value);
+
+  // 判断是否为左滑或右滑手势（水平滑动距离大于50px，垂直滑动距离小于30px）
+  if (Math.abs(deltaX) > 50 && deltaY < 30) {
+    // 左滑或右滑退出全屏
+    exitFullscreen(index);
+  }
+};
 
 // 监听视频全屏状态变化
 const onVideoFullscreenChange = (e, index) => {
@@ -1566,7 +1613,7 @@ const onShareTimeline = () => {
 }
 .winthecustomer-title2 {
   color: #000000;
-  font-size: 32rpx;
+  font-size: 34rpx;
   font-weight: bold;
 }
 .winthecustomer-line image {
@@ -1611,7 +1658,7 @@ const onShareTimeline = () => {
 .winthecustomer-content2-1 {
   color: #000000;
   font-size: 28rpx;
-  margin-left: 24rpx;
+  margin-left: 18rpx;
 }
 .winthecustomer-content2-2 {
   width: 112rpx;
@@ -1622,7 +1669,7 @@ const onShareTimeline = () => {
   font-size: 20rpx;
   line-height: 44rpx;
   text-align: center;
-  margin-right: 24rpx;
+  margin-right: 18rpx;
 }
 .headContent {
   display: flex;
@@ -1879,14 +1926,14 @@ wx-button:after {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-  border-radius: 50%;
-  width: 80rpx;
-  height: 80rpx;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  // box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  // transition: all 0.3s ease;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
 }
 
 .custom-play-button:hover {
@@ -1895,8 +1942,8 @@ wx-button:after {
 }
 
 .custom-play-button .play-icon {
-  width: 100%;
-  height: 100%;
+  width: 80rpx;
+  height: 80rpx;
 }
 
 /* 全屏返回按钮样式 */
