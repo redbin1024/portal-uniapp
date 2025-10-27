@@ -131,25 +131,19 @@ const fetchsuccessCaseList = async () => {
     // 根据不同的数据结构进行处理
     if (response && response.rows && Array.isArray(response.rows)) {
       dataArray = response.rows;
-    } else if (response && response.data && Array.isArray(response.data)) {
-      dataArray = response.data;
-    } else if (response && Array.isArray(response)) {
-      dataArray = response;
     } else {
-      console.warn("API返回的数据格式不正确:", response);
       dataArray = [];
     }
     // 处理分页数据
-    if (pageNum.value == 1) {
+    if (pageNum.value === 1) {
       successCaseList.value = dataArray;
     } else {
-      successCaseList.value = successCaseList.value.concat(dataArray);
+      successCaseList.value = [...successCaseList.value, ...dataArray];
     }
-    // if (result && result.rows && result.rows.length > 0) {
-    //   successCaseList.value = result.rows;
-    // }
-    // 判断是否还有更多数据
+
+    // 判断是否还有更多数据（根据返回数据量是否达到pageSize）
     types.value = dataArray.length >= 10 ? 1 : 2;
+    initAnimation();
   } catch (error) {
     console.error("获取成功案例列表失败:", error);
   } finally {
@@ -179,9 +173,9 @@ const initAnimation = () => {
       successCaseList.value.forEach((_, index) => {
         setTimeout(() => {
           animatedItems.value[index] = true;
-        }, index * 150); // 每个item延迟150ms，形成依次弹出的效果
+        }, index * 50); // 每个item延迟150ms，形成依次弹出的效果
       });
-    }, 200);
+    }, 100);
   });
 };
 
@@ -214,7 +208,7 @@ const handleScroll = (e) => {
 
 // 生命周期
 onMounted(() => {
-  initAnimation();
+  // initAnimation();
   fetchsuccessCaseList();
 });
 

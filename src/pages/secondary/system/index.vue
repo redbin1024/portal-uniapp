@@ -1,7 +1,17 @@
 <template>
   <view class="main">
-    <view class="video">
-      <video :src="bannerImages"></video>
+    <view class="video" @click="nextVideo(bannerImages)">
+      <!-- <video :src="bannerImages"></video> -->
+      <image
+        :src="enterpriseList.coverImage + '?image_process=format,webp'"
+        style="width: 100%; height: 100%; border-radius: 20rpx"
+      ></image>
+      <view class="custom-play-button">
+        <image
+          src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
+          class="play-icon"
+        />
+      </view>
     </view>
     <view class="videoTitle">
       <view class="videoTitle1">{{ enterpriseList.enterpriseName }}</view>
@@ -208,7 +218,11 @@ const onVideoError = (e) => {
     icon: "none",
   });
 };
-
+const nextVideo = (url) => {
+  uni.navigateTo({
+    url: "/pages/secondary/index/index?url=" + url,
+  });
+};
 const onFullscreenChange = (e, index, isEnteringFullscreen) => {
   console.log(
     "视频全屏状态变化:",
@@ -434,6 +448,7 @@ const processContent = (content) => {
   height: 394rpx;
   border-radius: 20rpx;
   margin: 20rpx auto;
+  position: relative;
 }
 .video video {
   width: 100%;
@@ -454,5 +469,29 @@ const processContent = (content) => {
   color: #4e4d4d;
   font-size: 24rpx;
   padding: 0 24rpx;
+}
+/* 自定义播放按钮样式 */
+.custom-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.custom-play-button:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(255, 255, 255, 1);
+}
+
+.custom-play-button .play-icon {
+  width: 80rpx;
+  height: 80rpx;
 }
 </style>

@@ -28,6 +28,11 @@ const _sfc_main = {
     common_vendor.ref({});
     common_vendor.ref([]);
     const caseDataList = common_vendor.ref([]);
+    const nextVideo = (url) => {
+      common_vendor.index.navigateTo({
+        url: "/pages/secondary/index/index?url=" + url
+      });
+    };
     const viewmore = () => {
       common_vendor.index.navigateTo({
         url: "/pages/secondary/businesspartner/index"
@@ -41,11 +46,7 @@ const _sfc_main = {
         });
         console.log("企业列表数据:", response);
         if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
-          let data = [];
-          for (let i = 0; i < response.rows.length; i++) {
-            data.push(response.rows[i].caseImages[0]);
-          }
-          caseDataList.value = data;
+          caseDataList.value = response.rows;
         }
       } catch (error) {
         console.error("获取企业列表失败:", error);
@@ -231,84 +232,12 @@ const _sfc_main = {
     const companyNewsList = common_vendor.ref([]);
     common_vendor.ref(0);
     common_vendor.ref(false);
-    let videoContext = null;
-    const playVideo = (index) => {
-      for (let i = 0; i < caseDataList.value.length; i++) {
-        if (i !== index) {
-          const otherVideoContext = common_vendor.index.createVideoContext("bannerVideo" + i);
-          otherVideoContext.pause();
-        }
-      }
-      videoContext = common_vendor.index.createVideoContext("bannerVideo" + index);
-      videoContext.play();
-      setTimeout(() => {
-        videoContext.requestFullScreen({ direction: 0 });
-        videoFullscreenIndex.value = index;
-        setTimeout(() => {
-          videoFullscreenIndex.value = index;
-          console.log("强制设置全屏视频索引:", index);
-        }, 200);
-      }, 100);
-    };
-    const videoFullscreenIndex = common_vendor.ref(-1);
-    const touchStartX = common_vendor.ref(0);
-    const touchStartY = common_vendor.ref(0);
-    const touchEndX = common_vendor.ref(0);
-    const touchEndY = common_vendor.ref(0);
-    const isDragging = common_vendor.ref(false);
-    const handleTouchStart = (e, index) => {
-      if (videoFullscreenIndex.value !== index)
-        return;
-      isDragging.value = true;
-      touchStartX.value = e.touches[0].clientX;
-      touchStartY.value = e.touches[0].clientY;
-    };
-    const handleTouchMove = (e, index) => {
-      if (videoFullscreenIndex.value !== index || !isDragging.value)
-        return;
-      touchEndX.value = e.touches[0].clientX;
-      touchEndY.value = e.touches[0].clientY;
-    };
-    const handleTouchEnd = (e, index) => {
-      if (videoFullscreenIndex.value !== index || !isDragging.value) {
-        isDragging.value = false;
-        return;
-      }
-      isDragging.value = false;
-      const deltaX = touchEndX.value - touchStartX.value;
-      const deltaY = Math.abs(touchEndY.value - touchStartY.value);
-      if (Math.abs(deltaX) > 50 && deltaY < 30) {
-        exitFullscreen(index);
-      }
-    };
-    const onVideoFullscreenChange = (e, index) => {
-      console.log("视频全屏状态变化:", e.detail.fullScreen, "索引:", index);
-      if (e.detail.fullScreen) {
-        videoFullscreenIndex.value = index;
-        setTimeout(() => {
-          videoFullscreenIndex.value = index;
-          console.log("第一次更新:", index);
-        }, 100);
-        setTimeout(() => {
-          videoFullscreenIndex.value = index;
-          console.log("第二次更新:", index);
-        }, 300);
-        setTimeout(() => {
-          videoFullscreenIndex.value = index;
-          console.log("第三次更新:", index);
-        }, 500);
-      } else {
-        videoContext.stop();
-        videoFullscreenIndex.value = -1;
-        console.log("退出全屏");
-      }
-    };
-    const exitFullscreen = (index) => {
-      videoContext = common_vendor.index.createVideoContext("bannerVideo" + index);
-      videoContext.exitFullScreen();
-      videoContext.pause();
-      videoFullscreenIndex.value = -1;
-    };
+    common_vendor.ref(-1);
+    common_vendor.ref(0);
+    common_vendor.ref(0);
+    common_vendor.ref(0);
+    common_vendor.ref(0);
+    common_vendor.ref(false);
     const showPreview = common_vendor.ref(false);
     const isVideoFullscreen = common_vendor.ref(false);
     const previewMedia = common_vendor.ref({
@@ -426,19 +355,11 @@ const _sfc_main = {
       var _a, _b, _c, _d, _e, _f;
       return common_vendor.e({
         a: common_vendor.f(caseDataList.value, (item, index, i0) => {
-          return common_vendor.e({
-            a: "bannerVideo" + index,
-            b: item,
-            c: common_vendor.o(($event) => onVideoFullscreenChange($event, index), index),
-            d: common_vendor.o(($event) => handleTouchStart($event, index), index),
-            e: common_vendor.o(($event) => handleTouchMove($event, index), index),
-            f: common_vendor.o(($event) => handleTouchEnd($event, index), index),
-            g: videoFullscreenIndex.value !== index
-          }, videoFullscreenIndex.value !== index ? {
-            h: common_vendor.o(($event) => playVideo(index), index)
-          } : {}, {
-            i: index
-          });
+          return {
+            a: item.coverImage + "?image_process=format,webp",
+            b: common_vendor.o(($event) => nextVideo(item.caseImages), index),
+            c: index
+          };
         }),
         b: common_vendor.o(viewmore),
         c: enterpriseList.value.bannerImages[0],

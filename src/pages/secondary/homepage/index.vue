@@ -96,7 +96,7 @@
               @click="onMediaClick(item, index, 'video')"
               style="border-radius: 20rpx"
             /> -->
-            <video
+            <!-- <video
               :id="'bannerVideo' + index"
               :src="item"
               class="banner-video"
@@ -112,9 +112,23 @@
               @touchend="handleTouchEnd($event, index)"
               style="border-radius: 20rpx"
               object-fit="cover"
-            />
+            /> -->
             <!-- 自定义播放按钮 -->
-            <view
+            <view @click="nextVideo(item.caseImages)">
+              <view>
+                <image
+                  :src="item.coverImage + '?image_process=format,webp'"
+                  style="width: 224rpx; height: 340rpx; border-radius: 20rpx"
+                />
+              </view>
+              <view class="custom-play-button">
+                <image
+                  src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
+                  class="play-icon"
+                />
+              </view>
+            </view>
+            <!-- <view
               v-if="videoFullscreenIndex !== index"
               class="custom-play-button"
               @click="playVideo(index)"
@@ -123,7 +137,7 @@
                 src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
                 class="play-icon"
               />
-            </view>
+            </view> -->
           </view>
         </view>
         <view class="viewmore" @click="viewmore">
@@ -402,6 +416,11 @@ const headContentVisible = ref({});
 // winthecustomer-content1 动画状态
 const content1Visible = ref([]);
 const caseDataList = ref([]);
+const nextVideo = (url) => {
+  uni.navigateTo({
+    url: "/pages/secondary/index/index?url=" + url,
+  });
+};
 //查看更多
 const viewmore = () => {
   uni.navigateTo({
@@ -425,11 +444,7 @@ const caseList = async () => {
       Array.isArray(response.rows) &&
       response.rows.length > 0
     ) {
-      let data = [];
-      for (let i = 0; i < response.rows.length; i++) {
-        data.push(response.rows[i].caseImages[0]);
-      }
-      caseDataList.value = data;
+      caseDataList.value = response.rows;
     }
   } catch (error) {
     console.error("获取企业列表失败:", error);

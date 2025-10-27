@@ -95,20 +95,16 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
         let dataArray = [];
         if (response && response.rows && Array.isArray(response.rows)) {
           dataArray = response.rows;
-        } else if (response && response.data && Array.isArray(response.data)) {
-          dataArray = response.data;
-        } else if (response && Array.isArray(response)) {
-          dataArray = response;
         } else {
-          console.warn("API返回的数据格式不正确:", response);
           dataArray = [];
         }
-        if (pageNum.value == 1) {
+        if (pageNum.value === 1) {
           successCaseList.value = dataArray;
         } else {
-          successCaseList.value = successCaseList.value.concat(dataArray);
+          successCaseList.value = [...successCaseList.value, ...dataArray];
         }
         types.value = dataArray.length >= 10 ? 1 : 2;
+        initAnimation();
       } catch (error) {
         console.error("获取成功案例列表失败:", error);
       } finally {
@@ -131,9 +127,9 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
           successCaseList.value.forEach((_, index) => {
             setTimeout(() => {
               animatedItems.value[index] = true;
-            }, index * 150);
+            }, index * 50);
           });
-        }, 200);
+        }, 100);
       });
     };
     const handleScroll = (e) => {
@@ -151,7 +147,6 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
       }).exec();
     };
     common_vendor.onMounted(() => {
-      initAnimation();
       fetchsuccessCaseList();
     });
     __expose({

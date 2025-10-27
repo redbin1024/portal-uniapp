@@ -1,22 +1,73 @@
 
 .video-container.data-v-0b50ab4e {
-  padding: 20rpx;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  position: relative;
 }
 .video-player.data-v-0b50ab4e {
   width: 100%;
-  height: 400rpx;
-  border-radius: 16rpx;
+  height: 100%;
 }
-.fullscreen-video-wrapper.data-v-0b50ab4e {
-  position: fixed;
-  top: 0;
+.custom-controls.data-v-0b50ab4e {
+  position: absolute;
+  bottom: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  z-index: 9999;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
 }
-.fullscreen-video.data-v-0b50ab4e {
-  width: 100%;
+.custom-controls.horizontal-layout.data-v-0b50ab4e {
+  flex-direction: column;
+  right: 0;
+  left: auto;
+  width: 120rpx;
   height: 100%;
+  justify-content: center;
+  background: linear-gradient(to left, transparent, rgba(0, 0, 0, 0.7));
+}
+.control-btn.data-v-0b50ab4e {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+.control-icon.data-v-0b50ab4e {
+  width: 40rpx;
+  height: 40rpx;
+}
+.progress-container.data-v-0b50ab4e {
+  flex: 1;
+  margin: 0 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.progress-slider.data-v-0b50ab4e {
+  width: 100%;
+}
+.time-text.data-v-0b50ab4e {
+  color: #fff;
+  font-size: 24rpx;
+  margin-top: 10rpx;
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) {
+.custom-controls.data-v-0b50ab4e {
+    flex-direction: column;
+    right: 0;
+    left: auto;
+    width: 120rpx;
+    height: 100%;
+    justify-content: center;
+}
 }

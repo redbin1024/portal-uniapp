@@ -167,8 +167,8 @@
     {
       "path": "pages/secondary/index/index",
       "style": {
-        "navigationBarTitleText": "视频",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationStyle": "custom",
+        "navigationBarTitleText": ""
       }
     }
    

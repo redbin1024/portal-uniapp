@@ -134,6 +134,11 @@ const _sfc_main = {
         });
       }
     };
+    const nextVideo = (url) => {
+      common_vendor.index.navigateTo({
+        url: "/pages/secondary/index/index?url=" + url
+      });
+    };
     const fetchEnterpriseList = () => __async(this, null, function* () {
       try {
         const response = yield api_activity.getEnterpriseList({
@@ -172,10 +177,11 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return {
-        a: bannerImages.value,
-        b: common_vendor.t(enterpriseList.value.enterpriseName),
-        c: enterpriseList.value.enterpriseDescription,
-        d: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        a: enterpriseList.value.coverImage + "?image_process=format,webp",
+        b: common_vendor.o(($event) => nextVideo(bannerImages.value)),
+        c: common_vendor.t(enterpriseList.value.enterpriseName),
+        d: enterpriseList.value.enterpriseDescription,
+        e: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage[0],
             b: common_vendor.t(item.serviceName),

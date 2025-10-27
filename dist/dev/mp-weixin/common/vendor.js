@@ -7751,7 +7751,6 @@ exports.onPageScroll = onPageScroll;
 exports.onReachBottom = onReachBottom;
 exports.onShow = onShow;
 exports.onUnload = onUnload;
-exports.onUnmounted = onUnmounted;
 exports.p = p;
 exports.reactive = reactive;
 exports.ref = ref;

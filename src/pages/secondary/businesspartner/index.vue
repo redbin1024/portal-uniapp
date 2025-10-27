@@ -6,7 +6,7 @@
         v-for="(item, index) in caseDataList"
         :key="index"
       >
-        <video
+        <!-- <video
           :id="'bannerVideo' + index"
           :src="item.caseImages[0]"
           class="banner-video"
@@ -19,16 +19,33 @@
           @fullscreenchange="onVideoFullscreenChange($event, index)"
           style="border-radius: 20rpx"
           object-fit="cover"
-        />
-        <view
-          v-if="videoFullscreenIndex !== index"
-          class="custom-play-button"
-          @click="playVideo(index)"
-        >
+        /> -->
+
+        <view @click="nextVideo(item.caseImages[0])">
+          <!-- <image
+            :src="item.coverImage + '?image_process=format,webp'"
+            style="width: 344rpx; height: 458rpx; border-radius: 20rpx"
+          ></image> -->
           <image
-            src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
-            class="play-icon"
-          />
+            :src="item.coverImage + '?image_process=format,webp'"
+            style="width: 344rpx; height: 458rpx; border-radius: 20rpx"
+          ></image>
+          <view class="custom-play-button">
+            <image
+              src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
+              class="play-icon"
+            />
+          </view>
+          <!-- <view
+            v-if="videoFullscreenIndex !== index"
+            class="custom-play-button"
+            @click="playVideo(index)"
+          >
+            <image
+              src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
+              class="play-icon"
+            />
+          </view> -->
         </view>
       </view>
     </view>
@@ -121,7 +138,12 @@ const onVideoFullscreenChange = (e, index) => {
   }
 };
 let videoContext = null;
-// 播放视频
+
+const nextVideo = (url) => {
+  uni.navigateTo({
+    url: "/pages/secondary/index/index?url=" + url,
+  });
+}; // 播放视频
 const playVideo = (index) => {
   // 暂停所有其他视频
   for (let i = 0; i < caseDataList.value.length; i++) {
@@ -228,7 +250,7 @@ const nextMedia = () => {
 const caseList = async () => {
   try {
     const response = await getcaseList({
-      pageSize: 10,
+      pageSize: 8,
       pageNum: pageNum.value,
     });
     let dataArray = [];
@@ -249,7 +271,7 @@ const caseList = async () => {
     } else {
       caseDataList.value = caseDataList.value.concat(dataArray);
     }
-    types.value = dataArray.length >= 10 ? 1 : 2;
+    types.value = dataArray.length >= 8 ? 1 : 2;
   } catch (error) {
     console.error("获取企业列表失败:", error);
     uni.showToast({
@@ -368,7 +390,6 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 }
 
