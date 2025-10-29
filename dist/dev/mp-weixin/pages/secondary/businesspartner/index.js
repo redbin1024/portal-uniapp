@@ -107,7 +107,7 @@ const _sfc_main = {
       return common_vendor.e({
         a: common_vendor.f(caseDataList.value, (item, index, i0) => {
           return {
-            a: item.coverImage + "?image_process=format,webp",
+            a: item.coverImage,
             b: common_vendor.o(($event) => nextVideo(item.caseImages[0]), index),
             c: index
           };

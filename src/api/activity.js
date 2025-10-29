@@ -55,7 +55,15 @@ export function getCompanyNewsList(params = {}) {
     ...params
   })
 }
-
+/**
+ * 
+ * @param {查询公司动态详情}   
+ * @returns 
+ */
+export function getCompanyNews(params = {}) {
+  return get('/mp/tk/companyNews/'+params.newsId, {
+  })
+}
 
 /**
  * 

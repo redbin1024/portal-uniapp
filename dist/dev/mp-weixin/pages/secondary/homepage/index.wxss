@@ -777,7 +777,6 @@ wx-button.data-v-24abe20b:after {
 }
 .custom-play-button.data-v-24abe20b:hover {
   transform: translate(-50%, -50%) scale(1.1);
-  background: rgb(255, 255, 255);
 }
 .custom-play-button .play-icon.data-v-24abe20b {
   width: 80rpx;

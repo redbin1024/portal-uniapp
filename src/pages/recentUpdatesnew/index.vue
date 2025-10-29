@@ -21,7 +21,10 @@
           :key="index"
           class="image-url"
         >
-          <image :src="res" mode="aspectFill"></image>
+          <image
+            :src="res + '?image_process=format,webp'"
+            mode="aspectFill"
+          ></image>
         </view>
       </view>
     </view>
@@ -172,7 +175,7 @@ const formatDate = (dateString) => {
 const next = (item) => {
   let itemStr = JSON.stringify(item);
   uni.navigateTo({
-    url: "/pages/recentdetails/index?item=" + itemStr,
+    url: "/pages/recentdetails/index?newsId=" + item.newsId,
   });
 };
 </script>

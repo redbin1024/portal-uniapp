@@ -118,6 +118,7 @@
               <view>
                 <image
                   :src="item.coverImage + '?image_process=format,webp'"
+                  mode="aspectFill"
                   style="width: 224rpx; height: 340rpx; border-radius: 20rpx"
                 />
               </view>
@@ -146,7 +147,7 @@
         </view>
         <view class="businesspartnernew-image">
           <image
-            :src="enterpriseList.bannerImages[0]"
+            :src="enterpriseList.bannerImages[0] + '?image_process=format,webp'"
             mode="aspectFill"
           ></image>
         </view>
@@ -163,7 +164,9 @@
             <view class="winthecustomer-line">
               <image
                 :src="serviceList?.serviceImage?.[0]"
-                v-if="serviceList?.serviceImage?.[0]"
+                v-if="
+                  serviceList?.serviceImage?.[0] + '?image_process=format,webp'
+                "
                 mode="white"
               ></image>
             </view>
@@ -188,7 +191,9 @@
               :key="index"
               @click="next(item)"
             >
-              <image :src="item.serviceImage"></image>
+              <image
+                :src="item.serviceImage + '?image_process=format,webp'"
+              ></image>
               <view class="winthecustomer-content2">
                 <view class="winthecustomer-content2-1">
                   {{ item.serviceName }}
@@ -287,7 +292,10 @@
                     :key="'row1-' + index"
                     class="certificate-item"
                   >
-                    <image :src="certificate" mode="aspectFit"></image>
+                    <image
+                      :src="certificate + '?image_process=format,webp'"
+                      mode="aspectFit"
+                    ></image>
                   </view>
                 </view>
                 <view
@@ -1953,7 +1961,7 @@ wx-button:after {
 
 .custom-play-button:hover {
   transform: translate(-50%, -50%) scale(1.1);
-  background: rgba(255, 255, 255, 1);
+  // background: rgba(255, 255, 255, 1);
 }
 
 .custom-play-button .play-icon {

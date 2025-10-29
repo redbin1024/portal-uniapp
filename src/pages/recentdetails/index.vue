@@ -13,6 +13,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { getCompanyNews } from "@/api/activity.js";
 const richText = ref("");
 // 定义组件名称
 defineOptions({
@@ -21,7 +22,25 @@ defineOptions({
 
 // 响应式数据
 const detailData = ref({});
-
+//查询公司动态列表
+const CompanyNews = async (newsId) => {
+  try {
+    const response = await getCompanyNews({
+      newsId,
+    });
+    if (response && response.data) {
+      detailData.value = response.data;
+      processContent(response.data.newDetails);
+    }
+  } catch (error) {
+    console.error("获取企业列表失败:", error);
+    uni.showToast({
+      title: "获取企业列表失败",
+      icon: "none",
+    });
+  } finally {
+  }
+};
 // 获取页面参数
 const getPageParams = () => {
   // 获取页面实例
@@ -29,12 +48,11 @@ const getPageParams = () => {
   const currentPage = pages[pages.length - 1];
 
   // 获取页面参数
-  if (currentPage.options && currentPage.options.item) {
+  if (currentPage.options && currentPage.options.newsId) {
     // 先解码URL编码的参数
-    const decodedItem = decodeURIComponent(currentPage.options.item);
-    let detailDatas = JSON.parse(decodedItem);
-    processContent(detailDatas.newDetails);
-    detailData.value = detailDatas;
+    // const decodedItem = decodeURIComponent(currentPage.options.item);
+    // let detailDatas = JSON.parse(decodedItem);
+    CompanyNews(currentPage.options.newsId);
   }
 };
 const processContent = (content) => {

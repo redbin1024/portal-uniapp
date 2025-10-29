@@ -304,7 +304,7 @@ const _sfc_main = {
     });
     const navigateToRecentDetails = (item) => {
       common_vendor.index.navigateTo({
-        url: "/pages/recentdetails/index?item=" + encodeURIComponent(JSON.stringify(item))
+        url: "/pages/recentdetails/index?newsId=" + item.newsId
       });
     };
     const goToRecentUpdates = () => {
@@ -392,10 +392,9 @@ const _sfc_main = {
     };
     common_vendor.onMounted(() => {
       setTimeout(() => {
-        checkDynamicItemVisibility();
+        showAllDynamicItems();
         checkListItemVisibility();
       }, 100);
-      showAllDynamicItems();
       fetchcaseList();
       fetchCompanyNewsList();
       fetchsuccessCaseList();
@@ -431,7 +430,7 @@ const _sfc_main = {
           }, index < companyNewsList.value.length - 1 ? {
             g: "step-line-" + index
           } : {}, {
-            h: item.newsImages[0],
+            h: item.newsImages[0] + "?image_process=format,webp",
             i: visibleDynamicItems.value.includes(index) ? 1 : "",
             j: index,
             k: common_vendor.o(($event) => navigateToRecentDetails(item), index)
@@ -442,7 +441,7 @@ const _sfc_main = {
         d: common_vendor.o(goToRecentUpdates),
         e: common_vendor.f(successCaseList.value, (item, index, i0) => {
           return {
-            a: item.caseImages[0],
+            a: item.caseImages[0] + "?image_process=format,webp",
             b: common_vendor.t(item.customerName),
             c: common_vendor.t(item.caseValue),
             d: index,

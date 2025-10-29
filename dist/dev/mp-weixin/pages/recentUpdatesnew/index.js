@@ -120,9 +120,9 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
       return dateString;
     };
     const next = (item) => {
-      let itemStr = JSON.stringify(item);
+      JSON.stringify(item);
       common_vendor.index.navigateTo({
-        url: "/pages/recentdetails/index?item=" + itemStr
+        url: "/pages/recentdetails/index?newsId=" + item.newsId
       });
     };
     return (_ctx, _cache) => {
@@ -136,7 +136,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
             c: common_vendor.t(item.newsContent),
             d: common_vendor.f(item.newsImages, (res, index2, i1) => {
               return {
-                a: res,
+                a: res + "?image_process=format,webp",
                 b: index2
               };
             }),

@@ -21,14 +21,18 @@
           object-fit="cover"
         /> -->
 
-        <view @click="nextVideo(item.caseImages[0])">
+        <view
+          @click="nextVideo(item.caseImages[0])"
+          style="width: 344rpx; height: 458rpx"
+        >
           <!-- <image
             :src="item.coverImage + '?image_process=format,webp'"
             style="width: 344rpx; height: 458rpx; border-radius: 20rpx"
           ></image> -->
           <image
-            :src="item.coverImage + '?image_process=format,webp'"
-            style="width: 344rpx; height: 458rpx; border-radius: 20rpx"
+            :src="item.coverImage"
+            mode="aspectFill"
+            style="width: 100%; height: 100%; border-radius: 20rpx"
           ></image>
           <view class="custom-play-button">
             <image

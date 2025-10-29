@@ -4,6 +4,7 @@
       <!-- <video :src="bannerImages"></video> -->
       <image
         :src="enterpriseList.coverImage + '?image_process=format,webp'"
+        mode="aspectFill"
         style="width: 100%; height: 100%; border-radius: 20rpx"
       ></image>
       <view class="custom-play-button">
@@ -29,7 +30,9 @@
             :key="index"
             @click="next(item)"
           >
-            <image :src="item.serviceImage[0]"></image>
+            <image
+              :src="item.serviceImage[0] + '?image_process=format,webp'"
+            ></image>
             <view class="winthecustomer-content2">
               <view class="winthecustomer-content2-1">
                 {{ item.serviceName }}
@@ -487,7 +490,7 @@ const processContent = (content) => {
 
 .custom-play-button:hover {
   transform: translate(-50%, -50%) scale(1.1);
-  background: rgba(255, 255, 255, 1);
+  /* background: rgba(255, 255, 255, 1); */
 }
 
 .custom-play-button .play-icon {

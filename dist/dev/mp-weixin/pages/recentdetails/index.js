@@ -1,5 +1,26 @@
 "use strict";
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 const common_vendor = require("../../common/vendor.js");
+const api_activity = require("../../api/activity.js");
 const _sfc_main = /* @__PURE__ */ Object.assign({
   name: "RecentDetails"
 }, {
@@ -7,14 +28,29 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
   setup(__props) {
     const richText = common_vendor.ref("");
     const detailData = common_vendor.ref({});
+    const CompanyNews = (newsId) => __async(this, null, function* () {
+      try {
+        const response = yield api_activity.getCompanyNews({
+          newsId
+        });
+        if (response && response.data) {
+          detailData.value = response.data;
+          processContent(response.data.newDetails);
+        }
+      } catch (error) {
+        console.error("获取企业列表失败:", error);
+        common_vendor.index.showToast({
+          title: "获取企业列表失败",
+          icon: "none"
+        });
+      } finally {
+      }
+    });
     const getPageParams = () => {
       const pages = getCurrentPages();
       const currentPage = pages[pages.length - 1];
-      if (currentPage.options && currentPage.options.item) {
-        const decodedItem = decodeURIComponent(currentPage.options.item);
-        let detailDatas = JSON.parse(decodedItem);
-        processContent(detailDatas.newDetails);
-        detailData.value = detailDatas;
+      if (currentPage.options && currentPage.options.newsId) {
+        CompanyNews(currentPage.options.newsId);
       }
     };
     const processContent = (content) => {

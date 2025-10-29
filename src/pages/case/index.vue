@@ -15,7 +15,7 @@
       <view class="image-container">
         <image
           class="item-image"
-          :src="item.caseImages[0]"
+          :src="item.caseImages[0] + '?image_process=format,webp'"
           mode="aspectFill"
         ></image>
       </view>

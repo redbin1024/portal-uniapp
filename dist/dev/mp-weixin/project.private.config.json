@@ -3,11 +3,18 @@
 		"miniprogram": {
 			"list": [
 				{
-					"name": "pages/secondary/system/index",
-					"pathName": "pages/secondary/system/index",
+					"name": "pages/secondary/businesspartner/index",
+					"pathName": "pages/secondary/businesspartner/index",
 					"query": "",
 					"scene": null,
 					"launchMode": "default"
+				},
+				{
+					"name": "pages/secondary/system/index",
+					"pathName": "pages/secondary/system/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
 				},
 				{
 					"name": "pages/secondary/businesspartner/index",

@@ -362,15 +362,15 @@ const _sfc_main = {
           };
         }),
         b: common_vendor.o(viewmore),
-        c: enterpriseList.value.bannerImages[0],
-        d: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
-      }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) ? {
+        c: enterpriseList.value.bannerImages[0] + "?image_process=format,webp",
+        d: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
+      }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) + "?image_process=format,webp" ? {
         e: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
         f: common_vendor.o(($event) => nextDetile()),
         g: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
-            a: item.serviceImage,
+            a: item.serviceImage + "?image_process=format,webp",
             b: common_vendor.t(item.serviceName),
             c: index,
             d: common_vendor.o(($event) => next(item), index)
@@ -378,7 +378,7 @@ const _sfc_main = {
         }),
         h: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
-            a: certificate,
+            a: certificate + "?image_process=format,webp",
             b: "row1-" + index
           };
         }),

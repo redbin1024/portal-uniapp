@@ -169,7 +169,7 @@ to {
 }
 .custom-play-button.data-v-8bd1f02a:hover {
   transform: translate(-50%, -50%) scale(1.1);
-  background: rgba(255, 255, 255, 1);
+  /* background: rgba(255, 255, 255, 1); */
 }
 .custom-play-button .play-icon.data-v-8bd1f02a {
   width: 80rpx;

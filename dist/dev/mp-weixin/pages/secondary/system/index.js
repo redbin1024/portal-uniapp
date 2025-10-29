@@ -183,7 +183,7 @@ const _sfc_main = {
         d: enterpriseList.value.enterpriseDescription,
         e: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
-            a: item.serviceImage[0],
+            a: item.serviceImage[0] + "?image_process=format,webp",
             b: common_vendor.t(item.serviceName),
             c: index,
             d: common_vendor.o(($event) => next(item), index)

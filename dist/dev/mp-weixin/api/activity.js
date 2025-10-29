@@ -25,12 +25,16 @@ function getServiceList(params = {}) {
 function getCompanyNewsList(params = {}) {
   return utils_request.get("/mp/tk/companyNews/list", __spreadValues({}, params));
 }
+function getCompanyNews(params = {}) {
+  return utils_request.get("/mp/tk/companyNews/" + params.newsId, {});
+}
 function getcaseList(params = {}) {
   return utils_request.get("/mp/tk/case/list", __spreadValues({}, params));
 }
 function getsuccessCaseList(params = {}) {
   return utils_request.get("/mp/tk/successCase/list", __spreadValues({}, params));
 }
+exports.getCompanyNews = getCompanyNews;
 exports.getCompanyNewsList = getCompanyNewsList;
 exports.getEnterpriseList = getEnterpriseList;
 exports.getServiceList = getServiceList;

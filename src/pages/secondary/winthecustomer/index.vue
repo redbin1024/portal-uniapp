@@ -31,12 +31,7 @@
           @click="navigateToRecentDetails(item)"
         >
           <!-- 左边内容 -->
-          <view
-            class="dynamic-left"
-            :class="{
-              'animate-fade-in-left': visibleDynamicItems.includes(index),
-            }"
-          >
+          <view class="dynamic-left">
             <view class="dynamic-date">{{ formatDate(item.createTime) }}</view>
             <view class="dynamic-text1">{{ item.newsTitle }}</view>
             <view class="dynamic-text">{{ item.newsContent }}</view>
@@ -44,10 +39,7 @@
 
           <!-- 中间步骤条 -->
           <view class="dynamic-center">
-            <view
-              class="step-dot"
-              :class="{ 'animate-dot': visibleDynamicItems.includes(index) }"
-            ></view>
+            <view class="step-dot"></view>
             <view
               class="step-line"
               v-if="index < companyNewsList.length - 1"
@@ -56,15 +48,10 @@
           </view>
 
           <!-- 右边图片 -->
-          <view
-            class="dynamic-right"
-            :class="{
-              'animate-fade-in-right': visibleDynamicItems.includes(index),
-            }"
-          >
+          <view class="dynamic-right">
             <image
               class="dynamic-image"
-              :src="item.newsImages[0]"
+              :src="item.newsImages[0] + '?image_process=format,webp'"
               mode="aspectFill"
             ></image>
           </view>
@@ -108,7 +95,7 @@
         <view class="image-container">
           <image
             class="item-image"
-            :src="item.caseImages[0]"
+            :src="item.caseImages[0] + '?image_process=format,webp'"
             mode="aspectFit"
           ></image>
         </view>
@@ -571,9 +558,7 @@ const fetchcaseList = async () => {
  */
 const navigateToRecentDetails = (item) => {
   uni.navigateTo({
-    url:
-      "/pages/recentdetails/index?item=" +
-      encodeURIComponent(JSON.stringify(item)),
+    url: "/pages/recentdetails/index?newsId=" + item.newsId,
   });
 };
 
@@ -728,10 +713,9 @@ onMounted(() => {
   // 初始化时检查list-item可见性
   // 直接显示所有动态内容项，不依赖滚动检测
   setTimeout(() => {
-    checkDynamicItemVisibility();
+    showAllDynamicItems(); // 直接显示所有动态项，立即触发动画
     checkListItemVisibility();
-  }, 100); // 延迟500ms，确保页面元素已渲染完成
-  showAllDynamicItems();
+  }, 100); // 延迟100ms，确保页面元素已渲染完成
   fetchcaseList(); // 暂时注释掉，因为当前页面主要显示服务信息
   fetchCompanyNewsList();
   fetchsuccessCaseList();

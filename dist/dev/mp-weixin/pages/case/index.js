@@ -158,7 +158,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
       }, loading.value ? {} : {}, {
         b: common_vendor.f(successCaseList.value, (item, index, i0) => {
           return {
-            a: item.caseImages[0],
+            a: item.caseImages[0] + "?image_process=format,webp",
             b: common_vendor.t(item.customerName),
             c: common_vendor.t(item.caseValue),
             d: animatedItems.value[index] ? 1 : "",
