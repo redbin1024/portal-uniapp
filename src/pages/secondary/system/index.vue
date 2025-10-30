@@ -1,6 +1,6 @@
 <template>
   <view class="main">
-    <view class="video" @click="nextVideo(bannerImages)">
+    <view class="video" @click="nextVideo(bannerImages, coverImage)">
       <!-- <video :src="bannerImages"></video> -->
       <image
         :src="enterpriseList.coverImage + '?image_process=format,webp'"
@@ -66,6 +66,7 @@ const caseList = ref([]);
 const richText = ref("");
 const imgList = ref([]);
 const bannerImages = ref("");
+const coverImage = ref("");
 // 企业列表数据
 const enterpriseList = ref([]);
 //查询商家案例列表
@@ -221,9 +222,10 @@ const onVideoError = (e) => {
     icon: "none",
   });
 };
-const nextVideo = (url) => {
+const nextVideo = (url, coverImage) => {
   uni.navigateTo({
-    url: "/pages/secondary/index/index?url=" + url,
+    url:
+      "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage,
   });
 };
 const onFullscreenChange = (e, index, isEnteringFullscreen) => {
@@ -277,6 +279,7 @@ const fetchEnterpriseList = async () => {
       response.rows.length > 0
     ) {
       enterpriseList.value = response.rows[0];
+      coverImage.value = response.rows[0].coverImage;
       let video;
       response.rows[0].bannerImages.forEach((str1) => {
         let result1 = str1.slice(-3);

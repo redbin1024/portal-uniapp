@@ -3,11 +3,18 @@
 		"miniprogram": {
 			"list": [
 				{
+					"name": "pages/recentdetails/index",
+					"pathName": "pages/recentdetails/index",
+					"query": "newsId=87",
+					"scene": null,
+					"launchMode": "default"
+				},
+				{
 					"name": "pages/secondary/businesspartner/index",
 					"pathName": "pages/secondary/businesspartner/index",
 					"query": "",
-					"scene": null,
-					"launchMode": "default"
+					"launchMode": "default",
+					"scene": null
 				},
 				{
 					"name": "pages/secondary/system/index",

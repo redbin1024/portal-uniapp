@@ -168,7 +168,14 @@
       "path": "pages/secondary/index/index",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": ""
+        "navigationBarTitleText": "",
+        "enableShareAppMessage": true,
+        // 关闭微信小程序的系统边缘滑动返回
+        "disableSwipeBack": true,
+        // 关闭 App 平台的侧滑返回（如需打包 app-plus）
+        "app-plus": {
+          "popGesture": "none"
+        }
       }
     }
    

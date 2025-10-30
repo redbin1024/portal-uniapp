@@ -21,29 +21,24 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../common/vendor.js");
 const api_activity = require("../../api/activity.js");
-const _sfc_main = /* @__PURE__ */ Object.assign({
-  name: "RecentDetails"
-}, {
+if (!Math) {
+  common_vendor.unref(mpHtml)();
+}
+const mpHtml = () => "../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html.js";
+const _sfc_main = /* @__PURE__ */ Object.assign({ name: "RecentDetails" }, {
   __name: "index",
-  setup(__props) {
+  setup(__props, { expose: __expose }) {
     const richText = common_vendor.ref("");
     const detailData = common_vendor.ref({});
     const CompanyNews = (newsId) => __async(this, null, function* () {
       try {
-        const response = yield api_activity.getCompanyNews({
-          newsId
-        });
+        const response = yield api_activity.getCompanyNews({ newsId });
         if (response && response.data) {
           detailData.value = response.data;
           processContent(response.data.newDetails);
         }
       } catch (error) {
-        console.error("获取企业列表失败:", error);
-        common_vendor.index.showToast({
-          title: "获取企业列表失败",
-          icon: "none"
-        });
-      } finally {
+        common_vendor.index.showToast({ title: "获取企业列表失败", icon: "none" });
       }
     });
     const getPageParams = () => {
@@ -58,6 +53,13 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
         return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
       }).replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
     };
+    const previewImage = (e) => {
+      common_vendor.index.previewImage({
+        current: e.detail.src,
+        urls: e.detail.imgs
+      });
+    };
+    __expose({ previewImage });
     common_vendor.onMounted(() => {
       getPageParams();
     });
@@ -65,7 +67,10 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
       return {
         a: common_vendor.t(detailData.value.newsTitle),
         b: common_vendor.t(detailData.value.newsContent),
-        c: richText.value
+        c: common_vendor.o(previewImage),
+        d: common_vendor.p({
+          content: richText.value
+        })
       };
     };
   }

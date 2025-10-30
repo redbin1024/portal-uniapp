@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "最近动态",
   "navigationBarBackgroundColor": "#ffffff",
-  "usingComponents": {}
+  "usingComponents": {
+    "mp-html": "../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html"
+  }
 }

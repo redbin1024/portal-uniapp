@@ -114,7 +114,7 @@
               object-fit="cover"
             /> -->
             <!-- 自定义播放按钮 -->
-            <view @click="nextVideo(item.caseImages)">
+            <view @click="nextVideo(item.caseImages, item.coverImage)">
               <view>
                 <image
                   :src="item.coverImage + '?image_process=format,webp'"
@@ -424,9 +424,10 @@ const headContentVisible = ref({});
 // winthecustomer-content1 动画状态
 const content1Visible = ref([]);
 const caseDataList = ref([]);
-const nextVideo = (url) => {
+const nextVideo = (url, coverImage) => {
   uni.navigateTo({
-    url: "/pages/secondary/index/index?url=" + url,
+    url:
+      "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage,
   });
 };
 //查看更多

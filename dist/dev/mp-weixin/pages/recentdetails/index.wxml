@@ -1,1 +1,1 @@
-<view class="main data-v-eede22fe"><view class="title data-v-eede22fe">{{a}}</view><view class="content data-v-eede22fe">{{b}}</view><rich-text class="activity data-v-eede22fe" nodes="{{c}}" type="text"></rich-text></view>
+<view class="main data-v-eede22fe"><view class="title data-v-eede22fe">{{a}}</view><view class="content data-v-eede22fe">{{b}}</view><mp-html wx:if="{{d}}" class="data-v-eede22fe" bindimgtap="{{c}}" u-i="eede22fe-0" bind:__l="__l" u-p="{{d}}"></mp-html></view>

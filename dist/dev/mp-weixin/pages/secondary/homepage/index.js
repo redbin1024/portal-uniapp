@@ -28,9 +28,9 @@ const _sfc_main = {
     common_vendor.ref({});
     common_vendor.ref([]);
     const caseDataList = common_vendor.ref([]);
-    const nextVideo = (url) => {
+    const nextVideo = (url, coverImage) => {
       common_vendor.index.navigateTo({
-        url: "/pages/secondary/index/index?url=" + url
+        url: "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage
       });
     };
     const viewmore = () => {
@@ -357,7 +357,7 @@ const _sfc_main = {
         a: common_vendor.f(caseDataList.value, (item, index, i0) => {
           return {
             a: item.coverImage + "?image_process=format,webp",
-            b: common_vendor.o(($event) => nextVideo(item.caseImages), index),
+            b: common_vendor.o(($event) => nextVideo(item.caseImages, item.coverImage), index),
             c: index
           };
         }),

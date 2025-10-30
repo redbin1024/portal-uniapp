@@ -28,10 +28,18 @@
           class="dynamic-item"
           v-for="(item, index) in companyNewsList"
           :key="index"
+          :class="{
+            'dynamic-item-visible': visibleDynamicItems.includes(index),
+          }"
           @click="navigateToRecentDetails(item)"
         >
           <!-- 左边内容 -->
-          <view class="dynamic-left">
+          <view
+            class="dynamic-left"
+            :class="{
+              'animate-fade-in-left': visibleDynamicItems.includes(index),
+            }"
+          >
             <view class="dynamic-date">{{ formatDate(item.createTime) }}</view>
             <view class="dynamic-text1">{{ item.newsTitle }}</view>
             <view class="dynamic-text">{{ item.newsContent }}</view>
@@ -39,7 +47,10 @@
 
           <!-- 中间步骤条 -->
           <view class="dynamic-center">
-            <view class="step-dot"></view>
+            <view
+              class="step-dot"
+              :class="{ 'animate-dot': visibleDynamicItems.includes(index) }"
+            ></view>
             <view
               class="step-line"
               v-if="index < companyNewsList.length - 1"
@@ -48,7 +59,12 @@
           </view>
 
           <!-- 右边图片 -->
-          <view class="dynamic-right">
+          <view
+            class="dynamic-right"
+            :class="{
+              'animate-fade-in-right': visibleDynamicItems.includes(index),
+            }"
+          >
             <image
               class="dynamic-image"
               :src="item.newsImages[0] + '?image_process=format,webp'"
@@ -474,27 +490,139 @@ const fetchCompanyNewsList = async () => {
       pageNum: 1,
       type: 1,
     });
-    console.log("企业列表数据:", response);
+    console.log("公司动态数据:", response);
+
     if (
       response &&
       response.rows &&
       Array.isArray(response.rows) &&
       response.rows.length > 0
     ) {
-      // 对数据进行文字截取处理
-      const processedData = response.rows.map((item) => ({
-        ...item,
-        newsTitle: truncateText(item.newsTitle, 21), // 截取23个字符
-        newsContent: truncateText(item.newsContent, 24), // 截取26个字符
-      }));
+      // 对数据进行安全处理
+      const processedData = response.rows.map((item, index) => {
+        console.log(`处理第${index + 1}个动态项:`, item);
+
+        // 安全获取字段值，使用默认值防止undefined
+        const newsTitle =
+          item.newsTitle || item.title || `动态标题${index + 1}`;
+        const newsContent =
+          item.newsContent ||
+          item.content ||
+          item.description ||
+          `动态内容${index + 1}`;
+        const createTime =
+          item.createTime ||
+          item.createDate ||
+          item.date ||
+          new Date().toISOString();
+
+        // 安全处理图片数组
+        let newsImages = [];
+        if (
+          item.newsImages &&
+          Array.isArray(item.newsImages) &&
+          item.newsImages.length > 0
+        ) {
+          newsImages = item.newsImages;
+        } else if (
+          item.images &&
+          Array.isArray(item.images) &&
+          item.images.length > 0
+        ) {
+          newsImages = item.images;
+        } else if (item.image) {
+          newsImages = [item.image];
+        } else {
+          // 使用默认图片
+          newsImages = [
+            "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
+          ];
+        }
+
+        return {
+          ...item,
+          newsTitle: truncateText(newsTitle, 21),
+          newsContent: truncateText(newsContent, 24),
+          newsImages: newsImages,
+          createTime: createTime,
+          newsId: item.newsId || item.id || index + 1,
+        };
+      });
+
+      console.log("处理后的动态数据:", processedData);
       companyNewsList.value = processedData;
+
+      // 确保数据更新后重新检查可见性
+      setTimeout(() => {
+        checkDynamicItemVisibility();
+        showAllDynamicItems();
+      }, 100);
+    } else {
+      console.log("没有获取到动态数据，使用默认数据");
+      // 使用默认数据作为后备
+      const defaultData = [
+        {
+          newsId: 1,
+          newsTitle: "公司成功完成新项目",
+          newsContent: "我们很高兴地宣布，公司成功完成了最新的软件开发项目。",
+          createTime: "2024-10-25",
+          newsImages: [
+            "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
+          ],
+        },
+        {
+          newsId: 2,
+          newsTitle: "技术团队培训完成",
+          newsContent: "我们的技术团队完成了新一轮的技能培训，提升了服务质量。",
+          createTime: "2024-10-20",
+          newsImages: [
+            "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
+          ],
+        },
+        {
+          newsId: 3,
+          newsTitle: "客户满意度持续提升",
+          newsContent: "通过持续优化服务流程，我们的客户满意度达到了新的高度。",
+          createTime: "2024-10-15",
+          newsImages: [
+            "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
+          ],
+        },
+      ];
+
+      companyNewsList.value = defaultData;
+
+      // 显示默认数据后重新检查可见性
+      setTimeout(() => {
+        showAllDynamicItems();
+      }, 100);
     }
   } catch (error) {
-    console.error("获取企业列表失败:", error);
+    console.error("获取公司动态失败:", error);
     uni.showToast({
-      title: "获取企业列表失败",
+      title: "获取动态信息失败",
       icon: "none",
     });
+
+    // 发生错误时也使用默认数据
+    const fallbackData = [
+      {
+        newsId: 1,
+        newsTitle: "欢迎了解我们的服务",
+        newsContent: "我们致力于为客户提供最优质的技术解决方案。",
+        createTime: "2024-10-30",
+        newsImages: [
+          "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
+        ],
+      },
+    ];
+
+    companyNewsList.value = fallbackData;
+
+    // 显示备用数据后重新检查可见性
+    setTimeout(() => {
+      showAllDynamicItems();
+    }, 100);
   }
 };
 //查询商家案例列表

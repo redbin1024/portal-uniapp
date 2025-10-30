@@ -31,6 +31,7 @@ const _sfc_main = {
     const richText = common_vendor.ref("");
     const imgList = common_vendor.ref([]);
     const bannerImages = common_vendor.ref("");
+    const coverImage = common_vendor.ref("");
     const enterpriseList = common_vendor.ref([]);
     const fetchcaseList = () => __async(this, null, function* () {
       try {
@@ -134,9 +135,9 @@ const _sfc_main = {
         });
       }
     };
-    const nextVideo = (url) => {
+    const nextVideo = (url, coverImage2) => {
       common_vendor.index.navigateTo({
-        url: "/pages/secondary/index/index?url=" + url
+        url: "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage2
       });
     };
     const fetchEnterpriseList = () => __async(this, null, function* () {
@@ -148,6 +149,7 @@ const _sfc_main = {
         console.log("企业列表数据:", response);
         if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
           enterpriseList.value = response.rows[0];
+          coverImage.value = response.rows[0].coverImage;
           let video;
           response.rows[0].bannerImages.forEach((str1) => {
             let result1 = str1.slice(-3);
@@ -178,7 +180,7 @@ const _sfc_main = {
     return (_ctx, _cache) => {
       return {
         a: enterpriseList.value.coverImage + "?image_process=format,webp",
-        b: common_vendor.o(($event) => nextVideo(bannerImages.value)),
+        b: common_vendor.o(($event) => nextVideo(bannerImages.value, coverImage.value)),
         c: common_vendor.t(enterpriseList.value.enterpriseName),
         d: enterpriseList.value.enterpriseDescription,
         e: common_vendor.f(serviceLists.value, (item, index, i0) => {
