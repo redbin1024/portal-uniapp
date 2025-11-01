@@ -4,7 +4,7 @@ const _sfc_main = {
   data() {
     return {
       coverImage: "",
-      videoUrl: "http://cdn.xiaodingdang1.com/2025/10/24/14761649ac8a42c693481f96a0b19917.mp4",
+      videoUrl: "",
       autoplay: true,
       loop: false,
       isPlaying: false,
