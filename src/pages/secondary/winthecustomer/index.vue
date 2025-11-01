@@ -175,8 +175,8 @@
 <script setup>
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { onPageScroll, onLoad, onShow } from "@dcloudio/uni-app";
-import hbxwRotateCarousel from "@/uni_modules/hbxw-rotate-carousel/components/hbxw-rotate-carousel/hbxw-rotate-carousel.vue";
-import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
+// import hbxwRotateCarousel from "@/uni_modules/hbxw-rotate-carousel/components/hbxw-rotate-carousel/hbxw-rotate-carousel.vue";
+// import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
 import {
   getcaseList,
   getCompanyNewsList,
