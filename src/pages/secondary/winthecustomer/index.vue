@@ -142,12 +142,13 @@
     </view>
     <view class="content-container">
       <view class="content-img">
-        <rich-text
+        <!-- <rich-text
           class="activity"
           :nodes="richText"
           type="text"
           @itemclick="onRichTextItemClick"
-        ></rich-text>
+        ></rich-text> -->
+        <mp-html :content="richText" @imgtap="previewImage"></mp-html>
       </view>
       <view class="btn">
         <button
@@ -173,6 +174,7 @@
 </template>
 
 <script setup>
+import mpHtml from "mp-html/dist/uni-app/components/mp-html/mp-html";
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { onPageScroll, onLoad, onShow } from "@dcloudio/uni-app";
 // import hbxwRotateCarousel from "@/uni_modules/hbxw-rotate-carousel/components/hbxw-rotate-carousel/hbxw-rotate-carousel.vue";

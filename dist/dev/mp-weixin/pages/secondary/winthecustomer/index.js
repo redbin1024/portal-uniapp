@@ -40,6 +40,10 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../../common/vendor.js");
 const api_activity = require("../../../api/activity.js");
+if (!Math) {
+  common_vendor.unref(mpHtml)();
+}
+const mpHtml = () => "../../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -154,34 +158,6 @@ const _sfc_main = {
       }
     });
     const richTextImages = common_vendor.ref([]);
-    const onRichTextItemClick = (event) => {
-      var _a;
-      if ((_a = event.detail) == null ? void 0 : _a.src) {
-        const clickedSrc = event.detail.src;
-        let index = richTextImages.value.findIndex(
-          (imgSrc) => imgSrc === clickedSrc
-        );
-        if (index === -1) {
-          try {
-            const decodedSrc = decodeURIComponent(clickedSrc);
-            index = richTextImages.value.findIndex(
-              (imgSrc) => imgSrc === decodedSrc
-            );
-          } catch (e) {
-            console.log("Decode URI failed:", e);
-          }
-        }
-        if (index === -1) {
-          index = 0;
-        }
-        if (richTextImages.value.length > 0) {
-          common_vendor.index.previewImage({
-            urls: richTextImages.value,
-            current: index
-          });
-        }
-      }
-    };
     const processContent = (content) => {
       const imgSrcRegex = /<img[^>]*src=['"]([^'"]+)['"][^>]*>/gi;
       let match;
@@ -528,8 +504,10 @@ const _sfc_main = {
         f: showCaseViewMoreBtn.value ? 1 : "",
         g: showCaseViewMoreBtn.value,
         h: common_vendor.o(goToCooperationcase),
-        i: richText.value,
-        j: common_vendor.o(onRichTextItemClick),
+        i: common_vendor.o(_ctx.previewImage),
+        j: common_vendor.p({
+          content: richText.value
+        }),
         k: common_vendor.o(onScroll)
       };
     };

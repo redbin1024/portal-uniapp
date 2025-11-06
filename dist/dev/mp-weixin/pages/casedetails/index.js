@@ -1,6 +1,10 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 require("../../utils/request.js");
+if (!Math) {
+  common_vendor.unref(mpHtml)();
+}
+const mpHtml = () => "../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -31,7 +35,10 @@ const _sfc_main = {
       }, loading.value ? {} : error.value ? {
         c: common_vendor.t(error.value)
       } : {
-        d: richText.value
+        d: common_vendor.o(_ctx.previewImage),
+        e: common_vendor.p({
+          content: richText.value
+        })
       }, {
         b: error.value
       });

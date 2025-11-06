@@ -178,11 +178,13 @@ const _sfc_main = {
       }).replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
     };
     return (_ctx, _cache) => {
-      return {
-        a: enterpriseList.value.coverImage + "?image_process=format,webp",
-        b: common_vendor.o(($event) => nextVideo(bannerImages.value, coverImage.value)),
-        c: common_vendor.t(enterpriseList.value.enterpriseName),
-        d: enterpriseList.value.enterpriseDescription,
+      return common_vendor.e({
+        a: bannerImages.value
+      }, bannerImages.value ? {
+        b: enterpriseList.value.coverImage + "?image_process=format,webp",
+        c: common_vendor.o(($event) => nextVideo(bannerImages.value, coverImage.value))
+      } : {}, {
+        d: common_vendor.t(enterpriseList.value.enterpriseName),
         e: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage[0] + "?image_process=format,webp",
@@ -191,7 +193,7 @@ const _sfc_main = {
             d: common_vendor.o(($event) => next(item), index)
           };
         })
-      };
+      });
     };
   }
 };

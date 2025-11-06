@@ -3,11 +3,18 @@
 		"miniprogram": {
 			"list": [
 				{
+					"name": "pages/secondary/index/index",
+					"pathName": "pages/secondary/index/index",
+					"query": "url=http%3A%2F%2Fcdn.xiaodingdang1.com%2F2025%2F11%2F05%2F3f879ec8b4d848efb26e2212087c53c3.mp4&coverImage=http%3A%2F%2Fcdn.xiaodingdang1.com%2F2025%2F11%2F05%2Fff51b77a3d034091b1c68869925c689f.jpg",
+					"scene": null,
+					"launchMode": "default"
+				},
+				{
 					"name": "pages/recentdetails/index",
 					"pathName": "pages/recentdetails/index",
 					"query": "newsId=87",
-					"scene": null,
-					"launchMode": "default"
+					"launchMode": "default",
+					"scene": null
 				},
 				{
 					"name": "pages/secondary/businesspartner/index",

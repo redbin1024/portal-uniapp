@@ -1,5 +1,9 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+if (!Math) {
+  common_vendor.unref(mpHtml)();
+}
+const mpHtml = () => "../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -40,10 +44,13 @@ const _sfc_main = {
         a: common_vendor.o(goBack),
         b: common_vendor.t(serviceName.value),
         c: _ctx.showHeaderBg ? 1 : "",
-        d: richText.value,
-        e: serviceDescription.value
+        d: common_vendor.o(_ctx.previewImage),
+        e: common_vendor.p({
+          content: richText.value
+        }),
+        f: serviceDescription.value
       }, serviceDescription.value ? {
-        f: common_vendor.t(serviceDescription.value)
+        g: common_vendor.t(serviceDescription.value)
       } : {});
     };
   }

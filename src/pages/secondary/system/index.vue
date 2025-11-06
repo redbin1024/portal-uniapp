@@ -1,6 +1,10 @@
 <template>
   <view class="main">
-    <view class="video" @click="nextVideo(bannerImages, coverImage)">
+    <view
+      class="video"
+      @click="nextVideo(bannerImages, coverImage)"
+      v-if="bannerImages"
+    >
       <!-- <video :src="bannerImages"></video> -->
       <image
         :src="enterpriseList.coverImage + '?image_process=format,webp'"
@@ -16,10 +20,10 @@
     </view>
     <view class="videoTitle">
       <view class="videoTitle1">{{ enterpriseList.enterpriseName }}</view>
-      <view
+      <!-- <view
         class="videoTitle2"
         v-html="enterpriseList.enterpriseDescription"
-      ></view>
+      ></view> -->
     </view>
     <view class="head">
       <view>

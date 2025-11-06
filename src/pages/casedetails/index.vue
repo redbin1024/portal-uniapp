@@ -7,7 +7,8 @@
       <text>{{ error }}</text>
     </view>
     <view v-else>
-      <rich-text class="activity" :nodes="richText" type="text"></rich-text>
+      <!-- <rich-text class="activity" :nodes="richText" type="text"></rich-text> -->
+      <mp-html :content="richText" @imgtap="previewImage"></mp-html>
     </view>
   </view>
 </template>
@@ -15,6 +16,7 @@
 <script setup>
 import { ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
+import mpHtml from "mp-html/dist/uni-app/components/mp-html/mp-html";
 import { getActivityDetail } from "@/api/activity.js";
 
 // 定义响应式数据

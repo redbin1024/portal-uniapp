@@ -13,7 +13,8 @@
       </view>
     </view>
     <view class="content-img">
-      <rich-text class="activity" :nodes="richText" type="text"></rich-text>
+      <!-- <rich-text class="activity" :nodes="richText" type="text"></rich-text> -->
+      <mp-html :content="richText" @imgtap="previewImage"></mp-html>
       <!-- 显示接收到的服务描述参数 -->
       <view v-if="serviceDescription" class="service-description">
         <text>服务描述: {{ serviceDescription }}</text>
@@ -46,12 +47,18 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-
+import mpHtml from "mp-html/dist/uni-app/components/mp-html/mp-html";
 // 定义响应式数据
 const serviceDescription = ref("");
 const richText = ref("");
 const serviceName = ref("");
-
+// 支持图片预览
+// const previewImage = (e) => {
+//   uni.previewImage({
+//     current: e.detail.src,
+//     urls: e.detail.imgs,
+//   });
+// };
 // 页面加载时获取参数
 onMounted(() => {
   // 获取页面参数
