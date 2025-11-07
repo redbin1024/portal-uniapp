@@ -322,25 +322,13 @@
       </view>
 
       <view class="introduce">
-        <view class="introduce-container">
-          <view class="introduce-title1">{{
-            enterpriseList.enterpriseName
-          }}</view>
-          <view class="introduce-title2">{{
-            enterpriseList.enterpriseAddress
-          }}</view>
-          <view class="introduce-title3"></view>
-          <view class="introduce-title4"
-            >电话：{{ enterpriseList.contactPhone }}</view
-          >
-        </view>
-        <view class="introduce-container5">
-          <image
-            :src="enterpriseList.qrCode"
-            @longpress="handleLongPressQrCode"
-          ></image>
-          <view class="introduce-container6">长按识别二维码</view>
-        </view>
+        <image
+          src="http://cdn.xiaodingdang1.com/2025/11/07/c6dd442174ea42628e4c8a5fc0a58617.png"
+          style="width: 170rpx; height: 47rpx"
+        ></image>
+        <view class="introduce-title4">{{
+          enterpriseList.enterpriseAddress
+        }}</view>
       </view>
     </view>
 
@@ -1724,8 +1712,6 @@ const onShareTimeline = () => {
 .introduce {
   background: #ffffff;
   padding: 63rpx 44rpx;
-  display: flex;
-  justify-content: space-between;
 }
 .introduce-title1 {
   color: #3d3d3d;
@@ -1742,8 +1728,9 @@ const onShareTimeline = () => {
   margin: 24rpx 0;
 }
 .introduce-title4 {
-  color: #000000;
-  font-size: 21rpx;
+  color: #7a7878;
+  font-size: 24rpx;
+  margin-top: 15rpx;
 }
 .introduce-container5 {
   text-align: center;

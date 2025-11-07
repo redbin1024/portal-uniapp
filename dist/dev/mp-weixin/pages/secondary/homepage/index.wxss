@@ -548,8 +548,6 @@
 .introduce.data-v-24abe20b {
   background: #ffffff;
   padding: 63rpx 44rpx;
-  display: flex;
-  justify-content: space-between;
 }
 .introduce-title1.data-v-24abe20b {
   color: #3d3d3d;
@@ -566,8 +564,9 @@
   margin: 24rpx 0;
 }
 .introduce-title4.data-v-24abe20b {
-  color: #000000;
-  font-size: 21rpx;
+  color: #7a7878;
+  font-size: 24rpx;
+  margin-top: 15rpx;
 }
 .introduce-container5.data-v-24abe20b {
   text-align: center;

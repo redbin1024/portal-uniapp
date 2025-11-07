@@ -246,49 +246,6 @@ const _sfc_main = {
       // 'image' 或 'video'
       index: 0
     });
-    const handleLongPressQrCode = () => {
-      if (!enterpriseList.value.qrCode) {
-        common_vendor.index.showToast({
-          title: "二维码不存在",
-          icon: "none"
-        });
-        return;
-      }
-      common_vendor.index.downloadFile({
-        url: enterpriseList.value.qrCode,
-        success: (downloadRes) => {
-          if (downloadRes.statusCode === 200) {
-            common_vendor.index.saveImageToPhotosAlbum({
-              filePath: downloadRes.tempFilePath,
-              success: () => {
-                common_vendor.index.showToast({
-                  title: "二维码保存相册成功",
-                  icon: "none",
-                  duration: 1500
-                });
-              },
-              fail: () => {
-                common_vendor.index.showToast({
-                  title: "保存失败，请检查相册权限",
-                  icon: "none"
-                });
-              }
-            });
-          } else {
-            common_vendor.index.showToast({
-              title: "下载失败",
-              icon: "none"
-            });
-          }
-        },
-        fail: () => {
-          common_vendor.index.showToast({
-            title: "下载失败",
-            icon: "none"
-          });
-        }
-      });
-    };
     const getVideoPoster = (videoUrl) => {
       if (typeof videoUrl !== "string") {
         console.warn("videoUrl is not a string:", videoUrl);
@@ -391,28 +348,24 @@ const _sfc_main = {
           };
         })
       } : {}, {
-        k: common_vendor.t(enterpriseList.value.enterpriseName),
-        l: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        m: common_vendor.t(enterpriseList.value.contactPhone),
-        n: enterpriseList.value.qrCode,
-        o: common_vendor.o(handleLongPressQrCode),
-        p: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
-        q: showPreview.value
+        k: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        l: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
+        m: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        r: previewMedia.value.type === "video"
+        n: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        s: previewMedia.value.src,
-        t: getVideoPoster(previewMedia.value.src),
-        v: common_vendor.o(onFullscreenChange),
-        w: "preview-video-" + previewMedia.value.index
+        o: previewMedia.value.src,
+        p: getVideoPoster(previewMedia.value.src),
+        q: common_vendor.o(onFullscreenChange),
+        r: "preview-video-" + previewMedia.value.index
       } : {
-        x: previewMedia.value.src
+        s: previewMedia.value.src
       }, {
-        y: isVideoFullscreen.value ? 1 : "",
-        z: common_vendor.o(handlePreviewModalClick)
+        t: isVideoFullscreen.value ? 1 : "",
+        v: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        A: common_vendor.o(handleCustomerServiceClick),
-        B: showPreview.value ? 1 : ""
+        w: common_vendor.o(handleCustomerServiceClick),
+        x: showPreview.value ? 1 : ""
       });
     };
   }

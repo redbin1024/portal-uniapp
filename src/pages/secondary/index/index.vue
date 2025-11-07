@@ -44,7 +44,7 @@
         <!-- 自定义控件区域 -->
       </video>
       <!-- 拖拽进度预览覆盖层 -->
-      <view v-if="dragSeekActive" class="seek-overlay">
+      <!-- <view v-if="dragSeekActive" class="seek-overlay">
         <view class="seek-info">
           <text class="seek-time"
             >{{ formatTime(seekPreviewTime) }} /
@@ -57,27 +57,38 @@
             :style="{ width: (seekPreviewTime / (duration || 1)) * 100 + '%' }"
           ></view>
         </view>
+      </view> -->
+      <!-- 倍速切换按钮（单按钮循环切换） -->
+      <view class="rate-controls">
+        <view class="rate-chip" @click.stop="toggleRate">
+          {{ playbackRate }}x
+        </view>
       </view>
-
       <!-- 自定义底部进度条控件 -->
-      <!-- <view class="custom-controls">
-        <view class="progress-container">
+      <view class="custom-controls">
+        <view
+          class="progress-container"
+          @touchstart.stop="onProgressTouchStart"
+          @touchmove.stop="onProgressTouchMove"
+          @touchend.stop="onProgressTouchEnd"
+        >
+          <view class="time-text" v-if="dragSeekActive"
+            >{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</view
+          >
           <slider
             class="progress-slider"
             :min="0"
             :max="duration"
             :value="currentTime"
-            activeColor="#ff4d4f"
+            activeColor="#ffffff"
             backgroundColor="rgba(255,255,255,0.2)"
             blockColor="#fff"
+            blockSize="20"
             @changing="onSliderChanging"
             @change="onSliderChange"
           />
-          <view class="time-text"
-            >{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</view
-          >
         </view>
-      </view> -->
+      </view>
       <!-- 居中播放覆盖层：暂停时显示，点击恢复播放 -->
       <view
         v-if="!isPlaying"
@@ -88,19 +99,6 @@
           src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
           class="play-icon"
         />
-      </view>
-      <!-- 倍速选择控件 -->
-      <view class="rate-controls">
-        <picker
-          mode="selector"
-          :range="playbackRateLabels"
-          @change="onRatePickerChange"
-        >
-          <view class="rate-dropdown">
-            <text class="rate-selected">{{ playbackRate }}x</text>
-            <text class="dropdown-icon">▼</text>
-          </view>
-        </picker>
       </view>
     </view>
   </view>
@@ -142,6 +140,10 @@ export default {
       seekInitialTime: 0,
       seekPreviewTime: 0,
       windowWidth: 375,
+      // 进度条交互区域标记与节流
+      isOnProgressArea: false,
+      lastSeekUpdate: 0,
+      seekUpdateTimer: null,
       // 添加用于存储页面参数的数据
     };
   },
@@ -275,21 +277,6 @@ export default {
       }
     },
 
-    // 进度条变化
-    onSliderChange(e) {
-      const seekTime = e.detail.value;
-      this.videoContext.seek(seekTime);
-    },
-    // 进度条拖动中（实时预览与 seek）
-    onSliderChanging(e) {
-      const seekTime = e.detail.value;
-      this.seekPreviewTime = seekTime;
-      this.dragSeekActive = true;
-      try {
-        this.videoContext && this.videoContext.seek(seekTime);
-      } catch (err) {}
-    },
-
     // 格式化时间显示
     formatTime(seconds) {
       const min = Math.floor(seconds / 60);
@@ -321,6 +308,14 @@ export default {
       }
     },
 
+    // 单按钮循环切换倍速
+    toggleRate() {
+      const idx = this.playbackRates.findIndex((r) => r === this.playbackRate);
+      const nextIndex = (idx + 1) % this.playbackRates.length;
+      const nextRate = this.playbackRates[nextIndex];
+      this.changeRate(nextRate);
+    },
+
     // 下拉选择倍速事件
     onRatePickerChange(e) {
       const index = Array.isArray(e?.detail?.value)
@@ -332,6 +327,8 @@ export default {
 
     // 触摸开始 - 记录起点
     onTouchStart(e) {
+      // 若触摸发生在进度条区域，交由进度条事件处理
+      if (this.isOnProgressArea) return;
       const touch = e.touches && e.touches[0];
       if (!touch) return;
       // 记录通用触摸起点
@@ -360,6 +357,8 @@ export default {
 
     // 触摸移动 - 计算下拖位移并跟随
     onTouchMove(e) {
+      // 进度条区域不参与页面级触摸逻辑
+      if (this.isOnProgressArea) return;
       const touch = e.touches && e.touches[0];
       if (!touch) return;
       const currentX = touch.clientX || touch.pageX || 0;
@@ -375,25 +374,13 @@ export default {
         (Math.abs(deltaX) > 18 && Math.abs(deltaY) < 12) ||
         Math.abs(deltaX) > Math.abs(deltaY) * 2;
       if (isMostlyHorizontal) {
+        // 标记为水平滑动但不再进行进度预览或 seek，彻底关闭横向拖拽加速/拖动
         this.horizontalSwipeActive = true;
-        // 横向拖拽：实时预览并更新进度
-        const width = this.windowWidth || 375;
-        const ratio = width > 0 ? deltaX / width : 0;
-        let nextTime =
-          (this.seekInitialTime || 0) + ratio * (this.duration || 0);
-        if (!isFinite(nextTime)) nextTime = 0;
-        // 边界限制
-        nextTime = Math.max(0, Math.min(nextTime, this.duration || 0));
-        this.seekPreviewTime = nextTime;
-        this.dragSeekActive = true;
-        // 尝试阻止默认行为，避免内置进度条拖动（不同平台兼容性不同）
+        this.dragSeekActive = false;
+        // 阻止默认行为，避免部分内置播放器识别为进度条拖动
         if (e && typeof e.preventDefault === "function") {
           e.preventDefault();
         }
-        try {
-          // 即时 seek，提升拖拽体验
-          this.videoContext && this.videoContext.seek(nextTime);
-        } catch (err) {}
         return; // 不触发下拉返回计算
       }
 
@@ -408,6 +395,8 @@ export default {
 
     // 触摸结束 - 阈值判断执行返回或回弹
     onTouchEnd(e) {
+      // 进度条区域不参与页面级触摸结束逻辑
+      if (this.isOnProgressArea) return;
       // 若识别为水平滑动，则不进行进度拖动；在全屏下可选择退出全屏
       if (this.horizontalSwipeActive) {
         const deltaX = (this.touchEndX || 0) - (this.touchStartX || 0);
@@ -452,6 +441,92 @@ export default {
         }
       }
       this.isDragging = false;
+    },
+
+    // 进度条区域：触摸开始
+    onProgressTouchStart(e) {
+      this.isOnProgressArea = true;
+      this.dragSeekActive = true;
+      // 初始化预览时间
+      this.seekPreviewTime = this.currentTime || 0;
+    },
+
+    // 进度条区域：触摸移动（根据触点与容器宽度计算时间）
+    onProgressTouchMove(e) {
+      const touch = e.touches && e.touches[0];
+      if (!touch) return;
+      const target =
+        e.currentTarget || (e.target && e.target.parentNode) || null;
+      let rect = null;
+      try {
+        rect =
+          target &&
+          target.getBoundingClientRect &&
+          target.getBoundingClientRect();
+      } catch (err) {}
+      const width = (rect && rect.width) || this.windowWidth || 375;
+      const left = (rect && rect.left) || 0;
+      const clientX = touch.clientX || touch.pageX || 0;
+      const x = clientX - left;
+      const progress = Math.max(0, Math.min(x / Math.max(width, 1), 1));
+      const seekTime = progress * (this.duration || 0);
+      this.seekPreviewTime = seekTime;
+      this.currentTime = seekTime; // 同步 slider 显示
+      // 节流进行 seek，提升左右滑动流畅度
+      this._throttledSeek(seekTime);
+    },
+
+    // 进度条区域：触摸结束（最终 seek 到预览时间）
+    onProgressTouchEnd(e) {
+      try {
+        this.videoContext && this.videoContext.seek(this.seekPreviewTime || 0);
+      } catch (err) {}
+      this.dragSeekActive = false;
+      this.isOnProgressArea = false;
+      // 清理节流定时器
+      if (this.seekUpdateTimer) {
+        clearTimeout(this.seekUpdateTimer);
+        this.seekUpdateTimer = null;
+      }
+    },
+
+    // 内部方法：节流 seek 调用，避免频繁跳播导致卡顿
+    _throttledSeek(value) {
+      const now = Date.now();
+      const interval = 100; // 100ms 节流间隔
+      if (now - this.lastSeekUpdate < interval) {
+        if (this.seekUpdateTimer) clearTimeout(this.seekUpdateTimer);
+        this.seekUpdateTimer = setTimeout(() => {
+          try {
+            this.videoContext &&
+              this.videoContext.seek(this.seekPreviewTime || value || 0);
+            this.lastSeekUpdate = Date.now();
+          } catch (err) {}
+        }, interval);
+      } else {
+        try {
+          this.videoContext && this.videoContext.seek(value || 0);
+          this.lastSeekUpdate = now;
+        } catch (err) {}
+      }
+    },
+
+    // 进度条滑块：拖动中采用节流 seek 提升流畅度
+    onSliderChanging(e) {
+      const seekTime = e.detail.value;
+      this.seekPreviewTime = seekTime;
+      this.dragSeekActive = true;
+      this.currentTime = seekTime;
+      this._throttledSeek(seekTime);
+    },
+
+    // 进度条滑块：松手后精确 seek
+    onSliderChange(e) {
+      const seekTime = e.detail.value;
+      try {
+        this.videoContext.seek(seekTime);
+      } catch (err) {}
+      this.dragSeekActive = false;
     },
   },
   computed: {
@@ -577,6 +652,9 @@ export default {
 .video-player {
   width: 100%;
   height: 100%;
+  /* 限制手势为纵向，关闭横向拖拽（H5/Android 浏览器更友好） */
+  touch-action: pan-y;
+  overscroll-behavior-x: none;
 }
 
 /* 屏蔽 H5 下原生视频控件的时间线与时间显示（Chrome/Safari/webkit 系） */
@@ -619,7 +697,7 @@ export default {
 /* 倍速控件样式 */
 .rate-controls {
   position: absolute;
-  bottom: 28rpx;
+  bottom: 158rpx;
   right: 24rpx;
   display: flex;
   gap: 12rpx;
@@ -661,10 +739,9 @@ export default {
 
 .custom-controls {
   position: absolute;
-  bottom: 0;
+  bottom: 50rpx;
   left: 0;
   right: 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
   padding: 20rpx;
   display: flex;
   align-items: center;
@@ -705,6 +782,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* 允许横向手势用于进度条拖动 */
+  touch-action: pan-x;
 }
 
 .progress-slider {
