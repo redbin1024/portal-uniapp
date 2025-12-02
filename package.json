@@ -36,9 +36,9 @@
     "@zebra-ui/swiper": "^3.0.2",
     "@zebra-ui/uniapp": "^2.0.2",
     "dayjs": "^1.11.13",
-    "mp-html": "^2.5.1",
     "pinia": "^2.1.0",
     "pinia-plugin-persistedstate": "3.2.1",
+    "uni-app-mp-html": "^2.5.0",
     "vue": "^3.4.21"
   },
   "devDependencies": {

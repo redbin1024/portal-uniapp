@@ -29,9 +29,9 @@ const _sfc_main = {
     const types = common_vendor.ref("");
     const pageNum = common_vendor.ref(1);
     common_vendor.ref(-1);
-    const nextVideo = (url) => {
+    const nextVideo = (url, visitContent) => {
       common_vendor.index.navigateTo({
-        url: "/pages/secondary/index/index?url=" + url
+        url: "/pages/secondary/index/index?url=" + url + "&visitContent=" + visitContent
       });
     };
     const previewMedia = common_vendor.ref({
@@ -108,7 +108,7 @@ const _sfc_main = {
         a: common_vendor.f(caseDataList.value, (item, index, i0) => {
           return {
             a: item.coverImage,
-            b: common_vendor.o(($event) => nextVideo(item.caseImages[0]), index),
+            b: common_vendor.o(($event) => nextVideo(item.caseImages[0], item.caseTitle), index),
             c: index
           };
         }),

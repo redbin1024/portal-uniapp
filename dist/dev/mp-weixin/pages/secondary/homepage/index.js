@@ -21,6 +21,7 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../../common/vendor.js");
 const api_activity = require("../../../api/activity.js");
+const utils_basePoint = require("../../../utils/basePoint.js");
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -28,9 +29,9 @@ const _sfc_main = {
     common_vendor.ref({});
     common_vendor.ref([]);
     const caseDataList = common_vendor.ref([]);
-    const nextVideo = (url, coverImage) => {
+    const nextVideo = (url, coverImage, visitContent) => {
       common_vendor.index.navigateTo({
-        url: "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage
+        url: "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage + "&visitContent=" + visitContent
       });
     };
     const viewmore = () => {
@@ -131,6 +132,20 @@ const _sfc_main = {
       fetchCompanyNewsList();
       caseList();
     });
+    common_vendor.onShow(() => __async(this, null, function* () {
+      yield utils_basePoint.basePoint.trackingStart({
+        visitModule: "首页",
+        visitContent: "首页"
+      });
+    }));
+    common_vendor.onHide(() => __async(this, null, function* () {
+      let trackingId = common_vendor.index.getStorageSync("trackingId");
+      if (trackingId) {
+        yield utils_basePoint.basePoint.trackingEnd({
+          id: trackingId
+        });
+      }
+    }));
     common_vendor.ref([
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png",
@@ -314,7 +329,7 @@ const _sfc_main = {
         a: common_vendor.f(caseDataList.value, (item, index, i0) => {
           return {
             a: item.coverImage + "?image_process=format,webp",
-            b: common_vendor.o(($event) => nextVideo(item.caseImages, item.coverImage), index),
+            b: common_vendor.o(($event) => nextVideo(item.caseImages, item.coverImage, item.caseTitle), index),
             c: index
           };
         }),

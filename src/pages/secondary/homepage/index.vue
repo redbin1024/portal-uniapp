@@ -114,7 +114,11 @@
               object-fit="cover"
             /> -->
             <!-- 自定义播放按钮 -->
-            <view @click="nextVideo(item.caseImages, item.coverImage)">
+            <view
+              @click="
+                nextVideo(item.caseImages, item.coverImage, item.caseTitle)
+              "
+            >
               <view>
                 <image
                   :src="item.coverImage + '?image_process=format,webp'"
@@ -397,13 +401,14 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
-import { onPageScroll } from "@dcloudio/uni-app";
+import { onPageScroll, onShow, onHide } from "@dcloudio/uni-app";
 import {
   getEnterpriseList,
   getServiceList,
   getCompanyNewsList,
   getcaseList,
 } from "@/api/activity.js";
+import basePoint from "@/utils/basePoint.js";
 
 // 标题动画状态
 const titleVisible = ref(false);
@@ -412,10 +417,15 @@ const headContentVisible = ref({});
 // winthecustomer-content1 动画状态
 const content1Visible = ref([]);
 const caseDataList = ref([]);
-const nextVideo = (url, coverImage) => {
+const nextVideo = (url, coverImage, visitContent) => {
   uni.navigateTo({
     url:
-      "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage,
+      "/pages/secondary/index/index?url=" +
+      url +
+      "&coverImage=" +
+      coverImage +
+      "&visitContent=" +
+      visitContent,
   });
 };
 //查看更多
@@ -561,6 +571,22 @@ onMounted(() => {
   //查询公司动态列表
   fetchCompanyNewsList();
   caseList();
+});
+
+onShow(async () => {
+  await basePoint.trackingStart({
+    visitModule: "首页",
+    visitContent: "首页",
+  });
+});
+
+onHide(async () => {
+  let trackingId = uni.getStorageSync("trackingId");
+  if (trackingId) {
+    await basePoint.trackingEnd({
+      id: trackingId,
+    });
+  }
 });
 
 // 轮播图数据

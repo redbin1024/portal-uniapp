@@ -10,8 +10,16 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import mpHtml from "mp-html/dist/uni-app/components/mp-html/mp-html";
+import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
 import { getCompanyNews } from "@/api/activity.js";
+import {
+  onPageScroll,
+  onLoad,
+  onShow,
+  onHide,
+  onUnload,
+} from "@dcloudio/uni-app";
+import basePoint from "@/utils/basePoint.js";
 const richText = ref("");
 const detailData = ref({});
 
@@ -23,13 +31,27 @@ const CompanyNews = async (newsId) => {
     const response = await getCompanyNews({ newsId });
     if (response && response.data) {
       detailData.value = response.data;
+      getTracking(response.data.newsTitle);
       processContent(response.data.newDetails);
     }
   } catch (error) {
     uni.showToast({ title: "获取企业列表失败", icon: "none" });
   }
 };
-
+const getTracking = async (newsTitle) => {
+  await basePoint.trackingStart({
+    visitModule: "最近动态",
+    visitContent: newsTitle,
+  });
+};
+onUnload(async () => {
+  let trackingId = uni.getStorageSync("trackingId");
+  if (trackingId) {
+    await basePoint.trackingEnd({
+      id: trackingId,
+    });
+  }
+});
 const getPageParams = () => {
   const pages = getCurrentPages();
   const currentPage = pages[pages.length - 1];

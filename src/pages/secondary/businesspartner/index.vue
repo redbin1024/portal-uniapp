@@ -22,7 +22,7 @@
         /> -->
 
         <view
-          @click="nextVideo(item.caseImages[0])"
+          @click="nextVideo(item.caseImages[0], item.caseTitle)"
           style="width: 344rpx; height: 458rpx"
         >
           <!-- <image
@@ -143,9 +143,13 @@ const onVideoFullscreenChange = (e, index) => {
 };
 let videoContext = null;
 
-const nextVideo = (url) => {
+const nextVideo = (url, visitContent) => {
   uni.navigateTo({
-    url: "/pages/secondary/index/index?url=" + url,
+    url:
+      "/pages/secondary/index/index?url=" +
+      url +
+      "&visitContent=" +
+      visitContent,
   });
 }; // 播放视频
 const playVideo = (index) => {

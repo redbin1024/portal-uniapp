@@ -40,10 +40,11 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../../common/vendor.js");
 const api_activity = require("../../../api/activity.js");
+const utils_basePoint = require("../../../utils/basePoint.js");
 if (!Math) {
-  common_vendor.unref(mpHtml)();
+  mpHtml();
 }
-const mpHtml = () => "../../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html.js";
+const mpHtml = () => "../../../node-modules/uni-app-mp-html/components/mp-html/mp-html.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -354,7 +355,7 @@ const _sfc_main = {
     });
     const navigateToRecentDetails = (item) => {
       common_vendor.index.navigateTo({
-        url: "/pages/recentdetails/index?newsId=" + item.newsId
+        url: "/pages/recentdetails/index?newsId=" + item.newsId + "&newsTitle=" + item.newsTitle
       });
     };
     const goToRecentUpdates = () => {
@@ -465,8 +466,20 @@ const _sfc_main = {
     };
     common_vendor.onLoad(() => {
     });
-    common_vendor.onShow(() => {
-    });
+    common_vendor.onShow(() => __async(this, null, function* () {
+      yield utils_basePoint.basePoint.trackingStart({
+        visitModule: "获客",
+        visitContent: "获客"
+      });
+    }));
+    common_vendor.onHide(() => __async(this, null, function* () {
+      let trackingId = common_vendor.index.getStorageSync("trackingId");
+      if (trackingId) {
+        yield utils_basePoint.basePoint.trackingEnd({
+          id: trackingId
+        });
+      }
+    }));
     return (_ctx, _cache) => {
       return {
         a: common_vendor.f(companyNewsList.value, (item, index, i0) => {

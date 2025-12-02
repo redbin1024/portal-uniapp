@@ -174,9 +174,9 @@
 </template>
 
 <script setup>
-import mpHtml from "mp-html/dist/uni-app/components/mp-html/mp-html";
+import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
-import { onPageScroll, onLoad, onShow } from "@dcloudio/uni-app";
+import { onPageScroll, onLoad, onShow, onHide } from "@dcloudio/uni-app";
 // import hbxwRotateCarousel from "@/uni_modules/hbxw-rotate-carousel/components/hbxw-rotate-carousel/hbxw-rotate-carousel.vue";
 // import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
 import {
@@ -185,6 +185,7 @@ import {
   getsuccessCaseList,
   getServiceList,
 } from "@/api/activity.js";
+import basePoint from "@/utils/basePoint.js";
 import VearCarousel from "@/components/vear-carousel/vear-carousel.vue";
 
 // 响应式数据
@@ -688,7 +689,11 @@ const fetchcaseList = async () => {
  */
 const navigateToRecentDetails = (item) => {
   uni.navigateTo({
-    url: "/pages/recentdetails/index?newsId=" + item.newsId,
+    url:
+      "/pages/recentdetails/index?newsId=" +
+      item.newsId +
+      "&newsTitle=" +
+      item.newsTitle,
   });
 };
 
@@ -869,7 +874,20 @@ const formatDate = (dateStr) => {
 
 // uni-app 生命周期
 onLoad(() => {});
-onShow(() => {});
+onShow(async () => {
+  await basePoint.trackingStart({
+    visitModule: "获客",
+    visitContent: "获客",
+  });
+});
+onHide(async () => {
+  let trackingId = uni.getStorageSync("trackingId");
+  if (trackingId) {
+    await basePoint.trackingEnd({
+      id: trackingId,
+    });
+  }
+});
 </script>
 
 <style scoped>

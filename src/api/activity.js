@@ -1,4 +1,4 @@
-import { get } from '@/utils/request.js'
+import { get, post } from '@/utils/request.js'
 
 /**
  * 获取活动详情
@@ -84,5 +84,26 @@ export function getcaseList(params = {}) {
 export function getsuccessCaseList(params = {}) {
   return get('/mp/tk/successCase/list', {
     ...params
+  })
+}
+/**
+ * 
+ * @param {开始访问埋点-天天拓客2.0}   
+ * @returns 
+ */
+export function getTrackingStart(params = {}) {
+  return post('/mp/tk/successCase/tracking/start', {
+    ...params
+  })
+}
+/**
+ * 
+ * @param {结束访问埋点-天天拓客2.0}   
+ * @returns 
+ */
+export function getTrackingEnd(params = {}) {
+  const { id, ...rest } = params
+  return post(`/mp/tk/successCase/tracking/end/${id}`, {
+    ...rest
   })
 }

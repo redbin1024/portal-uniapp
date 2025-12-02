@@ -6,91 +6,68 @@ const _sfc_main = {
       coverImage: "",
       videoUrl: "",
       autoplay: true,
-      loop: false,
       isPlaying: false,
-      isFullScreen: false,
       currentTime: 0,
       duration: 0,
-      isLandscape: false,
-      videoContext: null,
-      // 倍速相关
+      showControls: true,
+      controlsTimer: null,
+      // Playback Rate
       playbackRate: 1,
-      playbackRates: [0.5, 1, 1.25, 1.5, 2],
-      // 下拖返回相关状态
+      playbackRates: [1, 1.25, 1.5, 2, 0.5],
+      // Drag to Close Logic
       dragStartY: 0,
       dragTranslateY: 0,
-      dragTransitionEnabled: false,
       dragActivated: false,
-      dragThreshold: 200,
-      lastMoveY: 0,
-      // 左右滑动相关状态（用于避免进度条加速/拖动）
-      touchStartX: 0,
-      touchStartY: 0,
-      touchEndX: 0,
-      touchEndY: 0,
+      dragThreshold: 150,
       isDragging: false,
-      horizontalSwipeActive: false,
-      // 横向拖拽进度相关
-      dragSeekActive: false,
-      seekInitialTime: 0,
-      seekPreviewTime: 0,
-      windowWidth: 375,
-      // 进度条交互区域标记与节流
-      isOnProgressArea: false,
-      lastSeekUpdate: 0,
-      seekUpdateTimer: null
-      // 添加用于存储页面参数的数据
+      videoContext: null,
+      isSliderChanging: false
+      // To prevent timeupdate from jumping slider while dragging
     };
+  },
+  computed: {
+    dragStyle() {
+      if (this.dragTranslateY > 0) {
+        const scale = 1 - this.dragTranslateY / 1e3;
+        return {
+          transform: `translateY(${this.dragTranslateY}px) scale(${Math.max(
+            0.8,
+            scale
+          )})`,
+          opacity: 1 - this.dragTranslateY / 600,
+          transition: this.isDragging ? "none" : "all 0.3s ease",
+          backgroundColor: `rgba(0,0,0,${Math.max(
+            0,
+            1 - this.dragTranslateY / 300
+          )})`
+        };
+      }
+      return {
+        backgroundColor: "#000"
+      };
+    }
   },
   onLoad(options) {
     if (options && options.url) {
       this.videoUrl = decodeURIComponent(options.url);
-      this.coverImage = decodeURIComponent(options.coverImage);
+      this.coverImage = options.coverImage ? decodeURIComponent(options.coverImage) : "";
     }
   },
   onReady() {
     this.videoContext = common_vendor.index.createVideoContext("myVideo", this);
-    try {
-      const info = common_vendor.index.getSystemInfoSync && common_vendor.index.getSystemInfoSync();
-      if (info && info.windowWidth)
-        this.windowWidth = info.windowWidth;
-    } catch (e) {
-    }
-    try {
-      if (this.videoContext && typeof this.videoContext.playbackRate === "function") {
-        this.videoContext.playbackRate(this.playbackRate);
-      } else {
-        const el = typeof document !== "undefined" && document.getElementById && document.getElementById("myVideo");
-        if (el)
-          el.playbackRate = this.playbackRate;
-      }
-    } catch (e) {
-    }
-  },
-  onShow() {
-    common_vendor.index.onWindowResize((res) => {
-      this.isLandscape = res.deviceOrientation === "landscape";
-    });
+    this.resetControlsTimer();
   },
   methods: {
-    // 分享当前视频到微信好友/群聊
-    onShareAppMessage(res) {
-      const sharePath = "/pages/secondary/index/index?url=" + encodeURIComponent(this.videoUrl || "");
-      return {
-        path: sharePath,
-        imageUrl: this.coverImage
-      };
-    },
-    // 返回上一页，若无历史则跳转到首页 Tab
     handleBack() {
-      const pages = (getCurrentPages == null ? void 0 : getCurrentPages()) || [];
+      this.showControls = true;
+      this.resetControlsTimer();
+      const pages = getCurrentPages();
       if (pages.length > 1) {
         common_vendor.index.navigateBack({ delta: 1 });
       } else {
-        common_vendor.index.switchTab({ url: "/pages/secondary/homepage/index" });
+        common_vendor.index.switchTab({ url: "/pageA/home" });
       }
     },
-    // 切换播放状态
     togglePlay() {
       if (this.isPlaying) {
         this.videoContext.pause();
@@ -98,344 +75,146 @@ const _sfc_main = {
         this.videoContext.play();
       }
     },
-    // 切换全屏状态
-    toggleFullScreen() {
-      if (this.isFullScreen) {
-        this.videoContext.exitFullScreen();
-      } else {
-        this.videoContext.requestFullScreen({
-          direction: this.isLandscape ? 0 : 90
-        });
-      }
-    },
-    // 全屏状态变化回调
-    onFullscreenchange(e) {
-      this.isFullScreen = e.detail.fullScreen;
-      if (!this.isFullScreen) {
-        this.videoContext.pause();
-      }
-    },
-    // 播放事件
     onPlay() {
       this.isPlaying = true;
+      this.showControls = true;
+      this.resetControlsTimer();
     },
-    // 暂停事件
     onPause() {
       this.isPlaying = false;
+      this.showControls = true;
+      if (this.controlsTimer)
+        clearTimeout(this.controlsTimer);
     },
-    // 时间更新
+    onEnded() {
+      this.isPlaying = false;
+      this.showControls = true;
+    },
     onTimeupdate(e) {
-      this.currentTime = e.detail.currentTime;
+      if (!this.isSliderChanging) {
+        this.currentTime = e.detail.currentTime;
+      }
     },
-    // 视频元数据加载
     onLoadedmetadata(e) {
       this.duration = e.detail.duration;
     },
-    // 点击视频区域时，若正在播放则暂停并显示居中播放按钮
     onVideoClick() {
-      try {
-        if (this.isPlaying && this.videoContext) {
-          this.videoContext.pause();
-        }
-      } catch (err) {
-        const el = typeof document !== "undefined" && document.getElementById && document.getElementById("myVideo");
-        if (el && !el.paused) {
-          el.pause();
-        }
+      this.togglePlay();
+    },
+    toggleControls() {
+      this.showControls = !this.showControls;
+      if (this.showControls && this.isPlaying) {
+        this.resetControlsTimer();
       }
     },
-    // 格式化时间显示
+    resetControlsTimer() {
+      if (this.controlsTimer)
+        clearTimeout(this.controlsTimer);
+      this.controlsTimer = setTimeout(() => {
+        if (this.isPlaying) {
+          this.showControls = false;
+        }
+      }, 3e3);
+    },
     formatTime(seconds) {
       const min = Math.floor(seconds / 60);
       const sec = Math.floor(seconds % 60);
       return `${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
     },
-    // 修改倍速
-    changeRate(rate) {
-      this.playbackRate = rate;
-      try {
-        if (this.videoContext && typeof this.videoContext.playbackRate === "function") {
-          this.videoContext.playbackRate(rate);
-        } else {
-          const el = typeof document !== "undefined" && document.getElementById && document.getElementById("myVideo");
-          if (el)
-            el.playbackRate = rate;
-        }
-        common_vendor.index.showToast({ title: `已切换为${rate}倍速`, icon: "none" });
-      } catch (e) {
-        common_vendor.index.showToast({ title: "当前端不支持倍速", icon: "none" });
-      }
-    },
-    // 单按钮循环切换倍速
     toggleRate() {
       const idx = this.playbackRates.findIndex((r) => r === this.playbackRate);
       const nextIndex = (idx + 1) % this.playbackRates.length;
-      const nextRate = this.playbackRates[nextIndex];
-      this.changeRate(nextRate);
+      this.playbackRate = this.playbackRates[nextIndex];
+      this.videoContext.playbackRate(this.playbackRate);
+      common_vendor.index.showToast({ title: `倍速: ${this.playbackRate}x`, icon: "none" });
     },
-    // 下拉选择倍速事件
-    onRatePickerChange(e) {
-      var _a, _b, _c;
-      const index = Array.isArray((_a = e == null ? void 0 : e.detail) == null ? void 0 : _a.value) ? e.detail.value[0] : (_b = e == null ? void 0 : e.detail) == null ? void 0 : _b.value;
-      const rate = (_c = this.playbackRates[index]) != null ? _c : this.playbackRate;
-      this.changeRate(rate);
-    },
-    // 触摸开始 - 记录起点
-    onTouchStart(e) {
-      if (this.isOnProgressArea)
-        return;
-      const touch = e.touches && e.touches[0];
-      if (!touch)
-        return;
-      this.touchStartX = touch.clientX || touch.pageX || 0;
-      this.touchStartY = touch.clientY || touch.pageY || 0;
-      this.touchEndX = this.touchStartX;
-      this.touchEndY = this.touchStartY;
-      this.isDragging = true;
-      this.horizontalSwipeActive = false;
-      this.seekInitialTime = this.currentTime || 0;
-      this.seekPreviewTime = this.seekInitialTime;
-      this.dragSeekActive = false;
-      if (!this.isFullScreen) {
-        this.dragStartY = this.touchStartY;
-        this.lastMoveY = this.dragStartY;
-        this.dragActivated = true;
-        this.dragTransitionEnabled = false;
-      } else {
-        this.dragActivated = false;
-      }
-    },
-    // 触摸移动 - 计算下拖位移并跟随
-    onTouchMove(e) {
-      if (this.isOnProgressArea)
-        return;
-      const touch = e.touches && e.touches[0];
-      if (!touch)
-        return;
-      const currentX = touch.clientX || touch.pageX || 0;
-      const currentY = touch.clientY || touch.pageY || 0;
-      this.touchEndX = currentX;
-      this.touchEndY = currentY;
-      const deltaX = currentX - this.touchStartX;
-      const deltaY = currentY - this.touchStartY;
-      const isMostlyHorizontal = Math.abs(deltaX) > 18 && Math.abs(deltaY) < 12 || Math.abs(deltaX) > Math.abs(deltaY) * 2;
-      if (isMostlyHorizontal) {
-        this.horizontalSwipeActive = true;
-        this.dragSeekActive = false;
-        if (e && typeof e.preventDefault === "function") {
-          e.preventDefault();
-        }
-        return;
-      }
-      if (!this.isFullScreen && this.dragActivated) {
-        const deltaYDown = currentY - this.dragStartY;
-        const translateY = deltaYDown > 0 ? deltaYDown : 0;
-        this.dragTranslateY = translateY;
-        this.lastMoveY = currentY;
-      }
-    },
-    // 触摸结束 - 阈值判断执行返回或回弹
-    onTouchEnd(e) {
-      if (this.isOnProgressArea)
-        return;
-      if (this.horizontalSwipeActive) {
-        const deltaX = (this.touchEndX || 0) - (this.touchStartX || 0);
-        const deltaY = Math.abs(
-          (this.touchEndY || 0) - (this.touchStartY || 0)
-        );
-        if (this.dragSeekActive) {
-          this.dragSeekActive = false;
-        }
-        if (this.isFullScreen && Math.abs(deltaX) > 50 && deltaY < 30) {
-          this.videoContext && this.videoContext.exitFullScreen();
-        }
-        this.horizontalSwipeActive = false;
-        this.isDragging = false;
-        return;
-      }
-      if (!this.isFullScreen && this.dragActivated) {
-        this.dragActivated = false;
-        if (this.dragTranslateY >= this.dragThreshold) {
-          const pages = (getCurrentPages == null ? void 0 : getCurrentPages()) || [];
-          if (pages.length > 1) {
-            common_vendor.index.navigateBack({ delta: 1 });
-          } else {
-            common_vendor.index.switchTab({ url: "/pages/secondary/homepage/index" });
-          }
-          this.dragTranslateY = 0;
-          this.dragTransitionEnabled = false;
-        } else {
-          this.dragTransitionEnabled = true;
-          this.dragTranslateY = 0;
-          setTimeout(() => {
-            this.dragTransitionEnabled = false;
-          }, 200);
-        }
-      }
-      this.isDragging = false;
-    },
-    // 进度条区域：触摸开始
-    onProgressTouchStart(e) {
-      this.isOnProgressArea = true;
-      this.dragSeekActive = true;
-      this.seekPreviewTime = this.currentTime || 0;
-    },
-    // 进度条区域：触摸移动（根据触点与容器宽度计算时间）
-    onProgressTouchMove(e) {
-      const touch = e.touches && e.touches[0];
-      if (!touch)
-        return;
-      const target = e.currentTarget || e.target && e.target.parentNode || null;
-      let rect = null;
-      try {
-        rect = target && target.getBoundingClientRect && target.getBoundingClientRect();
-      } catch (err) {
-      }
-      const width = rect && rect.width || this.windowWidth || 375;
-      const left = rect && rect.left || 0;
-      const clientX = touch.clientX || touch.pageX || 0;
-      const x = clientX - left;
-      const progress = Math.max(0, Math.min(x / Math.max(width, 1), 1));
-      const seekTime = progress * (this.duration || 0);
-      this.seekPreviewTime = seekTime;
-      this.currentTime = seekTime;
-      this._throttledSeek(seekTime);
-    },
-    // 进度条区域：触摸结束（最终 seek 到预览时间）
-    onProgressTouchEnd(e) {
-      try {
-        this.videoContext && this.videoContext.seek(this.seekPreviewTime || 0);
-      } catch (err) {
-      }
-      this.dragSeekActive = false;
-      this.isOnProgressArea = false;
-      if (this.seekUpdateTimer) {
-        clearTimeout(this.seekUpdateTimer);
-        this.seekUpdateTimer = null;
-      }
-    },
-    // 内部方法：节流 seek 调用，避免频繁跳播导致卡顿
-    _throttledSeek(value) {
-      const now = Date.now();
-      const interval = 100;
-      if (now - this.lastSeekUpdate < interval) {
-        if (this.seekUpdateTimer)
-          clearTimeout(this.seekUpdateTimer);
-        this.seekUpdateTimer = setTimeout(() => {
-          try {
-            this.videoContext && this.videoContext.seek(this.seekPreviewTime || value || 0);
-            this.lastSeekUpdate = Date.now();
-          } catch (err) {
-          }
-        }, interval);
-      } else {
-        try {
-          this.videoContext && this.videoContext.seek(value || 0);
-          this.lastSeekUpdate = now;
-        } catch (err) {
-        }
-      }
-    },
-    // 进度条滑块：拖动中采用节流 seek 提升流畅度
     onSliderChanging(e) {
-      const seekTime = e.detail.value;
-      this.seekPreviewTime = seekTime;
-      this.dragSeekActive = true;
-      this.currentTime = seekTime;
-      this._throttledSeek(seekTime);
+      this.isSliderChanging = true;
+      this.currentTime = e.detail.value;
+      this.showControls = true;
+      this.resetControlsTimer();
     },
-    // 进度条滑块：松手后精确 seek
     onSliderChange(e) {
-      const seekTime = e.detail.value;
-      try {
-        this.videoContext.seek(seekTime);
-      } catch (err) {
+      this.isSliderChanging = false;
+      this.currentTime = e.detail.value;
+      this.videoContext.seek(this.currentTime);
+      this.videoContext.play();
+      this.isPlaying = true;
+      this.resetControlsTimer();
+    },
+    // Touch Logic for Pull Down to Close
+    onTouchStart(e) {
+      if (e.touches.length === 1) {
+        this.dragStartY = e.touches[0].clientY;
+        this.dragActivated = true;
+        this.isDragging = true;
       }
-      this.dragSeekActive = false;
-    }
-  },
-  computed: {
-    // 页面位移样式
-    dragStyle() {
-      const t = this.dragTranslateY || 0;
-      const transition = this.dragTransitionEnabled ? "transform 0.2s ease-out" : "none";
-      return `transform: translate3d(0, ${t}px, 0); transition: ${transition};`;
-    }
-  },
-  computed: {
-    // 页面位移样式
-    dragStyle() {
-      const t = this.dragTranslateY || 0;
-      const transition = this.dragTransitionEnabled ? "transform 0.2s ease-out" : "none";
-      return `transform: translate3d(0, ${t}px, 0); transition: ${transition};`;
     },
-    // 视频容器的缩放、圆角、阴影动画
-    dragVideoStyle() {
-      const y = this.dragTranslateY || 0;
-      const progress = Math.min(Math.max(y / 240, 0), 1);
-      const scale = 1 - 0.08 * progress;
-      const radius = 24 * progress;
-      const shadowOpacity = 0.22 * progress;
-      const transition = this.dragTransitionEnabled ? "transform 0.2s ease-out, border-radius 0.2s ease-out, box-shadow 0.2s ease-out" : "none";
-      return `transform: scale(${scale}); border-radius: ${radius}rpx; box-shadow: 0 20rpx 60rpx rgba(0,0,0,${shadowOpacity}); overflow: hidden; transition: ${transition};`;
+    onTouchMove(e) {
+      if (this.dragActivated && e.touches.length === 1) {
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - this.dragStartY;
+        if (deltaY > 0) {
+          this.dragTranslateY = deltaY;
+        }
+      }
     },
-    // 顶部提示的透明度与位移
-    dragHintStyle() {
-      const y = this.dragTranslateY || 0;
-      const progress = Math.min(Math.max(y / 240, 0), 1);
-      const offsetY = Math.round(y * 0.15);
-      const transition = this.dragTransitionEnabled ? "opacity 0.2s ease-out, transform 0.2s ease-out" : "none";
-      return `opacity: ${0.9 * progress}; transform: translate(-50%, ${offsetY}px); transition: ${transition};`;
-    },
-    // 提示文案
-    hintText() {
-      return this.dragTranslateY >= this.dragThreshold ? "松手返回上一页" : "下拉返回上一页";
-    },
-    // 倍速标签
-    playbackRateLabels() {
-      return this.playbackRates.map((r) => `${r}x`);
+    onTouchEnd(e) {
+      this.isDragging = false;
+      if (this.dragTranslateY > this.dragThreshold) {
+        this.handleBack();
+      } else {
+        this.dragTranslateY = 0;
+      }
+      this.dragActivated = false;
     }
   }
 };
+if (!Array) {
+  const _component_uni_icons = common_vendor.resolveComponent("uni-icons");
+  _component_uni_icons();
+}
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
-    a: common_vendor.o((...args) => $options.handleBack && $options.handleBack(...args)),
-    b: common_vendor.t($options.hintText),
-    c: common_vendor.s($options.dragHintStyle),
-    d: $data.videoUrl,
-    e: $data.autoplay,
-    f: $data.loop,
-    g: common_vendor.o((...args) => $options.onPlay && $options.onPlay(...args)),
-    h: common_vendor.o((...args) => $options.onPause && $options.onPause(...args)),
-    i: common_vendor.o((...args) => $options.onTimeupdate && $options.onTimeupdate(...args)),
-    j: common_vendor.o((...args) => $options.onLoadedmetadata && $options.onLoadedmetadata(...args)),
-    k: common_vendor.o((...args) => $options.onFullscreenchange && $options.onFullscreenchange(...args)),
-    l: common_vendor.o((...args) => $options.onVideoClick && $options.onVideoClick(...args)),
-    m: common_vendor.t($data.playbackRate),
-    n: common_vendor.o((...args) => $options.toggleRate && $options.toggleRate(...args)),
-    o: $data.dragSeekActive
-  }, $data.dragSeekActive ? {
-    p: common_vendor.t($options.formatTime($data.currentTime)),
-    q: common_vendor.t($options.formatTime($data.duration))
-  } : {}, {
-    r: $data.duration,
-    s: $data.currentTime,
-    t: common_vendor.o((...args) => $options.onSliderChanging && $options.onSliderChanging(...args)),
-    v: common_vendor.o((...args) => $options.onSliderChange && $options.onSliderChange(...args)),
-    w: common_vendor.o((...args) => $options.onProgressTouchStart && $options.onProgressTouchStart(...args)),
-    x: common_vendor.o((...args) => $options.onProgressTouchMove && $options.onProgressTouchMove(...args)),
-    y: common_vendor.o((...args) => $options.onProgressTouchEnd && $options.onProgressTouchEnd(...args)),
-    z: !$data.isPlaying
+    a: $data.videoUrl,
+    b: $data.coverImage,
+    c: $data.autoplay,
+    d: common_vendor.o((...args) => $options.onPlay && $options.onPlay(...args)),
+    e: common_vendor.o((...args) => $options.onPause && $options.onPause(...args)),
+    f: common_vendor.o((...args) => $options.onTimeupdate && $options.onTimeupdate(...args)),
+    g: common_vendor.o((...args) => $options.onLoadedmetadata && $options.onLoadedmetadata(...args)),
+    h: common_vendor.o((...args) => $options.onEnded && $options.onEnded(...args)),
+    i: common_vendor.o((...args) => $options.onVideoClick && $options.onVideoClick(...args)),
+    j: !$data.isPlaying
   }, !$data.isPlaying ? {
-    A: common_vendor.o((...args) => $options.togglePlay && $options.togglePlay(...args))
+    k: common_vendor.o((...args) => $options.togglePlay && $options.togglePlay(...args))
   } : {}, {
-    B: common_vendor.s($options.dragVideoStyle),
-    C: common_vendor.s($options.dragStyle),
-    D: common_vendor.o((...args) => $options.onTouchStart && $options.onTouchStart(...args)),
-    E: common_vendor.o((...args) => $options.onTouchMove && $options.onTouchMove(...args)),
-    F: common_vendor.o((...args) => $options.onTouchEnd && $options.onTouchEnd(...args))
+    l: common_vendor.p({
+      type: $data.isPlaying ? "pause-filled" : "play-filled",
+      size: "28",
+      color: "#fff"
+    }),
+    m: common_vendor.o((...args) => $options.togglePlay && $options.togglePlay(...args)),
+    n: common_vendor.t($options.formatTime($data.currentTime)),
+    o: common_vendor.t($options.formatTime($data.duration)),
+    p: $data.currentTime,
+    q: $data.duration,
+    r: common_vendor.o((...args) => $options.onSliderChange && $options.onSliderChange(...args)),
+    s: common_vendor.o((...args) => $options.onSliderChanging && $options.onSliderChanging(...args)),
+    t: common_vendor.t($data.playbackRate === 1 ? "倍速" : $data.playbackRate + "x"),
+    v: common_vendor.o((...args) => $options.toggleRate && $options.toggleRate(...args)),
+    w: !$data.showControls ? 1 : "",
+    x: common_vendor.p({
+      type: $data.showControls ? "bottom" : "top",
+      size: "24",
+      color: "#fff"
+    }),
+    y: common_vendor.o((...args) => $options.toggleControls && $options.toggleControls(...args)),
+    z: common_vendor.s($options.dragStyle),
+    A: common_vendor.o((...args) => $options.onTouchStart && $options.onTouchStart(...args)),
+    B: common_vendor.o((...args) => $options.onTouchMove && $options.onTouchMove(...args)),
+    C: common_vendor.o((...args) => $options.onTouchEnd && $options.onTouchEnd(...args))
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-0b50ab4e"]]);
-_sfc_main.__runtimeHooks = 2;
 wx.createPage(MiniProgramPage);

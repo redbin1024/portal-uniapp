@@ -15,6 +15,18 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
+var __objRest = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
+};
 const utils_request = require("../utils/request.js");
 function getEnterpriseList(params = {}) {
   return utils_request.get("/mp/tk/enterprise/list", __spreadValues({}, params));
@@ -34,9 +46,18 @@ function getcaseList(params = {}) {
 function getsuccessCaseList(params = {}) {
   return utils_request.get("/mp/tk/successCase/list", __spreadValues({}, params));
 }
+function getTrackingStart(params = {}) {
+  return utils_request.post("/mp/tk/successCase/tracking/start", __spreadValues({}, params));
+}
+function getTrackingEnd(params = {}) {
+  const _a = params, { id } = _a, rest = __objRest(_a, ["id"]);
+  return utils_request.post(`/mp/tk/successCase/tracking/end/${id}`, __spreadValues({}, rest));
+}
 exports.getCompanyNews = getCompanyNews;
 exports.getCompanyNewsList = getCompanyNewsList;
 exports.getEnterpriseList = getEnterpriseList;
 exports.getServiceList = getServiceList;
+exports.getTrackingEnd = getTrackingEnd;
+exports.getTrackingStart = getTrackingStart;
 exports.getcaseList = getcaseList;
 exports.getsuccessCaseList = getsuccessCaseList;

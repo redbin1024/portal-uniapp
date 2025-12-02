@@ -1,10 +1,31 @@
 "use strict";
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 const common_vendor = require("../../common/vendor.js");
 require("../../utils/request.js");
+const utils_basePoint = require("../../utils/basePoint.js");
 if (!Math) {
-  common_vendor.unref(mpHtml)();
+  mpHtml();
 }
-const mpHtml = () => "../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html.js";
+const mpHtml = () => "../../node-modules/uni-app-mp-html/components/mp-html/mp-html.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -12,6 +33,20 @@ const _sfc_main = {
     const loading = common_vendor.ref(false);
     const error = common_vendor.ref(null);
     common_vendor.ref("1951194533574815746");
+    const getTracking = (customerName) => __async(this, null, function* () {
+      yield utils_basePoint.basePoint.trackingStart({
+        visitModule: "商家案例",
+        visitContent: customerName
+      });
+    });
+    common_vendor.onUnload(() => __async(this, null, function* () {
+      let trackingId = common_vendor.index.getStorageSync("trackingId");
+      if (trackingId) {
+        yield utils_basePoint.basePoint.trackingEnd({
+          id: trackingId
+        });
+      }
+    }));
     const processContent = (content) => {
       richText.value = content.replace(/<img[^>]*>/gi, function(match, capture) {
         return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
@@ -27,6 +62,7 @@ const _sfc_main = {
         const decodedItem = decodeURIComponent(currentPage.options.item);
         let detailDatas = JSON.parse(decodedItem);
         processContent(detailDatas.caseDetails);
+        getTracking(detailDatas.customerName);
       }
     };
     return (_ctx, _cache) => {

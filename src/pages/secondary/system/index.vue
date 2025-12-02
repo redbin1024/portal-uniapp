@@ -51,6 +51,8 @@
 </template>
 
 <script setup>
+import basePoint from "@/utils/basePoint.js";
+import { onPageScroll, onLoad, onShow, onHide } from "@dcloudio/uni-app";
 import { ref, onMounted } from "vue";
 import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
 import VideoRotateCarousel from "@/components/video-rotate-carousel/video-rotate-carousel.vue";
@@ -229,7 +231,11 @@ const onVideoError = (e) => {
 const nextVideo = (url, coverImage) => {
   uni.navigateTo({
     url:
-      "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage,
+      "/pages/secondary/index/index?url=" +
+      url +
+      "&coverImage=" +
+      coverImage +
+      "&visitContent=宣传视频",
   });
 };
 const onFullscreenChange = (e, index, isEnteringFullscreen) => {
@@ -315,6 +321,20 @@ const processContent = (content) => {
     })
     .replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
 };
+onShow(async () => {
+  await basePoint.trackingStart({
+    visitModule: "系统",
+    visitContent: "系统",
+  });
+});
+onHide(async () => {
+  let trackingId = uni.getStorageSync("trackingId");
+  if (trackingId) {
+    await basePoint.trackingEnd({
+      id: trackingId,
+    });
+  }
+});
 </script>
 
 <style scoped>

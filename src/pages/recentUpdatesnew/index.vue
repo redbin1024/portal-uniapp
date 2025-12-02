@@ -49,6 +49,7 @@ import {
   onShareAppMessage,
   onShareTimeline,
 } from "@dcloudio/uni-app";
+import basePoint from "@/utils/basePoint.js";
 // 定义组件名称（可选）
 defineOptions({
   name: "RecentUpdates",
@@ -56,6 +57,20 @@ defineOptions({
 // 生命周期钩子
 onMounted(() => {
   fetchCompanyNewsList();
+});
+onShow(async () => {
+  await basePoint.trackingStart({
+    visitModule: "最近动态",
+    visitContent: "最近动态",
+  });
+});
+onHide(async () => {
+  let trackingId = uni.getStorageSync("trackingId");
+  if (trackingId) {
+    await basePoint.trackingEnd({
+      id: trackingId,
+    });
+  }
 });
 const loading = ref(false);
 const loadingMore = ref(false);
@@ -175,7 +190,11 @@ const formatDate = (dateString) => {
 const next = (item) => {
   let itemStr = JSON.stringify(item);
   uni.navigateTo({
-    url: "/pages/recentdetails/index?newsId=" + item.newsId,
+    url:
+      "/pages/recentdetails/index?newsId=" +
+      item.newsId +
+      "&newsTitle=" +
+      item.newsTitle,
   });
 };
 </script>

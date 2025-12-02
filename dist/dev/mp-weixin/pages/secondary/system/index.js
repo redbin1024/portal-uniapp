@@ -20,6 +20,7 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 const common_vendor = require("../../../common/vendor.js");
+const utils_basePoint = require("../../../utils/basePoint.js");
 const api_activity = require("../../../api/activity.js");
 const _sfc_main = {
   __name: "index",
@@ -137,7 +138,7 @@ const _sfc_main = {
     };
     const nextVideo = (url, coverImage2) => {
       common_vendor.index.navigateTo({
-        url: "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage2
+        url: "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage2 + "&visitContent=宣传视频"
       });
     };
     const fetchEnterpriseList = () => __async(this, null, function* () {
@@ -177,6 +178,20 @@ const _sfc_main = {
         return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
       }).replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
     };
+    common_vendor.onShow(() => __async(this, null, function* () {
+      yield utils_basePoint.basePoint.trackingStart({
+        visitModule: "系统",
+        visitContent: "系统"
+      });
+    }));
+    common_vendor.onHide(() => __async(this, null, function* () {
+      let trackingId = common_vendor.index.getStorageSync("trackingId");
+      if (trackingId) {
+        yield utils_basePoint.basePoint.trackingEnd({
+          id: trackingId
+        });
+      }
+    }));
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: bannerImages.value
@@ -198,4 +213,5 @@ const _sfc_main = {
   }
 };
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-8bd1f02a"]]);
+_sfc_main.__runtimeHooks = 1;
 wx.createPage(MiniProgramPage);

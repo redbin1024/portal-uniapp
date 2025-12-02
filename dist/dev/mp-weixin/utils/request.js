@@ -220,4 +220,12 @@ function get(url, params = {}, options = {}) {
     data: params
   }, options));
 }
+function post(url, data = {}, options = {}) {
+  return request(__spreadValues({
+    url,
+    method: "POST",
+    data
+  }, options));
+}
 exports.get = get;
+exports.post = post;

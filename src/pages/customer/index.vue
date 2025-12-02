@@ -46,8 +46,10 @@
 </template>
 
 <script setup>
+import basePoint from "@/utils/basePoint.js";
+import { onPageScroll, onShow, onUnload } from "@dcloudio/uni-app";
 import { ref, onMounted } from "vue";
-import mpHtml from "mp-html/dist/uni-app/components/mp-html/mp-html";
+import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
 // 定义响应式数据
 const serviceDescription = ref("");
 const richText = ref("");
@@ -59,6 +61,21 @@ const serviceName = ref("");
 //     urls: e.detail.imgs,
 //   });
 // };
+const getTracking = async () => {
+  await basePoint.trackingStart({
+    visitModule: "产品服务",
+    visitContent: serviceName.value,
+  });
+};
+
+onUnload(async () => {
+  let trackingId = uni.getStorageSync("trackingId");
+  if (trackingId) {
+    await basePoint.trackingEnd({
+      id: trackingId,
+    });
+  }
+});
 // 页面加载时获取参数
 onMounted(() => {
   // 获取页面参数
@@ -84,6 +101,7 @@ onMounted(() => {
       }
     }
   }
+  getTracking();
 });
 
 const processContent = (content) => {

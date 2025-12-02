@@ -2,6 +2,6 @@
   "navigationBarTitleText": "线上获客",
   "backgroundColor": "#F8F8F8",
   "usingComponents": {
-    "mp-html": "../../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html"
+    "mp-html": "../../../node-modules/uni-app-mp-html/components/mp-html/mp-html"
   }
 }

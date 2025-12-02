@@ -1,15 +1,50 @@
 "use strict";
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 const common_vendor = require("../../common/vendor.js");
+const utils_basePoint = require("../../utils/basePoint.js");
 if (!Math) {
-  common_vendor.unref(mpHtml)();
+  mpHtml();
 }
-const mpHtml = () => "../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html.js";
+const mpHtml = () => "../../node-modules/uni-app-mp-html/components/mp-html/mp-html.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
     const serviceDescription = common_vendor.ref("");
     const richText = common_vendor.ref("");
     const serviceName = common_vendor.ref("");
+    const getTracking = () => __async(this, null, function* () {
+      yield utils_basePoint.basePoint.trackingStart({
+        visitModule: "产品服务",
+        visitContent: serviceName.value
+      });
+    });
+    common_vendor.onUnload(() => __async(this, null, function* () {
+      let trackingId = common_vendor.index.getStorageSync("trackingId");
+      if (trackingId) {
+        yield utils_basePoint.basePoint.trackingEnd({
+          id: trackingId
+        });
+      }
+    }));
     common_vendor.onMounted(() => {
       const pages = getCurrentPages();
       const currentPage = pages[pages.length - 1];
@@ -30,6 +65,7 @@ const _sfc_main = {
           }
         }
       }
+      getTracking();
     });
     const processContent = (content) => {
       richText.value = content.replace(/<img[^>]*>/gi, function(match, capture) {
@@ -55,4 +91,5 @@ const _sfc_main = {
     };
   }
 };
+_sfc_main.__runtimeHooks = 1;
 wx.createPage(_sfc_main);

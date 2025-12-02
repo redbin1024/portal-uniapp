@@ -15,16 +15,39 @@
 
 <script setup>
 import { ref } from "vue";
-import { onLoad } from "@dcloudio/uni-app";
-import mpHtml from "mp-html/dist/uni-app/components/mp-html/mp-html";
+import { onLoad, onShow, onHide, onUnload } from "@dcloudio/uni-app";
+import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
 import { getActivityDetail } from "@/api/activity.js";
+import basePoint from "@/utils/basePoint.js";
 
 // 定义响应式数据
 const richText = ref("");
 const loading = ref(false);
 const error = ref(null);
 const activityId = ref("1951194533574815746");
+const getTracking = async (customerName) => {
+  await basePoint.trackingStart({
+    visitModule: "商家案例",
+    visitContent: customerName,
+  });
+};
+// onHide(async () => {
+//   let trackingId = uni.getStorageSync("trackingId");
+//   if (trackingId) {
+//     await basePoint.trackingEnd({
+//       id: trackingId,
+//     });
+//   }
+// });
 
+onUnload(async () => {
+  let trackingId = uni.getStorageSync("trackingId");
+  if (trackingId) {
+    await basePoint.trackingEnd({
+      id: trackingId,
+    });
+  }
+});
 // 处理内容的函数
 const processContent = (content) => {
   // 处理图片样式
@@ -52,6 +75,7 @@ const getPageParams = () => {
     const decodedItem = decodeURIComponent(currentPage.options.item);
     let detailDatas = JSON.parse(decodedItem);
     processContent(detailDatas.caseDetails);
+    getTracking(detailDatas.customerName);
   }
 };
 </script>

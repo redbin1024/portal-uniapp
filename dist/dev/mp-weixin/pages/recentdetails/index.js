@@ -21,10 +21,11 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../common/vendor.js");
 const api_activity = require("../../api/activity.js");
+const utils_basePoint = require("../../utils/basePoint.js");
 if (!Math) {
-  common_vendor.unref(mpHtml)();
+  mpHtml();
 }
-const mpHtml = () => "../../node-modules/mp-html/dist/uni-app/components/mp-html/mp-html.js";
+const mpHtml = () => "../../node-modules/uni-app-mp-html/components/mp-html/mp-html.js";
 const _sfc_main = /* @__PURE__ */ Object.assign({ name: "RecentDetails" }, {
   __name: "index",
   setup(__props, { expose: __expose }) {
@@ -35,12 +36,27 @@ const _sfc_main = /* @__PURE__ */ Object.assign({ name: "RecentDetails" }, {
         const response = yield api_activity.getCompanyNews({ newsId });
         if (response && response.data) {
           detailData.value = response.data;
+          getTracking(response.data.newsTitle);
           processContent(response.data.newDetails);
         }
       } catch (error) {
         common_vendor.index.showToast({ title: "获取企业列表失败", icon: "none" });
       }
     });
+    const getTracking = (newsTitle) => __async(this, null, function* () {
+      yield utils_basePoint.basePoint.trackingStart({
+        visitModule: "最近动态",
+        visitContent: newsTitle
+      });
+    });
+    common_vendor.onUnload(() => __async(this, null, function* () {
+      let trackingId = common_vendor.index.getStorageSync("trackingId");
+      if (trackingId) {
+        yield utils_basePoint.basePoint.trackingEnd({
+          id: trackingId
+        });
+      }
+    }));
     const getPageParams = () => {
       const pages = getCurrentPages();
       const currentPage = pages[pages.length - 1];
@@ -76,4 +92,5 @@ const _sfc_main = /* @__PURE__ */ Object.assign({ name: "RecentDetails" }, {
   }
 });
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-eede22fe"]]);
+_sfc_main.__runtimeHooks = 1;
 wx.createPage(MiniProgramPage);

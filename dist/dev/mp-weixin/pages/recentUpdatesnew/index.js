@@ -21,6 +21,7 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../common/vendor.js");
 const api_activity = require("../../api/activity.js");
+const utils_basePoint = require("../../utils/basePoint.js");
 const _sfc_main = /* @__PURE__ */ Object.assign({
   name: "RecentUpdates"
 }, {
@@ -29,6 +30,20 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
     common_vendor.onMounted(() => {
       fetchCompanyNewsList();
     });
+    common_vendor.onShow(() => __async(this, null, function* () {
+      yield utils_basePoint.basePoint.trackingStart({
+        visitModule: "最近动态",
+        visitContent: "最近动态"
+      });
+    }));
+    common_vendor.onHide(() => __async(this, null, function* () {
+      let trackingId = common_vendor.index.getStorageSync("trackingId");
+      if (trackingId) {
+        yield utils_basePoint.basePoint.trackingEnd({
+          id: trackingId
+        });
+      }
+    }));
     const loading = common_vendor.ref(false);
     const loadingMore = common_vendor.ref(false);
     const companyNewsList = common_vendor.ref([]);
@@ -122,7 +137,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
     const next = (item) => {
       JSON.stringify(item);
       common_vendor.index.navigateTo({
-        url: "/pages/recentdetails/index?newsId=" + item.newsId
+        url: "/pages/recentdetails/index?newsId=" + item.newsId + "&newsTitle=" + item.newsTitle
       });
     };
     return (_ctx, _cache) => {
