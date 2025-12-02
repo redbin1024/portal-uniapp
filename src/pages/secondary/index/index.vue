@@ -10,8 +10,8 @@
     <video
       id="myVideo"
       :src="videoUrl"
-      :poster="coverImage"
       :autoplay="autoplay"
+      :poster="coverImage"
       :controls="false"
       :show-play-btn="false"
       :show-center-play-btn="false"
@@ -64,7 +64,7 @@
               <slider
                 class="progress-slider"
                 :value="currentTime"
-                :max="duration"
+                :max="duration || 1"
                 activeColor="#ffffff"
                 backgroundColor="#454545"
                 block-size="8"
@@ -86,11 +86,21 @@
 
         <!-- Toggle Arrow -->
         <view class="icon-btn toggle-btn" @click.stop="toggleControls">
-          <uni-icons
+          <!-- <uni-icons
             :type="showControls ? 'bottom' : 'top'"
             size="24"
             color="#fff"
-          ></uni-icons>
+          ></uni-icons> -->
+          <image
+            src="http://cdn.xiaodingdang1.com/2025/12/02/676e0cd684664080a9de59c9d79e7795.png"
+            style="width: 60rpx; height: 60rpx"
+            v-show="showControls"
+          ></image>
+          <image
+            src="http://cdn.xiaodingdang1.com/2025/12/02/718b7008f05f4dc2af5f8e100db74618.png"
+            style="width: 60rpx; height: 60rpx"
+            v-show="!showControls"
+          ></image>
         </view>
       </view>
     </view>
@@ -98,13 +108,15 @@
 </template>
 
 <script>
+import basePoint from "@/utils/basePoint.js";
+
 export default {
   data() {
     return {
       coverImage: "",
       videoUrl: "",
       autoplay: true,
-      isPlaying: false,
+      isPlaying: true,
       currentTime: 0,
       duration: 0,
       showControls: true,
@@ -156,6 +168,38 @@ export default {
         ? decodeURIComponent(options.coverImage)
         : "";
     }
+    let data = {
+      visitContent: options.visitContent,
+      visitModule: "合作商家",
+    };
+    basePoint.trackingStart(data);
+  },
+
+  onUnload() {
+    const trackingId = uni.getStorageSync("trackingId");
+    if (trackingId) {
+      basePoint.trackingEnd({ id: trackingId });
+    }
+  },
+
+  onShareAppMessage() {
+    return {
+      title: "合作商家",
+      path: `/pages/secondary/index/index?url=${encodeURIComponent(
+        this.videoUrl
+      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
+      imageUrl: this.coverImage,
+    };
+  },
+
+  onShareTimeline() {
+    return {
+      title: "合作商家",
+      query: `url=${encodeURIComponent(
+        this.videoUrl
+      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
+      imageUrl: this.coverImage,
+    };
   },
 
   onReady() {
@@ -173,7 +217,7 @@ export default {
       if (pages.length > 1) {
         uni.navigateBack({ delta: 1 });
       } else {
-        uni.switchTab({ url: "/pageA/home" });
+        uni.switchTab({ url: "/pages/secondary/homepage/index" });
       }
     },
 

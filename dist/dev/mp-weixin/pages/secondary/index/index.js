@@ -1,12 +1,13 @@
 "use strict";
 const common_vendor = require("../../../common/vendor.js");
+const utils_basePoint = require("../../../utils/basePoint.js");
 const _sfc_main = {
   data() {
     return {
       coverImage: "",
       videoUrl: "",
       autoplay: true,
-      isPlaying: false,
+      isPlaying: true,
       currentTime: 0,
       duration: 0,
       showControls: true,
@@ -52,6 +53,35 @@ const _sfc_main = {
       this.videoUrl = decodeURIComponent(options.url);
       this.coverImage = options.coverImage ? decodeURIComponent(options.coverImage) : "";
     }
+    let data = {
+      visitContent: options.visitContent,
+      visitModule: "合作商家"
+    };
+    utils_basePoint.basePoint.trackingStart(data);
+  },
+  onUnload() {
+    const trackingId = common_vendor.index.getStorageSync("trackingId");
+    if (trackingId) {
+      utils_basePoint.basePoint.trackingEnd({ id: trackingId });
+    }
+  },
+  onShareAppMessage() {
+    return {
+      title: "合作商家",
+      path: `/pages/secondary/index/index?url=${encodeURIComponent(
+        this.videoUrl
+      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
+      imageUrl: this.coverImage
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "合作商家",
+      query: `url=${encodeURIComponent(
+        this.videoUrl
+      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
+      imageUrl: this.coverImage
+    };
   },
   onReady() {
     this.videoContext = common_vendor.index.createVideoContext("myVideo", this);
@@ -65,7 +95,7 @@ const _sfc_main = {
       if (pages.length > 1) {
         common_vendor.index.navigateBack({ delta: 1 });
       } else {
-        common_vendor.index.switchTab({ url: "/pageA/home" });
+        common_vendor.index.switchTab({ url: "/pages/secondary/homepage/index" });
       }
     },
     togglePlay() {
@@ -177,8 +207,8 @@ if (!Array) {
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
     a: $data.videoUrl,
-    b: $data.coverImage,
-    c: $data.autoplay,
+    b: $data.autoplay,
+    c: $data.coverImage,
     d: common_vendor.o((...args) => $options.onPlay && $options.onPlay(...args)),
     e: common_vendor.o((...args) => $options.onPause && $options.onPause(...args)),
     f: common_vendor.o((...args) => $options.onTimeupdate && $options.onTimeupdate(...args)),
@@ -198,23 +228,21 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     n: common_vendor.t($options.formatTime($data.currentTime)),
     o: common_vendor.t($options.formatTime($data.duration)),
     p: $data.currentTime,
-    q: $data.duration,
+    q: $data.duration || 1,
     r: common_vendor.o((...args) => $options.onSliderChange && $options.onSliderChange(...args)),
     s: common_vendor.o((...args) => $options.onSliderChanging && $options.onSliderChanging(...args)),
     t: common_vendor.t($data.playbackRate === 1 ? "倍速" : $data.playbackRate + "x"),
     v: common_vendor.o((...args) => $options.toggleRate && $options.toggleRate(...args)),
     w: !$data.showControls ? 1 : "",
-    x: common_vendor.p({
-      type: $data.showControls ? "bottom" : "top",
-      size: "24",
-      color: "#fff"
-    }),
-    y: common_vendor.o((...args) => $options.toggleControls && $options.toggleControls(...args)),
-    z: common_vendor.s($options.dragStyle),
-    A: common_vendor.o((...args) => $options.onTouchStart && $options.onTouchStart(...args)),
-    B: common_vendor.o((...args) => $options.onTouchMove && $options.onTouchMove(...args)),
-    C: common_vendor.o((...args) => $options.onTouchEnd && $options.onTouchEnd(...args))
+    x: $data.showControls,
+    y: !$data.showControls,
+    z: common_vendor.o((...args) => $options.toggleControls && $options.toggleControls(...args)),
+    A: common_vendor.s($options.dragStyle),
+    B: common_vendor.o((...args) => $options.onTouchStart && $options.onTouchStart(...args)),
+    C: common_vendor.o((...args) => $options.onTouchMove && $options.onTouchMove(...args)),
+    D: common_vendor.o((...args) => $options.onTouchEnd && $options.onTouchEnd(...args))
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-0b50ab4e"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);
