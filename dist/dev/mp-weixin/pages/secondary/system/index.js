@@ -137,8 +137,18 @@ const _sfc_main = {
       }
     };
     const nextVideo = (url, coverImage2) => {
-      common_vendor.index.navigateTo({
-        url: "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage2 + "&visitContent=宣传视频"
+      let sources = [];
+      sources = [
+        {
+          url,
+          type: "video",
+          poster: coverImage2
+        }
+      ];
+      common_vendor.index.previewMedia({
+        sources,
+        current: 0,
+        autoplay: true
       });
     };
     const fetchEnterpriseList = () => __async(this, null, function* () {

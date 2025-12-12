@@ -22,7 +22,9 @@
         /> -->
 
         <view
-          @click="nextVideo(item.caseImages[0], item.caseTitle)"
+          @click="
+            nextVideo(item.caseImages[0], item.caseTitle, item.coverImage)
+          "
           style="width: 344rpx; height: 458rpx"
         >
           <!-- <image
@@ -143,7 +145,7 @@ const onVideoFullscreenChange = (e, index) => {
 };
 let videoContext = null;
 
-const nextVideo = (url, visitContent) => {
+const nextVideo = (url, visitContent, coverImage) => {
   uni.navigateTo({
     url:
       "/pages/secondary/index/index?url=" +
@@ -151,6 +153,20 @@ const nextVideo = (url, visitContent) => {
       "&visitContent=" +
       visitContent,
   });
+  // let sources = [];
+  // sources = [
+  //   {
+  //     url: url,
+  //     type: "video",
+  //     poster: coverImage,
+  //   },
+  // ];
+
+  // uni.previewMedia({
+  //   sources: sources,
+  //   current: 0,
+  //   autoplay: true,
+  // });
 }; // 播放视频
 const playVideo = (index) => {
   // 暂停所有其他视频

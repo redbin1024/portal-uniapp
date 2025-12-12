@@ -407,8 +407,8 @@
 
 /**线上获客 */
 #win-the-customer.data-v-24abe20b {
-  background: linear-gradient(to bottom, #ffffff 30%, #3351e2 70%);
-  padding: 0 24rpx;
+  background: linear-gradient(to bottom, #f0f8ff 30%, #acb4db 50%, #3351e2 100%);
+  padding: 20rpx 24rpx 0 24rpx;
 }
 #winthecustomer.data-v-24abe20b {
   margin-top: 88rpx;
@@ -446,7 +446,7 @@
   font-size: 28rpx;
 }
 .winthecustomer-line.data-v-24abe20b {
-  padding: 24rpx 0 0rpx 0;
+  padding: 24rpx 0 20rpx 0;
   width: 100%;
   text-align: center;
 }
@@ -480,8 +480,8 @@
 .winthecustomer-line image.data-v-24abe20b {
   width: 698rpx;
   height: 380rpx;
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
 }
 .winthecustomer-content.data-v-24abe20b {
   display: flex;

@@ -18,13 +18,20 @@
       :enable-progress-gesture="false"
       object-fit="contain"
       class="video-player"
+      :custom-cache="false"
       @play="onPlay"
       @pause="onPause"
       @timeupdate="onTimeupdate"
       @loadedmetadata="onLoadedmetadata"
       @ended="onEnded"
+      @waiting="onWaiting"
       @click="onVideoClick"
     ></video>
+
+    <!-- Loading Spinner -->
+    <view class="loading-overlay" v-if="isLoading">
+      <view class="loading-spinner"></view>
+    </view>
 
     <!-- Center Play Button (when paused) -->
     <view
@@ -42,10 +49,7 @@
     <view class="bottom-capsule-container">
       <view class="controls-capsule">
         <!-- Main Controls (Collapsible) -->
-        <view
-          class="main-controls-group"
-          :class="{ 'hide-controls': !showControls }"
-        >
+        <view class="main-controls-group">
           <!-- Play/Pause -->
           <view class="icon-btn" @click.stop="togglePlay">
             <uni-icons
@@ -83,33 +87,12 @@
           <!-- Divider -->
           <view class="vertical-divider"></view>
         </view>
-
-        <!-- Toggle Arrow -->
-        <view class="icon-btn toggle-btn" @click.stop="toggleControls">
-          <!-- <uni-icons
-            :type="showControls ? 'bottom' : 'top'"
-            size="24"
-            color="#fff"
-          ></uni-icons> -->
-          <image
-            src="http://cdn.xiaodingdang1.com/2025/12/02/676e0cd684664080a9de59c9d79e7795.png"
-            style="width: 60rpx; height: 60rpx"
-            v-show="showControls"
-          ></image>
-          <image
-            src="http://cdn.xiaodingdang1.com/2025/12/02/718b7008f05f4dc2af5f8e100db74618.png"
-            style="width: 60rpx; height: 60rpx"
-            v-show="!showControls"
-          ></image>
-        </view>
       </view>
     </view>
   </view>
 </template>
 
 <script>
-import basePoint from "@/utils/basePoint.js";
-
 export default {
   data() {
     return {
@@ -135,6 +118,8 @@ export default {
 
       videoContext: null,
       isSliderChanging: false, // To prevent timeupdate from jumping slider while dragging
+      lastTimeUpdate: 0,
+      isLoading: true,
     };
   },
 
@@ -168,38 +153,6 @@ export default {
         ? decodeURIComponent(options.coverImage)
         : "";
     }
-    let data = {
-      visitContent: options.visitContent,
-      visitModule: "合作商家",
-    };
-    basePoint.trackingStart(data);
-  },
-
-  onUnload() {
-    const trackingId = uni.getStorageSync("trackingId");
-    if (trackingId) {
-      basePoint.trackingEnd({ id: trackingId });
-    }
-  },
-
-  onShareAppMessage() {
-    return {
-      title: "合作商家",
-      path: `/pages/secondary/index/index?url=${encodeURIComponent(
-        this.videoUrl
-      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
-      imageUrl: this.coverImage,
-    };
-  },
-
-  onShareTimeline() {
-    return {
-      title: "合作商家",
-      query: `url=${encodeURIComponent(
-        this.videoUrl
-      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
-      imageUrl: this.coverImage,
-    };
   },
 
   onReady() {
@@ -217,7 +170,7 @@ export default {
       if (pages.length > 1) {
         uni.navigateBack({ delta: 1 });
       } else {
-        uni.switchTab({ url: "/pages/secondary/homepage/index" });
+        uni.switchTab({ url: "/pageA/home" });
       }
     },
 
@@ -231,12 +184,18 @@ export default {
 
     onPlay() {
       this.isPlaying = true;
+      this.isLoading = false;
       this.showControls = true;
       this.resetControlsTimer();
     },
 
+    onWaiting() {
+      this.isLoading = true;
+    },
+
     onPause() {
       this.isPlaying = false;
+      this.isLoading = false;
       this.showControls = true;
       if (this.controlsTimer) clearTimeout(this.controlsTimer);
     },
@@ -247,8 +206,14 @@ export default {
     },
 
     onTimeupdate(e) {
+      this.isLoading = false;
       if (!this.isSliderChanging) {
-        this.currentTime = e.detail.currentTime;
+        const now = Date.now();
+        // 节流更新，减少渲染频率，优化iOS卡顿
+        if (now - this.lastTimeUpdate > 200) {
+          this.currentTime = e.detail.currentTime;
+          this.lastTimeUpdate = now;
+        }
       }
     },
 
@@ -466,5 +431,32 @@ export default {
   align-items: center;
   width: 60rpx;
   height: 60rpx;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 6rpx solid rgba(255, 255, 255, 0.3);
+  border-top: 6rpx solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

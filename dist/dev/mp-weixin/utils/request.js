@@ -165,12 +165,8 @@ function getNetworkErrorMessage(error) {
 }
 function request(options) {
   return new Promise((resolve, reject) => {
-    if (options.loading !== false) {
-      common_vendor.index.showLoading({
-        title: options.loadingText || "加载中...",
-        mask: true
-      });
-    }
+    if (options.loading !== false)
+      ;
     const config = Object.assign({}, requestConfig, options);
     const interceptedConfig = requestInterceptor(config);
     const requestKey = interceptedConfig.requestKey;

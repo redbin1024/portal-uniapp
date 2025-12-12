@@ -229,13 +229,27 @@ const onVideoError = (e) => {
   });
 };
 const nextVideo = (url, coverImage) => {
-  uni.navigateTo({
-    url:
-      "/pages/secondary/index/index?url=" +
-      url +
-      "&coverImage=" +
-      coverImage +
-      "&visitContent=宣传视频",
+  // uni.navigateTo({
+  //   url:
+  //     "/pages/secondary/index/index?url=" +
+  //     url +
+  //     "&coverImage=" +
+  //     coverImage +
+  //     "&visitContent=宣传视频",
+  // });
+  let sources = [];
+  sources = [
+    {
+      url: url,
+      type: "video",
+      poster: coverImage,
+    },
+  ];
+
+  uni.previewMedia({
+    sources: sources,
+    current: 0,
+    autoplay: true,
   });
 };
 const onFullscreenChange = (e, index, isEnteringFullscreen) => {

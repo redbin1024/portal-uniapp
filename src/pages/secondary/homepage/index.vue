@@ -160,7 +160,7 @@
         <view class="winthecustomer">
           <view class="winthecustomer-head">
             <view class="winthecustomer-head1">
-              <view class="winthecustomer-title">产品服务</view>
+              <view class="winthecustomer-title">流量服务</view>
               <view class="winthecustomer-title1">PRODUCT SERVICE</view>
             </view>
           </view>
@@ -174,7 +174,7 @@
                 mode="white"
               ></image>
             </view>
-            <view class="winthecustomer-line-bottom">
+            <!-- <view class="winthecustomer-line-bottom">
               <view class="winthecustomer-title2">抖音线上获客</view>
               <view class="winthecustomer-line-bottom1">
                 <view class="winthecustomer-title3">了解详情</view>
@@ -184,9 +184,10 @@
                   mode=""
                 />
               </view>
-            </view>
+            </view> -->
           </view>
         </view>
+        <view class="winthecustomer-title">系统服务</view>
         <view id="winthecustomer">
           <view class="winthecustomer-content">
             <view
@@ -418,6 +419,20 @@ const headContentVisible = ref({});
 const content1Visible = ref([]);
 const caseDataList = ref([]);
 const nextVideo = (url, coverImage, visitContent) => {
+  // let sources = [];
+  // sources = [
+  //   {
+  //     url: url,
+  //     type: "video",
+  //     poster: coverImage,
+  //   },
+  // ];
+
+  // uni.previewMedia({
+  //   sources: sources,
+  //   current: 0,
+  //   autoplay: true,
+  // });
   uni.navigateTo({
     url:
       "/pages/secondary/index/index?url=" +
@@ -1577,8 +1592,13 @@ const onShareTimeline = () => {
 }
 /**线上获客 */
 #win-the-customer {
-  background: linear-gradient(to bottom, #ffffff 30%, #3351e2 70%);
-  padding: 0 24rpx;
+  background: linear-gradient(
+    to bottom,
+    #f0f8ff 30%,
+    #acb4db 50%,
+    #3351e2 100%
+  );
+  padding: 20rpx 24rpx 0 24rpx;
 }
 #winthecustomer {
   margin-top: 88rpx;
@@ -1623,7 +1643,7 @@ const onShareTimeline = () => {
 .winthecustomer-line {
   // border-top-left-radius: 20rpx;
   // border-top-right-radius: 20rpx;
-  padding: 24rpx 0 0rpx 0;
+  padding: 24rpx 0 20rpx 0;
   width: 100%;
   text-align: center;
 }
@@ -1657,8 +1677,8 @@ const onShareTimeline = () => {
 .winthecustomer-line image {
   width: 698rpx;
   height: 380rpx;
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
 }
 .winthecustomer-content {
   display: flex;

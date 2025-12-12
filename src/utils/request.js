@@ -208,10 +208,10 @@ function request(options) {
   return new Promise((resolve, reject) => {
     // 显示加载提示
     if (options.loading !== false) {
-      uni.showLoading({
-        title: options.loadingText || '加载中...',
-        mask: true
-      })
+      // uni.showLoading({
+      //   title: options.loadingText || '加载中1...',
+      //   mask: true
+      // })
     }
     
     // 合并配置
