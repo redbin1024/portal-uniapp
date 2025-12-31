@@ -120,6 +120,7 @@ export default {
       isSliderChanging: false, // To prevent timeupdate from jumping slider while dragging
       lastTimeUpdate: 0,
       isLoading: true,
+      visitContent: "",
     };
   },
 
@@ -152,12 +153,33 @@ export default {
       this.coverImage = options.coverImage
         ? decodeURIComponent(options.coverImage)
         : "";
+      this.visitContent = decodeURIComponent(options.visitContent);
     }
   },
 
   onReady() {
     this.videoContext = uni.createVideoContext("myVideo", this);
     this.resetControlsTimer();
+  },
+
+  onShareAppMessage(res) {
+    return {
+      title: this.visitContent,
+      path: `/pages/secondary/index/index?url=${encodeURIComponent(
+        this.videoUrl
+      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
+      imageUrl: this.coverImage,
+    };
+  },
+
+  onShareTimeline(res) {
+    return {
+      title: this.visitContent,
+      query: `url=${encodeURIComponent(
+        this.videoUrl
+      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
+      imageUrl: this.coverImage,
+    };
   },
 
   methods: {
@@ -170,7 +192,7 @@ export default {
       if (pages.length > 1) {
         uni.navigateBack({ delta: 1 });
       } else {
-        uni.switchTab({ url: "/pageA/home" });
+        uni.switchTab({ url: "/pages/secondary/homepage/index" });
       }
     },
 

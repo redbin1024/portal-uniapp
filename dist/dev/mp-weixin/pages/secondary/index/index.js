@@ -24,7 +24,8 @@ const _sfc_main = {
       isSliderChanging: false,
       // To prevent timeupdate from jumping slider while dragging
       lastTimeUpdate: 0,
-      isLoading: true
+      isLoading: true,
+      visitContent: ""
     };
   },
   computed: {
@@ -53,11 +54,30 @@ const _sfc_main = {
     if (options && options.url) {
       this.videoUrl = decodeURIComponent(options.url);
       this.coverImage = options.coverImage ? decodeURIComponent(options.coverImage) : "";
+      this.visitContent = decodeURIComponent(options.visitContent);
     }
   },
   onReady() {
     this.videoContext = common_vendor.index.createVideoContext("myVideo", this);
     this.resetControlsTimer();
+  },
+  onShareAppMessage(res) {
+    return {
+      title: this.visitContent,
+      path: `/pages/secondary/index/index?url=${encodeURIComponent(
+        this.videoUrl
+      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
+      imageUrl: this.coverImage
+    };
+  },
+  onShareTimeline(res) {
+    return {
+      title: this.visitContent,
+      query: `url=${encodeURIComponent(
+        this.videoUrl
+      )}&coverImage=${encodeURIComponent(this.coverImage)}`,
+      imageUrl: this.coverImage
+    };
   },
   methods: {
     handleBack() {
@@ -67,7 +87,7 @@ const _sfc_main = {
       if (pages.length > 1) {
         common_vendor.index.navigateBack({ delta: 1 });
       } else {
-        common_vendor.index.switchTab({ url: "/pageA/home" });
+        common_vendor.index.switchTab({ url: "/pages/secondary/homepage/index" });
       }
     },
     togglePlay() {
@@ -225,4 +245,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-0b50ab4e"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);
