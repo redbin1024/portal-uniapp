@@ -781,6 +781,67 @@ wx-button.data-v-24abe20b:after {
   width: 80rpx;
   height: 80rpx;
 }
+.problem.data-v-24abe20b {
+  background: #ffffff;
+  padding: 46rpx 26rpx;
+}
+.problem-grid.data-v-24abe20b {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  margin-top: 24rpx;
+}
+.problem-card.data-v-24abe20b {
+  width: 100%;
+  height: 366rpx;
+  background-image: url("http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png"), url("http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png");
+  background-size: 106rpx 112rpx, cover;
+  background-position: right 24rpx bottom 24rpx, center;
+  background-repeat: no-repeat, no-repeat;
+  overflow: hidden;
+}
+.problem-card-header.data-v-24abe20b {
+  display: flex;
+  align-items: center;
+  padding: 60rpx 20rpx 8rpx 30rpx;
+  justify-content: space-between;
+}
+.problem-icon image.data-v-24abe20b {
+  width: 56rpx;
+  height: 56rpx;
+}
+.problem-arrow image.data-v-24abe20b {
+  width: 30rpx;
+  height: 30rpx;
+}
+.problem-card-body.data-v-24abe20b {
+  padding: 24rpx;
+}
+.problem-title.data-v-24abe20b {
+  width: 128rpx;
+  height: 40rpx;
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 600;
+  font-size: 32rpx;
+  color: #3351e3;
+  line-height: 40rpx;
+  text-align: left;
+  font-style: normal;
+  text-transform: none;
+}
+.problem-desc.data-v-24abe20b {
+  width: 270rpx;
+  height: 80rpx;
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 400;
+  font-size: 24rpx;
+  color: #3d3d3d;
+  line-height: 40rpx;
+  text-align: left;
+  font-style: normal;
+  text-transform: none;
+  margin-top: 24rpx;
+}
 
 /* 全屏返回按钮样式 */
 .video-fullscreen-back-btn.data-v-24abe20b {

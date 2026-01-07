@@ -247,6 +247,48 @@ const _sfc_main = {
     const companyNewsList = common_vendor.ref([]);
     common_vendor.ref(0);
     common_vendor.ref(false);
+    const problemList = common_vendor.ref([
+      {
+        title: "服务笔记",
+        desc: "客户总是要打开怎么教你如何用系统一次性解决"
+      },
+      {
+        title: "宝妈站台",
+        desc: "销售如何做到10分钟完成客户信任，快速签单"
+      },
+      {
+        title: "宝妈站台",
+        desc: "遇到客户在网上诋毁，会所该如何自救"
+      },
+      {
+        title: "宝宝请帖",
+        desc: "如何0成本做品牌曝光？如何0成本做线上获客"
+      },
+      {
+        title: "AI智能销售",
+        desc: "每个月到手的资源流失率超过80%，如何用系统完美解决"
+      },
+      {
+        title: "客户轨迹",
+        desc: "如何快速找到客户真实需求进行针对性营销 快速拿下订单"
+      }
+    ]);
+    const problemIcons = common_vendor.ref([
+      "http://cdn.xiaodingdang1.com/2026/01/07/329586497cb141d69864b7ffe44c01e2.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/3c68ffd0fa574800b29257226f5d92cf.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/3500dffbb8d24fa1970e0e1c33a9fcd4.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/a4859ef57e154df784dde7f35a99a3a8.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png"
+    ]);
+    const problemOverlayImages = common_vendor.ref([
+      "http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/55bf54069a0f40ec94e9a1b2d17e9492.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/8fecc01bffef42dd9d7273775fca6ee3.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/28ffbcf6db9b453c826b322d8e82e780.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/9779295dc4ca4826b12724f195e51309.png",
+      "http://cdn.xiaodingdang1.com/2026/01/07/6297c733c4614cec90bb9caf8d8c0b71.png"
+    ]);
     common_vendor.ref(-1);
     common_vendor.ref(0);
     common_vendor.ref(0);
@@ -323,6 +365,12 @@ const _sfc_main = {
     };
     common_vendor.onPageScroll((e) => {
     });
+    const viewProblemMore = () => {
+      common_vendor.index.showToast({
+        title: "敬请期待",
+        icon: "none"
+      });
+    };
     return (_ctx, _cache) => {
       var _a, _b, _c, _d, _e, _f;
       return common_vendor.e({
@@ -335,12 +383,22 @@ const _sfc_main = {
         }),
         b: common_vendor.o(viewmore),
         c: enterpriseList.value.bannerImages[0] + "?image_process=format,webp",
-        d: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
+        d: common_vendor.f(problemList.value, (item, index, i0) => {
+          return {
+            a: problemIcons.value[index],
+            b: common_vendor.t(item.title),
+            c: common_vendor.t(item.desc),
+            d: index,
+            e: `url(${problemOverlayImages.value[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`
+          };
+        }),
+        e: common_vendor.o(viewProblemMore),
+        f: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) + "?image_process=format,webp" ? {
-        e: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+        g: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
-        f: common_vendor.o(($event) => nextDetile()),
-        g: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        h: common_vendor.o(($event) => nextDetile()),
+        i: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage + "?image_process=format,webp",
             b: common_vendor.t(item.serviceName),
@@ -348,39 +406,39 @@ const _sfc_main = {
             d: common_vendor.o(($event) => next(item), index)
           };
         }),
-        h: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        j: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate + "?image_process=format,webp",
             b: "row1-" + index
           };
         }),
-        i: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        k: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        j: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        l: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        k: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        l: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
-        m: showPreview.value
+        m: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        n: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
+        o: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        n: previewMedia.value.type === "video"
+        p: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        o: previewMedia.value.src,
-        p: getVideoPoster(previewMedia.value.src),
-        q: common_vendor.o(onFullscreenChange),
-        r: "preview-video-" + previewMedia.value.index
+        q: previewMedia.value.src,
+        r: getVideoPoster(previewMedia.value.src),
+        s: common_vendor.o(onFullscreenChange),
+        t: "preview-video-" + previewMedia.value.index
       } : {
-        s: previewMedia.value.src
+        v: previewMedia.value.src
       }, {
-        t: isVideoFullscreen.value ? 1 : "",
-        v: common_vendor.o(handlePreviewModalClick)
+        w: isVideoFullscreen.value ? 1 : "",
+        x: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        w: common_vendor.o(handleCustomerServiceClick),
-        x: showPreview.value ? 1 : ""
+        y: common_vendor.o(handleCustomerServiceClick),
+        z: showPreview.value ? 1 : ""
       });
     };
   }
