@@ -39,6 +39,18 @@
 <script>
 export default {
   name: "WaterfallDemo",
+  onShareAppMessage() {
+    return {
+      title: "瀑布流演示",
+      path: "/pages/waterfall-demo/index",
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "瀑布流演示",
+      query: "",
+    };
+  },
   data() {
     return {
       loading: false,

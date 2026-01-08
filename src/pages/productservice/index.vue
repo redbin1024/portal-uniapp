@@ -61,6 +61,18 @@
 <script>
 export default {
   name: "About",
+  onShareAppMessage() {
+    return {
+      title: "产品服务",
+      path: "/pages/productservice/index",
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "产品服务",
+      query: "",
+    };
+  },
 };
 </script>
 

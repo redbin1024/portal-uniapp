@@ -149,6 +149,21 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+
+onShareAppMessage(() => {
+  return {
+    title: "MasterGo项目",
+    path: "/pages/index/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "MasterGo项目",
+    query: "",
+  };
+});
 
 // 轮播图数据
 const bannerList = ref([

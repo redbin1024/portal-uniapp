@@ -217,7 +217,7 @@ to {
   padding: 24rpx;
 }
 .problem-title.data-v-8bd1f02a {
-  width: 128rpx;
+  width: 100%;
   height: 40rpx;
   font-family: PingFang SC, PingFang SC;
   font-weight: 600;

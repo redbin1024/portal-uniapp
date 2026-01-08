@@ -55,6 +55,18 @@
 <script>
 export default {
   name: "About",
+  onShareAppMessage() {
+    return {
+      title: "关于我们",
+      path: "/pages/about/about",
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "关于我们",
+      query: "",
+    };
+  },
   setup() {
     const handleBack = () => {
       uni.switchTab({

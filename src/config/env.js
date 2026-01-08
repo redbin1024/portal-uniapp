@@ -2,7 +2,7 @@
 const envConfig = {
   // 开发环境
   dev: {
-    baseURL: 'https://admin-api.xiaodingdang1.com/',
+    baseURL: 'https://test-api.xiaodingdang1.com/',
     appId: 'wx573564cfaa3b019d',
     debug: true,
     vconsole: true,
@@ -12,7 +12,7 @@ const envConfig = {
   
   // 测试环境
   test: {
-    baseURL: 'https://admin-api.xiaodingdang1.com/',
+    baseURL: 'https://test-api.xiaodingdang1.com/',
     appId: 'wx573564cfaa3b019d',
     debug: true,
     vconsole: true,

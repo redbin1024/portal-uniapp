@@ -22,6 +22,18 @@ var __async = (__this, __arguments, generator) => {
 const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   name: "WaterfallDemo",
+  onShareAppMessage() {
+    return {
+      title: "瀑布流演示",
+      path: "/pages/waterfall-demo/index"
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "瀑布流演示",
+      query: ""
+    };
+  },
   data() {
     return {
       loading: false,
@@ -135,4 +147,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, $data.loading ? {} : {});
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-336331b8"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

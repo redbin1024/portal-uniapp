@@ -24,6 +24,18 @@ const api_activity = require("../../api/activity.js");
 const _sfc_main = {
   __name: "index",
   setup(__props) {
+    common_vendor.onShareAppMessage(() => {
+      return {
+        title: "API测试",
+        path: "/pages/api-test/index"
+      };
+    });
+    common_vendor.onShareTimeline(() => {
+      return {
+        title: "API测试",
+        query: ""
+      };
+    });
     const loading = common_vendor.ref(false);
     const resultText = common_vendor.ref("点击按钮开始测试");
     const apiData = common_vendor.ref([]);
@@ -105,4 +117,5 @@ const _sfc_main = {
   }
 };
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-a165d3e7"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

@@ -18,7 +18,23 @@ import {
   onShow,
   onHide,
   onUnload,
+  onShareAppMessage,
+  onShareTimeline,
 } from "@dcloudio/uni-app";
+
+onShareAppMessage(() => {
+  return {
+    title: "详情",
+    path: "/pages/recentdetails/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "详情",
+    query: "",
+  };
+});
 import basePoint from "@/utils/basePoint.js";
 const richText = ref("");
 const detailData = ref({});

@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view class="header" :class="{ 'header-with-bg': showHeaderBg }">
+    <!-- <view class="header" :class="{ 'header-with-bg': showHeaderBg }">
       <view class="title-wrapper">
         <view class="headLogo" @click="goBack">
           <image
@@ -11,7 +11,7 @@
         </view>
         <view class="title">{{ serviceName }}</view>
       </view>
-    </view>
+    </view> -->
     <view class="content-img">
       <!-- <rich-text class="activity" :nodes="richText" type="text"></rich-text> -->
       <mp-html :content="richText" @imgtap="previewImage"></mp-html>
@@ -45,42 +45,37 @@
   </view>
 </template>
 
+<script>
+export default {
+  onShareAppMessage() {
+    return {
+      title: "详情",
+      path: "/pages/secondary/issueDetails/index",
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "详情",
+      query: "",
+    };
+  },
+};
+</script>
+
 <script setup>
 import basePoint from "@/utils/basePoint.js";
-import {
-  onPageScroll,
-  onShow,
-  onUnload,
-  onShareAppMessage,
-  onShareTimeline,
-} from "@dcloudio/uni-app";
-
-onShareAppMessage(() => {
-  return {
-    title: "客户详情",
-    path: "/pages/customer/index",
-  };
-});
-
-onShareTimeline(() => {
-  return {
-    title: "客户详情",
-    query: "",
-  };
-});
+import { onPageScroll, onShow, onUnload } from "@dcloudio/uni-app";
 import { ref, onMounted } from "vue";
 import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
+import { getproductIntro } from "@/api/activity.js";
+
 // 定义响应式数据
 const serviceDescription = ref("");
 const richText = ref("");
 const serviceName = ref("");
-// 支持图片预览
-// const previewImage = (e) => {
-//   uni.previewImage({
-//     current: e.detail.src,
-//     urls: e.detail.imgs,
-//   });
-// };
+
+// ... existing code ...
+
 const getTracking = async () => {
   await basePoint.trackingStart({
     visitModule: "产品服务",
@@ -96,8 +91,9 @@ onUnload(async () => {
     });
   }
 });
+
 // 页面加载时获取参数
-onMounted(() => {
+onMounted(async () => {
   // 获取页面参数
   const pages = getCurrentPages();
   const currentPage = pages[pages.length - 1];
@@ -106,16 +102,36 @@ onMounted(() => {
     try {
       // 先解码URL编码的参数
       const decodedItem = decodeURIComponent(currentPage.options.item);
-      let serviceDescription = JSON.parse(decodedItem);
-      serviceName.value = serviceDescription.serviceName;
-      processContent(serviceDescription.serviceDescription);
+      let item = JSON.parse(decodedItem);
+
+      // 优先显示传递过来的数据
+      serviceName.value = item.introName || item.serviceName;
+      if (item.introDetail) {
+        processContent(item.introDetail);
+      }
+
+      // 调用接口获取最新详情
+      if (item.id) {
+        try {
+          const res = await getproductIntro({ newsId: item.id });
+          console.log("获取到的产品介绍详情:", res);
+          if (res) {
+            // 假设返回的数据结构与列表项类似，或者是 res.data
+            const data = res.data || res;
+            if (data.introName) serviceName.value = data.introName;
+            if (data.introDetail) processContent(data.introDetail);
+          }
+        } catch (error) {
+          console.error("获取产品介绍详情失败:", error);
+        }
+      }
     } catch (e) {
       console.error("解析服务描述参数失败:", e);
       // 如果解析失败，尝试直接使用原始参数
       try {
-        let serviceDescription = JSON.parse(currentPage.options.item);
-        serviceName.value = serviceDescription.serviceName;
-        processContent(serviceDescription.serviceDescription);
+        let item = JSON.parse(currentPage.options.item);
+        serviceName.value = item.introName || item.serviceName;
+        processContent(item.introDetail);
       } catch (e2) {
         serviceDescription.value = currentPage.options.item;
       }
@@ -123,7 +139,7 @@ onMounted(() => {
   }
   getTracking();
 });
-
+const getzh = () => {};
 const processContent = (content) => {
   // 处理图片样式
   richText.value = content
@@ -142,7 +158,7 @@ const goBack = () => {
 <style>
 .content-img {
   width: 750rpx;
-  margin-top: 150rpx;
+  /* margin-top: 150rpx; */
 }
 .content-img image {
   width: 100%;

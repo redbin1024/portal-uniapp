@@ -108,6 +108,25 @@ const _sfc_main = {
         });
       }
     });
+    const productIntroList = common_vendor.ref([]);
+    const fetchProductIntroList = () => __async(this, null, function* () {
+      try {
+        const response = yield api_activity.getProductIntroList({
+          pageSize: 10,
+          pageNum: 1
+        });
+        console.log("产品介绍列表数据:", response);
+        if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
+          productIntroList.value = response.rows;
+        }
+      } catch (error) {
+        console.error("获取产品介绍列表失败:", error);
+        common_vendor.index.showToast({
+          title: "获取产品介绍列表失败",
+          icon: "none"
+        });
+      }
+    });
     const fetchEnterpriseList = () => __async(this, null, function* () {
       try {
         const response = yield api_activity.getEnterpriseList({
@@ -126,8 +145,21 @@ const _sfc_main = {
         });
       }
     });
+    const goToIndex = (item) => {
+      if (item.introType == 2) {
+        common_vendor.index.navigateTo({
+          url: "/pages/secondary/index/index?url=" + item.videoUrl
+        });
+      } else {
+        const itemStr = JSON.stringify(item);
+        common_vendor.index.navigateTo({
+          url: "/pages/secondary/issueDetails/index?item=" + encodeURIComponent(itemStr)
+        });
+      }
+    };
     common_vendor.onMounted(() => {
       fetchEnterpriseList();
+      fetchProductIntroList();
       fetchServiceList();
       fetchCompanyNewsList();
       caseList();
@@ -247,7 +279,7 @@ const _sfc_main = {
     const companyNewsList = common_vendor.ref([]);
     common_vendor.ref(0);
     common_vendor.ref(false);
-    const problemList = common_vendor.ref([
+    common_vendor.ref([
       {
         title: "服务笔记",
         desc: "客户总是要打开怎么教你如何用系统一次性解决"
@@ -273,7 +305,7 @@ const _sfc_main = {
         desc: "如何快速找到客户真实需求进行针对性营销 快速拿下订单"
       }
     ]);
-    const problemIcons = common_vendor.ref([
+    common_vendor.ref([
       "http://cdn.xiaodingdang1.com/2026/01/07/329586497cb141d69864b7ffe44c01e2.png",
       "http://cdn.xiaodingdang1.com/2026/01/07/3c68ffd0fa574800b29257226f5d92cf.png",
       "http://cdn.xiaodingdang1.com/2026/01/07/3500dffbb8d24fa1970e0e1c33a9fcd4.png",
@@ -281,14 +313,17 @@ const _sfc_main = {
       "http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png",
       "http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png"
     ]);
-    const problemOverlayImages = common_vendor.ref([
-      "http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/55bf54069a0f40ec94e9a1b2d17e9492.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/8fecc01bffef42dd9d7273775fca6ee3.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/28ffbcf6db9b453c826b322d8e82e780.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/9779295dc4ca4826b12724f195e51309.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/6297c733c4614cec90bb9caf8d8c0b71.png"
+    common_vendor.ref([
+      "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+      "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+      "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+      "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+      "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+      "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png"
     ]);
+    common_vendor.ref(0);
+    common_vendor.ref(1);
+    common_vendor.ref(0);
     common_vendor.ref(-1);
     common_vendor.ref(0);
     common_vendor.ref(0);
@@ -365,12 +400,6 @@ const _sfc_main = {
     };
     common_vendor.onPageScroll((e) => {
     });
-    const viewProblemMore = () => {
-      common_vendor.index.showToast({
-        title: "敬请期待",
-        icon: "none"
-      });
-    };
     return (_ctx, _cache) => {
       var _a, _b, _c, _d, _e, _f;
       return common_vendor.e({
@@ -382,17 +411,17 @@ const _sfc_main = {
           };
         }),
         b: common_vendor.o(viewmore),
-        c: enterpriseList.value.bannerImages[0] + "?image_process=format,webp",
-        d: common_vendor.f(problemList.value, (item, index, i0) => {
+        c: enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0]
+      }, enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0] ? {
+        d: enterpriseList.value.bannerImages[0] + "?image_process=format,webp"
+      } : {}, {
+        e: common_vendor.f(productIntroList.value, (img, index, i0) => {
           return {
-            a: problemIcons.value[index],
-            b: common_vendor.t(item.title),
-            c: common_vendor.t(item.desc),
-            d: index,
-            e: `url(${problemOverlayImages.value[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`
+            a: img.coverImage,
+            b: common_vendor.o(($event) => goToIndex(img), "problem-" + index),
+            c: "problem-" + index
           };
         }),
-        e: common_vendor.o(viewProblemMore),
         f: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) + "?image_process=format,webp" ? {
         g: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]

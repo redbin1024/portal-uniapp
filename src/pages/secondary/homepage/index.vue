@@ -149,7 +149,10 @@
           <view>查看更多</view>
           <view>></view>
         </view>
-        <view class="businesspartnernew-image">
+        <view
+          class="businesspartnernew-image"
+          v-if="enterpriseList.bannerImages && enterpriseList.bannerImages[0]"
+        >
           <image
             :src="enterpriseList.bannerImages[0] + '?image_process=format,webp'"
             mode="aspectFill"
@@ -163,36 +166,28 @@
             <view class="winthecustomer-title1">PROBLEM</view>
           </view>
         </view>
-        <view class="problem-grid">
-          <view
-            class="problem-card"
-            v-for="(item, index) in problemList"
-            :key="index"
-            :style="{
-              backgroundImage: `url(${problemOverlayImages[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
-            }"
+        <swiper
+          class="problem-swiper"
+          :indicator-dots="false"
+          :autoplay="true"
+          :interval="1500"
+          :duration="500"
+          :circular="true"
+          :display-multiple-items="2"
+        >
+          <swiper-item
+            v-for="(img, index) in productIntroList"
+            :key="'problem-' + index"
           >
-            <view class="problem-card-header">
-              <view class="problem-icon">
-                <image :src="problemIcons[index]" mode="aspectFit"></image>
-              </view>
-              <view class="problem-arrow">
-                <image
-                  src="http://cdn.xiaodingdang1.com/2026/01/07/86381c17c8d74dac891a5b12e1b5e63f.png"
-                  mode="aspectFit"
-                ></image>
-              </view>
+            <view class="problem-slide" @click="goToIndex(img)">
+              <image
+                :src="img.coverImage"
+                class="problem-slide-image"
+                mode="scaleToFill"
+              />
             </view>
-            <view class="problem-card-body">
-              <view class="problem-title">{{ item.title }}</view>
-              <view class="problem-desc">{{ item.desc }}</view>
-            </view>
-          </view>
-        </view>
-        <view class="viewmore" @click="viewProblemMore">
-          <view>查看更多</view>
-          <view>></view>
-        </view>
+          </swiper-item>
+        </swiper>
       </view>
       <view id="win-the-customer">
         <view class="winthecustomer">
@@ -212,7 +207,7 @@
                 mode="white"
               ></image>
             </view>
-            <!-- <view class="winthecustomer-line-bottom">
+            <view class="winthecustomer-line-bottom">
               <view class="winthecustomer-title2">抖音线上获客</view>
               <view class="winthecustomer-line-bottom1">
                 <view class="winthecustomer-title3">了解详情</view>
@@ -222,7 +217,7 @@
                   mode=""
                 />
               </view>
-            </view> -->
+            </view>
           </view>
         </view>
         <view class="winthecustomer-title">系统服务</view>
@@ -446,6 +441,7 @@ import {
   getServiceList,
   getCompanyNewsList,
   getcaseList,
+  getProductIntroList,
 } from "@/api/activity.js";
 import basePoint from "@/utils/basePoint.js";
 
@@ -581,6 +577,31 @@ const fetchServiceList = async () => {
     });
   }
 };
+//查询产品介绍列表
+const productIntroList = ref([]);
+const fetchProductIntroList = async () => {
+  try {
+    const response = await getProductIntroList({
+      pageSize: 10,
+      pageNum: 1,
+    });
+    console.log("产品介绍列表数据:", response);
+    if (
+      response &&
+      response.rows &&
+      Array.isArray(response.rows) &&
+      response.rows.length > 0
+    ) {
+      productIntroList.value = response.rows;
+    }
+  } catch (error) {
+    console.error("获取产品介绍列表失败:", error);
+    uni.showToast({
+      title: "获取产品介绍列表失败",
+      icon: "none",
+    });
+  }
+};
 // 获取企业列表数据
 const fetchEnterpriseList = async () => {
   try {
@@ -615,10 +636,27 @@ const goToDetails = (item) => {
       encodeURIComponent(JSON.stringify(item)),
   });
 };
+
+const goToIndex = (item) => {
+  if (item.introType == 2) {
+    uni.navigateTo({
+      url: "/pages/secondary/index/index?url=" + item.videoUrl,
+    });
+  } else {
+    const itemStr = JSON.stringify(item);
+    uni.navigateTo({
+      url:
+        "/pages/secondary/issueDetails/index?item=" +
+        encodeURIComponent(itemStr),
+    });
+  }
+};
 // 页面加载完成后触发按钮动画
 onMounted(() => {
   // 获取企业列表数据
   fetchEnterpriseList();
+  //查询产品介绍列表
+  fetchProductIntroList();
   //查询服务信息列表
   fetchServiceList();
   //查询公司动态列表
@@ -819,13 +857,45 @@ const problemIcons = ref([
 ]);
 
 const problemOverlayImages = ref([
-  "http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/55bf54069a0f40ec94e9a1b2d17e9492.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/8fecc01bffef42dd9d7273775fca6ee3.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/28ffbcf6db9b453c826b322d8e82e780.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/9779295dc4ca4826b12724f195e51309.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/6297c733c4614cec90bb9caf8d8c0b71.png",
+  "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+  "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+  "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+  "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+  "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
+  "http://cdn.xiaodingdang1.com/2026/01/08/9d67dbc7bde141f1a0d1b0f65a8e86d4.png",
 ]);
+
+const problemScrollLeft = ref(0);
+const problemScrollDirection = ref(1);
+const problemMaxScroll = ref(0);
+let problemScrollTimer = null;
+const computeProblemMax = () => {
+  const totalContentUpx =
+    problemList.value.length * 306 + (problemList.value.length - 1) * 20 + 26;
+  const containerWidthUpx = 750 - 52;
+  const maxUpx = Math.max(totalContentUpx - containerWidthUpx, 0);
+  problemMaxScroll.value = uni.upx2px(maxUpx);
+};
+const startProblemAutoScroll = () => {
+  computeProblemMax();
+  stopProblemAutoScroll();
+  problemScrollTimer = setInterval(() => {
+    problemScrollLeft.value += problemScrollDirection.value * 2;
+    if (problemScrollLeft.value >= problemMaxScroll.value) {
+      problemScrollDirection.value = -1;
+      problemScrollLeft.value = problemMaxScroll.value;
+    } else if (problemScrollLeft.value <= 0) {
+      problemScrollDirection.value = 1;
+      problemScrollLeft.value = 0;
+    }
+  }, 16);
+};
+const stopProblemAutoScroll = () => {
+  if (problemScrollTimer) {
+    clearInterval(problemScrollTimer);
+    problemScrollTimer = null;
+  }
+};
 
 const onSwiperChange = (e) => {
   currentIndex.value = e.detail.current;
@@ -1688,7 +1758,7 @@ const viewProblemMore = () => {
     #acb4db 50%,
     #3351e2 100%
   );
-  padding: 20rpx 24rpx 0 24rpx;
+  padding: 50rpx 24rpx 0 24rpx;
 }
 #winthecustomer {
   margin-top: 88rpx;
@@ -1731,11 +1801,12 @@ const viewProblemMore = () => {
   font-size: 28rpx;
 }
 .winthecustomer-line {
-  // border-top-left-radius: 20rpx;
-  // border-top-right-radius: 20rpx;
-  padding: 24rpx 0 20rpx 0;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  padding: 24rpx 0 0rpx 0;
   width: 100%;
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 .winthecustomer-line-bottom {
   display: flex;
@@ -1745,6 +1816,7 @@ const viewProblemMore = () => {
   padding: 28rpx 28rpx;
   border-bottom-left-radius: 20rpx;
   border-bottom-right-radius: 20rpx;
+  margin-bottom: 50rpx;
 }
 .winthecustomer-line-bottom1 {
   display: flex;
@@ -1767,8 +1839,10 @@ const viewProblemMore = () => {
 .winthecustomer-line image {
   width: 698rpx;
   height: 380rpx;
-  border-radius: 20rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  display: block;
+  // box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
 }
 .winthecustomer-content {
   display: flex;
@@ -2097,6 +2171,34 @@ wx-button:after {
   background: #ffffff;
   padding: 46rpx 26rpx;
 }
+.problem-swiper {
+  height: 364rpx;
+  background-color: #fff;
+  margin-top: 24rpx;
+}
+.problem-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 24rpx;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+.problem-slide-image {
+  height: 364rpx;
+  border-radius: 20rpx;
+  border: 2rpx solid #e1e1e1;
+}
+.problem-scroll {
+  margin-top: 24rpx;
+  white-space: nowrap;
+}
+.problem-scroll-inner {
+  display: flex;
+  gap: 20rpx;
+  padding-right: 26rpx;
+}
 .problem-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -2104,7 +2206,7 @@ wx-button:after {
   margin-top: 24rpx;
 }
 .problem-card {
-  width: 100%;
+  width: 306rpx;
   height: 366rpx;
   background-image: url("http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png"),
     url("http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png");
@@ -2112,6 +2214,9 @@ wx-button:after {
   background-position: right 24rpx bottom 24rpx, center;
   background-repeat: no-repeat, no-repeat;
   overflow: hidden;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
 }
 .problem-card-header {
   display: flex;

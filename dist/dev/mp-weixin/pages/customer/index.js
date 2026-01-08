@@ -28,6 +28,18 @@ const mpHtml = () => "../../node-modules/uni-app-mp-html/components/mp-html/mp-h
 const _sfc_main = {
   __name: "index",
   setup(__props) {
+    common_vendor.onShareAppMessage(() => {
+      return {
+        title: "客户详情",
+        path: "/pages/customer/index"
+      };
+    });
+    common_vendor.onShareTimeline(() => {
+      return {
+        title: "客户详情",
+        query: ""
+      };
+    });
     const serviceDescription = common_vendor.ref("");
     const richText = common_vendor.ref("");
     const serviceName = common_vendor.ref("");
@@ -91,5 +103,5 @@ const _sfc_main = {
     };
   }
 };
-_sfc_main.__runtimeHooks = 1;
+_sfc_main.__runtimeHooks = 7;
 wx.createPage(_sfc_main);

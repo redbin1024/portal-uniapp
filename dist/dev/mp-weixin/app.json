@@ -23,7 +23,9 @@
     "pages/api-test/index",
     "pages/firmdynamicdetails/index",
     "pages/secondary/businesspartner/index",
-    "pages/secondary/index/index"
+    "pages/secondary/index/index",
+    "pages/secondary/issueDetails/index",
+    "pages/secondary/issueList/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",

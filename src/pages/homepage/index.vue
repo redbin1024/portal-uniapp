@@ -367,7 +367,23 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
-import { onPageScroll } from "@dcloudio/uni-app";
+import { onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+
+onShareAppMessage(() => {
+  return {
+    title: "MasterGo项目",
+    path: "/pages/homepage/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "MasterGo项目",
+    query: "",
+  };
+});
+
+// 轮播图数据import { onPageScroll } from "@dcloudio/uni-app";
 import {
   getEnterpriseList,
   getServiceList,

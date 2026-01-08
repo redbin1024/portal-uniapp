@@ -3,6 +3,18 @@ const common_vendor = require("../../common/vendor.js");
 const common_assets = require("../../common/assets.js");
 const _sfc_main = {
   name: "About",
+  onShareAppMessage() {
+    return {
+      title: "关于我们",
+      path: "/pages/about/about"
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "关于我们",
+      query: ""
+    };
+  },
   setup() {
     const handleBack = () => {
       common_vendor.index.switchTab({
@@ -21,4 +33,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-b5177f87"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

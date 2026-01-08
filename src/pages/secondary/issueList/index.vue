@@ -31,6 +31,23 @@
   </view>
 </template>
 
+<script>
+export default {
+  onShareAppMessage() {
+    return {
+      title: "列表",
+      path: "/pages/secondary/issueList/index",
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "列表",
+      query: "",
+    };
+  },
+};
+</script>
+
 <script setup>
 import basePoint from "@/utils/basePoint.js";
 import { onPageScroll, onLoad, onShow, onHide } from "@dcloudio/uni-app";

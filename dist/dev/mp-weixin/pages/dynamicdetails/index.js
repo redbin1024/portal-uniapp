@@ -3,6 +3,18 @@ const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   __name: "index",
   setup(__props) {
+    common_vendor.onShareAppMessage(() => {
+      return {
+        title: "动态详情",
+        path: "/pages/dynamicdetails/index"
+      };
+    });
+    common_vendor.onShareTimeline(() => {
+      return {
+        title: "动态详情",
+        query: ""
+      };
+    });
     const serviceDescription = common_vendor.ref("");
     const richText = common_vendor.ref("");
     common_vendor.onMounted(() => {
@@ -37,4 +49,5 @@ const _sfc_main = {
     };
   }
 };
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(_sfc_main);

@@ -5,6 +5,18 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
 }, {
   __name: "index",
   setup(__props) {
+    common_vendor.onShareAppMessage(() => {
+      return {
+        title: "企业动态详情",
+        path: "/pages/firmdynamicdetails/index"
+      };
+    });
+    common_vendor.onShareTimeline(() => {
+      return {
+        title: "企业动态详情",
+        query: ""
+      };
+    });
     const detailData = common_vendor.ref({});
     const getPageParams = () => {
       const pages = getCurrentPages();
@@ -28,4 +40,5 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
   }
 });
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-b023a030"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

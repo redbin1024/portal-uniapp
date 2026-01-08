@@ -12,6 +12,21 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+
+onShareAppMessage(() => {
+  return {
+    title: "企业动态详情",
+    path: "/pages/firmdynamicdetails/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "企业动态详情",
+    query: "",
+  };
+});
 
 // 定义组件名称
 defineOptions({

@@ -61,6 +61,21 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+
+onShareAppMessage(() => {
+  return {
+    title: "产品服务",
+    path: "/pages/productservicenew/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "产品服务",
+    query: "",
+  };
+});
 import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
 import VideoRotateCarousel from "@/components/video-rotate-carousel/video-rotate-carousel.vue";
 import { getServiceList, getcaseList } from "@/api/activity.js";

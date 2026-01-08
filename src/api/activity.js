@@ -107,3 +107,26 @@ export function getTrackingEnd(params = {}) {
     ...rest
   })
 }
+
+
+/**
+ * 
+ * @param {查询产品介绍列表}   
+ * @returns 
+ */
+export function getProductIntroList(params = {}) {
+  return get('/mp/tk/productIntro/list', {
+    ...params
+  })
+}
+
+
+/**
+ * 
+ * @param {获取产品介绍详细信息}   
+ * @returns 
+ */
+export function getproductIntro(params = {}) {
+  return get('/mp/tk/productIntro/'+params.newsId, {
+  })
+}

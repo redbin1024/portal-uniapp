@@ -118,7 +118,21 @@
 
 <script setup>
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
-import { onPageScroll, onLoad, onShow } from "@dcloudio/uni-app";
+import { onPageScroll, onLoad, onShow, onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+
+onShareAppMessage(() => {
+  return {
+    title: "合作案例",
+    path: "/pages/cooperationcase/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "合作案例",
+    query: "",
+  };
+});
 
 import {
   getcaseList,

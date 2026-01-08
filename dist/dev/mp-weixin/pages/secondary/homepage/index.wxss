@@ -408,7 +408,7 @@
 /**线上获客 */
 #win-the-customer.data-v-24abe20b {
   background: linear-gradient(to bottom, #f0f8ff 30%, #acb4db 50%, #3351e2 100%);
-  padding: 20rpx 24rpx 0 24rpx;
+  padding: 50rpx 24rpx 0 24rpx;
 }
 #winthecustomer.data-v-24abe20b {
   margin-top: 88rpx;
@@ -446,9 +446,12 @@
   font-size: 28rpx;
 }
 .winthecustomer-line.data-v-24abe20b {
-  padding: 24rpx 0 20rpx 0;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  padding: 24rpx 0 0rpx 0;
   width: 100%;
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 .winthecustomer-line-bottom.data-v-24abe20b {
   display: flex;
@@ -458,6 +461,7 @@
   padding: 28rpx 28rpx;
   border-bottom-left-radius: 20rpx;
   border-bottom-right-radius: 20rpx;
+  margin-bottom: 50rpx;
 }
 .winthecustomer-line-bottom1.data-v-24abe20b {
   display: flex;
@@ -480,8 +484,9 @@
 .winthecustomer-line image.data-v-24abe20b {
   width: 698rpx;
   height: 380rpx;
-  border-radius: 20rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  display: block;
 }
 .winthecustomer-content.data-v-24abe20b {
   display: flex;
@@ -785,6 +790,34 @@ wx-button.data-v-24abe20b:after {
   background: #ffffff;
   padding: 46rpx 26rpx;
 }
+.problem-swiper.data-v-24abe20b {
+  height: 364rpx;
+  background-color: #fff;
+  margin-top: 24rpx;
+}
+.problem-slide.data-v-24abe20b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 24rpx;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+.problem-slide-image.data-v-24abe20b {
+  height: 364rpx;
+  border-radius: 20rpx;
+  border: 2rpx solid #e1e1e1;
+}
+.problem-scroll.data-v-24abe20b {
+  margin-top: 24rpx;
+  white-space: nowrap;
+}
+.problem-scroll-inner.data-v-24abe20b {
+  display: flex;
+  gap: 20rpx;
+  padding-right: 26rpx;
+}
 .problem-grid.data-v-24abe20b {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -792,13 +825,16 @@ wx-button.data-v-24abe20b:after {
   margin-top: 24rpx;
 }
 .problem-card.data-v-24abe20b {
-  width: 100%;
+  width: 306rpx;
   height: 366rpx;
   background-image: url("http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png"), url("http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png");
   background-size: 106rpx 112rpx, cover;
   background-position: right 24rpx bottom 24rpx, center;
   background-repeat: no-repeat, no-repeat;
   overflow: hidden;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
 }
 .problem-card-header.data-v-24abe20b {
   display: flex;

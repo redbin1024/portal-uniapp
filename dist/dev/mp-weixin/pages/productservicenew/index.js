@@ -28,6 +28,18 @@ const VearCarousel = () => "../../components/vear-carousel/vear-carousel.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
+    common_vendor.onShareAppMessage(() => {
+      return {
+        title: "产品服务",
+        path: "/pages/productservicenew/index"
+      };
+    });
+    common_vendor.onShareTimeline(() => {
+      return {
+        title: "产品服务",
+        query: ""
+      };
+    });
     const activeTab = common_vendor.ref(0);
     const serviceList = common_vendor.ref([]);
     const serviceLists = common_vendor.ref([]);
@@ -238,4 +250,5 @@ const _sfc_main = {
   }
 };
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-e4863047"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

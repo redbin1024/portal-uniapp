@@ -15,8 +15,23 @@
 
 <script setup>
 import { ref } from "vue";
-import { onLoad, onShow, onHide, onUnload } from "@dcloudio/uni-app";
+import { onLoad, onShow, onHide, onUnload, onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
 import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
+
+onShareAppMessage(() => {
+  return {
+    title: "案例详情",
+    path: "/pages/casedetails/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "案例详情",
+    query: "",
+  };
+});
+
 import { getActivityDetail } from "@/api/activity.js";
 import basePoint from "@/utils/basePoint.js";
 

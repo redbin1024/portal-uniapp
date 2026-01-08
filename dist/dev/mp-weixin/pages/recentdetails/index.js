@@ -29,6 +29,18 @@ const mpHtml = () => "../../node-modules/uni-app-mp-html/components/mp-html/mp-h
 const _sfc_main = /* @__PURE__ */ Object.assign({ name: "RecentDetails" }, {
   __name: "index",
   setup(__props, { expose: __expose }) {
+    common_vendor.onShareAppMessage(() => {
+      return {
+        title: "详情",
+        path: "/pages/recentdetails/index"
+      };
+    });
+    common_vendor.onShareTimeline(() => {
+      return {
+        title: "详情",
+        query: ""
+      };
+    });
     const richText = common_vendor.ref("");
     const detailData = common_vendor.ref({});
     const CompanyNews = (newsId) => __async(this, null, function* () {
@@ -92,5 +104,5 @@ const _sfc_main = /* @__PURE__ */ Object.assign({ name: "RecentDetails" }, {
   }
 });
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-eede22fe"]]);
-_sfc_main.__runtimeHooks = 1;
+_sfc_main.__runtimeHooks = 7;
 wx.createPage(MiniProgramPage);

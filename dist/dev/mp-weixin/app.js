@@ -26,6 +26,8 @@ if (!Math) {
   "./pages/firmdynamicdetails/index.js";
   "./pages/secondary/businesspartner/index.js";
   "./pages/secondary/index/index.js";
+  "./pages/secondary/issueDetails/index.js";
+  "./pages/secondary/issueList/index.js";
 }
 if (!Array) {
   const _component_router_view = common_vendor.resolveComponent("router-view");

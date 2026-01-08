@@ -53,11 +53,19 @@ function getTrackingEnd(params = {}) {
   const _a = params, { id } = _a, rest = __objRest(_a, ["id"]);
   return utils_request.post(`/mp/tk/successCase/tracking/end/${id}`, __spreadValues({}, rest));
 }
+function getProductIntroList(params = {}) {
+  return utils_request.get("/mp/tk/productIntro/list", __spreadValues({}, params));
+}
+function getproductIntro(params = {}) {
+  return utils_request.get("/mp/tk/productIntro/" + params.newsId, {});
+}
 exports.getCompanyNews = getCompanyNews;
 exports.getCompanyNewsList = getCompanyNewsList;
 exports.getEnterpriseList = getEnterpriseList;
+exports.getProductIntroList = getProductIntroList;
 exports.getServiceList = getServiceList;
 exports.getTrackingEnd = getTrackingEnd;
 exports.getTrackingStart = getTrackingStart;
 exports.getcaseList = getcaseList;
+exports.getproductIntro = getproductIntro;
 exports.getsuccessCaseList = getsuccessCaseList;

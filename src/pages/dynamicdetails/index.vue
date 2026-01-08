@@ -8,6 +8,21 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+
+onShareAppMessage(() => {
+  return {
+    title: "动态详情",
+    path: "/pages/dynamicdetails/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "动态详情",
+    query: "",
+  };
+});
 
 // 定义响应式数据
 const serviceDescription = ref("");

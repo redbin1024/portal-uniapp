@@ -1,6 +1,8 @@
 {
   "navigationBarTitleText": "产品服务",
   "navigationBarBackgroundColor": "#ffffff",
+  "enableShareAppMessage": true,
+  "enableShareTimeline": true,
   "usingComponents": {
     "vear-carousel": "../../components/vear-carousel/vear-carousel"
   }

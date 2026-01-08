@@ -19,7 +19,9 @@
       "path": "pages/secondary/system/index",
       "style": {
         "navigationBarTitleText": "系统服务",
-         "backgroundColor": "#F8F8F8"
+         "backgroundColor": "#F8F8F8",
+         "enableShareAppMessage": true,
+         "enableShareTimeline": true
       }
     },
     {
@@ -97,7 +99,9 @@
       "path": "pages/cooperationcase/index",
       "style": {
         "navigationBarTitleText": "合作案例",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
     {
@@ -111,7 +115,9 @@
       "path": "pages/recentdetails/index",
       "style": {
         "navigationBarTitleText": "最近动态",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
     {
@@ -125,7 +131,9 @@
       "path": "pages/productservicenew/index",
       "style": {
         "navigationBarTitleText": "产品服务",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
    
@@ -133,7 +141,9 @@
       "path": "pages/customer/index",
      "style": {
             "navigationStyle": "custom",
-            "navigationBarTitleText": ""
+            "navigationBarTitleText": "",
+            "enableShareAppMessage": true,
+            "enableShareTimeline": true
           }
     },
     {
@@ -154,7 +164,9 @@
       "path": "pages/firmdynamicdetails/index",
       "style": {
         "navigationBarTitleText": "公司动态",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
     {
@@ -176,6 +188,24 @@
         "app-plus": {
           "popGesture": "none"
         }
+      }
+    },
+    {
+      "path": "pages/secondary/issueDetails/index",
+      "style": {
+        "navigationBarTitleText": "AI智能销售",
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
+      }
+    },
+    {
+      "path": "pages/secondary/issueList/index",
+      "style": {
+        "navigationBarTitleText": "列表",
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     }
    

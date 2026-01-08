@@ -35,11 +35,12 @@
       <view class="problem-grid">
         <view
           class="problem-card"
-          v-for="(item, index) in problemList"
+          v-for="(item, index) in productIntroList"
           :key="index"
           :style="{
             backgroundImage: `url(${problemOverlayImages[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
           }"
+          @click="goToIndex(item)"
         >
           <view class="problem-card-header">
             <view class="problem-icon">
@@ -53,8 +54,8 @@
             </view>
           </view>
           <view class="problem-card-body">
-            <view class="problem-title">{{ item.title }}</view>
-            <view class="problem-desc">{{ item.desc }}</view>
+            <view class="problem-title">{{ item.introName }}</view>
+            <view class="problem-desc">{{ item.introDetailFormat }}</view>
           </view>
         </view>
       </view>
@@ -69,6 +70,7 @@
             @click="next(item)"
           >
             <image
+              v-if="item.serviceImage && item.serviceImage[0]"
               :src="item.serviceImage[0] + '?image_process=format,webp'"
             ></image>
             <view class="winthecustomer-content2">
@@ -86,7 +88,28 @@
 
 <script setup>
 import basePoint from "@/utils/basePoint.js";
-import { onPageScroll, onLoad, onShow, onHide } from "@dcloudio/uni-app";
+import {
+  onPageScroll,
+  onLoad,
+  onShow,
+  onHide,
+  onShareAppMessage,
+  onShareTimeline,
+} from "@dcloudio/uni-app";
+
+onShareAppMessage(() => {
+  return {
+    title: "系统",
+    path: "/pages/secondary/system/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "系统",
+    query: "",
+  };
+});
 import { ref, onMounted } from "vue";
 import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
 import VideoRotateCarousel from "@/components/video-rotate-carousel/video-rotate-carousel.vue";
@@ -94,6 +117,7 @@ import {
   getServiceList,
   getcaseList,
   getEnterpriseList,
+  getProductIntroList,
 } from "@/api/activity.js";
 import VearCarousel from "@/components/vear-carousel/vear-carousel.vue";
 
@@ -149,6 +173,20 @@ const problemList = ref([
     desc: "如何快速找到客户真实需求进行针对性营销 快速拿下订单",
   },
 ]);
+const goToIndex = (item) => {
+  if (item.introType == 2) {
+    uni.navigateTo({
+      url: "/pages/secondary/index/index?url=" + item.videoUrl,
+    });
+  } else {
+    const itemStr = JSON.stringify(item);
+    uni.navigateTo({
+      url:
+        "/pages/secondary/issueDetails/index?item=" +
+        encodeURIComponent(itemStr),
+    });
+  }
+};
 // 企业列表数据
 const enterpriseList = ref([]);
 //查询商家案例列表
@@ -235,7 +273,7 @@ const fetchServiceList = async () => {
       serviceLists.value = response.rows.slice(1);
 
       if (data.serviceDescription) {
-        processContent(data.serviceDescription);
+        richText.value = processContent(data.serviceDescription);
       }
     } else {
       console.log("服务列表数据为空");
@@ -381,12 +419,17 @@ const fetchEnterpriseList = async () => {
       enterpriseList.value = response.rows[0];
       coverImage.value = response.rows[0].coverImage;
       let video;
-      response.rows[0].bannerImages.forEach((str1) => {
-        let result1 = str1.slice(-3);
-        if (result1 == "mp4") {
-          video = str1;
-        }
-      });
+      if (
+        response.rows[0].bannerImages &&
+        Array.isArray(response.rows[0].bannerImages)
+      ) {
+        response.rows[0].bannerImages.forEach((str1) => {
+          let result1 = str1.slice(-3);
+          if (result1 == "mp4") {
+            video = str1;
+          }
+        });
+      }
       bannerImages.value = video;
     }
   } catch (error) {
@@ -397,19 +440,56 @@ const fetchEnterpriseList = async () => {
     });
   }
 };
+const productIntroList = ref([]);
+const fetchProductIntroList = async () => {
+  try {
+    const response = await getProductIntroList({
+      pageSize: 6,
+      pageNum: 1,
+    });
+    console.log("产品介绍列表数据:", response);
+    if (
+      response &&
+      response.rows &&
+      Array.isArray(response.rows) &&
+      response.rows.length > 0
+    ) {
+      response.rows.forEach((item) => {
+        console.log("原始introDetail:", item.introDetail);
+        item.introDetailFormat = formatRichText(item.introDetail);
+      });
+      console.log("处理后的introDetailFormat:", response.rows);
+      productIntroList.value = response.rows;
+    }
+  } catch (error) {
+    console.error("获取产品介绍列表失败:", error);
+    uni.showToast({
+      title: "获取产品介绍列表失败",
+      icon: "none",
+    });
+  }
+};
 // 页面加载完成后触发按钮动画
 onMounted(() => {
   fetchServiceList();
   fetchcaseList(); // 暂时注释掉，因为当前页面主要显示服务信息
   fetchEnterpriseList();
+  //查询产品介绍列表
+  fetchProductIntroList();
 });
 const processContent = (content) => {
+  if (!content) return "";
   // 处理图片样式
-  richText.value = content
+  return content
     .replace(/<img[^>]*>/gi, function (match, capture) {
       return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
     })
     .replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
+};
+const formatRichText = (html) => {
+  let newContent = html.replace(/<[^>]+>/g, "");
+  newContent = newContent.replace(/&nbsp;/gi, "");
+  return newContent;
 };
 onShow(async () => {
   await basePoint.trackingStart({
@@ -657,7 +737,7 @@ onHide(async () => {
   padding: 24rpx;
 }
 .problem-title {
-  width: 128rpx;
+  width: 100%;
   height: 40rpx;
   font-family: PingFang SC, PingFang SC;
   font-weight: 600;

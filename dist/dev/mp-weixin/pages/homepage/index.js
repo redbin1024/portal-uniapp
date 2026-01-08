@@ -24,6 +24,18 @@ const api_activity = require("../../api/activity.js");
 const _sfc_main = {
   __name: "index",
   setup(__props) {
+    common_vendor.onShareAppMessage(() => {
+      return {
+        title: "MasterGo项目",
+        path: "/pages/homepage/index"
+      };
+    });
+    common_vendor.onShareTimeline(() => {
+      return {
+        title: "MasterGo项目",
+        query: ""
+      };
+    });
     common_vendor.ref(false);
     common_vendor.ref({});
     common_vendor.ref([]);
@@ -371,7 +383,7 @@ const _sfc_main = {
         return [];
       return partners.filter((_, index) => index % 2 === 1);
     };
-    common_vendor.onPageScroll((e) => {
+    onPageScroll((e) => {
     });
     return (_ctx, _cache) => {
       var _a, _b, _c, _d, _e, _f;
@@ -469,5 +481,5 @@ const _sfc_main = {
   }
 };
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-46fe8b1b"]]);
-_sfc_main.__runtimeHooks = 1;
+_sfc_main.__runtimeHooks = 7;
 wx.createPage(MiniProgramPage);

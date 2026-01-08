@@ -3,6 +3,18 @@ const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   __name: "index",
   setup(__props) {
+    common_vendor.onShareAppMessage(() => {
+      return {
+        title: "MasterGo项目",
+        path: "/pages/index/index"
+      };
+    });
+    common_vendor.onShareTimeline(() => {
+      return {
+        title: "MasterGo项目",
+        query: ""
+      };
+    });
     const bannerList = common_vendor.ref([
       {
         image: "http://cdn.xiaodingdang1.com/2025/09/17/3e714aab0c1044f3a6d9ad78dc856e63.png",
@@ -133,4 +145,5 @@ const _sfc_main = {
   }
 };
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-83a5a03c"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

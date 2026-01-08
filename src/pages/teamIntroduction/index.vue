@@ -18,7 +18,20 @@
 </template>
 
 <script>
-export default {};
+export default {
+  onShareAppMessage() {
+    return {
+      title: "团队介绍",
+      path: "/pages/teamIntroduction/index",
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "团队介绍",
+      query: "",
+    };
+  },
+};
 </script>
 
 <style scoped>

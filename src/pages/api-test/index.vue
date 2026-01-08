@@ -26,6 +26,21 @@
 
 <script setup>
 import { ref } from "vue";
+import { onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+
+onShareAppMessage(() => {
+  return {
+    title: "API测试",
+    path: "/pages/api-test/index",
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: "API测试",
+    query: "",
+  };
+});
 import { getsuccessCaseList } from "@/api/activity.js";
 
 const loading = ref(false);
