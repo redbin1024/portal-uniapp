@@ -59,6 +59,12 @@ function getProductIntroList(params = {}) {
 function getproductIntro(params = {}) {
   return utils_request.get("/mp/tk/productIntro/" + params.newsId, {});
 }
+function getservice(params = {}) {
+  return utils_request.get("/mp/tk/service/" + params.newsId, {});
+}
+function getsuccessCase(params = {}) {
+  return utils_request.get("/mp/tk/successCase/" + params.successCaseId, {});
+}
 exports.getCompanyNews = getCompanyNews;
 exports.getCompanyNewsList = getCompanyNewsList;
 exports.getEnterpriseList = getEnterpriseList;
@@ -68,4 +74,6 @@ exports.getTrackingEnd = getTrackingEnd;
 exports.getTrackingStart = getTrackingStart;
 exports.getcaseList = getcaseList;
 exports.getproductIntro = getproductIntro;
+exports.getservice = getservice;
+exports.getsuccessCase = getsuccessCase;
 exports.getsuccessCaseList = getsuccessCaseList;

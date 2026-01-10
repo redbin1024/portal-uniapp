@@ -31,19 +31,21 @@ const _sfc_main = /* @__PURE__ */ Object.assign({ name: "RecentDetails" }, {
   setup(__props, { expose: __expose }) {
     common_vendor.onShareAppMessage(() => {
       return {
-        title: "详情",
-        path: "/pages/recentdetails/index"
+        title: detailData.value.newsTitle || "最近动态",
+        path: `/pages/recentdetails/index?newsId=${currentNewsId.value}`
       };
     });
     common_vendor.onShareTimeline(() => {
       return {
-        title: "详情",
-        query: ""
+        title: detailData.value.newsTitle || "最近动态",
+        query: `newsId=${currentNewsId.value}`
       };
     });
     const richText = common_vendor.ref("");
     const detailData = common_vendor.ref({});
+    const currentNewsId = common_vendor.ref("");
     const CompanyNews = (newsId) => __async(this, null, function* () {
+      currentNewsId.value = newsId;
       try {
         const response = yield api_activity.getCompanyNews({ newsId });
         if (response && response.data) {
@@ -89,6 +91,10 @@ const _sfc_main = /* @__PURE__ */ Object.assign({ name: "RecentDetails" }, {
     };
     __expose({ previewImage });
     common_vendor.onMounted(() => {
+      common_vendor.index.showShareMenu({
+        withShareTicket: true,
+        menus: ["shareAppMessage", "shareTimeline"]
+      });
       getPageParams();
     });
     return (_ctx, _cache) => {

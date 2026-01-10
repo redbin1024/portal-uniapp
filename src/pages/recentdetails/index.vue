@@ -24,25 +24,27 @@ import {
 
 onShareAppMessage(() => {
   return {
-    title: "详情",
-    path: "/pages/recentdetails/index",
+    title: detailData.value.newsTitle || "最近动态",
+    path: `/pages/recentdetails/index?newsId=${currentNewsId.value}`,
   };
 });
 
 onShareTimeline(() => {
   return {
-    title: "详情",
-    query: "",
+    title: detailData.value.newsTitle || "最近动态",
+    query: `newsId=${currentNewsId.value}`,
   };
 });
 import basePoint from "@/utils/basePoint.js";
 const richText = ref("");
 const detailData = ref({});
+const currentNewsId = ref("");
 
 defineOptions({ name: "RecentDetails" });
 
 // 查询公司动态列表
 const CompanyNews = async (newsId) => {
+  currentNewsId.value = newsId;
   try {
     const response = await getCompanyNews({ newsId });
     if (response && response.data) {
@@ -94,6 +96,11 @@ const previewImage = (e) => {
 defineExpose({ previewImage });
 
 onMounted(() => {
+  // 显示分享菜单
+  uni.showShareMenu({
+    withShareTicket: true,
+    menus: ["shareAppMessage", "shareTimeline"],
+  });
   getPageParams();
 });
 </script>

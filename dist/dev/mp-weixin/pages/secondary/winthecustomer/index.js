@@ -434,7 +434,7 @@ const _sfc_main = {
     };
     const navigateToDetail = (item) => {
       common_vendor.index.navigateTo({
-        url: "/pages/casedetails/index?item=" + encodeURIComponent(JSON.stringify(item))
+        url: "/pages/casedetails/index?successCaseId=" + item.successCaseId
       });
     };
     const getBackgroundColor = (index) => {

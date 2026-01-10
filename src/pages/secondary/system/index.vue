@@ -25,7 +25,7 @@
         v-html="enterpriseList.enterpriseDescription"
       ></view> -->
     </view>
-    <view class="problem">
+    <view class="problem" v-if="productIntroList.length > 0">
       <view class="winthecustomer-head">
         <view class="winthecustomer-head1">
           <view class="winthecustomer-title">您是否也遇到这些问题？</view>
@@ -44,7 +44,7 @@
         >
           <view class="problem-card-header">
             <view class="problem-icon">
-              <image :src="problemIcons[index]" mode="aspectFit"></image>
+              <image :src="item.icon" mode="aspectFit"></image>
             </view>
             <view class="problem-arrow">
               <image
@@ -54,30 +54,42 @@
             </view>
           </view>
           <view class="problem-card-body">
-            <view class="problem-title">{{ item.introName }}</view>
-            <view class="problem-desc">{{ item.introDetailFormat }}</view>
+            <view class="problem-title">{{ item.title }}</view>
+            <view class="problem-desc">{{ item.introName }}</view>
           </view>
         </view>
       </view>
+      <view class="viewmore" @click="viewmore">
+        <view>查看更多</view>
+        <view>></view>
+      </view>
     </view>
-    <view class="head">
-      <view>
-        <view class="winthecustomer-content">
-          <view
-            class="winthecustomer-content1"
-            v-for="(item, index) in serviceLists"
-            :key="index"
-            @click="next(item)"
-          >
-            <image
-              v-if="item.serviceImage && item.serviceImage[0]"
-              :src="item.serviceImage[0] + '?image_process=format,webp'"
-            ></image>
-            <view class="winthecustomer-content2">
-              <view class="winthecustomer-content2-1">
-                {{ item.serviceName }}
+    <view class="system-service-wrapper">
+      <view class="winthecustomer-head" style="margin: 30rpx 24rpx 0 24rpx">
+        <view class="winthecustomer-head1">
+          <view class="winthecustomer-title">系统服务</view>
+          <view class="winthecustomer-title1">SYSTEM SERVICE</view>
+        </view>
+      </view>
+      <view class="head">
+        <view>
+          <view class="winthecustomer-content">
+            <view
+              class="winthecustomer-content1"
+              v-for="(item, index) in serviceLists"
+              :key="index"
+              @click="next(item)"
+            >
+              <image
+                v-if="item.serviceImage && item.serviceImage[0]"
+                :src="item.serviceImage[0] + '?image_process=format,webp'"
+              ></image>
+              <view class="winthecustomer-content2">
+                <view class="winthecustomer-content2-1">
+                  {{ item.serviceName }}
+                </view>
+                <view class="winthecustomer-content2-2">了解详情</view>
               </view>
-              <view class="winthecustomer-content2-2">了解详情</view>
             </view>
           </view>
         </view>
@@ -139,14 +151,7 @@ const problemIcons = ref([
   "http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png",
   "http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png",
 ]);
-const problemOverlayImages = ref([
-  "http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/55bf54069a0f40ec94e9a1b2d17e9492.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/8fecc01bffef42dd9d7273775fca6ee3.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/28ffbcf6db9b453c826b322d8e82e780.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/9779295dc4ca4826b12724f195e51309.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/6297c733c4614cec90bb9caf8d8c0b71.png",
-]);
+const problemOverlayImages = ref([]);
 const problemList = ref([
   {
     title: "服务笔记",
@@ -173,17 +178,23 @@ const problemList = ref([
     desc: "如何快速找到客户真实需求进行针对性营销 快速拿下订单",
   },
 ]);
+const viewmore = () => {
+  uni.navigateTo({
+    url: "/pages/secondary/issueList/index",
+  });
+};
 const goToIndex = (item) => {
   if (item.introType == 2) {
     uni.navigateTo({
-      url: "/pages/secondary/index/index?url=" + item.videoUrl,
+      url:
+        "/pages/secondary/index/index?url=" +
+        item.videoUrl +
+        "&visitContent=" +
+        item.title,
     });
   } else {
-    const itemStr = JSON.stringify(item);
     uni.navigateTo({
-      url:
-        "/pages/secondary/issueDetails/index?item=" +
-        encodeURIComponent(itemStr),
+      url: "/pages/secondary/issueDetails/index?introId=" + item.introId,
     });
   }
 };
@@ -295,9 +306,9 @@ const switchTab = (index) => {
 
 const next = (item) => {
   try {
-    const itemStr = JSON.stringify(item);
+    // const itemStr = JSON.stringify(item);
     uni.navigateTo({
-      url: "/pages/customer/index?item=" + encodeURIComponent(itemStr),
+      url: "/pages/customer/index?serviceId=" + item.serviceId,
     });
   } catch (error) {
     console.error("序列化参数失败:", error);
@@ -509,16 +520,26 @@ onHide(async () => {
 
 <style scoped>
 .main {
-  background-color: #ffffff;
+  background: #fff;
   min-height: 100vh;
+  overflow: hidden;
+}
+.system-service-wrapper {
+  background: linear-gradient(
+    to bottom,
+    #f0f8ff 30%,
+    #acb4db 50%,
+    #3351e2 100%
+  );
+  padding: 20rpx 0;
 }
 .first {
   padding-top: 40rpx;
   background: #fff;
 }
 .head {
-  background: #f0f0f0;
-  margin-top: 80rpx;
+  /* background: #f0f0f0; */
+  /* margin-top: 80rpx; */
 }
 .headTab {
   display: flex;
@@ -585,7 +606,7 @@ onHide(async () => {
   display: flex;
   flex-wrap: wrap;
   padding: 0rpx 18rpx 52rpx 18rpx;
-  background: linear-gradient(to bottom, #ffffff 0%, #3351e2 70%);
+  /* background: linear-gradient(to bottom, #ffffff 0%, #3351e2 70%); */
   padding-top: 20rpx;
 }
 .winthecustomer-content1:nth-of-type(2n) {
@@ -696,8 +717,8 @@ onHide(async () => {
 }
 
 .problem {
-  background: #ffffff;
-  padding: 46rpx 26rpx;
+  /* background: #ffffff; */
+  padding: 46rpx 26rpx 20rpx 26rpx;
 }
 .problem-grid {
   display: grid;
@@ -747,10 +768,12 @@ onHide(async () => {
   text-align: left;
   font-style: normal;
   text-transform: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .problem-desc {
   width: 270rpx;
-  height: 80rpx;
   font-family: PingFang SC, PingFang SC;
   font-weight: 400;
   font-size: 24rpx;
@@ -760,6 +783,11 @@ onHide(async () => {
   font-style: normal;
   text-transform: none;
   margin-top: 24rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .winthecustomer-head {
   display: flex;
@@ -778,5 +806,17 @@ onHide(async () => {
 .winthecustomer-title1 {
   color: #d6d4d4;
   font-size: 28rpx;
+}
+.viewmore {
+  display: flex;
+  justify-content: center;
+  background: #f3f5fb;
+  border-radius: 8rpx;
+  width: 100%;
+  height: 88rpx;
+  color: #313131;
+  font-size: 30rpx;
+  line-height: 88rpx;
+  margin: 28rpx 0 20rpx 0;
 }
 </style>

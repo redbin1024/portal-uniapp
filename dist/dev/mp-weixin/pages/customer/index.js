@@ -21,6 +21,7 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../common/vendor.js");
 const utils_basePoint = require("../../utils/basePoint.js");
+const api_activity = require("../../api/activity.js");
 if (!Math) {
   mpHtml();
 }
@@ -28,21 +29,22 @@ const mpHtml = () => "../../node-modules/uni-app-mp-html/components/mp-html/mp-h
 const _sfc_main = {
   __name: "index",
   setup(__props) {
+    const serviceDescription = common_vendor.ref("");
+    const richText = common_vendor.ref("");
+    const serviceName = common_vendor.ref("");
+    const currentServiceId = common_vendor.ref("");
     common_vendor.onShareAppMessage(() => {
       return {
-        title: "客户详情",
-        path: "/pages/customer/index"
+        title: serviceName.value,
+        path: `/pages/customer/index?serviceId=${currentServiceId.value}`
       };
     });
     common_vendor.onShareTimeline(() => {
       return {
-        title: "客户详情",
-        query: ""
+        title: serviceName.value,
+        query: `serviceId=${currentServiceId.value}`
       };
     });
-    const serviceDescription = common_vendor.ref("");
-    const richText = common_vendor.ref("");
-    const serviceName = common_vendor.ref("");
     const getTracking = () => __async(this, null, function* () {
       yield utils_basePoint.basePoint.trackingStart({
         visitModule: "产品服务",
@@ -57,25 +59,16 @@ const _sfc_main = {
         });
       }
     }));
-    common_vendor.onMounted(() => {
-      const pages = getCurrentPages();
-      const currentPage = pages[pages.length - 1];
-      if (currentPage.options && currentPage.options.item) {
-        try {
-          const decodedItem = decodeURIComponent(currentPage.options.item);
-          let serviceDescription2 = JSON.parse(decodedItem);
-          serviceName.value = serviceDescription2.serviceName;
-          processContent(serviceDescription2.serviceDescription);
-        } catch (e) {
-          console.error("解析服务描述参数失败:", e);
-          try {
-            let serviceDescription2 = JSON.parse(currentPage.options.item);
-            serviceName.value = serviceDescription2.serviceName;
-            processContent(serviceDescription2.serviceDescription);
-          } catch (e2) {
-            serviceDescription.value = currentPage.options.item;
+    common_vendor.onLoad((options) => {
+      if (options && options.serviceId) {
+        const serviceId = options.serviceId;
+        currentServiceId.value = serviceId;
+        api_activity.getservice({ newsId: serviceId }).then((res) => {
+          if (res && res.data) {
+            serviceName.value = res.data.serviceName;
+            processContent(res.data.serviceDescription);
           }
-        }
+        });
       }
       getTracking();
     });
@@ -85,7 +78,14 @@ const _sfc_main = {
       }).replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
     };
     const goBack = () => {
-      common_vendor.index.navigateBack();
+      const pages = getCurrentPages();
+      if (pages.length > 1) {
+        common_vendor.index.navigateBack();
+      } else {
+        common_vendor.index.switchTab({
+          url: "/pages/secondary/homepage/index"
+        });
+      }
     };
     return (_ctx, _cache) => {
       return common_vendor.e({

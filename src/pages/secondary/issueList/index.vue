@@ -7,12 +7,14 @@
           v-for="(item, index) in problemList"
           :key="index"
           :style="{
-            backgroundImage: `url(${problemOverlayImages[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
+            backgroundImage: `url(${
+              problemOverlayImages[index % problemOverlayImages.length]
+            }) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
           }"
         >
           <view class="problem-card-header">
             <view class="problem-icon">
-              <image :src="problemIcons[index]" mode="aspectFit"></image>
+              <image :src="item.icon" mode="aspectFit"></image>
             </view>
             <view class="problem-arrow">
               <image
@@ -23,7 +25,7 @@
           </view>
           <view class="problem-card-body">
             <view class="problem-title">{{ item.title }}</view>
-            <view class="problem-desc">{{ item.desc }}</view>
+            <view class="problem-desc">{{ item.introName }}</view>
           </view>
         </view>
       </view>
@@ -50,7 +52,13 @@ export default {
 
 <script setup>
 import basePoint from "@/utils/basePoint.js";
-import { onPageScroll, onLoad, onShow, onHide } from "@dcloudio/uni-app";
+import {
+  onPageScroll,
+  onLoad,
+  onShow,
+  onHide,
+  onReachBottom,
+} from "@dcloudio/uni-app";
 import { ref, onMounted } from "vue";
 import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
 import VideoRotateCarousel from "@/components/video-rotate-carousel/video-rotate-carousel.vue";
@@ -58,6 +66,7 @@ import {
   getServiceList,
   getcaseList,
   getEnterpriseList,
+  getProductIntroList,
 } from "@/api/activity.js";
 import VearCarousel from "@/components/vear-carousel/vear-carousel.vue";
 
@@ -69,40 +78,12 @@ const problemIcons = ref([
   "http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png",
   "http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png",
 ]);
-const problemOverlayImages = ref([
-  "http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/55bf54069a0f40ec94e9a1b2d17e9492.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/8fecc01bffef42dd9d7273775fca6ee3.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/28ffbcf6db9b453c826b322d8e82e780.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/9779295dc4ca4826b12724f195e51309.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/6297c733c4614cec90bb9caf8d8c0b71.png",
-]);
-const problemList = ref([
-  {
-    title: "服务笔记",
-    desc: "客户总是要打开怎么教你如何用系统一次性解决",
-  },
-  {
-    title: "宝妈站台",
-    desc: "销售如何做到10分钟完成客户信任，快速签单",
-  },
-  {
-    title: "宝妈站台",
-    desc: "遇到客户在网上诋毁，会所该如何自救",
-  },
-  {
-    title: "宝宝请帖",
-    desc: "如何0成本做品牌曝光？如何0成本做线上获客",
-  },
-  {
-    title: "AI智能销售",
-    desc: "每个月到手的资源流失率超过80%，如何用系统完美解决",
-  },
-  {
-    title: "客户轨迹",
-    desc: "如何快速找到客户真实需求进行针对性营销 快速拿下订单",
-  },
-]);
+const problemOverlayImages = ref([]);
+const problemList = ref([]);
+const pageNum = ref(1);
+const pageSize = ref(10);
+const total = ref(0);
+const isFinish = ref(false);
 
 // 获取企业列表数据
 const fetchEnterpriseList = async () => {
@@ -137,8 +118,50 @@ const fetchEnterpriseList = async () => {
     });
   }
 };
+// 获取产品介绍列表
+const fetchProductIntroList = async () => {
+  if (isFinish.value && pageNum.value > 1) return;
+  try {
+    const response = await getProductIntroList({
+      pageSize: pageSize.value,
+      pageNum: pageNum.value,
+    });
+    console.log("产品介绍列表数据:", response);
+    if (response && response.rows) {
+      if (pageNum.value === 1) {
+        problemList.value = response.rows;
+      } else {
+        problemList.value = [...problemList.value, ...response.rows];
+      }
+
+      // 判断是否加载完成
+      if (response.total) {
+        total.value = response.total;
+        if (problemList.value.length >= total.value) {
+          isFinish.value = true;
+        }
+      } else {
+        if (response.rows.length < pageSize.value) {
+          isFinish.value = true;
+        }
+      }
+    }
+  } catch (error) {
+    console.error("获取产品介绍列表失败:", error);
+  }
+};
+
+onReachBottom(() => {
+  if (!isFinish.value) {
+    pageNum.value++;
+    fetchProductIntroList();
+  }
+});
+
 // 页面加载完成后触发按钮动画
-onMounted(() => {});
+onMounted(() => {
+  fetchProductIntroList();
+});
 
 onShow(async () => {});
 </script>
@@ -146,7 +169,7 @@ onShow(async () => {});
 <style scoped>
 .problem {
   background: #ffffff;
-  padding: 46rpx 26rpx;
+  padding: 26rpx 26rpx;
 }
 .problem-grid {
   display: grid;
@@ -186,7 +209,7 @@ onShow(async () => {});
   padding: 24rpx;
 }
 .problem-title {
-  width: 128rpx;
+  width: 100%;
   height: 40rpx;
   font-family: PingFang SC, PingFang SC;
   font-weight: 600;
@@ -196,10 +219,12 @@ onShow(async () => {});
   text-align: left;
   font-style: normal;
   text-transform: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .problem-desc {
   width: 270rpx;
-  height: 80rpx;
   font-family: PingFang SC, PingFang SC;
   font-weight: 400;
   font-size: 24rpx;
@@ -209,6 +234,11 @@ onShow(async () => {});
   font-style: normal;
   text-transform: none;
   margin-top: 24rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .winthecustomer-head {
   display: flex;

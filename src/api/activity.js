@@ -130,3 +130,24 @@ export function getproductIntro(params = {}) {
   return get('/mp/tk/productIntro/'+params.newsId, {
   })
 }
+
+/**
+ * 
+ * @param {获取产品介绍详细信息}   
+ * @returns 
+ */
+export function getservice(params = {}) {
+  return get('/mp/tk/service/'+params.newsId, {
+  })
+}
+
+
+/**
+ * 
+ * @param {获取成功案例详细信息}   
+ * @returns 
+ */
+export function getsuccessCase(params = {}) {
+  return get('/mp/tk/successCase/'+params.successCaseId, {
+  })
+}

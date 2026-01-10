@@ -820,9 +820,7 @@ const showAllDynamicItems = () => {
 
 const navigateToDetail = (item) => {
   uni.navigateTo({
-    url:
-      "/pages/casedetails/index?item=" +
-      encodeURIComponent(JSON.stringify(item)),
+    url: "/pages/casedetails/index?successCaseId=" + item.successCaseId,
   });
 };
 

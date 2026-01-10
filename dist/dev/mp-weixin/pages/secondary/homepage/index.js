@@ -148,12 +148,11 @@ const _sfc_main = {
     const goToIndex = (item) => {
       if (item.introType == 2) {
         common_vendor.index.navigateTo({
-          url: "/pages/secondary/index/index?url=" + item.videoUrl
+          url: "/pages/secondary/index/index?url=" + item.videoUrl + "&visitContent=" + item.title
         });
       } else {
-        const itemStr = JSON.stringify(item);
         common_vendor.index.navigateTo({
-          url: "/pages/secondary/issueDetails/index?item=" + encodeURIComponent(itemStr)
+          url: "/pages/secondary/issueDetails/index?introId=" + item.introId
         });
       }
     };
@@ -373,9 +372,8 @@ const _sfc_main = {
     };
     const next = (item) => {
       try {
-        const itemStr = JSON.stringify(item);
         common_vendor.index.navigateTo({
-          url: "/pages/customer/index?item=" + encodeURIComponent(itemStr)
+          url: "/pages/customer/index?serviceId=" + item.serviceId
         });
       } catch (error) {
         console.error("序列化参数失败:", error);
@@ -415,19 +413,22 @@ const _sfc_main = {
       }, enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0] ? {
         d: enterpriseList.value.bannerImages[0] + "?image_process=format,webp"
       } : {}, {
-        e: common_vendor.f(productIntroList.value, (img, index, i0) => {
+        e: productIntroList.value.length > 0
+      }, productIntroList.value.length > 0 ? {
+        f: common_vendor.f(productIntroList.value, (img, index, i0) => {
           return {
             a: img.coverImage,
             b: common_vendor.o(($event) => goToIndex(img), "problem-" + index),
             c: "problem-" + index
           };
-        }),
-        f: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
-      }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) + "?image_process=format,webp" ? {
-        g: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+        })
       } : {}, {
-        h: common_vendor.o(($event) => nextDetile()),
-        i: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        g: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
+      }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) + "?image_process=format,webp" ? {
+        h: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+      } : {}, {
+        i: common_vendor.o(($event) => nextDetile()),
+        j: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage + "?image_process=format,webp",
             b: common_vendor.t(item.serviceName),
@@ -435,39 +436,39 @@ const _sfc_main = {
             d: common_vendor.o(($event) => next(item), index)
           };
         }),
-        j: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        k: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate + "?image_process=format,webp",
             b: "row1-" + index
           };
         }),
-        k: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        l: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        l: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        m: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        m: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        n: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
-        o: showPreview.value
+        n: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        o: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
+        p: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        p: previewMedia.value.type === "video"
+        q: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        q: previewMedia.value.src,
-        r: getVideoPoster(previewMedia.value.src),
-        s: common_vendor.o(onFullscreenChange),
-        t: "preview-video-" + previewMedia.value.index
+        r: previewMedia.value.src,
+        s: getVideoPoster(previewMedia.value.src),
+        t: common_vendor.o(onFullscreenChange),
+        v: "preview-video-" + previewMedia.value.index
       } : {
-        v: previewMedia.value.src
+        w: previewMedia.value.src
       }, {
-        w: isVideoFullscreen.value ? 1 : "",
-        x: common_vendor.o(handlePreviewModalClick)
+        x: isVideoFullscreen.value ? 1 : "",
+        y: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        y: common_vendor.o(handleCustomerServiceClick),
-        z: showPreview.value ? 1 : ""
+        z: common_vendor.o(handleCustomerServiceClick),
+        A: showPreview.value ? 1 : ""
       });
     };
   }

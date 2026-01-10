@@ -159,7 +159,7 @@
           ></image>
         </view>
       </view>
-      <view class="problem">
+      <view class="problem" v-if="productIntroList.length > 0">
         <view class="winthecustomer-head">
           <view class="winthecustomer-head1">
             <view class="winthecustomer-title">您是否也遇到这些问题？</view>
@@ -220,7 +220,15 @@
             </view>
           </view>
         </view>
-        <view class="winthecustomer-title">系统服务</view>
+        <!-- <view class="winthecustomer-title">系统服务</view> -->
+        <view class="winthecustomer-head">
+          <view class="winthecustomer-head1">
+            <view class="winthecustomer-title">系统服务</view>
+            <view class="winthecustomer-title1" id="winthecustomer-title1"
+              >SYSTEM SERVICE</view
+            >
+          </view>
+        </view>
         <view id="winthecustomer">
           <view class="winthecustomer-content">
             <view
@@ -640,14 +648,15 @@ const goToDetails = (item) => {
 const goToIndex = (item) => {
   if (item.introType == 2) {
     uni.navigateTo({
-      url: "/pages/secondary/index/index?url=" + item.videoUrl,
+      url:
+        "/pages/secondary/index/index?url=" +
+        item.videoUrl +
+        "&visitContent=" +
+        item.title,
     });
   } else {
-    const itemStr = JSON.stringify(item);
     uni.navigateTo({
-      url:
-        "/pages/secondary/issueDetails/index?item=" +
-        encodeURIComponent(itemStr),
+      url: "/pages/secondary/issueDetails/index?introId=" + item.introId,
     });
   }
 };
@@ -1266,9 +1275,9 @@ const handleNavigation = () => {
 };
 const next = (item) => {
   try {
-    const itemStr = JSON.stringify(item);
+    // const itemStr = JSON.stringify(item);
     uni.navigateTo({
-      url: "/pages/customer/index?item=" + encodeURIComponent(itemStr),
+      url: "/pages/customer/index?serviceId=" + item.serviceId,
     });
   } catch (error) {
     console.error("序列化参数失败:", error);
@@ -1800,6 +1809,10 @@ const viewProblemMore = () => {
   color: #d6d4d4;
   font-size: 28rpx;
 }
+#winthecustomer-title1 {
+  color: #9ca2be;
+  font-size: 28rpx;
+}
 .winthecustomer-line {
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
@@ -2186,7 +2199,7 @@ wx-button:after {
   height: 100%;
 }
 .problem-slide-image {
-  height: 364rpx;
+  height: 360rpx;
   border-radius: 20rpx;
   border: 2rpx solid #e1e1e1;
 }

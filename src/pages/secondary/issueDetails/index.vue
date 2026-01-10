@@ -45,26 +45,15 @@
   </view>
 </template>
 
-<script>
-export default {
-  onShareAppMessage() {
-    return {
-      title: "详情",
-      path: "/pages/secondary/issueDetails/index",
-    };
-  },
-  onShareTimeline() {
-    return {
-      title: "详情",
-      query: "",
-    };
-  },
-};
-</script>
-
 <script setup>
 import basePoint from "@/utils/basePoint.js";
-import { onPageScroll, onShow, onUnload } from "@dcloudio/uni-app";
+import {
+  onPageScroll,
+  onShow,
+  onUnload,
+  onShareAppMessage,
+  onShareTimeline,
+} from "@dcloudio/uni-app";
 import { ref, onMounted } from "vue";
 import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
 import { getproductIntro } from "@/api/activity.js";
@@ -73,6 +62,21 @@ import { getproductIntro } from "@/api/activity.js";
 const serviceDescription = ref("");
 const richText = ref("");
 const serviceName = ref("");
+const currentIntroId = ref("");
+
+onShareAppMessage(() => {
+  return {
+    title: serviceName.value || "产品服务",
+    path: `/pages/secondary/issueDetails/index?introId=${currentIntroId.value}`,
+  };
+});
+
+onShareTimeline(() => {
+  return {
+    title: serviceName.value || "产品服务",
+    query: `introId=${currentIntroId.value}`,
+  };
+});
 
 // ... existing code ...
 
@@ -94,49 +98,60 @@ onUnload(async () => {
 
 // 页面加载时获取参数
 onMounted(async () => {
+  // 显示分享菜单
+  uni.showShareMenu({
+    withShareTicket: true,
+    menus: ["shareAppMessage", "shareTimeline"],
+  });
+
   // 获取页面参数
   const pages = getCurrentPages();
   const currentPage = pages[pages.length - 1];
-  // 从页面选项中获取参数
-  if (currentPage.options && currentPage.options.item) {
+  const options = currentPage.options || {};
+
+  // 尝试解析 item 参数
+  // if (options.item) {
+  //   try {
+  //     const decodedItem = decodeURIComponent(options.item);
+  //     itemData = JSON.parse(decodedItem);
+  //     // 如果 options 中没有 id，尝试从 item 中获取
+  //     if (!id) id = itemData.id;
+
+  //     // 优先显示传递过来的数据
+  //     if (itemData.introName || itemData.serviceName) {
+  //       serviceName.value = itemData.introName || itemData.serviceName;
+  //     }
+  //     if (itemData.introDetail) {
+  //       processContent(itemData.introDetail);
+  //     }
+  //   } catch (e) {
+  //     console.error("解析服务描述参数失败:", e);
+  //     // 兼容旧逻辑：如果解析失败，可能是直接传的字符串描述
+  //     if (!serviceName.value) {
+  //        serviceDescription.value = options.item;
+  //     }
+  //   }
+  // }
+
+  // 调用接口获取最新详情
+  if (options.introId) {
+    currentIntroId.value = options.introId;
     try {
-      // 先解码URL编码的参数
-      const decodedItem = decodeURIComponent(currentPage.options.item);
-      let item = JSON.parse(decodedItem);
-
-      // 优先显示传递过来的数据
-      serviceName.value = item.introName || item.serviceName;
-      if (item.introDetail) {
-        processContent(item.introDetail);
-      }
-
-      // 调用接口获取最新详情
-      if (item.id) {
-        try {
-          const res = await getproductIntro({ newsId: item.id });
-          console.log("获取到的产品介绍详情:", res);
-          if (res) {
-            // 假设返回的数据结构与列表项类似，或者是 res.data
-            const data = res.data || res;
-            if (data.introName) serviceName.value = data.introName;
-            if (data.introDetail) processContent(data.introDetail);
-          }
-        } catch (error) {
-          console.error("获取产品介绍详情失败:", error);
+      const res = await getproductIntro({ newsId: options.introId });
+      console.log("获取到的产品介绍详情:", res);
+      if (res) {
+        const data = res.data || res;
+        if (data.introName) serviceName.value = data.introName;
+        // 重点：处理 introDetail 富文本
+        if (data.introDetail) {
+          processContent(data.introDetail);
         }
       }
-    } catch (e) {
-      console.error("解析服务描述参数失败:", e);
-      // 如果解析失败，尝试直接使用原始参数
-      try {
-        let item = JSON.parse(currentPage.options.item);
-        serviceName.value = item.introName || item.serviceName;
-        processContent(item.introDetail);
-      } catch (e2) {
-        serviceDescription.value = currentPage.options.item;
-      }
+    } catch (error) {
+      console.error("获取产品介绍详情失败:", error);
     }
   }
+
   getTracking();
 });
 const getzh = () => {};

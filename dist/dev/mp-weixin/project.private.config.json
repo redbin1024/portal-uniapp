@@ -3,11 +3,18 @@
 		"miniprogram": {
 			"list": [
 				{
-					"name": "pages/secondary/homepage/index",
-					"pathName": "pages/secondary/homepage/index",
+					"name": "pages/secondary/system/index",
+					"pathName": "pages/secondary/system/index",
 					"query": "",
 					"scene": null,
 					"launchMode": "default"
+				},
+				{
+					"name": "pages/secondary/homepage/index",
+					"pathName": "pages/secondary/homepage/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
 				},
 				{
 					"name": "pages/secondary/index/index",

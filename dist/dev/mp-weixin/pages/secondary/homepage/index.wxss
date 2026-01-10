@@ -445,6 +445,10 @@
   color: #d6d4d4;
   font-size: 28rpx;
 }
+#winthecustomer-title1.data-v-24abe20b {
+  color: #9ca2be;
+  font-size: 28rpx;
+}
 .winthecustomer-line.data-v-24abe20b {
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
@@ -805,7 +809,7 @@ wx-button.data-v-24abe20b:after {
   height: 100%;
 }
 .problem-slide-image.data-v-24abe20b {
-  height: 364rpx;
+  height: 360rpx;
   border-radius: 20rpx;
   border: 2rpx solid #e1e1e1;
 }

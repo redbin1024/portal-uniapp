@@ -46,34 +46,38 @@
 </template>
 
 <script setup>
-import basePoint from "@/utils/basePoint.js";
+import { ref } from "vue";
 import {
   onPageScroll,
   onShow,
   onUnload,
   onShareAppMessage,
   onShareTimeline,
+  onLoad,
 } from "@dcloudio/uni-app";
+import basePoint from "@/utils/basePoint.js";
+import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
+import { getservice } from "@/api/activity.js";
+
+// 定义响应式数据
+const serviceDescription = ref("");
+const richText = ref("");
+const serviceName = ref("");
+const currentServiceId = ref("");
 
 onShareAppMessage(() => {
   return {
-    title: "客户详情",
-    path: "/pages/customer/index",
+    title: serviceName.value,
+    path: `/pages/customer/index?serviceId=${currentServiceId.value}`,
   };
 });
 
 onShareTimeline(() => {
   return {
-    title: "客户详情",
-    query: "",
+    title: serviceName.value,
+    query: `serviceId=${currentServiceId.value}`,
   };
 });
-import { ref, onMounted } from "vue";
-import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
-// 定义响应式数据
-const serviceDescription = ref("");
-const richText = ref("");
-const serviceName = ref("");
 // 支持图片预览
 // const previewImage = (e) => {
 //   uni.previewImage({
@@ -97,30 +101,20 @@ onUnload(async () => {
   }
 });
 // 页面加载时获取参数
-onMounted(() => {
+onLoad((options) => {
   // 获取页面参数
-  const pages = getCurrentPages();
-  const currentPage = pages[pages.length - 1];
-  // 从页面选项中获取参数
-  if (currentPage.options && currentPage.options.item) {
-    try {
-      // 先解码URL编码的参数
-      const decodedItem = decodeURIComponent(currentPage.options.item);
-      let serviceDescription = JSON.parse(decodedItem);
-      serviceName.value = serviceDescription.serviceName;
-      processContent(serviceDescription.serviceDescription);
-    } catch (e) {
-      console.error("解析服务描述参数失败:", e);
-      // 如果解析失败，尝试直接使用原始参数
-      try {
-        let serviceDescription = JSON.parse(currentPage.options.item);
-        serviceName.value = serviceDescription.serviceName;
-        processContent(serviceDescription.serviceDescription);
-      } catch (e2) {
-        serviceDescription.value = currentPage.options.item;
+  if (options && options.serviceId) {
+    const serviceId = options.serviceId;
+    currentServiceId.value = serviceId;
+    getservice({ newsId: serviceId }).then((res) => {
+      if (res && res.data) {
+        serviceName.value = res.data.serviceName;
+        processContent(res.data.serviceDescription);
       }
-    }
+    });
   }
+  // 兼容旧逻辑或从其他参数解析（如果有必要可在此恢复）
+
   getTracking();
 });
 
@@ -135,7 +129,14 @@ const processContent = (content) => {
 
 // 返回上一页
 const goBack = () => {
-  uni.navigateBack();
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack();
+  } else {
+    uni.switchTab({
+      url: "/pages/secondary/homepage/index",
+    });
+  }
 };
 </script>
 

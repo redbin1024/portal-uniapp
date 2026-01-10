@@ -15,30 +15,39 @@
 
 <script setup>
 import { ref } from "vue";
-import { onLoad, onShow, onHide, onUnload, onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+import {
+  onLoad,
+  onShow,
+  onHide,
+  onUnload,
+  onShareAppMessage,
+  onShareTimeline,
+} from "@dcloudio/uni-app";
 import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
 
 onShareAppMessage(() => {
   return {
-    title: "案例详情",
-    path: "/pages/casedetails/index",
+    title: customerName.value || "商家案例",
+    path: `/pages/casedetails/index?successCaseId=${currentCaseId.value}`,
   };
 });
 
 onShareTimeline(() => {
   return {
-    title: "案例详情",
-    query: "",
+    title: customerName.value || "商家案例",
+    query: `successCaseId=${currentCaseId.value}`,
   };
 });
 
-import { getActivityDetail } from "@/api/activity.js";
+import { getActivityDetail, getsuccessCase } from "@/api/activity.js";
 import basePoint from "@/utils/basePoint.js";
 
 // 定义响应式数据
 const richText = ref("");
 const loading = ref(false);
 const error = ref(null);
+const customerName = ref("");
+const currentCaseId = ref("");
 const activityId = ref("1951194533574815746");
 const getTracking = async (customerName) => {
   await basePoint.trackingStart({
@@ -75,23 +84,53 @@ const processContent = (content) => {
 
 // uni-app 页面加载生命周期
 onLoad((options) => {
+  // 显示分享菜单
+  uni.showShareMenu({
+    withShareTicket: true,
+    menus: ["shareAppMessage", "shareTimeline"],
+  });
   // 从页面参数中获取活动ID
   getPageParams();
 });
 // 获取页面参数
-const getPageParams = () => {
+const getPageParams = async () => {
   // 获取页面实例
   const pages = getCurrentPages();
   const currentPage = pages[pages.length - 1];
+  const options = currentPage.options || {};
 
-  // 获取页面参数
-  if (currentPage.options && currentPage.options.item) {
-    // 先解码URL编码的参数
-    const decodedItem = decodeURIComponent(currentPage.options.item);
-    let detailDatas = JSON.parse(decodedItem);
-    processContent(detailDatas.caseDetails);
-    getTracking(detailDatas.customerName);
+  // 如果有 successCaseId 参数，则调用接口获取详情
+  if (options.successCaseId) {
+    currentCaseId.value = options.successCaseId;
+    loading.value = true;
+    try {
+      const res = await getsuccessCase({
+        successCaseId: options.successCaseId,
+      });
+      // 兼容直接返回数据或包裹在data中的情况
+      const data = res.data || res;
+      customerName.value = data.customerName || "";
+      if (data && data.caseDetails) {
+        processContent(data.caseDetails);
+        if (data.customerName) {
+          getTracking(data.customerName);
+        }
+      }
+    } catch (err) {
+      console.error("获取案例详情失败:", err);
+      error.value = "加载失败";
+    } finally {
+      loading.value = false;
+    }
   }
+  // else if (options.item) {
+  //   // 获取页面参数
+  //   // 先解码URL编码的参数
+  //   const decodedItem = decodeURIComponent(options.item);
+  //   let detailDatas = JSON.parse(decodedItem);
+  //   processContent(detailDatas.caseDetails);
+  //   getTracking(detailDatas.customerName);
+  // }
 };
 </script>
 

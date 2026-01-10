@@ -45,7 +45,7 @@ const _sfc_main = {
     const imgList = common_vendor.ref([]);
     const bannerImages = common_vendor.ref("");
     const coverImage = common_vendor.ref("");
-    const problemIcons = common_vendor.ref([
+    common_vendor.ref([
       "http://cdn.xiaodingdang1.com/2026/01/07/329586497cb141d69864b7ffe44c01e2.png",
       "http://cdn.xiaodingdang1.com/2026/01/07/3c68ffd0fa574800b29257226f5d92cf.png",
       "http://cdn.xiaodingdang1.com/2026/01/07/3500dffbb8d24fa1970e0e1c33a9fcd4.png",
@@ -53,14 +53,7 @@ const _sfc_main = {
       "http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png",
       "http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png"
     ]);
-    const problemOverlayImages = common_vendor.ref([
-      "http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/55bf54069a0f40ec94e9a1b2d17e9492.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/8fecc01bffef42dd9d7273775fca6ee3.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/28ffbcf6db9b453c826b322d8e82e780.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/9779295dc4ca4826b12724f195e51309.png",
-      "http://cdn.xiaodingdang1.com/2026/01/07/6297c733c4614cec90bb9caf8d8c0b71.png"
-    ]);
+    const problemOverlayImages = common_vendor.ref([]);
     common_vendor.ref([
       {
         title: "服务笔记",
@@ -87,15 +80,19 @@ const _sfc_main = {
         desc: "如何快速找到客户真实需求进行针对性营销 快速拿下订单"
       }
     ]);
+    const viewmore = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/secondary/issueList/index"
+      });
+    };
     const goToIndex = (item) => {
       if (item.introType == 2) {
         common_vendor.index.navigateTo({
-          url: "/pages/secondary/index/index?url=" + item.videoUrl
+          url: "/pages/secondary/index/index?url=" + item.videoUrl + "&visitContent=" + item.title
         });
       } else {
-        const itemStr = JSON.stringify(item);
         common_vendor.index.navigateTo({
-          url: "/pages/secondary/issueDetails/index?item=" + encodeURIComponent(itemStr)
+          url: "/pages/secondary/issueDetails/index?introId=" + item.introId
         });
       }
     };
@@ -190,9 +187,8 @@ const _sfc_main = {
     });
     const next = (item) => {
       try {
-        const itemStr = JSON.stringify(item);
         common_vendor.index.navigateTo({
-          url: "/pages/customer/index?item=" + encodeURIComponent(itemStr)
+          url: "/pages/customer/index?serviceId=" + item.serviceId
         });
       } catch (error) {
         console.error("序列化参数失败:", error);
@@ -310,17 +306,21 @@ const _sfc_main = {
         c: common_vendor.o(($event) => nextVideo(bannerImages.value, coverImage.value))
       } : {}, {
         d: common_vendor.t(enterpriseList.value.enterpriseName),
-        e: common_vendor.f(productIntroList.value, (item, index, i0) => {
+        e: productIntroList.value.length > 0
+      }, productIntroList.value.length > 0 ? {
+        f: common_vendor.f(productIntroList.value, (item, index, i0) => {
           return {
-            a: problemIcons.value[index],
-            b: common_vendor.t(item.introName),
-            c: common_vendor.t(item.introDetailFormat),
+            a: item.icon,
+            b: common_vendor.t(item.title),
+            c: common_vendor.t(item.introName),
             d: index,
             e: `url(${problemOverlayImages.value[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
             f: common_vendor.o(($event) => goToIndex(item), index)
           };
         }),
-        f: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        g: common_vendor.o(viewmore)
+      } : {}, {
+        h: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return common_vendor.e({
             a: item.serviceImage && item.serviceImage[0]
           }, item.serviceImage && item.serviceImage[0] ? {

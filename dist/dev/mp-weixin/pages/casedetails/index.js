@@ -20,7 +20,7 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 const common_vendor = require("../../common/vendor.js");
-require("../../utils/request.js");
+const api_activity = require("../../api/activity.js");
 const utils_basePoint = require("../../utils/basePoint.js");
 if (!Math) {
   mpHtml();
@@ -31,24 +31,26 @@ const _sfc_main = {
   setup(__props) {
     common_vendor.onShareAppMessage(() => {
       return {
-        title: "案例详情",
-        path: "/pages/casedetails/index"
+        title: customerName.value || "商家案例",
+        path: `/pages/casedetails/index?successCaseId=${currentCaseId.value}`
       };
     });
     common_vendor.onShareTimeline(() => {
       return {
-        title: "案例详情",
-        query: ""
+        title: customerName.value || "商家案例",
+        query: `successCaseId=${currentCaseId.value}`
       };
     });
     const richText = common_vendor.ref("");
     const loading = common_vendor.ref(false);
     const error = common_vendor.ref(null);
+    const customerName = common_vendor.ref("");
+    const currentCaseId = common_vendor.ref("");
     common_vendor.ref("1951194533574815746");
-    const getTracking = (customerName) => __async(this, null, function* () {
+    const getTracking = (customerName2) => __async(this, null, function* () {
       yield utils_basePoint.basePoint.trackingStart({
         visitModule: "商家案例",
-        visitContent: customerName
+        visitContent: customerName2
       });
     });
     common_vendor.onUnload(() => __async(this, null, function* () {
@@ -65,18 +67,39 @@ const _sfc_main = {
       }).replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
     };
     common_vendor.onLoad((options) => {
+      common_vendor.index.showShareMenu({
+        withShareTicket: true,
+        menus: ["shareAppMessage", "shareTimeline"]
+      });
       getPageParams();
     });
-    const getPageParams = () => {
+    const getPageParams = () => __async(this, null, function* () {
       const pages = getCurrentPages();
       const currentPage = pages[pages.length - 1];
-      if (currentPage.options && currentPage.options.item) {
-        const decodedItem = decodeURIComponent(currentPage.options.item);
-        let detailDatas = JSON.parse(decodedItem);
-        processContent(detailDatas.caseDetails);
-        getTracking(detailDatas.customerName);
+      const options = currentPage.options || {};
+      if (options.successCaseId) {
+        currentCaseId.value = options.successCaseId;
+        loading.value = true;
+        try {
+          const res = yield api_activity.getsuccessCase({
+            successCaseId: options.successCaseId
+          });
+          const data = res.data || res;
+          customerName.value = data.customerName || "";
+          if (data && data.caseDetails) {
+            processContent(data.caseDetails);
+            if (data.customerName) {
+              getTracking(data.customerName);
+            }
+          }
+        } catch (err) {
+          console.error("获取案例详情失败:", err);
+          error.value = "加载失败";
+        } finally {
+          loading.value = false;
+        }
       }
-    };
+    });
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: loading.value

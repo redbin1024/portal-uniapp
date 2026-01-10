@@ -1,15 +1,25 @@
 
 .main.data-v-8bd1f02a {
-  background-color: #ffffff;
+  background: #fff;
   min-height: 100vh;
+  overflow: hidden;
+}
+.system-service-wrapper.data-v-8bd1f02a {
+  background: linear-gradient(
+    to bottom,
+    #f0f8ff 30%,
+    #acb4db 50%,
+    #3351e2 100%
+  );
+  padding: 20rpx 0;
 }
 .first.data-v-8bd1f02a {
   padding-top: 40rpx;
   background: #fff;
 }
 .head.data-v-8bd1f02a {
-  background: #f0f0f0;
-  margin-top: 80rpx;
+  /* background: #f0f0f0; */
+  /* margin-top: 80rpx; */
 }
 .headTab.data-v-8bd1f02a {
   display: flex;
@@ -70,7 +80,7 @@ to {
   display: flex;
   flex-wrap: wrap;
   padding: 0rpx 18rpx 52rpx 18rpx;
-  background: linear-gradient(to bottom, #ffffff 0%, #3351e2 70%);
+  /* background: linear-gradient(to bottom, #ffffff 0%, #3351e2 70%); */
   padding-top: 20rpx;
 }
 .winthecustomer-content1.data-v-8bd1f02a:nth-of-type(2n) {
@@ -176,8 +186,8 @@ to {
   height: 80rpx;
 }
 .problem.data-v-8bd1f02a {
-  background: #ffffff;
-  padding: 46rpx 26rpx;
+  /* background: #ffffff; */
+  padding: 46rpx 26rpx 20rpx 26rpx;
 }
 .problem-grid.data-v-8bd1f02a {
   display: grid;
@@ -227,10 +237,12 @@ to {
   text-align: left;
   font-style: normal;
   text-transform: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .problem-desc.data-v-8bd1f02a {
   width: 270rpx;
-  height: 80rpx;
   font-family: PingFang SC, PingFang SC;
   font-weight: 400;
   font-size: 24rpx;
@@ -240,6 +252,11 @@ to {
   font-style: normal;
   text-transform: none;
   margin-top: 24rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .winthecustomer-head.data-v-8bd1f02a {
   display: flex;
@@ -258,4 +275,16 @@ to {
 .winthecustomer-title1.data-v-8bd1f02a {
   color: #d6d4d4;
   font-size: 28rpx;
+}
+.viewmore.data-v-8bd1f02a {
+  display: flex;
+  justify-content: center;
+  background: #f3f5fb;
+  border-radius: 8rpx;
+  width: 100%;
+  height: 88rpx;
+  color: #313131;
+  font-size: 30rpx;
+  line-height: 88rpx;
+  margin: 28rpx 0 20rpx 0;
 }
