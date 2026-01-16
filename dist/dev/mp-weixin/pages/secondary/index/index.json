@@ -1,6 +1,7 @@
 {
   "navigationStyle": "custom",
   "navigationBarTitleText": "",
+  "backgroundColor": "#000000",
   "enableShareAppMessage": true,
   "disableSwipeBack": true,
   "usingComponents": {}

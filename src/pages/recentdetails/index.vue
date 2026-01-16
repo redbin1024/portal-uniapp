@@ -6,6 +6,7 @@
     </view>
     <mp-html :content="richText" @imgtap="previewImage"></mp-html>
   </view>
+  <BackHome />
 </template>
 
 <script setup>

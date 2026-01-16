@@ -34,6 +34,7 @@
       <text>加载中...</text>
     </view>
   </view>
+  <BackHome />
 </template>
 
 <script>

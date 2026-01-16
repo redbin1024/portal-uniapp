@@ -8,6 +8,7 @@
       {{ detailData.newsContent }}
     </view>
   </view>
+  <BackHome />
 </template>
 
 <script setup>

@@ -10,6 +10,7 @@
       <!-- <rich-text class="activity" :nodes="richText" type="text"></rich-text> -->
       <mp-html :content="richText" @imgtap="previewImage"></mp-html>
     </view>
+    <BackHome />
   </view>
 </template>
 

@@ -2,5 +2,7 @@
   "navigationStyle": "custom",
   "navigationBarTitleText": "",
   "backgroundColor": "#ffffff",
-  "usingComponents": {}
+  "usingComponents": {
+    "back-home": "../../components/BackHome/BackHome"
+  }
 }

@@ -445,6 +445,15 @@
   color: #d6d4d4;
   font-size: 28rpx;
 }
+.view-more-btn.data-v-24abe20b {
+  font-size: 33rpx;
+  color: #313131;
+  padding: 6rpx 16rpx;
+  border-radius: 6rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 #winthecustomer-title1.data-v-24abe20b {
   color: #9ca2be;
   font-size: 28rpx;

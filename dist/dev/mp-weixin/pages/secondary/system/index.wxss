@@ -197,9 +197,7 @@ to {
 }
 .problem-card.data-v-8bd1f02a {
   width: 100%;
-  height: 366rpx;
-  background-image: url("http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png"),
-    url("http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png");
+  height: 378rpx;
   background-size: 106rpx 112rpx, cover;
   background-position: right 24rpx bottom 24rpx, center;
   background-repeat: no-repeat, no-repeat;

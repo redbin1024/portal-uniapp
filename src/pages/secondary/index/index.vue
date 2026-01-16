@@ -11,7 +11,6 @@
       id="myVideo"
       :src="videoUrl"
       :autoplay="autoplay"
-      :poster="coverImage"
       :controls="false"
       :show-play-btn="false"
       :show-center-play-btn="false"
@@ -90,6 +89,7 @@
       </view>
     </view>
   </view>
+  <!-- <BackHome /> -->
 </template>
 
 <script>

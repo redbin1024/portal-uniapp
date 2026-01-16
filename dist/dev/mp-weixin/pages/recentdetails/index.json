@@ -4,6 +4,7 @@
   "enableShareAppMessage": true,
   "enableShareTimeline": true,
   "usingComponents": {
+    "back-home": "../../components/BackHome/BackHome",
     "mp-html": "../../node-modules/uni-app-mp-html/components/mp-html/mp-html"
   }
 }

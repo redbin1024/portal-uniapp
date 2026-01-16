@@ -57,6 +57,7 @@
       </view>
     </view>
   </view>
+  <BackHome />
 </template>
 
 <script setup>

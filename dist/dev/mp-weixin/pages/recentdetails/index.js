@@ -22,8 +22,13 @@ var __async = (__this, __arguments, generator) => {
 const common_vendor = require("../../common/vendor.js");
 const api_activity = require("../../api/activity.js");
 const utils_basePoint = require("../../utils/basePoint.js");
+if (!Array) {
+  const _easycom_BackHome2 = common_vendor.resolveComponent("BackHome");
+  _easycom_BackHome2();
+}
+const _easycom_BackHome = () => "../../components/BackHome/BackHome.js";
 if (!Math) {
-  mpHtml();
+  (mpHtml + _easycom_BackHome)();
 }
 const mpHtml = () => "../../node-modules/uni-app-mp-html/components/mp-html/mp-html.js";
 const _sfc_main = /* @__PURE__ */ Object.assign({ name: "RecentDetails" }, {

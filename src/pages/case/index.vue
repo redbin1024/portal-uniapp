@@ -28,6 +28,7 @@
     <view v-if="loadingMore" class="loading-more-container">
       <text class="loading-more-text">加载更多中...</text>
     </view>
+    <BackHome />
   </view>
 </template>
 
@@ -154,9 +155,7 @@ const fetchsuccessCaseList = async () => {
 
 const navigateToDetail = (item) => {
   uni.navigateTo({
-    url:
-      "/pages/casedetails/index?item=" +
-      encodeURIComponent(JSON.stringify(item)),
+    url: "/pages/casedetails/index?successCaseId=" + item.successCaseId,
   });
 };
 

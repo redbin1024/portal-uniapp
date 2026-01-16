@@ -96,6 +96,7 @@
       </view>
     </view>
   </view>
+  <BackHome />
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
@@ -146,12 +147,12 @@ const onVideoFullscreenChange = (e, index) => {
 let videoContext = null;
 
 const nextVideo = (url, visitContent, coverImage) => {
+  let path = "/pages/secondary/index/index?url=" + url + "&visitContent=" + visitContent;
+  if (coverImage) {
+    path += "&coverImage=" + encodeURIComponent(coverImage);
+  }
   uni.navigateTo({
-    url:
-      "/pages/secondary/index/index?url=" +
-      url +
-      "&visitContent=" +
-      visitContent,
+    url: path
   });
   // let sources = [];
   // sources = [

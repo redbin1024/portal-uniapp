@@ -4,6 +4,7 @@
   "enableShareAppMessage": true,
   "enableShareTimeline": true,
   "usingComponents": {
+    "back-home": "../../components/BackHome/BackHome",
     "vear-carousel": "../../components/vear-carousel/vear-carousel"
   }
 }

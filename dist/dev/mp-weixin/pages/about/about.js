@@ -26,6 +26,14 @@ const _sfc_main = {
     };
   }
 };
+if (!Array) {
+  const _easycom_BackHome2 = common_vendor.resolveComponent("BackHome");
+  _easycom_BackHome2();
+}
+const _easycom_BackHome = () => "../../components/BackHome/BackHome.js";
+if (!Math) {
+  _easycom_BackHome();
+}
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
     a: common_assets._imports_0,

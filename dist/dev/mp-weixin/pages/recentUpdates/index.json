@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "最近动态",
   "navigationBarBackgroundColor": "#ffffff",
-  "usingComponents": {}
+  "usingComponents": {
+    "back-home": "../../components/BackHome/BackHome"
+  }
 }

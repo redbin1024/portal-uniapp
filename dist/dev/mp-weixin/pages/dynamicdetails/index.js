@@ -1,5 +1,13 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+if (!Array) {
+  const _easycom_BackHome2 = common_vendor.resolveComponent("BackHome");
+  _easycom_BackHome2();
+}
+const _easycom_BackHome = () => "../../components/BackHome/BackHome.js";
+if (!Math) {
+  _easycom_BackHome();
+}
 const _sfc_main = {
   __name: "index",
   setup(__props) {

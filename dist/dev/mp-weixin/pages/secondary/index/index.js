@@ -210,38 +210,37 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
     a: $data.videoUrl,
     b: $data.autoplay,
-    c: $data.coverImage,
-    d: common_vendor.o((...args) => $options.onPlay && $options.onPlay(...args)),
-    e: common_vendor.o((...args) => $options.onPause && $options.onPause(...args)),
-    f: common_vendor.o((...args) => $options.onTimeupdate && $options.onTimeupdate(...args)),
-    g: common_vendor.o((...args) => $options.onLoadedmetadata && $options.onLoadedmetadata(...args)),
-    h: common_vendor.o((...args) => $options.onEnded && $options.onEnded(...args)),
-    i: common_vendor.o((...args) => $options.onWaiting && $options.onWaiting(...args)),
-    j: common_vendor.o((...args) => $options.onVideoClick && $options.onVideoClick(...args)),
-    k: $data.isLoading
+    c: common_vendor.o((...args) => $options.onPlay && $options.onPlay(...args)),
+    d: common_vendor.o((...args) => $options.onPause && $options.onPause(...args)),
+    e: common_vendor.o((...args) => $options.onTimeupdate && $options.onTimeupdate(...args)),
+    f: common_vendor.o((...args) => $options.onLoadedmetadata && $options.onLoadedmetadata(...args)),
+    g: common_vendor.o((...args) => $options.onEnded && $options.onEnded(...args)),
+    h: common_vendor.o((...args) => $options.onWaiting && $options.onWaiting(...args)),
+    i: common_vendor.o((...args) => $options.onVideoClick && $options.onVideoClick(...args)),
+    j: $data.isLoading
   }, $data.isLoading ? {} : {}, {
-    l: !$data.isPlaying
+    k: !$data.isPlaying
   }, !$data.isPlaying ? {
-    m: common_vendor.o((...args) => $options.togglePlay && $options.togglePlay(...args))
+    l: common_vendor.o((...args) => $options.togglePlay && $options.togglePlay(...args))
   } : {}, {
-    n: common_vendor.p({
+    m: common_vendor.p({
       type: $data.isPlaying ? "pause-filled" : "play-filled",
       size: "28",
       color: "#fff"
     }),
-    o: common_vendor.o((...args) => $options.togglePlay && $options.togglePlay(...args)),
-    p: common_vendor.t($options.formatTime($data.currentTime)),
-    q: common_vendor.t($options.formatTime($data.duration)),
-    r: $data.currentTime,
-    s: $data.duration || 1,
-    t: common_vendor.o((...args) => $options.onSliderChange && $options.onSliderChange(...args)),
-    v: common_vendor.o((...args) => $options.onSliderChanging && $options.onSliderChanging(...args)),
-    w: common_vendor.t($data.playbackRate === 1 ? "倍速" : $data.playbackRate + "x"),
-    x: common_vendor.o((...args) => $options.toggleRate && $options.toggleRate(...args)),
-    y: common_vendor.s($options.dragStyle),
-    z: common_vendor.o((...args) => $options.onTouchStart && $options.onTouchStart(...args)),
-    A: common_vendor.o((...args) => $options.onTouchMove && $options.onTouchMove(...args)),
-    B: common_vendor.o((...args) => $options.onTouchEnd && $options.onTouchEnd(...args))
+    n: common_vendor.o((...args) => $options.togglePlay && $options.togglePlay(...args)),
+    o: common_vendor.t($options.formatTime($data.currentTime)),
+    p: common_vendor.t($options.formatTime($data.duration)),
+    q: $data.currentTime,
+    r: $data.duration || 1,
+    s: common_vendor.o((...args) => $options.onSliderChange && $options.onSliderChange(...args)),
+    t: common_vendor.o((...args) => $options.onSliderChanging && $options.onSliderChanging(...args)),
+    v: common_vendor.t($data.playbackRate === 1 ? "倍速" : $data.playbackRate + "x"),
+    w: common_vendor.o((...args) => $options.toggleRate && $options.toggleRate(...args)),
+    x: common_vendor.s($options.dragStyle),
+    y: common_vendor.o((...args) => $options.onTouchStart && $options.onTouchStart(...args)),
+    z: common_vendor.o((...args) => $options.onTouchMove && $options.onTouchMove(...args)),
+    A: common_vendor.o((...args) => $options.onTouchEnd && $options.onTouchEnd(...args))
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-0b50ab4e"]]);

@@ -37,6 +37,20 @@
           class="problem-card"
           v-for="(item, index) in productIntroList"
           :key="index"
+          @click="goToIndex(item)"
+        >
+          <image
+            :src="item.coverImage"
+            mode="aspectFit"
+            style="width: 100%; height: 100%; border-radius: 20rpx"
+          ></image>
+        </view>
+      </view>
+      <!-- <view class="problem-grid">
+        <view
+          class="problem-card"
+          v-for="(item, index) in productIntroList"
+          :key="index"
           :style="{
             backgroundImage: `url(${problemOverlayImages[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
           }"
@@ -58,7 +72,7 @@
             <view class="problem-desc">{{ item.introName }}</view>
           </view>
         </view>
-      </view>
+      </view> -->
       <view class="viewmore" @click="viewmore">
         <view>查看更多</view>
         <view>></view>
@@ -185,12 +199,16 @@ const viewmore = () => {
 };
 const goToIndex = (item) => {
   if (item.introType == 2) {
+    let url =
+      "/pages/secondary/index/index?url=" +
+      item.videoUrl +
+      "&visitContent=" +
+      item.title;
+    if (item.coverImage) {
+      url += "&coverImage=" + encodeURIComponent(item.coverImage);
+    }
     uni.navigateTo({
-      url:
-        "/pages/secondary/index/index?url=" +
-        item.videoUrl +
-        "&visitContent=" +
-        item.title,
+      url: url,
     });
   } else {
     uni.navigateTo({
@@ -354,6 +372,9 @@ const onVideoError = (e) => {
   });
 };
 const nextVideo = (url, coverImage) => {
+  uni.navigateTo({
+    url: "/pages/secondary/index/index?url=" + url + "&visitContent=宣传视频",
+  });
   // uni.navigateTo({
   //   url:
   //     "/pages/secondary/index/index?url=" +
@@ -362,20 +383,19 @@ const nextVideo = (url, coverImage) => {
   //     coverImage +
   //     "&visitContent=宣传视频",
   // });
-  let sources = [];
-  sources = [
-    {
-      url: url,
-      type: "video",
-      poster: coverImage,
-    },
-  ];
-
-  uni.previewMedia({
-    sources: sources,
-    current: 0,
-    autoplay: true,
-  });
+  // let sources = [];
+  // sources = [
+  //   {
+  //     url: url,
+  //     type: "video",
+  //     poster: coverImage,
+  //   },
+  // ];
+  // uni.previewMedia({
+  //   sources: sources,
+  //   current: 0,
+  //   autoplay: true,
+  // });
 };
 const onFullscreenChange = (e, index, isEnteringFullscreen) => {
   console.log(
@@ -728,9 +748,7 @@ onHide(async () => {
 }
 .problem-card {
   width: 100%;
-  height: 366rpx;
-  background-image: url("http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png"),
-    url("http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png");
+  height: 378rpx;
   background-size: 106rpx 112rpx, cover;
   background-position: right 24rpx bottom 24rpx, center;
   background-repeat: no-repeat, no-repeat;

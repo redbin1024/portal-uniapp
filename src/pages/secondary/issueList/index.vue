@@ -6,6 +6,21 @@
           class="problem-card"
           v-for="(item, index) in problemList"
           :key="index"
+          @click="goToIndex(item)"
+        >
+          <image
+            :src="item.coverImage"
+            mode="aspectFit"
+            style="width: 100%; height: 100%; border-radius: 20rpx"
+          ></image>
+        </view>
+      </view>
+      <!-- <view class="problem-grid">
+        <view
+          class="problem-card"
+          @click="goToIndex(item)"
+          v-for="(item, index) in problemList"
+          :key="index"
           :style="{
             backgroundImage: `url(${
               problemOverlayImages[index % problemOverlayImages.length]
@@ -28,9 +43,10 @@
             <view class="problem-desc">{{ item.introName }}</view>
           </view>
         </view>
-      </view>
+      </view> -->
     </view>
   </view>
+  <BackHome />
 </template>
 
 <script>
@@ -84,7 +100,25 @@ const pageNum = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
 const isFinish = ref(false);
-
+const goToIndex = (item) => {
+  if (item.introType == 2) {
+    let url =
+      "/pages/secondary/index/index?url=" +
+      item.videoUrl +
+      "&visitContent=" +
+      item.title;
+    if (item.coverImage) {
+      url += "&coverImage=" + encodeURIComponent(item.coverImage);
+    }
+    uni.navigateTo({
+      url: url,
+    });
+  } else {
+    uni.navigateTo({
+      url: "/pages/secondary/issueDetails/index?introId=" + item.introId,
+    });
+  }
+};
 // 获取企业列表数据
 const fetchEnterpriseList = async () => {
   try {
@@ -179,9 +213,7 @@ onShow(async () => {});
 }
 .problem-card {
   width: 100%;
-  height: 366rpx;
-  background-image: url("http://cdn.xiaodingdang1.com/2026/01/07/c4032fd2437547538d32d660aba816b9.png"),
-    url("http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png");
+  height: 378rpx;
   background-size: 106rpx 112rpx, cover;
   background-position: right 24rpx bottom 24rpx, center;
   background-repeat: no-repeat, no-repeat;

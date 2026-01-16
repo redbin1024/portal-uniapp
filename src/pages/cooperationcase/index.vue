@@ -114,6 +114,7 @@
       </view>
     </view>
   </scroll-view>
+  <BackHome />
 </template>
 
 <script setup>

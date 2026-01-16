@@ -163,14 +163,14 @@
         <view class="winthecustomer-head">
           <view class="winthecustomer-head1">
             <view class="winthecustomer-title">您是否也遇到这些问题？</view>
-            <view class="winthecustomer-title1">PROBLEM</view>
+            <view class="view-more-btn" @click="goToIssueList">查看更多></view>
           </view>
         </view>
         <swiper
           class="problem-swiper"
           :indicator-dots="false"
           :autoplay="true"
-          :interval="1500"
+          :interval="2500"
           :duration="500"
           :circular="true"
           :display-multiple-items="2"
@@ -489,6 +489,12 @@ const nextVideo = (url, coverImage, visitContent) => {
 const viewmore = () => {
   uni.navigateTo({
     url: "/pages/secondary/businesspartner/index",
+  });
+};
+// 跳转到问题列表
+const goToIssueList = () => {
+  uni.navigateTo({
+    url: "/pages/secondary/issueList/index",
   });
 };
 const handleFullScreenChange = (e) => {
@@ -1808,6 +1814,15 @@ const viewProblemMore = () => {
 .winthecustomer-title1 {
   color: #d6d4d4;
   font-size: 28rpx;
+}
+.view-more-btn {
+  font-size: 33rpx;
+  color: #313131;
+  padding: 6rpx 16rpx;
+  border-radius: 6rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #winthecustomer-title1 {
   color: #9ca2be;

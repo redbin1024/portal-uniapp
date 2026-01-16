@@ -22,8 +22,13 @@ var __async = (__this, __arguments, generator) => {
 const common_vendor = require("../../common/vendor.js");
 const utils_basePoint = require("../../utils/basePoint.js");
 const api_activity = require("../../api/activity.js");
+if (!Array) {
+  const _easycom_BackHome2 = common_vendor.resolveComponent("BackHome");
+  _easycom_BackHome2();
+}
+const _easycom_BackHome = () => "../../components/BackHome/BackHome.js";
 if (!Math) {
-  mpHtml();
+  (mpHtml + _easycom_BackHome)();
 }
 const mpHtml = () => "../../node-modules/uni-app-mp-html/components/mp-html/mp-html.js";
 const _sfc_main = {
@@ -33,6 +38,8 @@ const _sfc_main = {
     const richText = common_vendor.ref("");
     const serviceName = common_vendor.ref("");
     const currentServiceId = common_vendor.ref("");
+    const logoSrc = common_vendor.ref("");
+    const enterinto = common_vendor.ref(1);
     common_vendor.onShareAppMessage(() => {
       return {
         title: serviceName.value,
@@ -60,6 +67,14 @@ const _sfc_main = {
       }
     }));
     common_vendor.onLoad((options) => {
+      const pages = getCurrentPages();
+      if (pages.length === 1) {
+        logoSrc.value = "http://cdn.xiaodingdang1.com/2026/01/13/93e1ddecd5504aacbb31d21afc6bda1f.png";
+        enterinto.value = 1;
+      } else {
+        logoSrc.value = "http://cdn.xiaodingdang1.com/2025/10/22/5f4330db13db494d938cb202b88dfaa2.png";
+        enterinto.value = 2;
+      }
       if (options && options.serviceId) {
         const serviceId = options.serviceId;
         currentServiceId.value = serviceId;
@@ -89,16 +104,25 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_vendor.o(goBack),
-        b: common_vendor.t(serviceName.value),
-        c: _ctx.showHeaderBg ? 1 : "",
-        d: common_vendor.o(_ctx.previewImage),
-        e: common_vendor.p({
+        a: enterinto.value === 2
+      }, enterinto.value === 2 ? {
+        b: logoSrc.value,
+        c: common_vendor.o(goBack)
+      } : {}, {
+        d: enterinto.value === 1
+      }, enterinto.value === 1 ? {
+        e: logoSrc.value,
+        f: common_vendor.o(goBack)
+      } : {}, {
+        g: common_vendor.t(serviceName.value),
+        h: _ctx.showHeaderBg ? 1 : "",
+        i: common_vendor.o(_ctx.previewImage),
+        j: common_vendor.p({
           content: richText.value
         }),
-        f: serviceDescription.value
+        k: serviceDescription.value
       }, serviceDescription.value ? {
-        g: common_vendor.t(serviceDescription.value)
+        l: common_vendor.t(serviceDescription.value)
       } : {});
     };
   }

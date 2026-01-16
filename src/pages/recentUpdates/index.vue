@@ -24,6 +24,7 @@
       <text class="loading-more-text">加载更多中...</text>
     </view>
   </view>
+  <BackHome />
 </template>
 
 <script setup>

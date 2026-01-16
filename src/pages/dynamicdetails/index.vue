@@ -4,6 +4,7 @@
     <!-- 显示接收到的服务描述参数 -->
     <view v-if="serviceDescription" class="service-description"> </view>
   </view>
+  <BackHome />
 </template>
 
 <script setup>

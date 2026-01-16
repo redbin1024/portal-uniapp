@@ -53,7 +53,7 @@ const _sfc_main = {
       "http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png",
       "http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png"
     ]);
-    const problemOverlayImages = common_vendor.ref([]);
+    common_vendor.ref([]);
     common_vendor.ref([
       {
         title: "服务笔记",
@@ -87,8 +87,12 @@ const _sfc_main = {
     };
     const goToIndex = (item) => {
       if (item.introType == 2) {
+        let url = "/pages/secondary/index/index?url=" + item.videoUrl + "&visitContent=" + item.title;
+        if (item.coverImage) {
+          url += "&coverImage=" + encodeURIComponent(item.coverImage);
+        }
         common_vendor.index.navigateTo({
-          url: "/pages/secondary/index/index?url=" + item.videoUrl + "&visitContent=" + item.title
+          url
         });
       } else {
         common_vendor.index.navigateTo({
@@ -199,18 +203,8 @@ const _sfc_main = {
       }
     };
     const nextVideo = (url, coverImage2) => {
-      let sources = [];
-      sources = [
-        {
-          url,
-          type: "video",
-          poster: coverImage2
-        }
-      ];
-      common_vendor.index.previewMedia({
-        sources,
-        current: 0,
-        autoplay: true
+      common_vendor.index.navigateTo({
+        url: "/pages/secondary/index/index?url=" + url + "&visitContent=宣传视频"
       });
     };
     const fetchEnterpriseList = () => __async(this, null, function* () {
@@ -310,12 +304,9 @@ const _sfc_main = {
       }, productIntroList.value.length > 0 ? {
         f: common_vendor.f(productIntroList.value, (item, index, i0) => {
           return {
-            a: item.icon,
-            b: common_vendor.t(item.title),
-            c: common_vendor.t(item.introName),
-            d: index,
-            e: `url(${problemOverlayImages.value[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
-            f: common_vendor.o(($event) => goToIndex(item), index)
+            a: item.coverImage,
+            b: index,
+            c: common_vendor.o(($event) => goToIndex(item), index)
           };
         }),
         g: common_vendor.o(viewmore)

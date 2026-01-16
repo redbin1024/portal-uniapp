@@ -49,6 +49,7 @@
     <view class="footer">
       <button class="btn" @click="handleBack">返回首页</button>
     </view>
+    <BackHome />
   </view>
 </template>
 

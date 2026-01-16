@@ -21,8 +21,13 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../common/vendor.js");
 const api_activity = require("../../api/activity.js");
+if (!Array) {
+  const _easycom_BackHome2 = common_vendor.resolveComponent("BackHome");
+  _easycom_BackHome2();
+}
+const _easycom_BackHome = () => "../../components/BackHome/BackHome.js";
 if (!Math) {
-  VearCarousel();
+  (VearCarousel + _easycom_BackHome)();
 }
 const VearCarousel = () => "../../components/vear-carousel/vear-carousel.js";
 const _sfc_main = {

@@ -21,6 +21,14 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../common/vendor.js");
 const api_activity = require("../../api/activity.js");
+if (!Array) {
+  const _easycom_BackHome2 = common_vendor.resolveComponent("BackHome");
+  _easycom_BackHome2();
+}
+const _easycom_BackHome = () => "../../components/BackHome/BackHome.js";
+if (!Math) {
+  _easycom_BackHome();
+}
 const __default__ = {
   onPageScroll(e) {
     if (this.$refs && this.$refs.handleScroll) {
@@ -114,7 +122,7 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
     });
     const navigateToDetail = (item) => {
       common_vendor.index.navigateTo({
-        url: "/pages/casedetails/index?item=" + encodeURIComponent(JSON.stringify(item))
+        url: "/pages/casedetails/index?successCaseId=" + item.successCaseId
       });
     };
     const getBackgroundColor = (index) => {

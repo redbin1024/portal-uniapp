@@ -3,11 +3,25 @@
 		"miniprogram": {
 			"list": [
 				{
+					"name": "pages/secondary/issueDetails/index",
+					"pathName": "pages/secondary/issueDetails/index",
+					"query": "introId=2",
+					"scene": null,
+					"launchMode": "default"
+				},
+				{
 					"name": "pages/secondary/system/index",
 					"pathName": "pages/secondary/system/index",
 					"query": "",
-					"scene": null,
-					"launchMode": "default"
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/secondary/system/index",
+					"pathName": "pages/secondary/system/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
 				},
 				{
 					"name": "pages/secondary/homepage/index",

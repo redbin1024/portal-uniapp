@@ -1,5 +1,7 @@
 {
   "navigationStyle": "custom",
   "navigationBarTitleText": "",
-  "usingComponents": {}
+  "usingComponents": {
+    "back-home": "../../components/BackHome/BackHome"
+  }
 }

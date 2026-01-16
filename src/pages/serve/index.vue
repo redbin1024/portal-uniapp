@@ -57,6 +57,7 @@
         <view class="exhibition-title">管理系统</view>
       </view>
     </view>
+    <BackHome />
   </view>
 </template>
 

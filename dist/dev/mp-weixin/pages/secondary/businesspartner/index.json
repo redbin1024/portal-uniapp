@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "合作商家",
   "navigationBarBackgroundColor": "#ffffff",
-  "usingComponents": {}
+  "usingComponents": {
+    "back-home": "../../../components/BackHome/BackHome"
+  }
 }

@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "服务案例",
   "navigationBarBackgroundColor": "#ffffff",
-  "usingComponents": {}
+  "usingComponents": {
+    "back-home": "../../components/BackHome/BackHome"
+  }
 }

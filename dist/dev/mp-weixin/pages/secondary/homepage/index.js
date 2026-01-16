@@ -39,6 +39,11 @@ const _sfc_main = {
         url: "/pages/secondary/businesspartner/index"
       });
     };
+    const goToIssueList = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/secondary/issueList/index"
+      });
+    };
     const caseList = () => __async(this, null, function* () {
       try {
         const response = yield api_activity.getcaseList({
@@ -415,7 +420,8 @@ const _sfc_main = {
       } : {}, {
         e: productIntroList.value.length > 0
       }, productIntroList.value.length > 0 ? {
-        f: common_vendor.f(productIntroList.value, (img, index, i0) => {
+        f: common_vendor.o(goToIssueList),
+        g: common_vendor.f(productIntroList.value, (img, index, i0) => {
           return {
             a: img.coverImage,
             b: common_vendor.o(($event) => goToIndex(img), "problem-" + index),
@@ -423,12 +429,12 @@ const _sfc_main = {
           };
         })
       } : {}, {
-        g: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
+        h: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) + "?image_process=format,webp" ? {
-        h: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+        i: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
-        i: common_vendor.o(($event) => nextDetile()),
-        j: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        j: common_vendor.o(($event) => nextDetile()),
+        k: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage + "?image_process=format,webp",
             b: common_vendor.t(item.serviceName),
@@ -436,39 +442,39 @@ const _sfc_main = {
             d: common_vendor.o(($event) => next(item), index)
           };
         }),
-        k: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        l: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate + "?image_process=format,webp",
             b: "row1-" + index
           };
         }),
-        l: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        m: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        m: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        n: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        n: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        o: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
-        p: showPreview.value
+        o: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        p: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
+        q: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        q: previewMedia.value.type === "video"
+        r: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        r: previewMedia.value.src,
-        s: getVideoPoster(previewMedia.value.src),
-        t: common_vendor.o(onFullscreenChange),
-        v: "preview-video-" + previewMedia.value.index
+        s: previewMedia.value.src,
+        t: getVideoPoster(previewMedia.value.src),
+        v: common_vendor.o(onFullscreenChange),
+        w: "preview-video-" + previewMedia.value.index
       } : {
-        w: previewMedia.value.src
+        x: previewMedia.value.src
       }, {
-        x: isVideoFullscreen.value ? 1 : "",
-        y: common_vendor.o(handlePreviewModalClick)
+        y: isVideoFullscreen.value ? 1 : "",
+        z: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        z: common_vendor.o(handleCustomerServiceClick),
-        A: showPreview.value ? 1 : ""
+        A: common_vendor.o(handleCustomerServiceClick),
+        B: showPreview.value ? 1 : ""
       });
     };
   }

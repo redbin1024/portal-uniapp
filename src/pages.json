@@ -181,6 +181,7 @@
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "",
+        "backgroundColor": "#000000",
         "enableShareAppMessage": true,
         // 关闭微信小程序的系统边缘滑动返回
         "disableSwipeBack": true,
@@ -202,7 +203,7 @@
     {
       "path": "pages/secondary/issueList/index",
       "style": {
-        "navigationBarTitleText": "列表",
+        "navigationBarTitleText": "您是否也遇到这些问题?",
         "navigationBarBackgroundColor": "#ffffff",
         "enableShareAppMessage": true,
         "enableShareTimeline": true

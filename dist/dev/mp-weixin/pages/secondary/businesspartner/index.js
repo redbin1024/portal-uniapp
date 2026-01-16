@@ -21,6 +21,14 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../../common/vendor.js");
 const api_activity = require("../../../api/activity.js");
+if (!Array) {
+  const _easycom_BackHome2 = common_vendor.resolveComponent("BackHome");
+  _easycom_BackHome2();
+}
+const _easycom_BackHome = () => "../../../components/BackHome/BackHome.js";
+if (!Math) {
+  _easycom_BackHome();
+}
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -30,8 +38,12 @@ const _sfc_main = {
     const pageNum = common_vendor.ref(1);
     common_vendor.ref(-1);
     const nextVideo = (url, visitContent, coverImage) => {
+      let path = "/pages/secondary/index/index?url=" + url + "&visitContent=" + visitContent;
+      if (coverImage) {
+        path += "&coverImage=" + encodeURIComponent(coverImage);
+      }
       common_vendor.index.navigateTo({
-        url: "/pages/secondary/index/index?url=" + url + "&visitContent=" + visitContent
+        url: path
       });
     };
     const previewMedia = common_vendor.ref({

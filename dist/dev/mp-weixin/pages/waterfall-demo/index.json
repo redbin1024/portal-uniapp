@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "瀑布流演示",
   "navigationBarBackgroundColor": "#ffffff",
-  "usingComponents": {}
+  "usingComponents": {
+    "back-home": "../../components/BackHome/BackHome"
+  }
 }

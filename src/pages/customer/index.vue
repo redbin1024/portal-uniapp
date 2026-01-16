@@ -2,12 +2,11 @@
   <view>
     <view class="header" :class="{ 'header-with-bg': showHeaderBg }">
       <view class="title-wrapper">
-        <view class="headLogo" @click="goBack">
-          <image
-            class="logo"
-            src="http://cdn.xiaodingdang1.com/2025/10/22/5f4330db13db494d938cb202b88dfaa2.png"
-            mode="aspectFit"
-          />
+        <view class="headLogo" @click="goBack" v-if="enterinto === 2">
+          <image class="logo" :src="logoSrc" mode="aspectFit" />
+        </view>
+        <view class="headLogo1" @click="goBack" v-if="enterinto === 1">
+          <image class="logo" :src="logoSrc" mode="aspectFit" />
         </view>
         <view class="title">{{ serviceName }}</view>
       </view>
@@ -43,6 +42,7 @@
       </view>
     </view>
   </view>
+  <BackHome />
 </template>
 
 <script setup>
@@ -64,6 +64,8 @@ const serviceDescription = ref("");
 const richText = ref("");
 const serviceName = ref("");
 const currentServiceId = ref("");
+const logoSrc = ref("");
+const enterinto = ref(1);
 
 onShareAppMessage(() => {
   return {
@@ -102,6 +104,17 @@ onUnload(async () => {
 });
 // 页面加载时获取参数
 onLoad((options) => {
+  const pages = getCurrentPages();
+  if (pages.length === 1) {
+    logoSrc.value =
+      "http://cdn.xiaodingdang1.com/2026/01/13/93e1ddecd5504aacbb31d21afc6bda1f.png";
+    enterinto.value = 1;
+  } else {
+    logoSrc.value =
+      "http://cdn.xiaodingdang1.com/2025/10/22/5f4330db13db494d938cb202b88dfaa2.png";
+    enterinto.value = 2;
+  }
+
   // 获取页面参数
   if (options && options.serviceId) {
     const serviceId = options.serviceId;
@@ -186,6 +199,13 @@ const goBack = () => {
   width: 62rpx;
   height: 62rpx;
   position: absolute;
+}
+.headLogo1 {
+  border-radius: 100rpx;
+  width: 40rpx;
+  height: 42rpx;
+  position: absolute;
+  left: 30rpx;
 }
 .logo {
   width: 100%;

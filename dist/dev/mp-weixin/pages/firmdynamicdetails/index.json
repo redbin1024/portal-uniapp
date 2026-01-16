@@ -3,5 +3,7 @@
   "navigationBarBackgroundColor": "#ffffff",
   "enableShareAppMessage": true,
   "enableShareTimeline": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "back-home": "../../components/BackHome/BackHome"
+  }
 }
