@@ -27,9 +27,8 @@ if (!Array) {
 }
 const _easycom_BackHome = () => "../../components/BackHome/BackHome.js";
 if (!Math) {
-  (VearCarousel + _easycom_BackHome)();
+  _easycom_BackHome();
 }
-const VearCarousel = () => "../../components/vear-carousel/vear-carousel.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -334,19 +333,7 @@ const _sfc_main = {
     });
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.o(_ctx.selectedBanner),
-        b: common_vendor.o(_ctx.onVideoPlay),
-        c: common_vendor.o(_ctx.onVideoPause),
-        d: common_vendor.o(_ctx.onVideoEnded),
-        e: common_vendor.o(_ctx.onVideoError),
-        f: common_vendor.o(_ctx.onFullscreenChange),
-        g: common_vendor.o(_ctx.onPauseAllVideos),
-        h: common_vendor.p({
-          ["img-list"]: imgList.value,
-          ["url-key"]: "url",
-          ["show-title"]: true
-        }),
-        i: common_vendor.f(companyNewsList.value, (item, index, i0) => {
+        a: common_vendor.f(companyNewsList.value, (item, index, i0) => {
           return common_vendor.e({
             a: common_vendor.t(formatDate(item.createTime)),
             b: common_vendor.t(item.newsTitle),
@@ -363,10 +350,10 @@ const _sfc_main = {
             k: common_vendor.o(($event) => navigateToRecentDetails(item), index)
           });
         }),
-        j: showDynamicViewMoreBtn.value ? 1 : "",
-        k: showDynamicViewMoreBtn.value,
-        l: common_vendor.o(goToRecentUpdates),
-        m: common_vendor.f(successCaseList.value, (item, index, i0) => {
+        b: showDynamicViewMoreBtn.value ? 1 : "",
+        c: showDynamicViewMoreBtn.value,
+        d: common_vendor.o(goToRecentUpdates),
+        e: common_vendor.f(successCaseList.value, (item, index, i0) => {
           return {
             a: item.caseImages[0],
             b: common_vendor.t(item.customerName),
@@ -377,10 +364,10 @@ const _sfc_main = {
             g: common_vendor.o(($event) => navigateToDetail(item), index)
           };
         }),
-        n: showCaseViewMoreBtn.value ? 1 : "",
-        o: showCaseViewMoreBtn.value,
-        p: common_vendor.o(goToCooperationcase),
-        q: common_vendor.o(onScroll)
+        f: showCaseViewMoreBtn.value ? 1 : "",
+        g: showCaseViewMoreBtn.value,
+        h: common_vendor.o(goToCooperationcase),
+        i: common_vendor.o(onScroll)
       };
     };
   }

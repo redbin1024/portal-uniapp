@@ -3,7 +3,7 @@
     <view
       class="video"
       @click="nextVideo(bannerImages, coverImage)"
-      v-if="bannerImages"
+      v-if="bannerImages && videoEnabled"
     >
       <!-- <video :src="bannerImages"></video> -->
       <image
@@ -157,6 +157,7 @@ const richText = ref("");
 const imgList = ref([]);
 const bannerImages = ref("");
 const coverImage = ref("");
+const videoEnabled = ref(true);
 const problemIcons = ref([
   "http://cdn.xiaodingdang1.com/2026/01/07/329586497cb141d69864b7ffe44c01e2.png",
   "http://cdn.xiaodingdang1.com/2026/01/07/3c68ffd0fa574800b29257226f5d92cf.png",
@@ -462,6 +463,7 @@ const fetchEnterpriseList = async () => {
         });
       }
       bannerImages.value = video;
+      videoEnabled.value = response.rows[0].videoEnabled;
     }
   } catch (error) {
     console.error("获取企业列表失败:", error);

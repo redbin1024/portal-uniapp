@@ -5,7 +5,7 @@
     enable-back-to-top="true"
     @scroll="onScroll"
   >
-    <VearCarousel
+    <!-- <VearCarousel
       :img-list="imgList"
       url-key="url"
       :show-title="true"
@@ -16,7 +16,7 @@
       @video-error="onVideoError"
       @fullscreen-change="onFullscreenChange"
       @pause-all-videos="onPauseAllVideos"
-    />
+    /> -->
     <view class="dynamic">
       <view class="dynamic-title">最近动态</view>
       <view class="dynamic-title1">关注正在发生的故事</view>
@@ -119,7 +119,13 @@
 
 <script setup>
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
-import { onPageScroll, onLoad, onShow, onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+import {
+  onPageScroll,
+  onLoad,
+  onShow,
+  onShareAppMessage,
+  onShareTimeline,
+} from "@dcloudio/uni-app";
 
 onShareAppMessage(() => {
   return {

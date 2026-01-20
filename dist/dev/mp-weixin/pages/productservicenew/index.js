@@ -27,9 +27,8 @@ if (!Array) {
 }
 const _easycom_BackHome = () => "../../components/BackHome/BackHome.js";
 if (!Math) {
-  (VearCarousel + _easycom_BackHome)();
+  _easycom_BackHome();
 }
-const VearCarousel = () => "../../components/vear-carousel/vear-carousel.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
@@ -45,7 +44,7 @@ const _sfc_main = {
         query: ""
       };
     });
-    const activeTab = common_vendor.ref(0);
+    common_vendor.ref(0);
     const serviceList = common_vendor.ref([]);
     const serviceLists = common_vendor.ref([]);
     const caseList = common_vendor.ref([]);
@@ -139,72 +138,6 @@ const _sfc_main = {
         });
       }
     });
-    const switchTab = (index) => {
-      activeTab.value = index;
-      console.log("切换到tab:", index);
-      console.log("当前serviceList:", serviceList.value);
-    };
-    const next = (item) => {
-      try {
-        const itemStr = JSON.stringify(item);
-        common_vendor.index.navigateTo({
-          url: "/pages/customer/index?item=" + encodeURIComponent(itemStr)
-        });
-      } catch (error) {
-        console.error("序列化参数失败:", error);
-        common_vendor.index.showToast({
-          title: "参数传递失败",
-          icon: "none"
-        });
-      }
-    };
-    const onVideoPlay = (e) => {
-      console.log("视频开始播放:", e);
-    };
-    const onVideoPause = (e) => {
-      console.log("视频暂停:", e);
-    };
-    const onVideoEnded = (e) => {
-      console.log("视频播放结束:", e);
-    };
-    const onVideoError = (e) => {
-      console.error("视频播放错误:", e);
-      common_vendor.index.showToast({
-        title: "视频播放失败",
-        icon: "none"
-      });
-    };
-    const onFullscreenChange = (e, index, isEnteringFullscreen) => {
-      console.log(
-        "视频全屏状态变化:",
-        e,
-        "索引:",
-        index,
-        "进入全屏:",
-        isEnteringFullscreen
-      );
-      if (isEnteringFullscreen) {
-        console.log("视频进入全屏模式，已取消静音");
-        common_vendor.index.showToast({
-          title: "全屏播放已开启声音",
-          icon: "none",
-          duration: 1500
-        });
-      } else {
-        console.log("视频退出全屏模式，已恢复静音");
-      }
-    };
-    const onPauseAllVideos = () => {
-      console.log("暂停所有视频");
-    };
-    const selectedBanner = (item, index) => {
-      console.log("选中轮播项:", item, "索引:", index);
-      if (item.type === "video") {
-        console.log("点击了视频项");
-      } else {
-        console.log("点击了图片项");
-      }
-    };
     common_vendor.onMounted(() => {
       fetchServiceList();
       fetchcaseList();
@@ -215,42 +148,7 @@ const _sfc_main = {
       }).replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
     };
     return (_ctx, _cache) => {
-      return common_vendor.e({
-        a: activeTab.value === 0
-      }, activeTab.value === 0 ? {} : {}, {
-        b: activeTab.value === 0 ? 1 : "",
-        c: common_vendor.o(($event) => switchTab(0)),
-        d: activeTab.value === 1
-      }, activeTab.value === 1 ? {} : {}, {
-        e: activeTab.value === 1 ? 1 : "",
-        f: common_vendor.o(($event) => switchTab(1)),
-        g: activeTab.value == 0
-      }, activeTab.value == 0 ? {
-        h: common_vendor.o(selectedBanner),
-        i: common_vendor.o(onVideoPlay),
-        j: common_vendor.o(onVideoPause),
-        k: common_vendor.o(onVideoEnded),
-        l: common_vendor.o(onVideoError),
-        m: common_vendor.o(onFullscreenChange),
-        n: common_vendor.o(onPauseAllVideos),
-        o: common_vendor.p({
-          ["img-list"]: imgList.value,
-          ["url-key"]: "url",
-          ["show-title"]: true
-        }),
-        p: richText.value
-      } : {}, {
-        q: activeTab.value == 1
-      }, activeTab.value == 1 ? {
-        r: common_vendor.f(serviceLists.value, (item, index, i0) => {
-          return {
-            a: item.serviceImage[0],
-            b: common_vendor.t(item.serviceName),
-            c: index,
-            d: common_vendor.o(($event) => next(item), index)
-          };
-        })
-      } : {});
+      return {};
     };
   }
 };

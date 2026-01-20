@@ -1,6 +1,6 @@
 <template>
   <view class="main">
-    <view class="head">
+    <!-- <view class="head">
       <view class="headTab">
         <view
           class="tab-item"
@@ -55,7 +55,7 @@
           </view>
         </view>
       </view>
-    </view>
+    </view> -->
   </view>
   <BackHome />
 </template>

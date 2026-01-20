@@ -141,6 +141,7 @@ const _sfc_main = {
         console.log("企业列表数据:", response);
         if (response && response.rows && Array.isArray(response.rows) && response.rows.length > 0) {
           enterpriseList.value = response.rows[0];
+          common_vendor.index.setStorageSync("videoEnabled", response.rows[0].videoEnabled);
         }
       } catch (error) {
         console.error("获取企业列表失败:", error);
@@ -406,22 +407,27 @@ const _sfc_main = {
     return (_ctx, _cache) => {
       var _a, _b, _c, _d, _e, _f;
       return common_vendor.e({
-        a: common_vendor.f(caseDataList.value, (item, index, i0) => {
+        a: enterpriseList.value.videoEnabled
+      }, enterpriseList.value.videoEnabled ? common_vendor.e({
+        b: common_vendor.f(caseDataList.value, (item, index, i0) => {
           return {
             a: item.coverImage + "?image_process=format,webp",
             b: common_vendor.o(($event) => nextVideo(item.caseImages, item.coverImage, item.caseTitle), index),
             c: index
           };
         }),
-        b: common_vendor.o(viewmore),
-        c: enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0]
-      }, enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0] ? {
-        d: enterpriseList.value.bannerImages[0] + "?image_process=format,webp"
+        c: enterpriseList.value.videoEnabled
+      }, enterpriseList.value.videoEnabled ? {
+        d: common_vendor.o(viewmore)
       } : {}, {
-        e: productIntroList.value.length > 0
+        e: enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0]
+      }, enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0] ? {
+        f: enterpriseList.value.bannerImages[0] + "?image_process=format,webp"
+      } : {}) : {}, {
+        g: productIntroList.value.length > 0
       }, productIntroList.value.length > 0 ? {
-        f: common_vendor.o(goToIssueList),
-        g: common_vendor.f(productIntroList.value, (img, index, i0) => {
+        h: common_vendor.o(goToIssueList),
+        i: common_vendor.f(productIntroList.value, (img, index, i0) => {
           return {
             a: img.coverImage,
             b: common_vendor.o(($event) => goToIndex(img), "problem-" + index),
@@ -429,12 +435,12 @@ const _sfc_main = {
           };
         })
       } : {}, {
-        h: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
+        j: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) + "?image_process=format,webp" ? {
-        i: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+        k: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
-        j: common_vendor.o(($event) => nextDetile()),
-        k: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        l: common_vendor.o(($event) => nextDetile()),
+        m: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage + "?image_process=format,webp",
             b: common_vendor.t(item.serviceName),
@@ -442,39 +448,39 @@ const _sfc_main = {
             d: common_vendor.o(($event) => next(item), index)
           };
         }),
-        l: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        n: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate + "?image_process=format,webp",
             b: "row1-" + index
           };
         }),
-        m: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        o: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        n: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        p: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        o: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        p: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
-        q: showPreview.value
+        q: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        r: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
+        s: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        r: previewMedia.value.type === "video"
+        t: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        s: previewMedia.value.src,
-        t: getVideoPoster(previewMedia.value.src),
-        v: common_vendor.o(onFullscreenChange),
-        w: "preview-video-" + previewMedia.value.index
+        v: previewMedia.value.src,
+        w: getVideoPoster(previewMedia.value.src),
+        x: common_vendor.o(onFullscreenChange),
+        y: "preview-video-" + previewMedia.value.index
       } : {
-        x: previewMedia.value.src
+        z: previewMedia.value.src
       }, {
-        y: isVideoFullscreen.value ? 1 : "",
-        z: common_vendor.o(handlePreviewModalClick)
+        A: isVideoFullscreen.value ? 1 : "",
+        B: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        A: common_vendor.o(handleCustomerServiceClick),
-        B: showPreview.value ? 1 : ""
+        C: common_vendor.o(handleCustomerServiceClick),
+        D: showPreview.value ? 1 : ""
       });
     };
   }

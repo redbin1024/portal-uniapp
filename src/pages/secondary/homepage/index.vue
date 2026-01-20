@@ -72,7 +72,7 @@
           </swiper-item>
         </swiper>
       </view> -->
-      <view class="businesspartnernew">
+      <view class="businesspartnernew" v-if="enterpriseList.videoEnabled">
         <view class="winthecustomer-head">
           <view class="winthecustomer-head1">
             <view class="winthecustomer-title">合作商家</view>
@@ -145,7 +145,11 @@
             </view> -->
           </view>
         </view>
-        <view class="viewmore" @click="viewmore">
+        <view
+          class="viewmore"
+          @click="viewmore"
+          v-if="enterpriseList.videoEnabled"
+        >
           <view>查看更多</view>
           <view>></view>
         </view>
@@ -631,6 +635,7 @@ const fetchEnterpriseList = async () => {
       response.rows.length > 0
     ) {
       enterpriseList.value = response.rows[0];
+      uni.setStorageSync("videoEnabled", response.rows[0].videoEnabled);
     }
   } catch (error) {
     console.error("获取企业列表失败:", error);

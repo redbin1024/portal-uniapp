@@ -45,6 +45,7 @@ const _sfc_main = {
     const imgList = common_vendor.ref([]);
     const bannerImages = common_vendor.ref("");
     const coverImage = common_vendor.ref("");
+    const videoEnabled = common_vendor.ref(true);
     common_vendor.ref([
       "http://cdn.xiaodingdang1.com/2026/01/07/329586497cb141d69864b7ffe44c01e2.png",
       "http://cdn.xiaodingdang1.com/2026/01/07/3c68ffd0fa574800b29257226f5d92cf.png",
@@ -227,6 +228,7 @@ const _sfc_main = {
             });
           }
           bannerImages.value = video;
+          videoEnabled.value = response.rows[0].videoEnabled;
         }
       } catch (error) {
         console.error("获取企业列表失败:", error);
@@ -294,8 +296,8 @@ const _sfc_main = {
     }));
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: bannerImages.value
-      }, bannerImages.value ? {
+        a: bannerImages.value && videoEnabled.value
+      }, bannerImages.value && videoEnabled.value ? {
         b: enterpriseList.value.coverImage + "?image_process=format,webp",
         c: common_vendor.o(($event) => nextVideo(bannerImages.value, coverImage.value))
       } : {}, {
