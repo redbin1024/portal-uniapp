@@ -20,6 +20,7 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 const common_vendor = require("../../common/vendor.js");
+const common_assets = require("../../common/assets.js");
 const api_activity = require("../../api/activity.js");
 if (!Array) {
   const _easycom_BackHome2 = common_vendor.resolveComponent("BackHome");
@@ -221,20 +222,8 @@ const _sfc_main = {
     const serviceList = common_vendor.ref([]);
     const serviceLists = common_vendor.ref([]);
     const companyNewsList = common_vendor.ref([]);
-    const currentIndex = common_vendor.ref(0);
+    common_vendor.ref(0);
     const showHeaderBg = common_vendor.ref(false);
-    const onSwiperChange = (e) => {
-      currentIndex.value = e.detail.current;
-      const currentItem = enterpriseList.value.bannerImages[currentIndex.value];
-      if (isVideo(currentItem)) {
-        setTimeout(() => {
-          const videoContext = common_vendor.index.createVideoContext(
-            "bannerVideo" + currentIndex.value
-          );
-          videoContext.play();
-        }, 100);
-      }
-    };
     const showPreview = common_vendor.ref(false);
     const isVideoFullscreen = common_vendor.ref(false);
     const previewMedia = common_vendor.ref({
@@ -265,15 +254,6 @@ const _sfc_main = {
         "_poster.jpg"
       );
     };
-    const onMediaClick = (item, index, type) => {
-      console.log("Media clicked:", item, index, type);
-      previewMedia.value = {
-        src: item,
-        type,
-        index
-      };
-      showPreview.value = true;
-    };
     const closePreview = () => {
       if (isVideoFullscreen.value) {
         return;
@@ -298,8 +278,8 @@ const _sfc_main = {
       closePreview();
     };
     const prevMedia = () => {
-      const currentIndex2 = previewMedia.value.index;
-      const newIndex = currentIndex2 > 0 ? currentIndex2 - 1 : enterpriseList.value.bannerImages.length - 1;
+      const currentIndex = previewMedia.value.index;
+      const newIndex = currentIndex > 0 ? currentIndex - 1 : enterpriseList.value.bannerImages.length - 1;
       const newSrc = enterpriseList.value.bannerImages[newIndex];
       previewMedia.value = {
         src: newSrc,
@@ -308,8 +288,8 @@ const _sfc_main = {
       };
     };
     const nextMedia = () => {
-      const currentIndex2 = previewMedia.value.index;
-      const newIndex = currentIndex2 < enterpriseList.value.bannerImages.length - 1 ? currentIndex2 + 1 : 0;
+      const currentIndex = previewMedia.value.index;
+      const newIndex = currentIndex < enterpriseList.value.bannerImages.length - 1 ? currentIndex + 1 : 0;
       const newSrc = enterpriseList.value.bannerImages[newIndex];
       previewMedia.value = {
         src: newSrc,
@@ -394,37 +374,35 @@ const _sfc_main = {
     onPageScroll((e) => {
     });
     return (_ctx, _cache) => {
-      var _a, _b, _c, _d, _e, _f;
+      var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o;
       return common_vendor.e({
         a: common_vendor.t(enterpriseList.value.enterpriseName),
         b: showHeaderBg.value ? 1 : "",
-        c: common_vendor.f(enterpriseList.value.bannerImages, (item, index, i0) => {
-          return common_vendor.e({
-            a: isVideo(item)
-          }, isVideo(item) ? {
-            b: "bannerVideo" + index,
-            c: item,
-            d: index === currentIndex.value,
-            e: common_vendor.o(($event) => onMediaClick(item, index, "video"), index),
-            f: common_vendor.o(($event) => onMediaClick(item, index, "video"), index)
-          } : {
-            g: item,
-            h: common_vendor.o(($event) => onMediaClick(item, index, "image"), index)
-          }, {
-            i: index
-          });
-        }),
-        d: common_vendor.o(onSwiperChange),
-        e: common_vendor.t(enterpriseList.value.enterpriseName),
-        f: common_vendor.t(enterpriseList.value.enterpriseDescription),
-        g: common_vendor.o(handlePhoneCall),
-        h: common_vendor.o(handleNavigation),
-        i: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
+        c: common_assets._imports_0,
+        d: common_vendor.t(enterpriseList.value.enterpriseName || "天天拓客"),
+        e: (_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]
       }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) ? {
-        j: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
+        f: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
       } : {}, {
-        k: common_vendor.o(($event) => nextDetile(serviceList.value)),
-        l: common_vendor.f(serviceLists.value, (item, index, i0) => {
+        g: common_vendor.o(($event) => nextDetile(serviceList.value)),
+        h: serviceLists.value.length > 0
+      }, serviceLists.value.length > 0 ? common_vendor.e({
+        i: (_g = serviceLists.value[0]) == null ? void 0 : _g.serviceImage
+      }, ((_h = serviceLists.value[0]) == null ? void 0 : _h.serviceImage) ? {
+        j: (_i = serviceLists.value[0]) == null ? void 0 : _i.serviceImage
+      } : {}, {
+        k: common_vendor.o(($event) => next(serviceLists.value[0]))
+      }) : {}, {
+        l: common_vendor.t(enterpriseList.value.enterpriseName),
+        m: common_vendor.t(enterpriseList.value.enterpriseDescription),
+        n: common_vendor.o(handlePhoneCall),
+        o: common_vendor.o(handleNavigation),
+        p: (_k = (_j = serviceList.value) == null ? void 0 : _j.serviceImage) == null ? void 0 : _k[0]
+      }, ((_m = (_l = serviceList.value) == null ? void 0 : _l.serviceImage) == null ? void 0 : _m[0]) ? {
+        q: (_o = (_n = serviceList.value) == null ? void 0 : _n.serviceImage) == null ? void 0 : _o[0]
+      } : {}, {
+        r: common_vendor.o(($event) => nextDetile(serviceList.value)),
+        s: common_vendor.f(serviceLists.value, (item, index, i0) => {
           return {
             a: item.serviceImage,
             b: common_vendor.t(item.serviceName),
@@ -432,58 +410,58 @@ const _sfc_main = {
             d: common_vendor.o(($event) => next(item), index)
           };
         }),
-        m: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        t: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row1-" + index
           };
         }),
-        n: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
+        v: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
       }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        o: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
+        w: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
           return {
             a: certificate,
             b: "row2-" + index
           };
         })
       } : {}, {
-        p: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+        x: common_vendor.f(getFirstRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
           return {
             a: partner,
             b: "row1-" + index
           };
         }),
-        q: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
+        y: getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0
       }, getSecondRowPartners(enterpriseList.value.cooperationMerchants).length > 0 ? {
-        r: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
+        z: common_vendor.f(getSecondRowPartners(enterpriseList.value.cooperationMerchants), (partner, index, i0) => {
           return {
             a: partner,
             b: "row2-" + index
           };
         })
       } : {}, {
-        s: common_vendor.t(enterpriseList.value.enterpriseName),
-        t: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        v: common_vendor.t(enterpriseList.value.contactPhone),
-        w: enterpriseList.value.qrCode,
-        x: showPreview.value
+        A: common_vendor.t(enterpriseList.value.enterpriseName),
+        B: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        C: common_vendor.t(enterpriseList.value.contactPhone),
+        D: enterpriseList.value.qrCode,
+        E: showPreview.value
       }, showPreview.value ? common_vendor.e({
-        y: previewMedia.value.type === "video"
+        F: previewMedia.value.type === "video"
       }, previewMedia.value.type === "video" ? {
-        z: previewMedia.value.src,
-        A: getVideoPoster(previewMedia.value.src),
-        B: common_vendor.o(onFullscreenChange),
-        C: "preview-video-" + previewMedia.value.index
+        G: previewMedia.value.src,
+        H: getVideoPoster(previewMedia.value.src),
+        I: common_vendor.o(onFullscreenChange),
+        J: "preview-video-" + previewMedia.value.index
       } : {
-        D: previewMedia.value.src
+        K: previewMedia.value.src
       }, {
-        E: common_vendor.o(prevMedia),
-        F: common_vendor.o(nextMedia),
-        G: isVideoFullscreen.value ? 1 : "",
-        H: common_vendor.o(handlePreviewModalClick)
+        L: common_vendor.o(prevMedia),
+        M: common_vendor.o(nextMedia),
+        N: isVideoFullscreen.value ? 1 : "",
+        O: common_vendor.o(handlePreviewModalClick)
       }) : {}, {
-        I: common_vendor.o(handleCustomerServiceClick),
-        J: showPreview.value ? 1 : ""
+        P: common_vendor.o(handleCustomerServiceClick),
+        Q: showPreview.value ? 1 : ""
       });
     };
   }
