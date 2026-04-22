@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "API测试",
-  "navigationBarBackgroundColor": "#ffffff",
-  "usingComponents": {
-    "back-home": "../../components/BackHome/BackHome"
-  }
-}

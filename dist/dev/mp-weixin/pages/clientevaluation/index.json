@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "动态",
-  "navigationBarBackgroundColor": "#ffffff",
-  "usingComponents": {
-    "back-home": "../../components/BackHome/BackHome"
-  }
-}

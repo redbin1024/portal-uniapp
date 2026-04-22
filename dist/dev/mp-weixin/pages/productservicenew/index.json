@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "产品服务",
-  "navigationBarBackgroundColor": "#ffffff",
-  "enableShareAppMessage": true,
-  "enableShareTimeline": true,
-  "usingComponents": {
-    "back-home": "../../components/BackHome/BackHome"
-  }
-}

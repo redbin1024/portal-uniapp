@@ -3,6 +3,25 @@
     <view class="hero" :style="heroStyle">
       <view class="hero__spacer"></view>
 
+      <view class="conversion-section">
+        <image class="conversion-section__bg" src="/static/conversion-bg.png" mode="aspectFill" />
+        <view class="conversion-section__title">
+          <text class="conversion-section__brand">天天拓客</text>
+          <text class="conversion-section__slogan">全域流量高效转化</text>
+        </view>
+        <view class="conversion-section__card">
+          <image class="conversion-section__card-deco" src="/static/conversion-card-deco.png" mode="aspectFill" />
+          <view class="conversion-section__card-content">
+            <text class="conversion-section__card-line1">充足的客资是业绩</text>
+            <text class="conversion-section__card-line2">唯一的保障</text>
+            <text class="conversion-section__card-desc">全域全域引流精准锁客</text>
+            <view class="conversion-section__card-btn">
+              <text>了解详情</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
       <view class="partner-section" v-if="enterpriseInfo.videoEnabled">
         <view class="section-header">
           <view class="section-header__row">
@@ -436,6 +455,126 @@ onShareTimeline(() => {
 
 .hero__spacer {
   height: 580rpx;
+}
+
+.conversion-section {
+  position: relative;
+  width: 750rpx;
+  height: 560rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -200rpx;
+}
+
+.conversion-section__bg {
+  position: absolute;
+  top: -92rpx;
+  left: -220rpx;
+  width: 2612rpx;
+  height: 890rpx;
+  z-index: 1;
+}
+
+.conversion-section__title {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 36rpx;
+}
+
+.conversion-section__brand {
+  color: #000000;
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 56rpx;
+}
+
+.conversion-section__slogan {
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 56rpx;
+  background: linear-gradient(90deg, #006EEE 0%, #00BDFE 94%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.conversion-section__card {
+  position: relative;
+  z-index: 3;
+  width: 702rpx;
+  height: 330rpx;
+  margin-top: 24rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 8rpx 32rpx 0 #C4E2F1;
+  overflow: hidden;
+}
+
+.conversion-section__card-deco {
+  position: absolute;
+  right: -4rpx;
+  top: -118rpx;
+  width: 794rpx;
+  height: 506rpx;
+  z-index: 1;
+}
+
+.conversion-section__card-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 256rpx;
+  height: 192rpx;
+  margin-left: 48rpx;
+  margin-top: 70rpx;
+}
+
+.conversion-section__card-line1 {
+  color: #000000;
+  font-size: 32rpx;
+  font-weight: 700;
+  line-height: 48rpx;
+}
+
+.conversion-section__card-line2 {
+  font-size: 32rpx;
+  font-weight: 700;
+  line-height: 48rpx;
+  background: linear-gradient(90deg, #006EEE 0%, #00BDFE 94%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.conversion-section__card-desc {
+  color: rgba(61, 61, 61, 0.6);
+  font-size: 22rpx;
+  line-height: 32rpx;
+  margin-top: 16rpx;
+}
+
+.conversion-section__card-btn {
+  width: 100rpx;
+  height: 36rpx;
+  background: #006DFF;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 28rpx;
+}
+
+.conversion-section__card-btn text {
+  color: #F4F5F9;
+  font-size: 14rpx;
+  font-weight: 500;
+  line-height: 20rpx;
 }
 
 .section-header {

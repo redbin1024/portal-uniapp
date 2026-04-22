@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "我们的服务",
-  "navigationBarBackgroundColor": "#ffffff",
-  "usingComponents": {
-    "back-home": "../../components/BackHome/BackHome"
-  }
-}
