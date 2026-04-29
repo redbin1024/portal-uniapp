@@ -1,69 +1,67 @@
 <template>
-  <view class="page">
-    <view class="hero" :style="heroStyle">
-      <view class="hero__spacer"></view>
+  <scroll-view
+    class="page-scroll"
+    scroll-y
+    scroll-anchoring
+    enhanced
+    enable-passive
+    bounces
+    style="height: 100vh"
+  >
+    <view class="page">
+      <!-- 顶部 Banner（sticky 固定） -->
+      <view class="hero" :style="heroStyle"></view>
 
-      <view class="conversion-section">
-        <image class="conversion-section__bg" src="/static/conversion-bg.png" mode="aspectFill" />
-        <view class="conversion-section__title">
-          <text class="conversion-section__brand">天天拓客</text>
-          <text class="conversion-section__slogan">全域流量高效转化</text>
-        </view>
-        <view class="conversion-section__card">
-          <image class="conversion-section__card-deco" src="/static/conversion-card-deco.png" mode="aspectFill" />
-          <view class="conversion-section__card-content">
-            <text class="conversion-section__card-line1">充足的客资是业绩</text>
-            <text class="conversion-section__card-line2">唯一的保障</text>
-            <text class="conversion-section__card-desc">全域全域引流精准锁客</text>
-            <view class="conversion-section__card-btn">
-              <text>了解详情</text>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <view class="partner-section" v-if="enterpriseInfo.videoEnabled">
-        <view class="section-header">
-          <view class="section-header__row">
-            <view class="section-header__title">合作商家</view>
-            <view class="section-header__subtitle">PARTNER MERCHANT</view>
-          </view>
-        </view>
-
-        <view class="partner-section__grid">
-          <view
-            class="partner-section__item"
-            v-for="(item, index) in partnerCaseList"
-            :key="index"
-          >
+      <view class="page__content">
+        <!-- 合作伙伴案例 -->
+        <view
+          class="partner-section reveal"
+          :class="{ 'reveal--visible': visibleSet.has('partner') }"
+          data-reveal-id="partner"
+          v-if="enterpriseInfo.videoEnabled"
+        >
+          <view class="partner-section__grid">
             <view
-              class="partner-card"
-              @click="
-                openPartnerCase(item.caseImages, item.coverImage, item.caseTitle)
-              "
+              class="partner-section__item"
+              v-for="(item, index) in partnerCaseList"
+              :key="index"
             >
-              <image
-                class="partner-card__cover"
-                :src="toWebpUrl(item.coverImage)"
-                mode="aspectFill"
-              />
-              <view class="partner-card__play-overlay">
+              <view
+                class="partner-card"
+                @click="
+                  openPartnerCase(
+                    item.caseImages,
+                    item.coverImage,
+                    item.caseTitle,
+                  )
+                "
+              >
                 <image
-                  class="partner-card__play-icon"
-                  src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
+                  class="partner-card__cover"
+                  :src="toWebpUrl(item.coverImage)"
+                  mode="aspectFill"
                 />
+                <view class="partner-card__play-overlay">
+                  <image
+                    class="partner-card__play-icon"
+                    src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
+                  />
+                </view>
               </view>
             </view>
           </view>
+
+          <view class="partner-section__more" @click="goToPartnerListPage">
+            <view>查看更多</view>
+            <view>></view>
+          </view>
         </view>
 
-        <view class="partner-section__more" @click="goToPartnerListPage">
-          <view>查看更多</view>
-          <view>></view>
-        </view>
-
+        <!-- 宣传 Banner 图 -->
         <view
-          class="partner-section__banner"
+          class="partner-section__banner reveal"
+          :class="{ 'reveal--visible': visibleSet.has('banner') }"
+          data-reveal-id="banner"
           v-if="enterpriseInfo.bannerImages && enterpriseInfo.bannerImages[0]"
         >
           <image
@@ -72,200 +70,382 @@
             mode="aspectFill"
           ></image>
         </view>
-      </view>
 
-      <view class="problem-section" v-if="productIntroList.length > 0">
-        <view class="section-header">
-          <view class="section-header__row">
-            <view class="section-header__title">您是否也遇到这些问题？</view>
-            <view class="section-header__more" @click="goToIssueListPage"
-              >查看更多></view
-            >
+        <!-- 全域流量转化 -->
+        <view
+          class="conversion-section reveal"
+          :class="{ 'reveal--visible': visibleSet.has('conversion') }"
+          data-reveal-id="conversion"
+        >
+          <image
+            class="conversion-section__bg"
+            src="/static/conversion-bg.png"
+            mode="aspectFill"
+          />
+          <view class="conversion-section__title">
+            <text class="conversion-section__brand">天天拓客</text>
+            <text class="conversion-section__slogan">全域流量高效转化</text>
+          </view>
+          <view class="conversion-section__card">
+            <image
+              class="conversion-section__card-deco"
+              src="/static/conversion-card-deco.png"
+              mode="aspectFill"
+            />
+            <view class="conversion-section__card-content">
+              <text class="conversion-section__card-line1"
+                >充足的客资是业绩</text
+              >
+              <text class="conversion-section__card-line2">唯一的保障</text>
+              <text class="conversion-section__card-desc"
+                >全域全域引流精准锁客</text
+              >
+              <view class="conversion-section__card-btn">
+                <text>了解详情</text>
+              </view>
+            </view>
           </view>
         </view>
 
-        <swiper
-          class="problem-section__swiper"
-          :indicator-dots="false"
-          :autoplay="true"
-          :interval="2500"
-          :duration="500"
-          :circular="true"
-          :display-multiple-items="2"
+        <!-- 业务系统 -->
+        <view
+          class="business-section reveal"
+          :class="{ 'reveal--visible': visibleSet.has('business') }"
+          data-reveal-id="business"
+          v-if="businessSystemList.length > 0"
         >
-          <swiper-item
-            v-for="(item, index) in productIntroList"
-            :key="'problem-' + index"
+          <view class="business-section__heading">
+            <view class="business-section__brand">宝妈小叮当</view>
+            <view class="business-section__slogan">专注业务系统</view>
+          </view>
+
+          <view
+            class="business-card"
+            v-for="(item, index) in businessSystemList"
+            :key="'biz-' + index"
+            @click="goToServiceDetail(item)"
           >
-            <view
-              class="problem-section__slide"
-              @click="handleIntroClick(item)"
-            >
+            <view class="business-card__header">
+              <view class="business-card__title">{{ item.title }}</view>
               <image
-                :src="toWebpUrl(item.coverImage)"
-                class="problem-section__slide-image"
-                mode="scaleToFill"
+                class="business-card__arrow-icon"
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQgMkwxMCA2TDQgMTAiIHN0cm9rZT0iI0E3QTdBNyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4="
+                mode="aspectFit"
               />
             </view>
-          </swiper-item>
-        </swiper>
-      </view>
-
-      <view class="service-section">
-        <view class="traffic-service">
-          <view class="section-header">
-            <view class="section-header__row">
-              <view class="section-header__title">流量服务</view>
-              <view class="section-header__subtitle">PRODUCT SERVICE</view>
+            <view class="business-card__divider">
+              <view class="business-card__divider-bar"></view>
             </view>
-          </view>
-
-          <view @click="goToTrafficServicePage">
-            <view class="traffic-service__image">
+            <view class="business-card__body">
               <image
-                v-if="trafficService.serviceImage && trafficService.serviceImage[0]"
-                :src="toWebpUrl(trafficService.serviceImage[0])"
+                class="business-card__image"
+                :src="item.image"
                 mode="aspectFill"
-              ></image>
-            </view>
-            <view class="traffic-service__footer">
-              <view class="traffic-service__name">抖音线上获客</view>
-              <view class="traffic-service__cta">
-                <view class="traffic-service__cta-text">了解详情</view>
-                <image
-                  class="traffic-service__cta-icon"
-                  src="http://cdn.xiaodingdang1.com/2025/10/21/71d280df9062455ca2b23bd5ecda6223.png"
-                  mode="aspectFit"
-                />
+              />
+              <view class="business-card__content">
+                <view class="business-card__subtitle">{{ item.title }}</view>
+                <view class="business-card__features">
+                  <view
+                    class="business-card__feature"
+                    v-for="(feat, fi) in item.features"
+                    :key="'feat-' + fi"
+                  >
+                    <view class="business-card__dot"></view>
+                    <view class="business-card__feature-text">{{ feat }}</view>
+                  </view>
+                </view>
+                <view class="business-card__actions">
+                  <view
+                    class="business-card__btn business-card__btn--primary"
+                    @click.stop="goToServiceDetail(item)"
+                    >免费试用</view
+                  >
+                  <view
+                    class="business-card__btn business-card__btn--ghost"
+                    @click.stop="goToServiceDetail(item)"
+                    >了解更多</view
+                  >
+                </view>
               </view>
             </view>
           </view>
         </view>
 
-        <view class="section-header">
-          <view class="section-header__row">
-            <view class="section-header__title">系统服务</view>
-            <view class="section-header__subtitle section-header__subtitle--muted"
-              >SYSTEM SERVICE</view
-            >
+        <!-- 管理系统 -->
+        <view
+          class="management-section reveal"
+          :class="{ 'reveal--visible': visibleSet.has('management') }"
+          data-reveal-id="management"
+          v-if="managementItem.serviceId"
+        >
+          <view class="management-section__heading">
+            <view class="management-section__brand">宝妈小叮当</view>
+            <view class="management-section__slogan">专注管理系统</view>
+          </view>
+
+          <view
+            class="management-card"
+            @click="goToServiceDetail(managementItem)"
+          >
+            <view class="management-card__header">
+              <view class="management-card__title">{{
+                managementItem.title
+              }}</view>
+              <image
+                class="management-card__arrow-icon"
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQgMkwxMCA2TDQgMTAiIHN0cm9rZT0iI0E3QTdBNyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4="
+                mode="aspectFit"
+              />
+            </view>
+            <view class="management-card__divider">
+              <view class="management-card__divider-bar"></view>
+            </view>
+
+            <image
+              class="management-card__image"
+              :src="managementItem.image"
+              mode="aspectFill"
+            />
+
+            <view class="management-card__subtitle">{{
+              managementItem.subtitle
+            }}</view>
+
+            <view class="management-card__features">
+              <view
+                class="management-card__feature"
+                v-for="(feat, fi) in managementItem.features"
+                :key="'mfeat-' + fi"
+              >
+                <view class="management-card__dot"></view>
+                <view class="management-card__feature-text">{{ feat }}</view>
+              </view>
+            </view>
+
+            <view class="management-card__actions">
+              <view
+                class="management-card__btn management-card__btn--primary"
+                @click.stop="goToServiceDetail(managementItem)"
+                >免费试用</view
+              >
+              <view
+                class="management-card__btn management-card__btn--ghost"
+                @click.stop="goToServiceDetail(managementItem)"
+                >了解更多</view
+              >
+            </view>
           </view>
         </view>
 
-        <view class="system-service">
-          <view class="system-service__grid">
+        <!-- 经营痛点 -->
+        <view
+          class="problem-section reveal"
+          :class="{ 'reveal--visible': visibleSet.has('problem') }"
+          data-reveal-id="problem"
+          v-if="productIntroList.length > 0"
+        >
+          <view class="problem-section__heading">
+            <view class="problem-section__title-main">月子会所经营痛点</view>
+            <view class="problem-section__title-sub">你是否也有</view>
+          </view>
+
+          <view class="problem-section__list">
             <view
-              class="system-service__card"
-              v-for="(item, index) in systemServiceList"
-              :key="index"
-              @click="goToServiceDetail(item)"
+              class="problem-card"
+              v-for="(item, index) in productIntroList.slice(0, 3)"
+              :key="'problem-' + index"
+              @click="handleIntroClick(item)"
             >
-              <image :src="toWebpUrl(item.serviceImage)"></image>
-              <view class="system-service__card-footer">
-                <view class="system-service__card-title">
-                  {{ item.serviceName }}
-                </view>
-                <view class="system-service__card-cta">了解详情</view>
+              <view class="problem-card__inner">
+                <view class="problem-card__title">{{ item.title || '' }}</view>
+                <view class="problem-card__desc">{{ item.introName }}</view>
               </view>
             </view>
           </view>
-        </view>
-      </view>
 
-      <view class="surface-section">
-        <view class="certificate-section">
-          <view class="section-header">
-            <view class="section-header__row">
-              <view class="section-header__title">荣誉证书</view>
-              <view class="section-header__subtitle">CERTIFICATE OF HONOR</view>
-            </view>
+          <view class="problem-section__more" @click="goToIssueListPage">
+            查看更多
           </view>
+        </view>
 
-          <view class="certificate-section__list">
-            <view class="certificate-section__scroll">
-              <view class="certificate-section__double-row">
-                <view class="certificate-section__row">
-                  <view
-                    v-for="(certificate, index) in getEvenIndexItems(
-                      enterpriseInfo.honorCertificates
-                    )"
-                    :key="'row1-' + index"
-                    class="certificate-section__item"
-                  >
-                    <image
-                      :src="toWebpUrl(certificate)"
-                      mode="aspectFit"
-                    ></image>
-                  </view>
-                </view>
-                <view
-                  class="certificate-section__row"
-                  v-if="
-                    getOddIndexItems(enterpriseInfo.honorCertificates).length >
-                      0
-                  "
-                >
-                  <view
-                    v-for="(certificate, index) in getOddIndexItems(
-                      enterpriseInfo.honorCertificates
-                    )"
-                    :key="'row2-' + index"
-                    class="certificate-section__item"
-                  >
-                    <image :src="toWebpUrl(certificate)" mode="aspectFit"></image>
-                  </view>
-                </view>
+        <!-- 荣誉证书 -->
+        <view
+          class="surface-section reveal"
+          :class="{ 'reveal--visible': visibleSet.has('certificate') }"
+          data-reveal-id="certificate"
+        >
+          <view class="certificate-section">
+            <view class="section-header">
+              <view class="section-header__row">
+                <view class="section-header__title">荣誉证书</view>
               </view>
             </view>
+
+            <swiper
+              class="certificate-section__swiper"
+              :indicator-dots="false"
+              :autoplay="true"
+              :interval="3000"
+              :duration="500"
+              :circular="true"
+            >
+              <swiper-item
+                v-for="(page, pi) in certificatePages"
+                :key="'cert-page-' + pi"
+              >
+                <view class="certificate-section__grid">
+                  <view
+                    class="certificate-section__card"
+                    v-for="(certificate, ci) in page"
+                    :key="ci"
+                  >
+                    <view class="certificate-section__image-wrap">
+                      <image
+                        class="certificate-section__image"
+                        :src="toWebpUrl(certificate)"
+                        mode="aspectFit"
+                      />
+                    </view>
+                  </view>
+                </view>
+              </swiper-item>
+            </swiper>
           </view>
+        </view>
+
+        <!-- 页脚：Logo 与企业地址 -->
+        <view
+          class="footer-info reveal"
+          :class="{ 'reveal--visible': visibleSet.has('footer') }"
+          data-reveal-id="footer"
+        >
+          <image
+            class="footer-info__logo"
+            src="http://cdn.xiaodingdang1.com/2025/11/07/c6dd442174ea42628e4c8a5fc0a58617.png"
+          ></image>
+          <view class="footer-info__address">{{
+            enterpriseInfo.enterpriseAddress
+          }}</view>
         </view>
       </view>
 
-      <view class="footer-info">
-        <image
-          class="footer-info__logo"
-          src="http://cdn.xiaodingdang1.com/2025/11/07/c6dd442174ea42628e4c8a5fc0a58617.png"
-        ></image>
-        <view class="footer-info__address">{{
-          enterpriseInfo.enterpriseAddress
-        }}</view>
+      <!-- 悬浮客服按钮 -->
+      <view class="customer-service">
+        <button class="customer-service__button" open-type="contact">
+          <image
+            class="customer-service__image"
+            src="http://cdn.xiaodingdang1.com/2025/09/29/84932e513ebd49d093825177c28edf83.png"
+            mode="aspectFit"
+          />
+        </button>
       </view>
     </view>
-
-    <view class="customer-service">
-      <button class="customer-service__button" open-type="contact">
-        <image
-          class="customer-service__image"
-          src="http://cdn.xiaodingdang1.com/2025/09/29/84932e513ebd49d093825177c28edf83.png"
-          mode="aspectFit"
-        />
-      </button>
-    </view>
-  </view>
+  </scroll-view>
 </template>
 <script setup>
-import { computed, ref, onMounted } from "vue";
-import { onShow, onHide, onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+import {
+  computed,
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  nextTick,
+  watch,
+  getCurrentInstance,
+} from 'vue';
+import {
+  onShow,
+  onHide,
+  onShareAppMessage,
+  onShareTimeline,
+} from '@dcloudio/uni-app';
 import {
   getEnterpriseList,
   getServiceList,
   getcaseList,
   getProductIntroList,
-} from "@/api/activity.js";
-import basePoint from "@/utils/basePoint.js";
+} from '@/api/activity.js';
+import basePoint from '@/utils/basePoint.js';
 
 const enterpriseInfo = ref({});
-const trafficService = ref({});
-const systemServiceList = ref([]);
 const partnerCaseList = ref([]);
 const productIntroList = ref([]);
+
+const businessSystemList = ref([]);
+const managementItem = ref({});
+
+const certificatePages = computed(() => {
+  const certs = enterpriseInfo.value.honorCertificates || [];
+  const pages = [];
+  for (let i = 0; i < certs.length; i += 6) {
+    pages.push(certs.slice(i, i + 6));
+  }
+  return pages;
+});
+
+const parseFeaturesFromDescription = (html) => {
+  if (!html) return [];
+  const liMatches = html.match(/<li[^>]*>([\s\S]*?)<\/li>/gi);
+  if (liMatches && liMatches.length > 0) {
+    return liMatches
+      .map((s) => s.replace(/<[^>]+>/g, '').trim())
+      .filter(Boolean);
+  }
+  return html
+    .replace(/<[^>]+>/g, '\n')
+    .split(/\n|•|·/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+};
+
+const mapServiceToBusinessItem = (item) => {
+  return {
+    serviceId: item.serviceId || '',
+    title: item.serviceName || item.title || '',
+    subtitle: item.subtitle || '',
+    image:
+      (Array.isArray(item.serviceImage)
+        ? item.serviceImage[0]
+        : item.serviceImage) ||
+      item.image ||
+      item.coverImage ||
+      '',
+    features: Array.isArray(item.features)
+      ? item.features
+      : parseFeaturesFromDescription(item.description),
+  };
+};
+
+const fetchBusinessSystemList = async () => {
+  try {
+    const rows = getResponseRows(
+      await getServiceList({ pageSize: 10, pageNum: 1 }),
+    );
+    if (rows.length === 0) return;
+    // 业务系统卡片：跳过首个 banner 服务（与系统页面一致），取接下来的 3 个
+    const business = rows.slice(1, 4).map(mapServiceToBusinessItem);
+    if (business.length > 0) {
+      businessSystemList.value = business;
+    }
+    // 管理系统卡片：取第 5 个，若无则取最后一个
+    const mgmtRow = rows[4] || rows[rows.length - 1];
+    if (mgmtRow) {
+      managementItem.value = mapServiceToBusinessItem(mgmtRow);
+    }
+  } catch (error) {
+    uni.showToast({
+      title: '获取业务系统列表失败',
+      icon: 'none',
+    });
+  }
+};
 
 const getResponseRows = (response) => {
   return Array.isArray(response?.rows) ? response.rows : [];
 };
 
 const toWebpUrl = (url) => {
-  if (!url) return "";
-  return `${url}${url.includes("?") ? "&" : "?"}image_process=format,webp`;
+  if (!url) return '';
+  return `${url}${url.includes('?') ? '&' : '?'}image_process=format,webp`;
 };
 
 const heroStyle = computed(() => {
@@ -277,61 +457,37 @@ const heroStyle = computed(() => {
 const openPartnerCase = (videoUrl, coverImage, visitContent) => {
   uni.navigateTo({
     url:
-      "/pages/secondary/index/index?url=" +
-      encodeURIComponent(videoUrl || "") +
-      "&coverImage=" +
-      encodeURIComponent(coverImage || "") +
-      "&visitContent=" +
-      encodeURIComponent(visitContent || ""),
+      '/pages/secondary/index/index?url=' +
+      encodeURIComponent(videoUrl || '') +
+      '&coverImage=' +
+      encodeURIComponent(coverImage || '') +
+      '&visitContent=' +
+      encodeURIComponent(visitContent || ''),
   });
 };
 
 const goToPartnerListPage = () => {
   uni.navigateTo({
-    url: "/pages/secondary/businesspartner/index",
+    url: '/pages/secondary/businesspartner/index',
   });
 };
 
 const goToIssueListPage = () => {
   uni.navigateTo({
-    url: "/pages/secondary/issueList/index",
+    url: '/pages/secondary/issueList/index',
   });
 };
 
 const fetchPartnerCaseList = async () => {
   try {
-    const rows = getResponseRows(await getcaseList({ pageSize: 9, pageNum: 1 }));
+    const rows = getResponseRows(
+      await getcaseList({ pageSize: 9, pageNum: 1 }),
+    );
     partnerCaseList.value = rows;
   } catch (error) {
     uni.showToast({
-      title: "获取合作商家失败",
-      icon: "none",
-    });
-  }
-};
-
-const goToTrafficServicePage = () => {
-  try {
-    uni.switchTab({
-      url: "/pages/secondary/winthecustomer/index",
-    });
-  } catch (error) {
-    uni.showToast({
-      title: "跳转失败",
-      icon: "none",
-    });
-  }
-};
-
-const fetchServiceList = async () => {
-  try {
-    const rows = getResponseRows(await getServiceList({ pageSize: 5, pageNum: 1 }));
-    trafficService.value = rows[0] || {};
-    systemServiceList.value = rows.slice(1);
-  } catch (error) {
-    uni.showToast({
-      title: "获取服务列表失败",
-      icon: "none",
+      title: '获取合作商家失败',
+      icon: 'none',
     });
   }
 };
@@ -339,13 +495,13 @@ const fetchServiceList = async () => {
 const fetchProductIntroList = async () => {
   try {
     const rows = getResponseRows(
-      await getProductIntroList({ pageSize: 10, pageNum: 1 })
+      await getProductIntroList({ pageSize: 10, pageNum: 1 }),
     );
     productIntroList.value = rows;
   } catch (error) {
     uni.showToast({
-      title: "获取产品介绍列表失败",
-      icon: "none",
+      title: '获取产品介绍列表失败',
+      icon: 'none',
     });
   }
 };
@@ -353,16 +509,16 @@ const fetchProductIntroList = async () => {
 const fetchEnterpriseInfo = async () => {
   try {
     const rows = getResponseRows(
-      await getEnterpriseList({ pageSize: 10, pageNum: 1 })
+      await getEnterpriseList({ pageSize: 10, pageNum: 1 }),
     );
     if (rows.length > 0) {
       enterpriseInfo.value = rows[0] || {};
-      uni.setStorageSync("videoEnabled", !!rows[0]?.videoEnabled);
+      uni.setStorageSync('videoEnabled', !!rows[0]?.videoEnabled);
     }
   } catch (error) {
     uni.showToast({
-      title: "获取企业信息失败",
-      icon: "none",
+      title: '获取企业信息失败',
+      icon: 'none',
     });
   }
 };
@@ -371,40 +527,92 @@ const handleIntroClick = (item) => {
   if (item.introType == 2) {
     uni.navigateTo({
       url:
-        "/pages/secondary/index/index?url=" +
-        encodeURIComponent(item.videoUrl || "") +
-        "&visitContent=" +
-        encodeURIComponent(item.title || ""),
+        '/pages/secondary/index/index?url=' +
+        encodeURIComponent(item.videoUrl || '') +
+        '&visitContent=' +
+        encodeURIComponent(item.title || ''),
     });
   } else {
     uni.navigateTo({
-      url: "/pages/secondary/issueDetails/index?introId=" + item.introId,
+      url: '/pages/secondary/issueDetails/index?introId=' + item.introId,
     });
   }
 };
 
 const goToServiceDetail = (item) => {
   uni.navigateTo({
-    url: "/pages/customer/index?serviceId=" + item.serviceId,
+    url: '/pages/customer/index?serviceId=' + item.serviceId,
   });
+};
+
+// 滚动入场动效
+const visibleSet = ref(new Set());
+let revealObserver = null;
+
+const setupRevealObserver = () => {
+  if (revealObserver) {
+    revealObserver.disconnect();
+    revealObserver = null;
+  }
+  const instance = getCurrentInstance();
+  revealObserver = uni.createIntersectionObserver(instance, {
+    observeAll: true,
+    thresholds: [0, 0.05],
+  });
+  revealObserver
+    .relativeTo('.page-scroll', { bottom: 0 })
+    .observe('.reveal', (res) => {
+      if (res.intersectionRatio <= 0) return;
+      const id = res.dataset && res.dataset.revealId;
+      if (!id || visibleSet.value.has(id)) return;
+      const next = new Set(visibleSet.value);
+      next.add(id);
+      visibleSet.value = next;
+    });
 };
 
 onMounted(() => {
   fetchEnterpriseInfo();
   fetchProductIntroList();
-  fetchServiceList();
   fetchPartnerCaseList();
+  fetchBusinessSystemList();
+  nextTick(() => {
+    setTimeout(setupRevealObserver, 100);
+  });
+});
+
+// 数据加载后（含 v-if 的模块）重新启动观察
+watch(
+  () => [
+    enterpriseInfo.value.videoEnabled,
+    enterpriseInfo.value.bannerImages?.length,
+    productIntroList.value.length,
+    businessSystemList.value.length,
+    managementItem.value.serviceId,
+  ],
+  () => {
+    nextTick(() => {
+      setTimeout(setupRevealObserver, 100);
+    });
+  },
+);
+
+onBeforeUnmount(() => {
+  if (revealObserver) {
+    revealObserver.disconnect();
+    revealObserver = null;
+  }
 });
 
 onShow(async () => {
   await basePoint.trackingStart({
-    visitModule: "首页",
-    visitContent: "首页",
+    visitModule: '首页',
+    visitContent: '首页',
   });
 });
 
 onHide(async () => {
-  const trackingId = uni.getStorageSync("trackingId");
+  const trackingId = uni.getStorageSync('trackingId');
   if (trackingId) {
     await basePoint.trackingEnd({
       id: trackingId,
@@ -412,29 +620,19 @@ onHide(async () => {
   }
 });
 
-const getEvenIndexItems = (items) => {
-  if (!items || !Array.isArray(items)) return [];
-  return items.filter((_, index) => index % 2 === 0);
-};
-
-const getOddIndexItems = (items) => {
-  if (!items || !Array.isArray(items)) return [];
-  return items.filter((_, index) => index % 2 === 1);
-};
-
 onShareAppMessage(() => {
   return {
-    title: enterpriseInfo.value.enterpriseName || "天天拓客",
-    path: "/pages/secondary/homepage/index",
-    imageUrl: enterpriseInfo.value.enterpriseLogo || "",
+    title: enterpriseInfo.value.enterpriseName || '天天拓客',
+    path: '/pages/secondary/homepage/index',
+    imageUrl: enterpriseInfo.value.enterpriseLogo || '',
   };
 });
 
 onShareTimeline(() => {
   return {
-    title: enterpriseInfo.value.enterpriseName || "天天拓客",
-    query: "",
-    imageUrl: enterpriseInfo.value.enterpriseLogo || "",
+    title: enterpriseInfo.value.enterpriseName || '天天拓客',
+    query: '',
+    imageUrl: enterpriseInfo.value.enterpriseLogo || '',
   };
 });
 </script>
@@ -445,7 +643,23 @@ onShareTimeline(() => {
   min-height: 100vh;
 }
 
+/* 滚动入场：上浮 + 淐入 + 轻量 Z 轴缩放 */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 60rpx, 0) scale(0.94);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.reveal--visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
 .hero {
+  position: sticky;
+  top: 0;
+  z-index: 0;
   width: 100%;
   height: 750rpx;
   background-size: cover;
@@ -453,8 +667,14 @@ onShareTimeline(() => {
   background-repeat: no-repeat;
 }
 
-.hero__spacer {
-  height: 580rpx;
+.page__content {
+  position: relative;
+  z-index: 1;
+  margin-top: -40rpx;
+  background: #ffffff;
+  border-top-left-radius: 52rpx;
+  border-top-right-radius: 52rpx;
+  overflow: hidden;
 }
 
 .conversion-section {
@@ -465,15 +685,14 @@ onShareTimeline(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -200rpx;
 }
 
 .conversion-section__bg {
   position: absolute;
-  top: -92rpx;
-  left: -220rpx;
-  width: 2612rpx;
-  height: 890rpx;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
 }
 
@@ -497,7 +716,7 @@ onShareTimeline(() => {
   font-size: 40rpx;
   font-weight: 700;
   line-height: 56rpx;
-  background: linear-gradient(90deg, #006EEE 0%, #00BDFE 94%);
+  background: linear-gradient(90deg, #006eee 0%, #00bdfe 94%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -510,7 +729,7 @@ onShareTimeline(() => {
   height: 330rpx;
   margin-top: 24rpx;
   border-radius: 16rpx;
-  box-shadow: 0 8rpx 32rpx 0 #C4E2F1;
+  box-shadow: 0 8rpx 32rpx 0 #c4e2f1;
   overflow: hidden;
 }
 
@@ -546,7 +765,7 @@ onShareTimeline(() => {
   font-size: 32rpx;
   font-weight: 700;
   line-height: 48rpx;
-  background: linear-gradient(90deg, #006EEE 0%, #00BDFE 94%);
+  background: linear-gradient(90deg, #006eee 0%, #00bdfe 94%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -562,7 +781,7 @@ onShareTimeline(() => {
 .conversion-section__card-btn {
   width: 100rpx;
   height: 36rpx;
-  background: #006DFF;
+  background: #006dff;
   border-radius: 8rpx;
   display: flex;
   align-items: center;
@@ -571,7 +790,7 @@ onShareTimeline(() => {
 }
 
 .conversion-section__card-btn text {
-  color: #F4F5F9;
+  color: #f4f5f9;
   font-size: 14rpx;
   font-weight: 500;
   line-height: 20rpx;
@@ -579,12 +798,14 @@ onShareTimeline(() => {
 
 .section-header {
   display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .section-header__row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
 }
 
@@ -615,17 +836,13 @@ onShareTimeline(() => {
 
 .partner-section {
   background: #ffffff;
-  border-top-right-radius: 52rpx;
-  border-top-left-radius: 52rpx;
-  padding: 46rpx 26rpx;
-  margin-top: 130rpx;
+  padding: 60rpx 26rpx 40rpx;
 }
 
 .partner-section__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 9px;
-  margin-top: 24rpx;
 }
 
 .partner-section__item {
@@ -676,7 +893,7 @@ onShareTimeline(() => {
   color: #313131;
   font-size: 30rpx;
   line-height: 88rpx;
-  margin: 28rpx 0 60rpx 0;
+  margin: 24rpx 0 0 0;
 }
 
 .partner-section__banner {
@@ -690,149 +907,377 @@ onShareTimeline(() => {
 }
 
 .problem-section {
-  background: #ffffff;
-  padding: 46rpx 26rpx;
+  background: #f4f5fa;
+  padding: 60rpx 26rpx 40rpx;
 }
 
-.problem-section__swiper {
-  height: 364rpx;
-  background-color: #fff;
-  margin-top: 24rpx;
-}
-
-.problem-section__slide {
+.problem-section__heading {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding-right: 24rpx;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
+  margin-bottom: 36rpx;
 }
 
-.problem-section__slide-image {
-  height: 360rpx;
-  border-radius: 20rpx;
-  border: 2rpx solid #e1e1e1;
-}
-
-.service-section {
-  background: linear-gradient(
-    to bottom,
-    #f0f8ff 30%,
-    #acb4db 50%,
-    #3351e2 100%
-  );
-  padding: 50rpx 24rpx 0 24rpx;
-}
-
-.traffic-service__image {
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
-  padding: 24rpx 0 0rpx 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.traffic-service__image image {
-  width: 698rpx;
-  height: 380rpx;
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
-  display: block;
-}
-
-.traffic-service__footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #ffffff;
-  padding: 28rpx 28rpx;
-  border-bottom-left-radius: 20rpx;
-  border-bottom-right-radius: 20rpx;
-  margin-bottom: 50rpx;
-}
-
-.traffic-service__cta {
-  display: flex;
-  background: #3552e3;
-  align-items: center;
-  width: 164rpx;
-  height: 56rpx;
-  border-radius: 100rpx;
-  justify-content: center;
-}
-
-.traffic-service__cta-text {
-  font-size: 24rpx;
-  color: #ffffff;
-}
-
-.traffic-service__cta-icon {
-  width: 24rpx;
-  height: 24rpx;
-}
-
-.traffic-service__name {
+.problem-section__title-main {
   color: #000000;
-  font-size: 34rpx;
-  font-weight: bold;
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 56rpx;
 }
 
-.system-service {
-  margin-top: 88rpx;
+.problem-section__title-sub {
+  color: #000000;
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 56rpx;
 }
 
-.system-service__grid {
+.problem-section__list {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20rpx;
-  margin-top: -60rpx;
-  padding: 0 0rpx 50rpx 0rpx;
+  flex-direction: column;
+  gap: 24rpx;
 }
 
-.system-service__card {
-  width: calc(49% - 6rpx);
-  background: #f2f6ff;
-  margin-top: 8rpx;
-  border-radius: 20rpx;
+.problem-card {
+  background: linear-gradient(91deg, #f178ff 0%, #006dff 100%);
+  border-radius: 24rpx;
+  padding: 2rpx;
 }
 
-.system-service__card image {
-  width: 100%;
-  height: 350rpx;
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
+.problem-card__inner {
+  background: #ffffff;
+  border-radius: 22rpx;
+  padding: 38rpx 32rpx;
 }
 
-.system-service__card-footer {
-  width: 100%;
-  padding: 20rpx 0;
-  text-align: center;
-  border-bottom-left-radius: 20rpx;
-  border-bottom-right-radius: 20rpx;
+.problem-card__title {
+  color: #3d3d3d;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 40rpx;
+  margin-bottom: 16rpx;
+}
+
+.problem-card__desc {
+  color: rgba(61, 61, 61, 0.6);
+  font-size: 24rpx;
+  font-weight: 400;
+  line-height: 28rpx;
+}
+
+.problem-section__more {
+  margin-top: 28rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+  height: 88rpx;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.business-section {
+  background: #ffffff;
+  padding: 60rpx 26rpx 40rpx;
+}
+
+.business-section__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 36rpx;
+}
+
+.business-section__brand {
+  color: #000000;
+  font-size: 44rpx;
+  font-weight: 700;
+  line-height: 60rpx;
+}
+
+.business-section__slogan {
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 56rpx;
+  margin-top: 4rpx;
+  background: linear-gradient(90deg, #006eee 0%, #00bdfe 94%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.business-card {
+  background: #ffffff;
+  border: 1rpx solid #d9d9d9;
+  border-radius: 24rpx;
+  padding: 23rpx 22rpx 26rpx 22rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0rpx 6rpx 22rpx 0rpx rgba(220, 222, 229, 0.8);
+}
+
+.business-card:last-child {
+  margin-bottom: 0;
+}
+
+.business-card__header {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
-.system-service__card-title {
+.business-card__title {
   color: #000000;
   font-size: 28rpx;
-  margin-left: 18rpx;
+  font-weight: 700;
 }
 
-.system-service__card-cta {
-  width: 112rpx;
-  height: 44rpx;
-  background: #3552e3;
-  border-radius: 100rpx;
-  color: #ffffff;
+.business-card__arrow {
+  color: #9aa0b4;
+  font-size: 18rpx;
+  line-height: 18rpx;
+  width: 10rpx;
+  height: 18rpx;
+}
+
+.business-card__divider {
+  height: 2rpx;
+  background: #d9d9d9;
+  margin-top: 12rpx;
+  position: relative;
+  width: 100%;
+}
+
+.business-card__divider-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 140rpx;
+  height: 2rpx;
+  background: #006dff;
+}
+
+.business-card__body {
+  display: flex;
+  margin-top: 18rpx;
+}
+
+.business-card__image {
+  width: 368rpx;
+  height: 264rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+}
+
+.business-card__content {
+  flex: 1;
+  margin-left: 48rpx;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20rpx;
+}
+
+.business-card__subtitle {
+  color: #000000;
   font-size: 20rpx;
-  line-height: 44rpx;
+  font-weight: 700;
+  line-height: 30rpx;
+}
+
+.business-card__features {
+  margin-top: 12rpx;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.business-card__feature {
+  display: flex;
+  align-items: center;
+  height: 28rpx;
+}
+
+.business-card__dot {
+  width: 4rpx;
+  height: 4rpx;
+  border-radius: 50%;
+  background: #3d3d3d;
+  margin-right: 6rpx;
+  flex-shrink: 0;
+}
+
+.business-card__feature-text {
+  color: #3d3d3d;
+  font-size: 16rpx;
+  line-height: 28rpx;
+}
+
+.business-card__actions {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 20rpx;
+}
+
+.business-card__btn {
+  width: 100rpx;
+  height: 34rpx;
+  border-radius: 8rpx;
+  font-size: 12rpx;
+  line-height: 34rpx;
   text-align: center;
-  margin-right: 18rpx;
+  padding: 0;
+}
+
+.business-card__btn--primary {
+  background: #006dff;
+  color: #f4f5f9;
+}
+
+.business-card__btn--ghost {
+  background: #ffffff;
+  color: #006dff;
+  border: 1rpx solid #006dff;
+}
+
+.management-section {
+  background: #ffffff;
+  padding: 60rpx 26rpx 40rpx;
+}
+
+.management-section__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 36rpx;
+}
+
+.management-section__brand {
+  color: #000000;
+  font-size: 44rpx;
+  font-weight: 700;
+  line-height: 60rpx;
+}
+
+.management-section__slogan {
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 56rpx;
+  margin-top: 4rpx;
+  background: linear-gradient(90deg, #006eee 0%, #00bdfe 94%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.management-card {
+  background: #ffffff;
+  border: 1rpx solid #d9d9d9;
+  border-radius: 24rpx;
+  padding: 23rpx 22rpx 26rpx 22rpx;
+  margin-bottom: 0;
+  box-shadow: 0rpx 6rpx 22rpx 0rpx rgba(220, 222, 229, 0.8);
+}
+
+.management-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.management-card__title {
+  color: #000000;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.management-card__divider {
+  height: 2rpx;
+  background: #d9d9d9;
+  margin-top: 12rpx;
+  position: relative;
+  width: 100%;
+}
+
+.management-card__divider-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 140rpx;
+  height: 2rpx;
+  background: #006dff;
+}
+
+.management-card__image {
+  width: 100%;
+  height: 380rpx;
+  border-radius: 16rpx;
+  margin-top: 18rpx;
+}
+
+.management-card__subtitle {
+  color: #000000;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 36rpx;
+  margin-top: 20rpx;
+}
+
+.management-card__features {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 12rpx;
+}
+
+.management-card__feature {
+  display: flex;
+  align-items: center;
+  height: 28rpx;
+}
+
+.management-card__dot {
+  width: 4rpx;
+  height: 4rpx;
+  border-radius: 50%;
+  background: #3d3d3d;
+  margin-right: 6rpx;
+  flex-shrink: 0;
+}
+
+.management-card__feature-text {
+  color: #3d3d3d;
+  font-size: 16rpx;
+  line-height: 28rpx;
+}
+
+.management-card__actions {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 20rpx;
+}
+
+.management-card__btn {
+  width: 100rpx;
+  height: 34rpx;
+  border-radius: 8rpx;
+  font-size: 12rpx;
+  line-height: 34rpx;
+  text-align: center;
+  padding: 0;
+}
+
+.management-card__btn--primary {
+  background: #006dff;
+  color: #f4f5f9;
+}
+
+.management-card__btn--ghost {
+  background: #ffffff;
+  color: #006dff;
+  border: 1rpx solid #006dff;
 }
 
 .surface-section {
@@ -841,78 +1286,74 @@ onShareTimeline(() => {
 
 .certificate-section {
   background: #f4f5fa;
-  padding: 40rpx 26rpx;
+  padding: 60rpx 26rpx 40rpx;
 }
 
-.certificate-section__list {
-  margin-top: 20rpx;
+.certificate-section__swiper {
+  height: 580rpx;
+  margin-top: 36rpx;
 }
 
-.certificate-section__scroll {
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.certificate-section__double-row {
+.certificate-section__grid {
   display: flex;
-  flex-direction: column;
-  width: max-content;
+  flex-wrap: wrap;
+  height: 100%;
+  align-content: flex-start;
 }
 
-.certificate-section__row {
-  display: flex;
-  gap: 0;
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.certificate-section__item {
-  width: 239rpx;
-  height: 265rpx;
-  flex-shrink: 0;
+.certificate-section__card {
+  width: calc(33.333% - 16rpx);
+  margin-right: 24rpx;
+  margin-bottom: 24rpx;
   background: #ffffff;
+  border-radius: 16rpx;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  margin: 16rpx 16rpx;
-  border-radius: 12rpx;
-  &:last-child {
-    margin-right: 49rpx;
-  }
+  align-items: center;
+  padding: 20rpx;
+  box-sizing: border-box;
 }
-.certificate-section__item image {
+
+.certificate-section__card:nth-child(3n) {
+  margin-right: 0;
+}
+
+.certificate-section__image-wrap {
   width: 100%;
-  height: 265rpx;
-  object-fit: cover;
-  border-radius: 12rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.certificate-section__image {
+  width: 100%;
+  height: 240rpx;
+  object-fit: contain;
 }
 
 .footer-info {
   background: #ffffff;
-  padding: 63rpx 44rpx;
+  padding: 40rpx 42rpx 60rpx 42rpx;
 }
 
 .footer-info__logo {
   width: 170rpx;
-  height: 47rpx;
+  height: 48rpx;
 }
 
 .footer-info__address {
-  color: #7a7878;
+  color: rgba(0, 0, 0, 0.6);
   font-size: 24rpx;
-  margin-top: 15rpx;
+  font-weight: 400;
+  line-height: 34rpx;
+  margin-top: 13rpx;
 }
 
 .customer-service {
   position: fixed;
   right: 0;
-  bottom: 280rpx;
+  bottom: 140rpx;
   width: 160rpx;
   height: 160rpx;
   z-index: 999;
@@ -938,5 +1379,86 @@ onShareTimeline(() => {
 }
 wx-button:after {
   border: none;
+}
+
+/* ===== 交互动效 ===== */
+
+/* 卡片按压反馈 */
+.business-card,
+.management-card,
+.problem-card,
+.certificate-section__card,
+.conversion-section__card,
+.partner-card,
+.partner-section__more,
+.problem-section__more {
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+.business-card:active,
+.management-card:active,
+.problem-card:active,
+.certificate-section__card:active,
+.conversion-section__card:active,
+.partner-card:active,
+.partner-section__more:active,
+.problem-section__more:active {
+  transform: scale(0.97);
+}
+
+/* 按钮按压反馈 */
+.business-card__btn,
+.management-card__btn,
+.conversion-section__card-btn {
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+.business-card__btn:active,
+.management-card__btn:active,
+.conversion-section__card-btn:active {
+  transform: scale(0.92);
+  opacity: 0.8;
+}
+
+/* 分割线展开动画 */
+@keyframes dividerExpand {
+  from {
+    width: 0;
+  }
+  to {
+    width: 140rpx;
+  }
+}
+.business-card__divider-bar,
+.management-card__divider-bar {
+  animation: dividerExpand 0.6s ease-out 0.15s both;
+}
+
+/* 箭头点击微动 */
+.business-card__arrow-icon,
+.management-card__arrow-icon {
+  width: 24rpx;
+  height: 24rpx;
+  transition: transform 0.2s ease;
+}
+.business-card:active .business-card__arrow-icon,
+.management-card:active .management-card__arrow-icon {
+  transform: translateX(6rpx);
+}
+
+/* 客服按钮持续浮动 */
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12rpx);
+  }
+}
+.customer-service {
+  animation: floatY 3s ease-in-out infinite;
 }
 </style>

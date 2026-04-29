@@ -4,27 +4,31 @@
     <view v-if="loading" class="loading-container">
       <text class="loading-text">加载中...</text>
     </view>
-    <view
-      class="update-item"
-      v-for="(item, index) in companyNewsList"
-      :key="index"
-      @click="next(item)"
-    >
-      <view class="content">
-        <view class="date">{{ formatDate(item.createTime) }}</view>
-        <view class="title">{{ item.newsTitle }}</view>
-        <view class="description">{{ item.newsContent }}</view>
-      </view>
-      <view class="image">
-        <view
-          v-for="(res, index) in item.newsImages"
-          :key="index"
-          class="image-url"
-        >
-          <image
-            :src="res + '?image_process=format,webp'"
-            mode="aspectFill"
-          ></image>
+    <view class="timeline">
+      <view
+        class="timeline-item"
+        v-for="(item, index) in companyNewsList"
+        :key="index"
+        @click="next(item)"
+      >
+        <view class="left-col">
+          <view class="circle"></view>
+          <view class="line" v-if="index < companyNewsList.length - 1"></view>
+        </view>
+        <view class="right-col">
+          <text class="date">{{ formatDate(item.createTime) }}</text>
+          <text class="title">{{ item.newsTitle }}</text>
+          <text class="description">{{ item.newsContent }}</text>
+          <view
+            class="image-container"
+            v-if="item.newsImages && item.newsImages.length > 0"
+          >
+            <image
+              :src="item.newsImages[0] + '?image_process=format,webp'"
+              mode="aspectFill"
+              class="news-image"
+            ></image>
+          </view>
         </view>
       </view>
     </view>
@@ -172,16 +176,12 @@ const formatDate = (dateString) => {
 
   // 如果是字符串格式
   if (typeof dateString === "string") {
-    // 处理 "YYYY-MM-DD HH:mm:ss" 格式
-    if (dateString.includes(" ")) {
-      return dateString.split(" ")[0];
+    const cleanDate = dateString.split(" ")[0].split("T")[0];
+    const parts = cleanDate.split("-");
+    if (parts.length === 3) {
+      return `${parts[0]}.${parseInt(parts[1])}.${parseInt(parts[2])}`;
     }
-    // 处理 ISO 格式 "YYYY-MM-DDTHH:mm:ss"
-    if (dateString.includes("T")) {
-      return dateString.split("T")[0];
-    }
-    // 如果已经是 YYYY-MM-DD 格式，直接返回
-    return dateString;
+    return cleanDate;
   }
 
   return dateString;
@@ -202,9 +202,11 @@ const next = (item) => {
 
 <style scoped lang="scss">
 .main {
-  padding: 20rpx 0;
-  background: #f0f0f0;
+  padding: 48rpx 32rpx 40rpx;
+  background: #ffffff;
+  min-height: 100vh;
 }
+
 .loading-more-container {
   display: flex;
   justify-content: center;
@@ -215,6 +217,7 @@ const next = (item) => {
     color: #999999;
   }
 }
+
 .loading-container {
   display: flex;
   justify-content: center;
@@ -225,54 +228,103 @@ const next = (item) => {
     color: #999999;
   }
 }
-.update-item {
-  padding: 32rpx 32rpx;
-  background: #ffffff;
-  margin-bottom: 20rpx;
+
+.timeline {
+  width: 100%;
 }
 
-.update-item:last-child {
-  border-bottom: none;
-}
-
-.content {
-  flex: 1;
-  margin-right: 20rpx;
-}
-
-.date {
-  color: #2c80ff;
-  font-size: 32rpx;
-  margin-bottom: 10rpx;
-}
-
-.title {
-  color: #3d3d3d;
-  font-size: 32rpx;
-  margin-bottom: 10rpx;
-  font-weight: bold;
-}
-
-.description {
-  color: #535353;
-  font-size: 26rpx;
-  line-height: 1.4;
-}
-.image {
+.timeline-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 32rpx;
+  flex-direction: row;
+  align-items: stretch;
 }
-.image-url {
-  width: 328rpx;
-  height: 328rpx;
-  border-radius: 8rpx;
+
+/* 左侧时间轴列 */
+.left-col {
+  width: 56rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 圆形指示器 */
+.circle {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background-color: #000000;
+  flex-shrink: 0;
+  margin-top: 6rpx;
+}
+
+/* 虚线连接线 */
+.line {
+  width: 2rpx;
+  flex: 1;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #c8c8c8 0,
+    #c8c8c8 8rpx,
+    transparent 8rpx,
+    transparent 16rpx
+  );
+  min-height: 32rpx;
+}
+
+/* 右侧内容列 */
+.right-col {
+  flex: 1;
+  padding-left: 16rpx;
+  padding-bottom: 56rpx;
+  min-width: 0;
+}
+
+/* 日期 */
+.date {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 36rpx;
+  color: #000000;
+  margin-bottom: 18rpx;
+}
+
+/* 标题 */
+.title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 48rpx;
+  color: #000000;
+  margin-bottom: 16rpx;
+}
+
+/* 描述 */
+.description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+  font-size: 24rpx;
+  font-weight: 400;
+  line-height: 36rpx;
+  color: #3d3d3d;
+  margin-bottom: 24rpx;
+}
+
+/* 图片容器 */
+.image-container {
+  width: 100%;
+  border-radius: 16rpx;
   overflow: hidden;
 }
 
-.image-url image {
+.news-image {
   width: 100%;
-  height: 100%;
+  height: 420rpx;
+  border-radius: 16rpx;
+  display: block;
 }
 </style>

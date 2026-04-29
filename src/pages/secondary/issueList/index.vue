@@ -1,49 +1,25 @@
 <template>
   <view class="main">
-    <view class="problem">
-      <view class="problem-grid">
-        <view
-          class="problem-card"
-          v-for="(item, index) in problemList"
-          :key="index"
-          @click="goToIndex(item)"
-        >
-          <image
-            :src="item.coverImage"
-            mode="aspectFit"
-            style="width: 100%; height: 100%; border-radius: 20rpx"
-          ></image>
+    <view class="issue-list">
+      <view
+        v-for="(item, index) in problemList"
+        :key="index"
+        class="issue-card-wrap"
+        :class="{ 'issue-card-wrap--active': index === 0 }"
+        @click="goToIndex(item)"
+      >
+        <view class="issue-card">
+          <view class="issue-card-inner">
+            <text class="issue-card-title">{{ item.title }}</text>
+            <text class="issue-card-desc">{{ item.introName }}</text>
+          </view>
         </view>
       </view>
-      <!-- <view class="problem-grid">
-        <view
-          class="problem-card"
-          @click="goToIndex(item)"
-          v-for="(item, index) in problemList"
-          :key="index"
-          :style="{
-            backgroundImage: `url(${
-              problemOverlayImages[index % problemOverlayImages.length]
-            }) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
-          }"
-        >
-          <view class="problem-card-header">
-            <view class="problem-icon">
-              <image :src="item.icon" mode="aspectFit"></image>
-            </view>
-            <view class="problem-arrow">
-              <image
-                src="http://cdn.xiaodingdang1.com/2026/01/07/86381c17c8d74dac891a5b12e1b5e63f.png"
-                mode="aspectFit"
-              ></image>
-            </view>
-          </view>
-          <view class="problem-card-body">
-            <view class="problem-title">{{ item.title }}</view>
-            <view class="problem-desc">{{ item.introName }}</view>
-          </view>
+      <view class="issue-more" v-if="!isFinish" @click="loadMore">
+        <view class="issue-more-inner">
+          <text class="issue-more-text">查看更多</text>
         </view>
-      </view> -->
+      </view>
     </view>
   </view>
   <BackHome />
@@ -53,46 +29,31 @@
 export default {
   onShareAppMessage() {
     return {
-      title: "列表",
-      path: "/pages/secondary/issueList/index",
+      title: '列表',
+      path: '/pages/secondary/issueList/index',
     };
   },
   onShareTimeline() {
     return {
-      title: "列表",
-      query: "",
+      title: '列表',
+      query: '',
     };
   },
 };
 </script>
 
 <script setup>
-import basePoint from "@/utils/basePoint.js";
-import {
-  onPageScroll,
-  onLoad,
-  onShow,
-  onHide,
-  onReachBottom,
-} from "@dcloudio/uni-app";
-import { ref, onMounted } from "vue";
-import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
-import VideoRotateCarousel from "@/components/video-rotate-carousel/video-rotate-carousel.vue";
-import {
-  getServiceList,
-  getcaseList,
-  getEnterpriseList,
-  getProductIntroList,
-} from "@/api/activity.js";
-import VearCarousel from "@/components/vear-carousel/vear-carousel.vue";
+import { onShow, onReachBottom } from '@dcloudio/uni-app';
+import { ref, onMounted } from 'vue';
+import { getEnterpriseList, getProductIntroList } from '@/api/activity.js';
 
 const problemIcons = ref([
-  "http://cdn.xiaodingdang1.com/2026/01/07/329586497cb141d69864b7ffe44c01e2.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/3c68ffd0fa574800b29257226f5d92cf.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/3500dffbb8d24fa1970e0e1c33a9fcd4.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/a4859ef57e154df784dde7f35a99a3a8.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png",
+  'http://cdn.xiaodingdang1.com/2026/01/07/329586497cb141d69864b7ffe44c01e2.png',
+  'http://cdn.xiaodingdang1.com/2026/01/07/3c68ffd0fa574800b29257226f5d92cf.png',
+  'http://cdn.xiaodingdang1.com/2026/01/07/3500dffbb8d24fa1970e0e1c33a9fcd4.png',
+  'http://cdn.xiaodingdang1.com/2026/01/07/a4859ef57e154df784dde7f35a99a3a8.png',
+  'http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png',
+  'http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png',
 ]);
 const problemOverlayImages = ref([]);
 const problemList = ref([]);
@@ -103,19 +64,19 @@ const isFinish = ref(false);
 const goToIndex = (item) => {
   if (item.introType == 2) {
     let url =
-      "/pages/secondary/index/index?url=" +
+      '/pages/secondary/index/index?url=' +
       item.videoUrl +
-      "&visitContent=" +
+      '&visitContent=' +
       item.title;
     if (item.coverImage) {
-      url += "&coverImage=" + encodeURIComponent(item.coverImage);
+      url += '&coverImage=' + encodeURIComponent(item.coverImage);
     }
     uni.navigateTo({
       url: url,
     });
   } else {
     uni.navigateTo({
-      url: "/pages/secondary/issueDetails/index?introId=" + item.introId,
+      url: '/pages/secondary/issueDetails/index?introId=' + item.introId,
     });
   }
 };
@@ -126,7 +87,7 @@ const fetchEnterpriseList = async () => {
       pageSize: 10,
       pageNum: 1,
     });
-    console.log("企业列表数据:", response);
+    console.log('企业列表数据:', response);
     if (
       response &&
       response.rows &&
@@ -138,17 +99,17 @@ const fetchEnterpriseList = async () => {
       let video;
       response.rows[0].bannerImages.forEach((str1) => {
         let result1 = str1.slice(-3);
-        if (result1 == "mp4") {
+        if (result1 == 'mp4') {
           video = str1;
         }
       });
       bannerImages.value = video;
     }
   } catch (error) {
-    console.error("获取企业列表失败:", error);
+    console.error('获取企业列表失败:', error);
     uni.showToast({
-      title: "获取企业列表失败",
-      icon: "none",
+      title: '获取企业列表失败',
+      icon: 'none',
     });
   }
 };
@@ -160,7 +121,7 @@ const fetchProductIntroList = async () => {
       pageSize: pageSize.value,
       pageNum: pageNum.value,
     });
-    console.log("产品介绍列表数据:", response);
+    console.log('产品介绍列表数据:', response);
     if (response && response.rows) {
       if (pageNum.value === 1) {
         problemList.value = response.rows;
@@ -181,7 +142,7 @@ const fetchProductIntroList = async () => {
       }
     }
   } catch (error) {
-    console.error("获取产品介绍列表失败:", error);
+    console.error('获取产品介绍列表失败:', error);
   }
 };
 
@@ -193,101 +154,126 @@ onReachBottom(() => {
 });
 
 // 页面加载完成后触发按钮动画
-onMounted(() => {
+onMounted(() => {});
+
+const loadMore = () => {
+  if (!isFinish.value) {
+    pageNum.value++;
+    fetchProductIntroList();
+  }
+};
+
+onShow(async () => {
   fetchProductIntroList();
 });
-
-onShow(async () => {});
 </script>
 
 <style scoped>
-.problem {
-  background: #ffffff;
-  padding: 26rpx 26rpx;
+.main {
+  background-color: #f4f5f9;
+  min-height: 100vh;
 }
-.problem-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20rpx;
-  margin-top: 24rpx;
-}
-.problem-card {
-  width: 100%;
-  height: 378rpx;
-  background-size: 106rpx 112rpx, cover;
-  background-position: right 24rpx bottom 24rpx, center;
-  background-repeat: no-repeat, no-repeat;
-  overflow: hidden;
-}
-.problem-card-header {
+
+.issue-list {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 60rpx 20rpx 8rpx 30rpx;
-  justify-content: space-between;
+  padding-bottom: 60rpx;
 }
-.problem-icon {
+
+.issue-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60rpx;
 }
-.problem-icon image {
-  width: 56rpx;
-  height: 56rpx;
+
+.issue-heading-line {
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 56rpx;
+  color: #000000;
+  text-align: center;
 }
-.problem-arrow {
+
+.issue-card-wrap {
+  width: 698rpx;
+  border-radius: 24rpx;
+  margin-top: 22rpx;
 }
-.problem-arrow image {
-  width: 30rpx;
-  height: 30rpx;
+
+.issue-card-wrap:first-of-type {
+  margin-top: 36rpx;
 }
-.problem-card-body {
-  padding: 24rpx;
+
+.issue-card-wrap--active {
+  background: linear-gradient(91.3deg, #f178ff 0.37%, #006dff 99.68%);
+  padding: 2rpx;
 }
-.problem-title {
+
+.issue-card-wrap--active .issue-card {
+  border-radius: 22rpx;
+}
+
+.issue-card {
   width: 100%;
-  height: 40rpx;
-  font-family: PingFang SC, PingFang SC;
-  font-weight: 600;
-  font-size: 32rpx;
-  color: #3351e3;
-  line-height: 40rpx;
-  text-align: left;
-  font-style: normal;
-  text-transform: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  background-color: #ffffff;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 228rpx;
 }
-.problem-desc {
-  width: 270rpx;
-  font-family: PingFang SC, PingFang SC;
-  font-weight: 400;
-  font-size: 24rpx;
-  color: #3d3d3d;
+
+.issue-card-inner {
+  width: 622rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 38rpx auto;
+}
+
+.issue-card-title {
+  font-size: 28rpx;
+  font-weight: 700;
   line-height: 40rpx;
-  text-align: left;
-  font-style: normal;
-  text-transform: none;
-  margin-top: 24rpx;
+  color: #3d3d3d;
+  white-space: pre-line;
+}
+
+.issue-card-desc {
+  font-size: 24rpx;
+  font-weight: 400;
+  line-height: 34rpx;
+  color: rgba(61, 61, 61, 0.6);
+  margin-top: 16rpx;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
-.winthecustomer-head {
-  display: flex;
+
+.issue-more {
+  width: 698rpx;
+  height: 72rpx;
+  margin-top: 22rpx;
 }
-.winthecustomer-head1 {
+
+.issue-more-inner {
+  width: 100%;
+  height: 72rpx;
+  background-color: #ffffff;
+  border-radius: 24rpx;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  justify-content: center;
 }
-.winthecustomer-title {
+
+.issue-more-text {
+  font-size: 24rpx;
+  font-weight: 400;
+  line-height: 28rpx;
   color: #000000;
-  font-weight: bold;
-  font-size: 40rpx;
-}
-.winthecustomer-title1 {
-  color: #d6d4d4;
-  font-size: 28rpx;
 }
 </style>

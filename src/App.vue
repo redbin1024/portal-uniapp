@@ -59,4 +59,8 @@ const checkUpdate = () => {
 };
 </script>
 
-<style></style>
+<style>
+view,scroll-view{
+  box-sizing: border-box;
+}
+</style>

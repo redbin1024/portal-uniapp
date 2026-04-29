@@ -9,19 +9,18 @@
       :class="{ 'list-item-animate': animatedItems[index] }"
       v-for="(item, index) in successCaseList"
       :key="index"
-      :style="{ backgroundColor: getBackgroundColor(index) }"
       @click="navigateToDetail(item)"
     >
-      <view class="image-container">
+      <view class="card-image-wrap">
         <image
           class="item-image"
           :src="item.caseImages[0] + '?image_process=format,webp'"
           mode="aspectFill"
         ></image>
       </view>
-      <view class="content-container">
-        <view class="title">{{ item.customerName }}</view>
-        <view class="description">{{ item.caseValue }}</view>
+      <view class="card-content">
+        <text class="card-title">{{ item.customerName }}</text>
+        <text class="card-desc">{{ item.caseValue }}</text>
       </view>
     </view>
     <!-- 加载更多状态 -->
@@ -33,8 +32,8 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, nextTick, getCurrentInstance } from "vue";
-import { getsuccessCaseList } from "@/api/activity.js";
+import { ref, reactive, onMounted, nextTick, getCurrentInstance } from 'vue';
+import { getsuccessCaseList } from '@/api/activity.js';
 import {
   onLoad,
   onReady,
@@ -45,7 +44,7 @@ import {
   onPageScroll,
   onShareAppMessage,
   onShareTimeline,
-} from "@dcloudio/uni-app";
+} from '@dcloudio/uni-app';
 // 获取当前实例
 const instance = getCurrentInstance();
 
@@ -65,52 +64,52 @@ onReachBottom(() => {
 const listData = reactive([
   {
     image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
-    title: "东方幸福国际母婴会所",
+      'http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png',
+    title: '东方幸福国际母婴会所',
     description:
-      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+      '月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。',
   },
   {
     image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
-    title: "东方幸福国际母婴会所",
+      'http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png',
+    title: '东方幸福国际母婴会所',
     description:
-      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+      '月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。',
   },
   {
     image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-    title: "东方幸福国际母婴会所",
+      'http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png',
+    title: '东方幸福国际母婴会所',
     description:
-      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+      '月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。',
   },
   {
     image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-    title: "东方幸福国际母婴会所",
+      'http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png',
+    title: '东方幸福国际母婴会所',
     description:
-      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+      '月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。',
   },
   {
     image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-    title: "东方幸福国际母婴会所",
+      'http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png',
+    title: '东方幸福国际母婴会所',
     description:
-      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+      '月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。',
   },
   {
     image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-    title: "东方幸福国际母婴会所",
+      'http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png',
+    title: '东方幸福国际母婴会所',
     description:
-      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+      '月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。',
   },
   {
     image:
-      "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-    title: "东方幸福国际母婴会所",
+      'http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png',
+    title: '东方幸福国际母婴会所',
     description:
-      "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。",
+      '月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。',
   },
 ]);
 
@@ -146,7 +145,7 @@ const fetchsuccessCaseList = async () => {
     types.value = dataArray.length >= 10 ? 1 : 2;
     initAnimation();
   } catch (error) {
-    console.error("获取成功案例列表失败:", error);
+    console.error('获取成功案例列表失败:', error);
   } finally {
     loading.value = false;
     loadingMore.value = false;
@@ -155,13 +154,8 @@ const fetchsuccessCaseList = async () => {
 
 const navigateToDetail = (item) => {
   uni.navigateTo({
-    url: "/pages/casedetails/index?successCaseId=" + item.successCaseId,
+    url: '/pages/casedetails/index?successCaseId=' + item.successCaseId,
   });
-};
-
-const getBackgroundColor = (index) => {
-  const colors = ["#FFEFEB", "#DFF1FF", "#EDF1FF", "#DAF9FF"];
-  return colors[index % 4];
 };
 
 // 初始化动画 - 页面进入时的弹出效果
@@ -186,7 +180,7 @@ const handleScroll = (e) => {
   uni
     .createSelectorQuery()
     .in(instance)
-    .selectAll(".list-item")
+    .selectAll('.list-item')
     .boundingClientRect((rects) => {
       if (rects) {
         rects.forEach((rect, index) => {
@@ -255,16 +249,12 @@ export default {
   }
 }
 .list-item {
-  display: flex;
-  align-items: flex-start;
-  border-radius: 16rpx;
-  height: 270rpx;
-  padding: 0 24rpx;
-  margin-bottom: 62rpx;
-  position: relative;
   width: 100%;
-  box-sizing: border-box;
-  /* 初始状态 - 与cooperationcase页面相同的动画效果 */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40rpx;
+  position: relative;
+  isolation: isolate;
   opacity: 0;
   transform: translateY(20rpx);
   transition: all 0.6s ease-out;
@@ -275,42 +265,58 @@ export default {
   transform: translateY(0);
 }
 
-.image-container {
-  flex-shrink: 0;
-  margin-right: 24rpx;
+.card-image-wrap {
+  width: 100%;
   position: relative;
+  z-index: 1;
 }
 
 .item-image {
-  width: 214rpx;
-  height: 282rpx;
-  border-radius: 20rpx;
-  background-color: #f0f0f0;
-  border: 3rpx solid #ffffff;
-  position: relative;
-  top: -30rpx;
+  width: 100%;
+  height: 436rpx;
+  display: block;
+  border-radius: 20rpx 20rpx 0 0;
 }
 
-.content-container {
-  flex: 1;
+.card-content {
+  width: 100%;
+  height: 184rpx;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  align-items: center;
+  margin-top: -28rpx;
+  position: relative;
+  z-index: 0;
 }
 
-.title {
-  height: 90rpx;
-  line-height: 130rpx;
-  font-size: 34rpx;
-  font-weight: 600;
-  color: #000000;
-  margin-bottom: 12rpx;
-}
-
-.description {
+.card-title {
   font-size: 28rpx;
-  color: #7e7f80;
-  line-height: 1.5;
-  word-break: break-all;
+  font-family:
+    SourceHanSansCN-Revision,
+    Source Han Sans CN,
+    sans-serif;
+  font-weight: 700;
+  line-height: 36rpx;
+  color: #000000;
+  margin-top: 60rpx;
+  white-space: nowrap;
+}
+
+.card-desc {
+  font-size: 22rpx;
+  font-family:
+    SourceHanSansCN-Revision,
+    Source Han Sans CN,
+    sans-serif;
+  font-weight: 400;
+  line-height: 32rpx;
+  color: #636363;
+  margin-top: 12rpx;
+  text-align: center;
+  padding: 0 20rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 </style>

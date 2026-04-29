@@ -1,720 +1,444 @@
 <template>
-  <view class="main">
-    <view
-      class="video"
-      @click="nextVideo(bannerImages, coverImage)"
-      v-if="bannerImages && videoEnabled"
-    >
-      <!-- <video :src="bannerImages"></video> -->
-      <image
-        :src="enterpriseList.coverImage + '?image_process=format,webp'"
-        mode="aspectFill"
-        style="width: 100%; height: 100%; border-radius: 20rpx"
-      ></image>
-      <view class="custom-play-button">
+  <scroll-view
+    class="page-scroll"
+    scroll-y
+    scroll-anchoring
+    enhanced
+    enable-passive
+    bounces
+    style="height: 100vh"
+  >
+    <view class="page-wrapper">
+      <view
+        class="video-banner reveal"
+        :class="{ 'reveal--visible': visibleSet.has('video') }"
+        data-reveal-id="video"
+        @click="handleVideoClick(videoUrl)"
+        v-if="videoUrl && videoEnabled"
+      >
         <image
-          src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
-          class="play-icon"
-        />
-      </view>
-    </view>
-    <view class="videoTitle">
-      <view class="videoTitle1">{{ enterpriseList.enterpriseName }}</view>
-      <!-- <view
-        class="videoTitle2"
-        v-html="enterpriseList.enterpriseDescription"
-      ></view> -->
-    </view>
-    <view class="problem" v-if="productIntroList.length > 0">
-      <view class="winthecustomer-head">
-        <view class="winthecustomer-head1">
-          <view class="winthecustomer-title">您是否也遇到这些问题？</view>
-          <view class="winthecustomer-title1">PROBLEM</view>
-        </view>
-      </view>
-      <view class="problem-grid">
-        <view
-          class="problem-card"
-          v-for="(item, index) in productIntroList"
-          :key="index"
-          @click="goToIndex(item)"
-        >
+          :src="companyInfo.coverImage + '?image_process=format,webp'"
+          mode="aspectFill"
+          style="width: 100%; height: 100%; border-radius: 20rpx"
+        ></image>
+        <view class="play-button">
           <image
-            :src="item.coverImage"
-            mode="aspectFit"
-            style="width: 100%; height: 100%; border-radius: 20rpx"
-          ></image>
+            src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
+            class="play-icon"
+          />
         </view>
       </view>
-      <!-- <view class="problem-grid">
-        <view
-          class="problem-card"
-          v-for="(item, index) in productIntroList"
-          :key="index"
-          :style="{
-            backgroundImage: `url(${problemOverlayImages[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
-          }"
-          @click="goToIndex(item)"
-        >
-          <view class="problem-card-header">
-            <view class="problem-icon">
-              <image :src="item.icon" mode="aspectFit"></image>
-            </view>
-            <view class="problem-arrow">
+
+      <view
+        class="system-service-wrapper reveal"
+        :class="{ 'reveal--visible': visibleSet.has('service') }"
+        data-reveal-id="service"
+      >
+        <view class="brand-header">
+          <text class="brand-title">宝妈小叮当</text>
+          <text class="brand-subtitle">专注月子系统开发服务</text>
+        </view>
+        <view class="service-list">
+          <view
+            class="service-card"
+            v-for="(item, index) in serviceCardList"
+            :key="index"
+          >
+            <view
+              class="service-card-header"
+              @click="navigateToServiceDetail(item)"
+            >
+              <text class="service-card-name">{{ item.serviceName }}</text>
               <image
-                src="http://cdn.xiaodingdang1.com/2026/01/07/86381c17c8d74dac891a5b12e1b5e63f.png"
+                class="service-card-arrow"
+                src="/static/right-arrow.svg"
                 mode="aspectFit"
               ></image>
             </view>
-          </view>
-          <view class="problem-card-body">
-            <view class="problem-title">{{ item.title }}</view>
-            <view class="problem-desc">{{ item.introName }}</view>
-          </view>
-        </view>
-      </view> -->
-      <view class="viewmore" @click="viewmore">
-        <view>查看更多</view>
-        <view>></view>
-      </view>
-    </view>
-    <view class="system-service-wrapper">
-      <view class="winthecustomer-head" style="margin: 30rpx 24rpx 0 24rpx">
-        <view class="winthecustomer-head1">
-          <view class="winthecustomer-title">系统服务</view>
-          <view class="winthecustomer-title1">SYSTEM SERVICE</view>
-        </view>
-      </view>
-      <view class="head">
-        <view>
-          <view class="winthecustomer-content">
-            <view
-              class="winthecustomer-content1"
-              v-for="(item, index) in serviceLists"
-              :key="index"
-              @click="next(item)"
-            >
-              <image
-                v-if="item.serviceImage && item.serviceImage[0]"
-                :src="item.serviceImage[0] + '?image_process=format,webp'"
-              ></image>
-              <view class="winthecustomer-content2">
-                <view class="winthecustomer-content2-1">
-                  {{ item.serviceName }}
+            <view class="service-divider">
+              <view class="service-divider-active"></view>
+            </view>
+            <view class="service-card-body">
+              <view class="service-img-wrap">
+                <image
+                  v-if="item.serviceImage?.length"
+                  class="service-card-img"
+                  :src="getServiceCover(item, index)"
+                  mode="aspectFill"
+                ></image>
+              </view>
+              <view class="service-info">
+                <text class="service-info-title">{{ item.serviceName }}</text>
+                <view class="service-info-features">
+                  <view
+                    class="service-info-feature"
+                    v-for="(feat, fi) in item.features"
+                    :key="'feat-' + fi"
+                  >
+                    <view class="service-info-dot"></view>
+                    <view class="service-info-feature-text">{{ feat }}</view>
+                  </view>
                 </view>
-                <view class="winthecustomer-content2-2">了解详情</view>
+                <view class="service-btns">
+                  <view
+                    class="service-btn-primary"
+                    @click="navigateToServiceDetail(item)"
+                  >
+                    <text class="service-btn-text">免费试用</text>
+                  </view>
+                  <view
+                    class="service-btn-outline"
+                    @click="navigateToServiceDetail(item)"
+                  >
+                    <text class="service-btn-text-outline">了解更多</text>
+                  </view>
+                </view>
               </view>
             </view>
           </view>
         </view>
       </view>
+
+      <view
+        class="problem-section reveal"
+        :class="{ 'reveal--visible': visibleSet.has('problem') }"
+        data-reveal-id="problem"
+        v-if="problemItemList.length > 0"
+      >
+        <view class="problem-section-header">
+          <text class="problem-section-title"
+            >月子会所经营痛点&#10;你是否也有</text
+          >
+        </view>
+        <view class="problem-list">
+          <view
+            class="problem-item"
+            :class="{ 'problem-item-highlighted': index === 0 }"
+            v-for="(item, index) in problemItemList"
+            :key="index"
+            @click="handleProblemClick(item)"
+          >
+            <text class="problem-item-title">{{ item.title }}</text>
+            <text class="problem-item-desc">{{ item.introName }}</text>
+          </view>
+        </view>
+        <view class="view-more" @click="handleViewMore">
+          <text class="view-more-text">查看更多</text>
+        </view>
+      </view>
+
+      <view
+        class="partner-section reveal"
+        :class="{ 'reveal--visible': visibleSet.has('partner') }"
+        data-reveal-id="partner"
+        v-if="partnerList.length > 0"
+      >
+        <view class="partner-section-header">
+          <text class="partner-section-title">合作伙伴</text>
+        </view>
+        <view class="partner-grid">
+          <view
+            class="partner-item"
+            v-for="(item, index) in partnerList"
+            :key="index"
+          >
+            <image class="partner-logo" :src="item" mode="aspectFill"></image>
+          </view>
+        </view>
+      </view>
     </view>
-  </view>
+  </scroll-view>
 </template>
 
 <script setup>
-import basePoint from "@/utils/basePoint.js";
+import basePoint from '@/utils/basePoint.js';
 import {
-  onPageScroll,
   onLoad,
   onShow,
   onHide,
   onShareAppMessage,
   onShareTimeline,
-} from "@dcloudio/uni-app";
-
-onShareAppMessage(() => {
-  return {
-    title: "系统",
-    path: "/pages/secondary/system/index",
-  };
-});
-
-onShareTimeline(() => {
-  return {
-    title: "系统",
-    query: "",
-  };
-});
-import { ref, onMounted } from "vue";
-import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
-import VideoRotateCarousel from "@/components/video-rotate-carousel/video-rotate-carousel.vue";
+} from '@dcloudio/uni-app';
+import {
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  nextTick,
+  watch,
+  getCurrentInstance,
+} from 'vue';
 import {
   getServiceList,
-  getcaseList,
   getEnterpriseList,
   getProductIntroList,
-} from "@/api/activity.js";
-import VearCarousel from "@/components/vear-carousel/vear-carousel.vue";
+} from '@/api/activity.js';
 
-// 响应式数据
-const activeTab = ref(0); // 默认选中第一个
-//查询服务信息列表
-const serviceList = ref([]);
-const serviceLists = ref([]);
-const caseList = ref([]);
-const richText = ref("");
-const imgList = ref([]);
-const bannerImages = ref("");
-const coverImage = ref("");
+// 分享配置
+onShareAppMessage(() => ({
+  title: '系统',
+  path: '/pages/secondary/system/index',
+}));
+
+onShareTimeline(() => ({
+  title: '系统',
+  query: '',
+}));
+
+// 企业信息
+const companyInfo = ref({});
+const videoUrl = ref('');
 const videoEnabled = ref(true);
-const problemIcons = ref([
-  "http://cdn.xiaodingdang1.com/2026/01/07/329586497cb141d69864b7ffe44c01e2.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/3c68ffd0fa574800b29257226f5d92cf.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/3500dffbb8d24fa1970e0e1c33a9fcd4.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/a4859ef57e154df784dde7f35a99a3a8.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png",
-]);
-const problemOverlayImages = ref([]);
-const problemList = ref([
-  {
-    title: "服务笔记",
-    desc: "客户总是要打开怎么教你如何用系统一次性解决",
-  },
-  {
-    title: "宝妈站台",
-    desc: "销售如何做到10分钟完成客户信任，快速签单",
-  },
-  {
-    title: "宝妈站台",
-    desc: "遇到客户在网上诋毁，会所该如何自救",
-  },
-  {
-    title: "宝宝请帖",
-    desc: "如何0成本做品牌曝光？如何0成本做线上获客",
-  },
-  {
-    title: "AI智能销售",
-    desc: "每个月到手的资源流失率超过80%，如何用系统完美解决",
-  },
-  {
-    title: "客户轨迹",
-    desc: "如何快速找到客户真实需求进行针对性营销 快速拿下订单",
-  },
-]);
-const viewmore = () => {
+
+// 系统服务卡片列表（排除第一个 banner 服务）
+const serviceCardList = ref([]);
+
+// 经营痛点列表
+const problemItemList = ref([]);
+
+// 合作伙伴列表
+const partnerList = ref([]);
+
+// 导航：查看视频
+const handleVideoClick = (url) => {
   uni.navigateTo({
-    url: "/pages/secondary/issueList/index",
+    url: '/pages/secondary/index/index?url=' + url + '&visitContent=宣传视频',
   });
 };
-const goToIndex = (item) => {
+
+// 导航：查看服务详情
+const navigateToServiceDetail = (item) => {
+  try {
+    uni.navigateTo({
+      url: '/pages/customer/index?serviceId=' + item.serviceId,
+    });
+  } catch (error) {
+    console.error('序列化参数失败:', error);
+    uni.showToast({ title: '参数传递失败', icon: 'none' });
+  }
+};
+
+const getServiceCover = (item, index) => {
+  let current = 0; //index === 3 ? 1 : 0;
+  return `${item.serviceImage[current]}?image_process=format,webp`;
+};
+
+// 导航：查看痛点详情
+const handleProblemClick = (item) => {
   if (item.introType == 2) {
     let url =
-      "/pages/secondary/index/index?url=" +
+      '/pages/secondary/index/index?url=' +
       item.videoUrl +
-      "&visitContent=" +
+      '&visitContent=' +
       item.title;
     if (item.coverImage) {
-      url += "&coverImage=" + encodeURIComponent(item.coverImage);
+      url += '&coverImage=' + encodeURIComponent(item.coverImage);
     }
-    uni.navigateTo({
-      url: url,
-    });
+    uni.navigateTo({ url });
   } else {
     uni.navigateTo({
-      url: "/pages/secondary/issueDetails/index?introId=" + item.introId,
+      url: '/pages/secondary/issueDetails/index?introId=' + item.introId,
     });
   }
 };
-// 企业列表数据
-const enterpriseList = ref([]);
-//查询商家案例列表
-const fetchcaseList = async () => {
+
+// 导航：查看更多痛点
+const handleViewMore = () => {
+  uni.navigateTo({ url: '/pages/secondary/issueList/index' });
+};
+
+// 获取企业信息
+const fetchCompanyInfo = async () => {
   try {
-    const response = await getcaseList({
-      pageSize: 10,
-      pageNum: 1,
-    });
-    console.log("案例列表数据:", response);
-    if (response && response.rows) {
-      let data = response.rows;
-      let slideshowData = [];
-      data.forEach((res, index) => {
-        // 检查是否有视频，如果有则添加视频类型的数据
-        if (res.caseImages && res.caseImages.length > 0) {
-          slideshowData.push({
-            type: "video",
-            url: res.caseImages[0],
-            src: res.caseImages[0],
-            poster:
-              res.caseImages && res.caseImages[0] ? res.caseImages[0] : "",
-            title: res.caseName || "",
-            description: res.caseDescription || "",
-            id: res.id || index,
-            autoplay: false,
-            loop: false,
-            muted: true, // 默认静音自动播放
-            controls: true,
-            showFullscreenBtn: true,
-            caseTitle: res.caseTitle,
-          });
-        } else if (res.caseImages && res.caseImages.length > 0) {
-          // 如果没有视频，则使用图片
-          slideshowData.push({
-            type: "image",
-            url: res.caseImages[0],
-            src: res.caseImages[0],
-            title: res.caseName || "",
-            description: res.caseDescription || "",
-            id: res.id || index,
-            caseTitle: res.caseTitle,
-          });
-        }
-      });
-      console.log("案例轮播数据:", slideshowData);
-      caseList.value = slideshowData;
-      // 将案例数据传递给 carousel 组件
-      imgList.value = slideshowData;
-    }
-  } catch (error) {
-    console.error("获取案例列表失败:", error);
-    uni.showToast({
-      title: "获取案例列表失败",
-      icon: "none",
-    });
-  }
-};
-//查询服务信息列表
-const fetchServiceList = async () => {
-  try {
-    const response = await getServiceList({
-      pageSize: 10,
-      pageNum: 1,
-    });
-    console.log("服务列表数据:", response);
-    if (response && response.rows && response.rows.length > 0) {
-      let data = response.rows[0];
-      let slideshowData = [];
+    const response = await getEnterpriseList({ pageSize: 10, pageNum: 1 });
+    if (response?.rows?.[0]) {
+      companyInfo.value = response.rows[0];
 
-      // 确保 serviceImage 存在且是数组
-      if (data.serviceImage && Array.isArray(data.serviceImage)) {
-        data.serviceImage.forEach((res) => {
-          slideshowData.push({
-            image: res,
-            title: "",
-            description: "",
-          });
-        });
-      }
-
-      console.log("服务轮播数据:", slideshowData);
-      serviceList.value = slideshowData;
-      serviceLists.value = response.rows.slice(1);
-
-      if (data.serviceDescription) {
-        richText.value = processContent(data.serviceDescription);
-      }
-    } else {
-      console.log("服务列表数据为空");
-    }
-  } catch (error) {
-    console.error("获取服务列表失败:", error);
-    uni.showToast({
-      title: "获取服务列表失败",
-      icon: "none",
-    });
-  }
-};
-// 方法
-const switchTab = (index) => {
-  activeTab.value = index;
-  console.log("切换到tab:", index);
-  console.log("当前serviceList:", serviceList.value);
-};
-
-const next = (item) => {
-  try {
-    // const itemStr = JSON.stringify(item);
-    uni.navigateTo({
-      url: "/pages/customer/index?serviceId=" + item.serviceId,
-    });
-  } catch (error) {
-    console.error("序列化参数失败:", error);
-    uni.showToast({
-      title: "参数传递失败",
-      icon: "none",
-    });
-  }
-};
-
-// 轮播图事件处理
-const onCarouselChange = (e) => {
-  console.log("轮播图切换:", e);
-};
-
-const onCarouselClick = (e) => {
-  console.log("轮播图点击:", e);
-};
-
-// 视频相关事件处理
-const onVideoClick = (e) => {
-  console.log("视频点击全屏:", e);
-  // 可扩展：点击视频时的自定义逻辑
-};
-
-const onVideoPlay = (e) => {
-  console.log("视频开始播放:", e);
-};
-
-const onVideoPause = (e) => {
-  console.log("视频暂停:", e);
-};
-
-const onVideoEnded = (e) => {
-  console.log("视频播放结束:", e);
-};
-
-const onVideoError = (e) => {
-  console.error("视频播放错误:", e);
-  uni.showToast({
-    title: "视频播放失败",
-    icon: "none",
-  });
-};
-const nextVideo = (url, coverImage) => {
-  uni.navigateTo({
-    url: "/pages/secondary/index/index?url=" + url + "&visitContent=宣传视频",
-  });
-  // uni.navigateTo({
-  //   url:
-  //     "/pages/secondary/index/index?url=" +
-  //     url +
-  //     "&coverImage=" +
-  //     coverImage +
-  //     "&visitContent=宣传视频",
-  // });
-  // let sources = [];
-  // sources = [
-  //   {
-  //     url: url,
-  //     type: "video",
-  //     poster: coverImage,
-  //   },
-  // ];
-  // uni.previewMedia({
-  //   sources: sources,
-  //   current: 0,
-  //   autoplay: true,
-  // });
-};
-const onFullscreenChange = (e, index, isEnteringFullscreen) => {
-  console.log(
-    "视频全屏状态变化:",
-    e,
-    "索引:",
-    index,
-    "进入全屏:",
-    isEnteringFullscreen
-  );
-
-  if (isEnteringFullscreen) {
-    console.log("视频进入全屏模式，已取消静音");
-    uni.showToast({
-      title: "全屏播放已开启声音",
-      icon: "none",
-      duration: 1500,
-    });
-  } else {
-    console.log("视频退出全屏模式，已恢复静音");
-  }
-};
-
-const onPauseAllVideos = () => {
-  console.log("暂停所有视频");
-  // 这里可以添加暂停所有视频的逻辑
-};
-
-const selectedBanner = (item, index) => {
-  console.log("选中轮播项:", item, "索引:", index);
-  // 这里可以添加点击轮播项的处理逻辑
-  if (item.type === "video") {
-    console.log("点击了视频项");
-  } else {
-    console.log("点击了图片项");
-  }
-};
-// 获取企业列表数据
-const fetchEnterpriseList = async () => {
-  try {
-    const response = await getEnterpriseList({
-      pageSize: 10,
-      pageNum: 1,
-    });
-    console.log("企业列表数据:", response);
-    if (
-      response &&
-      response.rows &&
-      Array.isArray(response.rows) &&
-      response.rows.length > 0
-    ) {
-      enterpriseList.value = response.rows[0];
-      coverImage.value = response.rows[0].coverImage;
       let video;
-      if (
-        response.rows[0].bannerImages &&
-        Array.isArray(response.rows[0].bannerImages)
-      ) {
-        response.rows[0].bannerImages.forEach((str1) => {
-          let result1 = str1.slice(-3);
-          if (result1 == "mp4") {
-            video = str1;
+      if (Array.isArray(response.rows[0].bannerImages)) {
+        response.rows[0].bannerImages.forEach((str) => {
+          if (str.slice(-3) === 'mp4') {
+            video = str;
           }
         });
       }
-      bannerImages.value = video;
+      videoUrl.value = video;
       videoEnabled.value = response.rows[0].videoEnabled;
+      partnerList.value = Array.isArray(response.rows[0].cooperationMerchants)
+        ? response.rows[0].cooperationMerchants
+        : [];
     }
   } catch (error) {
-    console.error("获取企业列表失败:", error);
-    uni.showToast({
-      title: "获取企业列表失败",
-      icon: "none",
-    });
+    console.error('获取企业列表失败:', error);
+    uni.showToast({ title: '获取企业列表失败', icon: 'none' });
   }
 };
-const productIntroList = ref([]);
-const fetchProductIntroList = async () => {
+
+// 从 description HTML 中提取特性列表
+const parseFeaturesFromDescription = (html) => {
+  if (!html) return [];
+  const liMatches = html.match(/<li[^>]*>([\s\S]*?)<\/li>/gi);
+  if (liMatches && liMatches.length > 0) {
+    return liMatches
+      .map((s) => s.replace(/<[^>]+>/g, '').trim())
+      .filter(Boolean);
+  }
+  return html
+    .replace(/<[^>]+>/g, '\n')
+    .split(/\n|•|·/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+};
+
+// 获取服务列表
+const fetchServiceList = async () => {
   try {
-    const response = await getProductIntroList({
-      pageSize: 6,
-      pageNum: 1,
-    });
-    console.log("产品介绍列表数据:", response);
-    if (
-      response &&
-      response.rows &&
-      Array.isArray(response.rows) &&
-      response.rows.length > 0
-    ) {
-      response.rows.forEach((item) => {
-        console.log("原始introDetail:", item.introDetail);
-        item.introDetailFormat = formatRichText(item.introDetail);
-      });
-      console.log("处理后的introDetailFormat:", response.rows);
-      productIntroList.value = response.rows;
+    const response = await getServiceList({ pageSize: 10, pageNum: 1 });
+    if (response?.rows?.length > 0) {
+      serviceCardList.value = response.rows.slice(1).map((row) => ({
+        ...row,
+        features: parseFeaturesFromDescription(row.description),
+      }));
     }
   } catch (error) {
-    console.error("获取产品介绍列表失败:", error);
-    uni.showToast({
-      title: "获取产品介绍列表失败",
-      icon: "none",
-    });
+    console.error('获取服务列表失败:', error);
+    uni.showToast({ title: '获取服务列表失败', icon: 'none' });
   }
 };
-// 页面加载完成后触发按钮动画
+
+// 获取痛点列表
+const fetchProblemList = async () => {
+  try {
+    const response = await getProductIntroList({ pageSize: 6, pageNum: 1 });
+    if (response?.rows?.length > 0) {
+      response.rows.forEach((item) => {
+        item.introDetailFormat = stripHtmlTags(item.introDetail);
+      });
+      problemItemList.value = response.rows;
+    }
+  } catch (error) {
+    console.error('获取产品介绍列表失败:', error);
+    uni.showToast({ title: '获取产品介绍列表失败', icon: 'none' });
+  }
+};
+
+// 滚动入场动效
+const visibleSet = ref(new Set());
+let revealObserver = null;
+
+const setupRevealObserver = () => {
+  if (revealObserver) {
+    revealObserver.disconnect();
+    revealObserver = null;
+  }
+  const instance = getCurrentInstance();
+  revealObserver = uni.createIntersectionObserver(instance, {
+    observeAll: true,
+    thresholds: [0, 0.05],
+  });
+  revealObserver
+    .relativeTo('.page-scroll', { bottom: 0 })
+    .observe('.reveal', (res) => {
+      if (res.intersectionRatio <= 0) return;
+      const id = res.dataset && res.dataset.revealId;
+      if (!id || visibleSet.value.has(id)) return;
+      const next = new Set(visibleSet.value);
+      next.add(id);
+      visibleSet.value = next;
+    });
+};
+
+// 数据加载后（含 v-if 的模块）重新启动观察
+watch(
+  () => [
+    videoUrl.value,
+    videoEnabled.value,
+    problemItemList.value.length,
+    partnerList.value.length,
+  ],
+  () => {
+    nextTick(() => {
+      setTimeout(setupRevealObserver, 100);
+    });
+  },
+);
+
+onBeforeUnmount(() => {
+  if (revealObserver) {
+    revealObserver.disconnect();
+    revealObserver = null;
+  }
+});
+
+// 页面加载
 onMounted(() => {
   fetchServiceList();
-  fetchcaseList(); // 暂时注释掉，因为当前页面主要显示服务信息
-  fetchEnterpriseList();
-  //查询产品介绍列表
-  fetchProductIntroList();
-});
-const processContent = (content) => {
-  if (!content) return "";
-  // 处理图片样式
-  return content
-    .replace(/<img[^>]*>/gi, function (match, capture) {
-      return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
-    })
-    .replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
-};
-const formatRichText = (html) => {
-  let newContent = html.replace(/<[^>]+>/g, "");
-  newContent = newContent.replace(/&nbsp;/gi, "");
-  return newContent;
-};
-onShow(async () => {
-  await basePoint.trackingStart({
-    visitModule: "系统",
-    visitContent: "系统",
+  fetchCompanyInfo();
+  fetchProblemList();
+  nextTick(() => {
+    setTimeout(setupRevealObserver, 100);
   });
 });
+
+// HTML 标签去除
+const stripHtmlTags = (html) => {
+  if (!html) return '';
+  return html.replace(/<[^>]+>/g, '').replace(/&nbsp;/gi, '');
+};
+
+// 页面展示埋点
+onShow(async () => {
+  await basePoint.trackingStart({ visitModule: '系统', visitContent: '系统' });
+});
+
+// 页面隐藏结束埋点
 onHide(async () => {
-  let trackingId = uni.getStorageSync("trackingId");
+  const trackingId = uni.getStorageSync('trackingId');
   if (trackingId) {
-    await basePoint.trackingEnd({
-      id: trackingId,
-    });
+    await basePoint.trackingEnd({ id: trackingId });
   }
 });
 </script>
 
 <style scoped>
-.main {
+.page-wrapper {
   background: #fff;
   min-height: 100vh;
   overflow: hidden;
 }
+
+/* 滚动入场：上浮 + 淐入 + 轻量 Z 轴缩放 */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 60rpx, 0) scale(0.94);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.reveal--visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
 .system-service-wrapper {
-  background: linear-gradient(
-    to bottom,
-    #f0f8ff 30%,
-    #acb4db 50%,
-    #3351e2 100%
-  );
-  padding: 20rpx 0;
-}
-.first {
-  padding-top: 40rpx;
-  background: #fff;
-}
-.head {
-  /* background: #f0f0f0; */
-  /* margin-top: 80rpx; */
-}
-.headTab {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  /* padding: 20rpx; */
-  background: #fff;
-  border-bottom: 1rpx solid #f0f0f0;
+  padding: 0;
 }
 
-.tab-item {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 20rpx 0;
-}
-
-.tab-text {
-  font-size: 36rpx;
-  color: #000000;
-  transition: color 0.3s ease;
-}
-
-.tab-item.active .tab-text {
-  color: #000000;
-  font-weight: bold;
-}
-
-.tab-line {
-  width: 60rpx;
-  height: 6rpx;
-  background: #000000;
-  border-radius: 2rpx;
-  margin-top: 10rpx;
-  animation: lineSlide 0.3s ease;
-}
-
-@keyframes lineSlide {
-  from {
-    width: 0;
-  }
-  to {
-    width: 60rpx;
-  }
-}
-.slideshow {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 40rpx 0;
-  border-radius: 0 0 40rpx 40rpx;
-}
-.content-img {
-  margin-top: 38rpx;
-  width: 750rpx;
-}
-.content-img image {
-  width: 100%;
-}
-
-.winthecustomer-content {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0rpx 18rpx 52rpx 18rpx;
-  /* background: linear-gradient(to bottom, #ffffff 0%, #3351e2 70%); */
-  padding-top: 20rpx;
-}
-.winthecustomer-content1:nth-of-type(2n) {
-  margin-left: 3%;
-}
-.winthecustomer-content1 {
-  width: 48%;
-  background: #f2f6ff;
-  margin-bottom: 38rpx;
-  border-radius: 20rpx;
-}
-.winthecustomer-content1 image {
-  width: 100%;
-  height: 350rpx;
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
-}
-.winthecustomer-content2 {
-  width: 100%;
-  padding: 20rpx 0;
-  text-align: center;
-  border-bottom-left-radius: 20rpx;
-  border-bottom-right-radius: 20rpx;
-  display: flex;
-  justify-content: space-between;
-}
-.winthecustomer-content2-1 {
-  color: #000000;
-  font-size: 28rpx;
-  margin-left: 24rpx;
-}
-.winthecustomer-content2-2 {
-  width: 112rpx;
-  height: 44rpx;
-  background: #3552e3;
-  border-radius: 100rpx;
-  color: #ffffff;
-  font-size: 20rpx;
-  line-height: 44rpx;
-  text-align: center;
-  margin-right: 24rpx;
-}
-
-.loading-placeholder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 800rpx;
-  background: #f8f8f8;
-  border-radius: 20rpx;
-  margin: 20rpx;
-}
-
-.loading-placeholder text {
-  color: #999;
-  font-size: 28rpx;
-}
-.video {
+/* 视频 Banner */
+.video-banner {
   width: 702rpx;
   height: 394rpx;
   border-radius: 20rpx;
   margin: 20rpx auto;
   position: relative;
 }
-.video video {
+.video-banner video {
   width: 100%;
   height: 100%;
   border-radius: 20rpx;
 }
-.videoTitle {
-  margin-top: 20rpx;
-}
-.videoTitle1 {
-  color: #000000;
-  font-size: 36rpx;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 24rpx;
-}
-.videoTitle2 {
-  color: #4e4d4d;
-  font-size: 24rpx;
-  padding: 0 24rpx;
-}
-/* 自定义播放按钮样式 */
-.custom-play-button {
+
+/* 播放按钮 */
+.play-button {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -727,116 +451,294 @@ onHide(async () => {
   height: 100%;
   opacity: 0.5;
 }
-
-.custom-play-button:hover {
+.play-button:hover {
   transform: translate(-50%, -50%) scale(1.1);
-  /* background: rgba(255, 255, 255, 1); */
 }
-
-.custom-play-button .play-icon {
+.play-button .play-icon {
   width: 80rpx;
   height: 80rpx;
 }
 
-.problem {
-  /* background: #ffffff; */
-  padding: 46rpx 26rpx 20rpx 26rpx;
+/* 品牌标题 */
+.brand-header {
+  margin: 60rpx auto 36rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.problem-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20rpx;
-  margin-top: 24rpx;
+.brand-title {
+  color: #000000;
+  font-size: 44rpx;
+  font-weight: bold;
+  text-align: center;
+  line-height: 60rpx;
 }
-.problem-card {
+.brand-subtitle {
+  color: #000000;
+  font-size: 44rpx;
+  font-weight: bold;
+  text-align: center;
+  line-height: 60rpx;
+}
+
+/* 服务卡片 */
+.service-list {
+  padding: 0 26rpx 40rpx;
+}
+.service-card {
   width: 100%;
-  height: 378rpx;
-  background-size: 106rpx 112rpx, cover;
-  background-position: right 24rpx bottom 24rpx, center;
-  background-repeat: no-repeat, no-repeat;
+  border-radius: 24rpx;
+  border: 1rpx solid #d9d9d9;
+  background-color: #ffffff;
+  box-shadow: 0rpx 6rpx 22rpx 0rpx rgba(220, 222, 229, 0.8);
+  overflow: hidden;
+  padding-bottom: 18rpx;
+  margin-bottom: 24rpx;
+}
+.service-card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 24rpx 0 24rpx;
+  height: 64rpx;
+}
+.service-card-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #000000;
+  line-height: 40rpx;
+}
+.service-card-arrow {
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
+}
+.service-divider {
+  width: 100%;
+  height: 2rpx;
+  background-color: #d9d9d9;
+  margin-top: 12rpx;
+}
+.service-divider-active {
+  width: 140rpx;
+  height: 2rpx;
+  background-color: #006dff;
+  margin-left: 48rpx;
+}
+.service-card-body {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 18rpx;
+  padding: 0 18rpx;
+}
+.service-img-wrap {
+  width: 360rpx;
+  height: 264rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.service-card-img {
+  width: 100%;
+  height: 100%;
+}
+.service-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 48rpx;
+  padding-top: 26rpx;
+  min-width: 0;
+}
+.service-info-title {
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #000000;
+  line-height: 30rpx;
+  margin-bottom: 12rpx;
+}
+.service-info-desc {
+  font-size: 16rpx;
+  font-weight: 400;
+  color: #3d3d3d;
+  line-height: 26rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
   overflow: hidden;
 }
-.problem-card-header {
+.service-info-features {
+  margin-top: 8rpx;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+.service-info-feature {
   display: flex;
   align-items: center;
-  padding: 60rpx 20rpx 8rpx 30rpx;
-  justify-content: space-between;
+  height: 28rpx;
 }
-.problem-icon {
+.service-info-dot {
+  width: 4rpx;
+  height: 4rpx;
+  border-radius: 50%;
+  background: #3d3d3d;
+  margin-right: 6rpx;
+  flex-shrink: 0;
 }
-.problem-icon image {
-  width: 56rpx;
-  height: 56rpx;
-}
-.problem-arrow {
-}
-.problem-arrow image {
-  width: 30rpx;
-  height: 30rpx;
-}
-.problem-card-body {
-  padding: 24rpx;
-}
-.problem-title {
-  width: 100%;
-  height: 40rpx;
-  font-family: PingFang SC, PingFang SC;
-  font-weight: 600;
-  font-size: 32rpx;
-  color: #3351e3;
-  line-height: 40rpx;
-  text-align: left;
-  font-style: normal;
-  text-transform: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.problem-desc {
-  width: 270rpx;
-  font-family: PingFang SC, PingFang SC;
-  font-weight: 400;
-  font-size: 24rpx;
+.service-info-feature-text {
   color: #3d3d3d;
+  font-size: 16rpx;
+  line-height: 28rpx;
+}
+.service-btns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20rpx;
+}
+.service-btn-primary {
+  width: 100rpx;
+  height: 36rpx;
+  border-radius: 8rpx;
+  background-color: #006dff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 14rpx;
+}
+.service-btn-text {
+  font-size: 18rpx;
+  color: #f4f5f9;
+  font-weight: 500;
+}
+.service-btn-outline {
+  width: 100rpx;
+  height: 36rpx;
+  border-radius: 8rpx;
+  border: 1rpx solid #006dff;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.service-btn-text-outline {
+  font-size: 18rpx;
+  color: #006dff;
+  font-weight: 500;
+}
+
+/* 合作伙伴模块 */
+.partner-section {
+  background-color: #ffffff;
+  padding: 60rpx 26rpx 40rpx;
+}
+.partner-section-header {
+  padding-bottom: 36rpx;
+  text-align: center;
+}
+.partner-section-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #000000;
+  line-height: 56rpx;
+}
+.partner-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12rpx;
+}
+.partner-item {
+  background-color: #fbfbfb;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.partner-logo {
+  width: 100%;
+  height: 100%;
+}
+
+/* 痛点模块 */
+.problem-section {
+  background-color: #f4f5f9;
+  padding: 60rpx 26rpx 40rpx;
+}
+.problem-section-header {
+  padding-bottom: 36rpx;
+  text-align: center;
+}
+.problem-section-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #000000;
+  line-height: 56rpx;
+  text-align: center;
+  white-space: pre;
+}
+.problem-list {
+  display: flex;
+  flex-direction: column;
+}
+.problem-item {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 24rpx;
+  padding: 38rpx 36rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(0, 0, 0, 0.04);
+}
+.problem-item-highlighted {
+  border: 2rpx solid transparent;
+  background-image:
+    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(91.3deg, #f178ff 0.37%, #006dff 99.68%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+.problem-item-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 700;
   line-height: 40rpx;
-  text-align: left;
-  font-style: normal;
-  text-transform: none;
-  margin-top: 24rpx;
+  color: #3d3d3d;
+  margin-bottom: 16rpx;
+}
+.problem-item-desc {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 400;
+  line-height: 36rpx;
+  color: rgba(61, 61, 61, 0.6);
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
-.winthecustomer-head {
-  display: flex;
-}
-.winthecustomer-head1 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-.winthecustomer-title {
-  color: #000000;
-  font-weight: bold;
-  font-size: 40rpx;
-}
-.winthecustomer-title1 {
-  color: #d6d4d4;
-  font-size: 28rpx;
-}
-.viewmore {
+
+/* 查看更多 */
+.view-more {
   display: flex;
   justify-content: center;
-  background: #f3f5fb;
-  border-radius: 8rpx;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 24rpx;
   width: 100%;
-  height: 88rpx;
-  color: #313131;
-  font-size: 30rpx;
-  line-height: 88rpx;
-  margin: 28rpx 0 20rpx 0;
+  height: 72rpx;
+  margin: 6rpx 0 0 0;
+  box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(0, 0, 0, 0.04);
+}
+.view-more-text {
+  font-size: 24rpx;
+  font-weight: 400;
+  color: #000000;
+  text-align: center;
 }
 </style>

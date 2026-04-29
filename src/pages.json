@@ -9,6 +9,13 @@
       }
     },
     {
+      "path": "pages/secondary/serviceDetail/index",
+      "style": {
+        "navigationBarTitleText": "服务详情",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
       "path": "pages/secondary/winthecustomer/index",
       "style": {
         "navigationBarTitleText": "线上获客",
@@ -183,9 +190,7 @@
         "navigationBarTitleText": "",
         "backgroundColor": "#000000",
         "enableShareAppMessage": true,
-        // 关闭微信小程序的系统边缘滑动返回
         "disableSwipeBack": true,
-        // 关闭 App 平台的侧滑返回（如需打包 app-plus）
         "app-plus": {
           "popGesture": "none"
         }
@@ -213,7 +218,7 @@
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "MasterGo项目",
+    "navigationBarTitleText": "天天拓客官网",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
