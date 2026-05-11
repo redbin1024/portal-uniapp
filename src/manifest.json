@@ -1,6 +1,6 @@
 {
     "name" : "mastergo-project",
-    "appid" : "__UNI__MASTERGO",
+    "appid" : "__UNI__D3B26BE",
     "description" : "基于MasterGo设计稿的UniApp项目",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -74,10 +74,7 @@
                 "desc" : "用于选择相册图片上传"
             }
         },
-        "requiredPrivateInfos" : [
-            "getLocation",
-            "chooseLocation"
-        ],
+        "requiredPrivateInfos" : [ "getLocation", "chooseLocation" ],
         "lazyCodeLoading" : "requiredComponents",
         "plugins" : {},
         "resizable" : true,
