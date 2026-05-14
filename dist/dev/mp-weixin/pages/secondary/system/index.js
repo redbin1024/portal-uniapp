@@ -37,12 +37,16 @@ const _sfc_main = {
     const serviceLists = common_vendor.ref([]);
     const businessSystemList = common_vendor.ref([]);
     const partnerList = common_vendor.ref([]);
-    const extractVideoUrl = (bannerImages) => {
-      if (!Array.isArray(bannerImages))
+    const extractVideoUrl = (bannerVideos) => {
+      if (!Array.isArray(bannerVideos))
         return "";
-      for (const str of bannerImages) {
-        if (typeof str === "string" && str.slice(-3) === "mp4")
-          return str;
+      for (const item of bannerVideos) {
+        if (typeof item === "string" && item.includes(".mp4"))
+          return item;
+        if (item == null ? void 0 : item.videoUrl)
+          return item.videoUrl;
+        if (item == null ? void 0 : item.url)
+          return item.url;
       }
       return "";
     };
@@ -58,7 +62,7 @@ const _sfc_main = {
           videoList.value = response.rows.filter((row) => row.videoEnabled).map((row) => ({
             enterpriseName: row.enterpriseName,
             coverImage: row.coverImage,
-            videoUrl: extractVideoUrl(row.bannerImages)
+            videoUrl: extractVideoUrl(row.bannerVideos)
           })).filter((row) => row.videoUrl && row.coverImage);
           partnerList.value = Array.isArray(response.rows[0].cooperationMerchants) ? response.rows[0].cooperationMerchants : [];
         }

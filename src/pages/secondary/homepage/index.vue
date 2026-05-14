@@ -7,10 +7,10 @@
       }"
     >
       <!-- 顶部背景占位 -->
-      <view style="height: 580rpx"></view>
+      <view style="height: 640rpx"></view>
 
       <!-- 企业介绍 -->
-      <AnimateOnView animation="fade-up" :duration="1200">
+      <AnimateOnView animation="fade-up" :duration="700">
         <view class="intro-section">
           <view class="intro-title">{{
             enterpriseList.enterpriseName || "天天拓客"
@@ -27,12 +27,12 @@
       </AnimateOnView>
 
       <!-- 公司发展历程（跑马灯） -->
-      <AnimateOnView animation="flip-up" :delay="80" :duration="1100">
+      <AnimateOnView animation="fade-up" :delay="40" :duration="700">
         <CompanyHistory />
       </AnimateOnView>
 
       <!-- 合作商家 · 赋能月子服务（内部已集成视频预览） -->
-      <AnimateOnView animation="bounce-in" :duration="1200">
+      <AnimateOnView animation="fade-up" :duration="700">
         <BusinessPartner
           v-if="enterpriseList.videoEnabled"
           :list="caseDataList"
@@ -41,7 +41,7 @@
       </AnimateOnView>
 
       <!-- 合作商家底部横幅图 -->
-      <AnimateOnView animation="zoom-in" :duration="1100">
+      <AnimateOnView animation="fade-in" :duration="650">
         <view
           class="businesspartnernew-image"
           v-if="
@@ -58,12 +58,27 @@
       </AnimateOnView>
 
       <!-- 天天拓客 · 精准获取线上流量 -->
-      <AnimateOnView animation="slide-right" :duration="1100">
+      <AnimateOnView animation="fade-up" :duration="700">
         <TrafficBanner @click="nextDetile" />
       </AnimateOnView>
 
+      <!-- 关于宝妈小叮当 -->
+      <AnimateOnView animation="fade-up" :duration="700">
+        <view class="about-xdd-section">
+          <view class="about-xdd-card">
+            <view class="about-xdd-title">关于宝妈小叮当</view>
+            <view class="about-xdd-desc">
+              “宝妈小叮当” 专属月子中心系统品牌，深耕母婴月子行业获客运营赛道。依托天天拓客成熟完整服务体系，搭配宝妈小叮当智能系统工具双轮驱动、强强赋能，从线上精准引流、客户裂变锁客，到私域精细化运营、到店转化成交、老客转介绍复购全流程闭环赋能。
+            </view>
+            <view class="about-xdd-desc">
+              专为月子中心量身打造低成本获客、高效率留客、高转化成交的专属解决方案，全方位破解月子中心获客难、客源少、空置率高的经营痛点，助力门店稳定拓客、持续引流、快速满房，实现长久盈利经营。
+            </view>
+          </view>
+        </view>
+      </AnimateOnView>
+
       <!-- 宝妈小叮当 业务系统 -->
-      <AnimateOnView animation="flip-up" :duration="1100">
+      <AnimateOnView animation="fade-up" :duration="700">
         <BusinessSystem
           title="宝妈小叮当"
           subtitle="业务系统"
@@ -73,7 +88,7 @@
       </AnimateOnView>
 
       <!-- 宝妈小叮当 管理系统 -->
-      <AnimateOnView animation="slide-left" :duration="1100">
+      <AnimateOnView animation="fade-up" :duration="700">
         <BusinessSystem
           title="宝妈小叮当"
           subtitle="管理系统"
@@ -83,7 +98,7 @@
       </AnimateOnView>
 
       <!-- 你的会所是否需要解决 这些经营问题 -->
-      <AnimateOnView animation="bounce-in" :duration="1200">
+      <AnimateOnView animation="fade-up" :duration="700">
         <ProblemList
           v-if="productIntroList.length > 0"
           :list="productIntroList"
@@ -94,7 +109,7 @@
       </AnimateOnView>
 
       <!-- 荣誉证书（双排自动跑马灯轮播） -->
-      <AnimateOnView animation="zoom-in" :duration="1100">
+      <AnimateOnView animation="fade-in" :duration="650">
         <view class="brand-story">
           <HonorCertificate
             v-if="
@@ -102,7 +117,6 @@
               enterpriseList.honorCertificates.length
             "
             :list="enterpriseList.honorCertificates"
-            :duration="30"
           />
         </view>
       </AnimateOnView>
@@ -126,7 +140,7 @@
     />
 
     <!-- 右下角悬浮客服按钮 -->
-    <CustomerServiceBtn :bottom="160" @click="handleCustomerServiceClick" />
+    <CustomerServiceBtn :bottom="80" @click="handleCustomerServiceClick" />
   </view>
 </template>
 <script setup>
@@ -1199,7 +1213,42 @@ const viewProblemMore = () => {
   background: #ffffff;
   // padding: 80rpx 26rpx;
   color: #000000;
-  // margin-top: 80rpx;
+}
+
+.about-xdd-section {
+  background: #ffffff;
+  padding: 68rpx 26rpx;
+}
+
+.about-xdd-card {
+  width: 100%;
+  min-height: 670rpx;
+  background: #ffffff;
+  border: 1rpx solid #e5e5e5;
+  border-radius: 24rpx;
+  box-sizing: border-box;
+  padding: 66rpx 34rpx 56rpx;
+}
+
+.about-xdd-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #0076ff;
+  line-height: 56rpx;
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.about-xdd-desc {
+  font-size: 28rpx;
+  font-weight: 400;
+  color: #666666;
+  line-height: 48rpx;
+  text-align: justify;
+}
+
+.about-xdd-desc + .about-xdd-desc {
+  margin-top: 38rpx;
 }
 /* 品牌/团队/荣誉证书/合作商的旧样式已迁移至对应组件内部。 */
 .teamappearance-content {

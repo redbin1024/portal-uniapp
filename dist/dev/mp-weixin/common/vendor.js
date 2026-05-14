@@ -11733,7 +11733,6 @@ exports.onShareTimeline = onShareTimeline;
 exports.onShow = onShow;
 exports.onUnload = onUnload;
 exports.p = p;
-exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
 exports.s = s;

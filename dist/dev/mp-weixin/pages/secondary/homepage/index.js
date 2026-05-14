@@ -383,12 +383,12 @@ const _sfc_main = {
         c: common_vendor.t(enterpriseList.value.enterpriseIntroTwo || "“宝妈小叮当”是公司系统品牌，致力于通过“天天拓客”的服务体系与“宝妈小叮当”的系统工具，双轮驱动助力月子中心满房盈利。"),
         d: common_vendor.p({
           animation: "fade-up",
-          duration: 1200
+          duration: 700
         }),
         e: common_vendor.p({
-          animation: "flip-up",
-          delay: 80,
-          duration: 1100
+          animation: "fade-up",
+          delay: 40,
+          duration: 700
         }),
         f: enterpriseList.value.videoEnabled
       }, enterpriseList.value.videoEnabled ? {
@@ -398,79 +398,82 @@ const _sfc_main = {
         })
       } : {}, {
         i: common_vendor.p({
-          animation: "bounce-in",
-          duration: 1200
+          animation: "fade-up",
+          duration: 700
         }),
         j: enterpriseList.value.videoEnabled && enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0]
       }, enterpriseList.value.videoEnabled && enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0] ? {
         k: enterpriseList.value.bannerImages[0] + "?image_process=format,webp"
       } : {}, {
         l: common_vendor.p({
-          animation: "zoom-in",
-          duration: 1100
+          animation: "fade-in",
+          duration: 650
         }),
         m: common_vendor.o(nextDetile),
         n: common_vendor.p({
-          animation: "slide-right",
-          duration: 1100
+          animation: "fade-up",
+          duration: 700
         }),
-        o: common_vendor.o(next),
-        p: common_vendor.p({
+        o: common_vendor.p({
+          animation: "fade-up",
+          duration: 700
+        }),
+        p: common_vendor.o(next),
+        q: common_vendor.p({
           title: "宝妈小叮当",
           subtitle: "业务系统",
           list: businessSystemList.value
         }),
-        q: common_vendor.p({
-          animation: "flip-up",
-          duration: 1100
+        r: common_vendor.p({
+          animation: "fade-up",
+          duration: 700
         }),
-        r: common_vendor.o(next),
-        s: common_vendor.p({
+        s: common_vendor.o(next),
+        t: common_vendor.p({
           title: "宝妈小叮当",
           subtitle: "管理系统",
           list: managementSystemList.value
         }),
-        t: common_vendor.p({
-          animation: "slide-left",
-          duration: 1100
+        v: common_vendor.p({
+          animation: "fade-up",
+          duration: 700
         }),
-        v: productIntroList.value.length > 0
+        w: productIntroList.value.length > 0
       }, productIntroList.value.length > 0 ? {
-        w: common_vendor.o(goToIndex),
-        x: common_vendor.o(goToIssueList),
-        y: common_vendor.p({
+        x: common_vendor.o(goToIndex),
+        y: common_vendor.o(goToIssueList),
+        z: common_vendor.p({
           list: productIntroList.value,
           limit: 4
         })
       } : {}, {
-        z: common_vendor.p({
-          animation: "bounce-in",
-          duration: 1200
+        A: common_vendor.p({
+          animation: "fade-up",
+          duration: 700
         }),
-        A: enterpriseList.value.honorCertificates && enterpriseList.value.honorCertificates.length
+        B: enterpriseList.value.honorCertificates && enterpriseList.value.honorCertificates.length
       }, enterpriseList.value.honorCertificates && enterpriseList.value.honorCertificates.length ? {
-        B: common_vendor.p({
-          list: enterpriseList.value.honorCertificates,
-          duration: 30
+        C: common_vendor.p({
+          list: enterpriseList.value.honorCertificates
         })
       } : {}, {
-        C: common_vendor.p({
-          animation: "zoom-in",
-          duration: 1100
+        D: common_vendor.p({
+          animation: "fade-in",
+          duration: 650
         }),
-        D: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        E: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
-        F: common_vendor.o(($event) => isVideoFullscreen.value = $event),
-        G: common_vendor.o(($event) => showPreview.value = $event),
-        H: common_vendor.p({
+        E: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        F: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
+        G: common_vendor.o(($event) => isVideoFullscreen.value = $event),
+        H: common_vendor.o(($event) => showPreview.value = $event),
+        I: common_vendor.p({
           media: previewMedia.value,
           visible: showPreview.value
         }),
-        I: common_vendor.o(handleCustomerServiceClick),
-        J: common_vendor.p({
-          bottom: 160
+        J: common_vendor.o(handleCustomerServiceClick),
+        K: common_vendor.p({
+          bottom: 80
         }),
-        K: showPreview.value ? 1 : ""
+        L: showPreview.value ? 1 : ""
       });
     };
   }

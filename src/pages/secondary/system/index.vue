@@ -55,10 +55,12 @@ const businessSystemList = ref([]);
 const partnerList = ref([]);
 
 // ===== 工具方法 =====
-const extractVideoUrl = (bannerImages) => {
-  if (!Array.isArray(bannerImages)) return '';
-  for (const str of bannerImages) {
-    if (typeof str === 'string' && str.slice(-3) === 'mp4') return str;
+const extractVideoUrl = (bannerVideos) => {
+  if (!Array.isArray(bannerVideos)) return '';
+  for (const item of bannerVideos) {
+    if (typeof item === 'string' && item.includes('.mp4')) return item;
+    if (item?.videoUrl) return item.videoUrl;
+    if (item?.url) return item.url;
   }
   return '';
 };
@@ -78,7 +80,7 @@ const fetchEnterpriseList = async () => {
         .map((row) => ({
           enterpriseName: row.enterpriseName,
           coverImage: row.coverImage,
-          videoUrl: extractVideoUrl(row.bannerImages),
+          videoUrl: extractVideoUrl(row.bannerVideos),
         }))
         .filter((row) => row.videoUrl && row.coverImage);
       partnerList.value = Array.isArray(response.rows[0].cooperationMerchants)

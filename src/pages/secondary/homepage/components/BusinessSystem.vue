@@ -126,7 +126,7 @@ const handleClick = (item) => {
 }
 .bs-card-title {
   font-family: SourceHanSansCN-Revision, 'PingFang SC';
-  font-size: 28rpx;
+  font-size: 32rpx;
   font-weight: 700;
   color: #000000;
   line-height: 40rpx;

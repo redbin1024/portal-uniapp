@@ -36,8 +36,8 @@ const handleClick = () => {
 
 <style scoped>
 .traffic-banner {
-  background: #ffffff;
-  padding: 46rpx 26rpx;
+  background: #f4f5f9;
+  padding: 72rpx 26rpx;
 }
 
 /* 标题 */

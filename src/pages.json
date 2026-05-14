@@ -25,40 +25,11 @@
       }
     },
     {
-      "path": "pages/homepage/index",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    {
       "path": "pages/index/index",
      "style": {
             "navigationStyle": "custom",
             "navigationBarTitleText": ""
           }
-    },
-    {
-      "path": "pages/about/about",
-      "style": {
-        "navigationBarTitleText": "关于",
-         "backgroundColor": "#F8F8F8"
-      }
-    },
-    {
-      "path": "pages/serve/index",
-      "style": {
-        "navigationBarTitleText": "我们的服务",
-        "navigationBarBackgroundColor": "#ffffff"
-      }
-    },
-    {
-      "path": "pages/clientevaluation/index",
-      "style": {
-        "navigationBarTitleText": "动态",
-        "navigationBarBackgroundColor": "#ffffff"
-      }
     },
     {
       "path": "pages/case/index",
@@ -71,43 +42,6 @@
       "path": "pages/casedetails/index",
       "style": {
         "navigationBarTitleText": "澜悦湾",
-        "navigationBarBackgroundColor": "#ffffff"
-      }
-    },
-    {
-      "path": "pages/waterfall-demo/index",
-      "style": {
-        "navigationBarTitleText": "瀑布流演示",
-        "navigationBarBackgroundColor": "#ffffff"
-      }
-    },
-    {
-      "path": "pages/teamIntroduction/index",
-      "style": {
-        "navigationBarTitleText": "团队亮相",
-        "navigationBarBackgroundColor": "#ffffff"
-      }
-    },
-    {
-      "path": "pages/productservice/index",
-      "style": {
-        "navigationBarTitleText": "产品服务",
-        "navigationBarBackgroundColor": "#ffffff"
-      }
-    },
-    {
-      "path": "pages/cooperationcase/index",
-      "style": {
-        "navigationBarTitleText": "合作案例",
-        "navigationBarBackgroundColor": "#ffffff",
-        "enableShareAppMessage": true,
-        "enableShareTimeline": true
-      }
-    },
-    {
-      "path": "pages/recentUpdates/index",
-      "style": {
-        "navigationBarTitleText": "最近动态",
         "navigationBarBackgroundColor": "#ffffff"
       }
     },
@@ -128,16 +62,6 @@
       }
     },
     {
-      "path": "pages/productservicenew/index",
-      "style": {
-        "navigationBarTitleText": "产品服务",
-        "navigationBarBackgroundColor": "#ffffff",
-        "enableShareAppMessage": true,
-        "enableShareTimeline": true
-      }
-    },
-   
-    {
       "path": "pages/customer/index",
      "style": {
             "navigationStyle": "custom",
@@ -145,20 +69,6 @@
             "enableShareAppMessage": true,
             "enableShareTimeline": true
           }
-    },
-    {
-      "path": "pages/dynamicdetails/index",
-      "style": {
-        "navigationBarTitleText": "动态",
-        "navigationBarBackgroundColor": "#ffffff"
-      }
-    },
-    {
-      "path": "pages/api-test/index",
-      "style": {
-        "navigationBarTitleText": "API测试",
-        "navigationBarBackgroundColor": "#ffffff"
-      }
     },
     {
       "path": "pages/firmdynamicdetails/index",

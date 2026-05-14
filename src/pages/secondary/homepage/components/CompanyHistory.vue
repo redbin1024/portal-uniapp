@@ -2,8 +2,18 @@
   <view class="company-history">
     <view class="company-history-viewport" :style="viewportStyle">
       <view class="company-history-track" :style="trackStyle">
-        <image class="company-history-image" :src="src" mode="aspectFit" />
-        <image class="company-history-image" :src="src" mode="aspectFit" />
+        <image
+          class="company-history-image"
+          :src="src"
+          mode="aspectFit"
+          @click="previewHistoryImage"
+        />
+        <image
+          class="company-history-image"
+          :src="src"
+          mode="aspectFit"
+          @click="previewHistoryImage"
+        />
       </view>
     </view>
   </view>
@@ -56,6 +66,13 @@ const trackStyle = computed(() => ({
   animationDuration: props.duration + "s",
   "--ch-image-width": imageWidthRpx.value + "rpx",
 }));
+
+const previewHistoryImage = () => {
+  uni.previewImage({
+    urls: [props.src],
+    current: props.src,
+  });
+};
 </script>
 
 <style scoped>
