@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "线上获客",
-  "backgroundColor": "#F8F8F8",
-  "usingComponents": {
-    "recent-dynamic": "./components/RecentDynamic",
-    "merchant-case": "./components/MerchantCase",
-    "service-content": "./components/ServiceContent"
-  }
-}

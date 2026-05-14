@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "公司动态",
-  "navigationBarBackgroundColor": "#ffffff",
-  "enableShareAppMessage": true,
-  "enableShareTimeline": true,
-  "usingComponents": {
-    "back-home": "../../components/BackHome/BackHome"
-  }
-}

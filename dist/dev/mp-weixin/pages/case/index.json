@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "服务案例",
-  "navigationBarBackgroundColor": "#ffffff",
-  "usingComponents": {
-    "case-card-grid": "../secondary/winthecustomer/components/CaseCardGrid",
-    "back-home": "../../components/BackHome/BackHome"
-  }
-}
