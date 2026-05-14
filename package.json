@@ -11,7 +11,7 @@
     "dev:mp-weixin:pro": "uni --mode pro",
     "build": "uni build",
     "build:h5": "uni build:h5",
-    "build:mp-weixin": "uni build:mp-weixin",
+    "build:mp-weixin": "uni -p build:mp-weixin",
     "build:mp-weixin:dev": "uni build:mp-weixin --mode dev",
     "build:mp-weixin:test": "uni build:mp-weixin --mode test",
     "build:mp-weixin:staging": "uni build:mp-weixin --mode staging",

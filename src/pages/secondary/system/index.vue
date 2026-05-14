@@ -1,543 +1,190 @@
 <template>
   <view class="main">
-    <view
-      class="video"
-      @click="nextVideo(bannerImages, coverImage)"
-      v-if="bannerImages && videoEnabled"
-    >
-      <!-- <video :src="bannerImages"></video> -->
-      <image
-        :src="enterpriseList.coverImage + '?image_process=format,webp'"
-        mode="aspectFill"
-        style="width: 100%; height: 100%; border-radius: 20rpx"
-      ></image>
-      <view class="custom-play-button">
-        <image
-          src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
-          class="play-icon"
-        />
-      </view>
-    </view>
-    <view class="videoTitle">
-      <view class="videoTitle1">{{ enterpriseList.enterpriseName }}</view>
-      <!-- <view
-        class="videoTitle2"
-        v-html="enterpriseList.enterpriseDescription"
-      ></view> -->
-    </view>
-    <view class="problem" v-if="productIntroList.length > 0">
-      <view class="winthecustomer-head">
-        <view class="winthecustomer-head1">
-          <view class="winthecustomer-title">您是否也遇到这些问题？</view>
-          <view class="winthecustomer-title1">PROBLEM</view>
-        </view>
-      </view>
-      <view class="problem-grid">
-        <view
-          class="problem-card"
-          v-for="(item, index) in productIntroList"
-          :key="index"
-          @click="goToIndex(item)"
-        >
-          <image
-            :src="item.coverImage"
-            mode="aspectFit"
-            style="width: 100%; height: 100%; border-radius: 20rpx"
-          ></image>
-        </view>
-      </view>
-      <!-- <view class="problem-grid">
-        <view
-          class="problem-card"
-          v-for="(item, index) in productIntroList"
-          :key="index"
-          :style="{
-            backgroundImage: `url(${problemOverlayImages[index]}) , url('http://cdn.xiaodingdang1.com/2026/01/07/eef8835804c445578657bcd774639c8f.png')`,
-          }"
-          @click="goToIndex(item)"
-        >
-          <view class="problem-card-header">
-            <view class="problem-icon">
-              <image :src="item.icon" mode="aspectFit"></image>
-            </view>
-            <view class="problem-arrow">
-              <image
-                src="http://cdn.xiaodingdang1.com/2026/01/07/86381c17c8d74dac891a5b12e1b5e63f.png"
-                mode="aspectFit"
-              ></image>
-            </view>
-          </view>
-          <view class="problem-card-body">
-            <view class="problem-title">{{ item.title }}</view>
-            <view class="problem-desc">{{ item.introName }}</view>
-          </view>
-        </view>
-      </view> -->
-      <view class="viewmore" @click="viewmore">
-        <view>查看更多</view>
-        <view>></view>
-      </view>
-    </view>
-    <view class="system-service-wrapper">
-      <view class="winthecustomer-head" style="margin: 30rpx 24rpx 0 24rpx">
-        <view class="winthecustomer-head1">
-          <view class="winthecustomer-title">系统服务</view>
-          <view class="winthecustomer-title1">SYSTEM SERVICE</view>
-        </view>
-      </view>
-      <view class="head">
-        <view>
-          <view class="winthecustomer-content">
-            <view
-              class="winthecustomer-content1"
-              v-for="(item, index) in serviceLists"
-              :key="index"
-              @click="next(item)"
-            >
-              <image
-                v-if="item.serviceImage && item.serviceImage[0]"
-                :src="item.serviceImage[0] + '?image_process=format,webp'"
-              ></image>
-              <view class="winthecustomer-content2">
-                <view class="winthecustomer-content2-1">
-                  {{ item.serviceName }}
-                </view>
-                <view class="winthecustomer-content2-2">了解详情</view>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
+    <VideoCarousel :videos="videoList" @play="onVideoPlay" />
+
+    <image
+      class="business-banner"
+      src="http://cdn.xiaodingdang1.com/2026/05/13/b01ee0a56c40431a8d1a3534c0001f14.png?image_process=format,webp"
+      mode="widthFix"
+    ></image>
+
+    <BusinessSystem
+      v-if="businessSystemList.length > 0"
+      title="宝妈小叮当"
+      subtitle="业务系统"
+      :list="businessSystemList"
+      @click="goToCustomer"
+    />
+
+    <ProblemList
+      v-if="productIntroList.length > 0"
+      :list="productIntroList"
+      :limit="4"
+      @click="goToIntro"
+      @more="goToIssueList"
+    />
+
+    <Partners :list="partnerList" />
   </view>
 </template>
 
 <script setup>
-import basePoint from "@/utils/basePoint.js";
+import { ref, onMounted } from 'vue';
 import {
-  onPageScroll,
-  onLoad,
   onShow,
   onHide,
   onShareAppMessage,
   onShareTimeline,
-} from "@dcloudio/uni-app";
-
-onShareAppMessage(() => {
-  return {
-    title: "系统",
-    path: "/pages/secondary/system/index",
-  };
-});
-
-onShareTimeline(() => {
-  return {
-    title: "系统",
-    query: "",
-  };
-});
-import { ref, onMounted } from "vue";
-import BlurSwiper from "@/components/blur-swiper/blur-swiper.vue";
-import VideoRotateCarousel from "@/components/video-rotate-carousel/video-rotate-carousel.vue";
+} from '@dcloudio/uni-app';
 import {
   getServiceList,
-  getcaseList,
   getEnterpriseList,
   getProductIntroList,
-} from "@/api/activity.js";
-import VearCarousel from "@/components/vear-carousel/vear-carousel.vue";
+} from '@/api/activity.js';
+import basePoint from '@/utils/basePoint.js';
+import VideoCarousel from './components/VideoCarousel.vue';
+import ProblemList from '@/pages/secondary/homepage/components/ProblemList.vue';
+import SystemService from './components/SystemService.vue';
+import BusinessSystem from '@/pages/secondary/homepage/components/BusinessSystem.vue';
+import Partners from './components/Partners.vue';
 
-// 响应式数据
-const activeTab = ref(0); // 默认选中第一个
-//查询服务信息列表
-const serviceList = ref([]);
+const videoList = ref([]);
+const productIntroList = ref([]);
 const serviceLists = ref([]);
-const caseList = ref([]);
-const richText = ref("");
-const imgList = ref([]);
-const bannerImages = ref("");
-const coverImage = ref("");
-const videoEnabled = ref(true);
-const problemIcons = ref([
-  "http://cdn.xiaodingdang1.com/2026/01/07/329586497cb141d69864b7ffe44c01e2.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/3c68ffd0fa574800b29257226f5d92cf.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/3500dffbb8d24fa1970e0e1c33a9fcd4.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/a4859ef57e154df784dde7f35a99a3a8.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/eb5b036256d842e199c48424b5bda131.png",
-  "http://cdn.xiaodingdang1.com/2026/01/07/303e3c6ea6b34406bf1024b2cb0e9a70.png",
-]);
-const problemOverlayImages = ref([]);
-const problemList = ref([
-  {
-    title: "服务笔记",
-    desc: "客户总是要打开怎么教你如何用系统一次性解决",
-  },
-  {
-    title: "宝妈站台",
-    desc: "销售如何做到10分钟完成客户信任，快速签单",
-  },
-  {
-    title: "宝妈站台",
-    desc: "遇到客户在网上诋毁，会所该如何自救",
-  },
-  {
-    title: "宝宝请帖",
-    desc: "如何0成本做品牌曝光？如何0成本做线上获客",
-  },
-  {
-    title: "AI智能销售",
-    desc: "每个月到手的资源流失率超过80%，如何用系统完美解决",
-  },
-  {
-    title: "客户轨迹",
-    desc: "如何快速找到客户真实需求进行针对性营销 快速拿下订单",
-  },
-]);
-const viewmore = () => {
-  uni.navigateTo({
-    url: "/pages/secondary/issueList/index",
-  });
-};
-const goToIndex = (item) => {
-  if (item.introType == 2) {
-    let url =
-      "/pages/secondary/index/index?url=" +
-      item.videoUrl +
-      "&visitContent=" +
-      item.title;
-    if (item.coverImage) {
-      url += "&coverImage=" + encodeURIComponent(item.coverImage);
-    }
-    uni.navigateTo({
-      url: url,
-    });
-  } else {
-    uni.navigateTo({
-      url: "/pages/secondary/issueDetails/index?introId=" + item.introId,
-    });
+const businessSystemList = ref([]);
+const partnerList = ref([]);
+
+// ===== 工具方法 =====
+const extractVideoUrl = (bannerImages) => {
+  if (!Array.isArray(bannerImages)) return '';
+  for (const str of bannerImages) {
+    if (typeof str === 'string' && str.slice(-3) === 'mp4') return str;
   }
-};
-// 企业列表数据
-const enterpriseList = ref([]);
-//查询商家案例列表
-const fetchcaseList = async () => {
-  try {
-    const response = await getcaseList({
-      pageSize: 10,
-      pageNum: 1,
-    });
-    console.log("案例列表数据:", response);
-    if (response && response.rows) {
-      let data = response.rows;
-      let slideshowData = [];
-      data.forEach((res, index) => {
-        // 检查是否有视频，如果有则添加视频类型的数据
-        if (res.caseImages && res.caseImages.length > 0) {
-          slideshowData.push({
-            type: "video",
-            url: res.caseImages[0],
-            src: res.caseImages[0],
-            poster:
-              res.caseImages && res.caseImages[0] ? res.caseImages[0] : "",
-            title: res.caseName || "",
-            description: res.caseDescription || "",
-            id: res.id || index,
-            autoplay: false,
-            loop: false,
-            muted: true, // 默认静音自动播放
-            controls: true,
-            showFullscreenBtn: true,
-            caseTitle: res.caseTitle,
-          });
-        } else if (res.caseImages && res.caseImages.length > 0) {
-          // 如果没有视频，则使用图片
-          slideshowData.push({
-            type: "image",
-            url: res.caseImages[0],
-            src: res.caseImages[0],
-            title: res.caseName || "",
-            description: res.caseDescription || "",
-            id: res.id || index,
-            caseTitle: res.caseTitle,
-          });
-        }
-      });
-      console.log("案例轮播数据:", slideshowData);
-      caseList.value = slideshowData;
-      // 将案例数据传递给 carousel 组件
-      imgList.value = slideshowData;
-    }
-  } catch (error) {
-    console.error("获取案例列表失败:", error);
-    uni.showToast({
-      title: "获取案例列表失败",
-      icon: "none",
-    });
-  }
-};
-//查询服务信息列表
-const fetchServiceList = async () => {
-  try {
-    const response = await getServiceList({
-      pageSize: 10,
-      pageNum: 1,
-    });
-    console.log("服务列表数据:", response);
-    if (response && response.rows && response.rows.length > 0) {
-      let data = response.rows[0];
-      let slideshowData = [];
-
-      // 确保 serviceImage 存在且是数组
-      if (data.serviceImage && Array.isArray(data.serviceImage)) {
-        data.serviceImage.forEach((res) => {
-          slideshowData.push({
-            image: res,
-            title: "",
-            description: "",
-          });
-        });
-      }
-
-      console.log("服务轮播数据:", slideshowData);
-      serviceList.value = slideshowData;
-      serviceLists.value = response.rows.slice(1);
-
-      if (data.serviceDescription) {
-        richText.value = processContent(data.serviceDescription);
-      }
-    } else {
-      console.log("服务列表数据为空");
-    }
-  } catch (error) {
-    console.error("获取服务列表失败:", error);
-    uni.showToast({
-      title: "获取服务列表失败",
-      icon: "none",
-    });
-  }
-};
-// 方法
-const switchTab = (index) => {
-  activeTab.value = index;
-  console.log("切换到tab:", index);
-  console.log("当前serviceList:", serviceList.value);
+  return '';
 };
 
-const next = (item) => {
-  try {
-    // const itemStr = JSON.stringify(item);
-    uni.navigateTo({
-      url: "/pages/customer/index?serviceId=" + item.serviceId,
-    });
-  } catch (error) {
-    console.error("序列化参数失败:", error);
-    uni.showToast({
-      title: "参数传递失败",
-      icon: "none",
-    });
-  }
+const formatRichText = (html) => {
+  if (!html) return '';
+  return html.replace(/<[^>]+>/g, '').replace(/&nbsp;/gi, '');
 };
 
-// 轮播图事件处理
-const onCarouselChange = (e) => {
-  console.log("轮播图切换:", e);
-};
-
-const onCarouselClick = (e) => {
-  console.log("轮播图点击:", e);
-};
-
-// 视频相关事件处理
-const onVideoClick = (e) => {
-  console.log("视频点击全屏:", e);
-  // 可扩展：点击视频时的自定义逻辑
-};
-
-const onVideoPlay = (e) => {
-  console.log("视频开始播放:", e);
-};
-
-const onVideoPause = (e) => {
-  console.log("视频暂停:", e);
-};
-
-const onVideoEnded = (e) => {
-  console.log("视频播放结束:", e);
-};
-
-const onVideoError = (e) => {
-  console.error("视频播放错误:", e);
-  uni.showToast({
-    title: "视频播放失败",
-    icon: "none",
-  });
-};
-const nextVideo = (url, coverImage) => {
-  uni.navigateTo({
-    url: "/pages/secondary/index/index?url=" + url + "&visitContent=宣传视频",
-  });
-  // uni.navigateTo({
-  //   url:
-  //     "/pages/secondary/index/index?url=" +
-  //     url +
-  //     "&coverImage=" +
-  //     coverImage +
-  //     "&visitContent=宣传视频",
-  // });
-  // let sources = [];
-  // sources = [
-  //   {
-  //     url: url,
-  //     type: "video",
-  //     poster: coverImage,
-  //   },
-  // ];
-  // uni.previewMedia({
-  //   sources: sources,
-  //   current: 0,
-  //   autoplay: true,
-  // });
-};
-const onFullscreenChange = (e, index, isEnteringFullscreen) => {
-  console.log(
-    "视频全屏状态变化:",
-    e,
-    "索引:",
-    index,
-    "进入全屏:",
-    isEnteringFullscreen
-  );
-
-  if (isEnteringFullscreen) {
-    console.log("视频进入全屏模式，已取消静音");
-    uni.showToast({
-      title: "全屏播放已开启声音",
-      icon: "none",
-      duration: 1500,
-    });
-  } else {
-    console.log("视频退出全屏模式，已恢复静音");
-  }
-};
-
-const onPauseAllVideos = () => {
-  console.log("暂停所有视频");
-  // 这里可以添加暂停所有视频的逻辑
-};
-
-const selectedBanner = (item, index) => {
-  console.log("选中轮播项:", item, "索引:", index);
-  // 这里可以添加点击轮播项的处理逻辑
-  if (item.type === "video") {
-    console.log("点击了视频项");
-  } else {
-    console.log("点击了图片项");
-  }
-};
-// 获取企业列表数据
+// ===== 数据获取 =====
 const fetchEnterpriseList = async () => {
   try {
-    const response = await getEnterpriseList({
-      pageSize: 10,
-      pageNum: 1,
-    });
-    console.log("企业列表数据:", response);
-    if (
-      response &&
-      response.rows &&
-      Array.isArray(response.rows) &&
-      response.rows.length > 0
-    ) {
-      enterpriseList.value = response.rows[0];
-      coverImage.value = response.rows[0].coverImage;
-      let video;
-      if (
-        response.rows[0].bannerImages &&
-        Array.isArray(response.rows[0].bannerImages)
-      ) {
-        response.rows[0].bannerImages.forEach((str1) => {
-          let result1 = str1.slice(-3);
-          if (result1 == "mp4") {
-            video = str1;
-          }
-        });
-      }
-      bannerImages.value = video;
-      videoEnabled.value = response.rows[0].videoEnabled;
+    const response = await getEnterpriseList({ pageSize: 10, pageNum: 1 });
+    if (response && Array.isArray(response.rows) && response.rows.length > 0) {
+      videoList.value = response.rows
+        .filter((row) => row.videoEnabled)
+        .map((row) => ({
+          enterpriseName: row.enterpriseName,
+          coverImage: row.coverImage,
+          videoUrl: extractVideoUrl(row.bannerImages),
+        }))
+        .filter((row) => row.videoUrl && row.coverImage);
+      partnerList.value = Array.isArray(response.rows[0].cooperationMerchants)
+        ? response.rows[0].cooperationMerchants
+        : [];
     }
   } catch (error) {
-    console.error("获取企业列表失败:", error);
-    uni.showToast({
-      title: "获取企业列表失败",
-      icon: "none",
-    });
+    uni.showToast({ title: '获取企业列表失败', icon: 'none' });
   }
 };
-const productIntroList = ref([]);
+
 const fetchProductIntroList = async () => {
   try {
-    const response = await getProductIntroList({
-      pageSize: 6,
-      pageNum: 1,
-    });
-    console.log("产品介绍列表数据:", response);
-    if (
-      response &&
-      response.rows &&
-      Array.isArray(response.rows) &&
-      response.rows.length > 0
-    ) {
+    const response = await getProductIntroList({ pageSize: 6, pageNum: 1 });
+    if (response && Array.isArray(response.rows) && response.rows.length > 0) {
       response.rows.forEach((item) => {
-        console.log("原始introDetail:", item.introDetail);
         item.introDetailFormat = formatRichText(item.introDetail);
       });
-      console.log("处理后的introDetailFormat:", response.rows);
       productIntroList.value = response.rows;
     }
   } catch (error) {
-    console.error("获取产品介绍列表失败:", error);
-    uni.showToast({
-      title: "获取产品介绍列表失败",
-      icon: "none",
-    });
+    uni.showToast({ title: '获取产品介绍列表失败', icon: 'none' });
   }
 };
-// 页面加载完成后触发按钮动画
-onMounted(() => {
-  fetchServiceList();
-  fetchcaseList(); // 暂时注释掉，因为当前页面主要显示服务信息
-  fetchEnterpriseList();
-  //查询产品介绍列表
-  fetchProductIntroList();
-});
-const processContent = (content) => {
-  if (!content) return "";
-  // 处理图片样式
-  return content
-    .replace(/<img[^>]*>/gi, function (match, capture) {
-      return match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
-    })
-    .replace(/\<img/gi, '<img style="width:100%;height:auto;display:block;"');
+
+const fetchServiceList = async () => {
+  try {
+    const response = await getServiceList({ pageSize: 10, pageNum: 1 });
+    if (response && Array.isArray(response.rows) && response.rows.length > 0) {
+      serviceLists.value = response.rows;
+      // 业务系统模块排除 serviceName 为「线上获客」的项
+      businessSystemList.value = response.rows.filter(
+        (it) => (it?.serviceName || '').trim() !== '线上获客'
+      );
+    }
+  } catch (error) {
+    uni.showToast({ title: '获取服务列表失败', icon: 'none' });
+  }
 };
-const formatRichText = (html) => {
-  let newContent = html.replace(/<[^>]+>/g, "");
-  newContent = newContent.replace(/&nbsp;/gi, "");
-  return newContent;
-};
-onShow(async () => {
-  await basePoint.trackingStart({
-    visitModule: "系统",
-    visitContent: "系统",
+
+// ===== 跳转事件 =====
+const onVideoPlay = (item) => {
+  uni.navigateTo({
+    url:
+      '/pages/secondary/index/index?url=' +
+      item.videoUrl +
+      '&visitContent=宣传视频',
   });
-});
-onHide(async () => {
-  let trackingId = uni.getStorageSync("trackingId");
-  if (trackingId) {
-    await basePoint.trackingEnd({
-      id: trackingId,
+};
+
+const goToIntro = (item) => {
+  if (item.introType == 2) {
+    let url =
+      '/pages/secondary/index/index?url=' +
+      item.videoUrl +
+      '&visitContent=' +
+      item.title;
+    if (item.coverImage) {
+      url += '&coverImage=' + encodeURIComponent(item.coverImage);
+    }
+    uni.navigateTo({ url });
+  } else {
+    uni.navigateTo({
+      url: '/pages/secondary/issueDetails/index?introId=' + item.introId,
     });
   }
+};
+
+const goToIssueList = () => {
+  uni.navigateTo({ url: '/pages/secondary/issueList/index' });
+};
+
+const goToCustomer = (item) => {
+  uni.navigateTo({
+    url: '/pages/customer/index?serviceId=' + item.serviceId,
+  });
+};
+
+// ===== 生命周期 =====
+onMounted(() => {
+  fetchEnterpriseList();
+  fetchProductIntroList();
+  fetchServiceList();
 });
+
+onShow(async () => {
+  await basePoint.trackingStart({ visitModule: '系统', visitContent: '系统' });
+});
+
+onHide(async () => {
+  const trackingId = uni.getStorageSync('trackingId');
+  if (trackingId) {
+    await basePoint.trackingEnd({ id: trackingId });
+  }
+});
+
+// ===== 分享 =====
+onShareAppMessage(() => ({
+  title: '系统',
+  path: '/pages/secondary/system/index',
+}));
+
+onShareTimeline(() => ({
+  title: '系统',
+  query: '',
+}));
 </script>
 
 <style scoped>
@@ -546,297 +193,10 @@ onHide(async () => {
   min-height: 100vh;
   overflow: hidden;
 }
-.system-service-wrapper {
-  background: linear-gradient(
-    to bottom,
-    #f0f8ff 30%,
-    #acb4db 50%,
-    #3351e2 100%
-  );
-  padding: 20rpx 0;
-}
-.first {
-  padding-top: 40rpx;
-  background: #fff;
-}
-.head {
-  /* background: #f0f0f0; */
-  /* margin-top: 80rpx; */
-}
-.headTab {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  /* padding: 20rpx; */
-  background: #fff;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-
-.tab-item {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 20rpx 0;
-}
-
-.tab-text {
-  font-size: 36rpx;
-  color: #000000;
-  transition: color 0.3s ease;
-}
-
-.tab-item.active .tab-text {
-  color: #000000;
-  font-weight: bold;
-}
-
-.tab-line {
-  width: 60rpx;
-  height: 6rpx;
-  background: #000000;
-  border-radius: 2rpx;
-  margin-top: 10rpx;
-  animation: lineSlide 0.3s ease;
-}
-
-@keyframes lineSlide {
-  from {
-    width: 0;
-  }
-  to {
-    width: 60rpx;
-  }
-}
-.slideshow {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 40rpx 0;
-  border-radius: 0 0 40rpx 40rpx;
-}
-.content-img {
-  margin-top: 38rpx;
+.business-banner {
+  margin-top: 40rpx;
+  display: block;
   width: 750rpx;
-}
-.content-img image {
-  width: 100%;
-}
-
-.winthecustomer-content {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0rpx 18rpx 52rpx 18rpx;
-  /* background: linear-gradient(to bottom, #ffffff 0%, #3351e2 70%); */
-  padding-top: 20rpx;
-}
-.winthecustomer-content1:nth-of-type(2n) {
-  margin-left: 3%;
-}
-.winthecustomer-content1 {
-  width: 48%;
-  background: #f2f6ff;
-  margin-bottom: 38rpx;
-  border-radius: 20rpx;
-}
-.winthecustomer-content1 image {
-  width: 100%;
-  height: 350rpx;
-  border-top-left-radius: 20rpx;
-  border-top-right-radius: 20rpx;
-}
-.winthecustomer-content2 {
-  width: 100%;
-  padding: 20rpx 0;
-  text-align: center;
-  border-bottom-left-radius: 20rpx;
-  border-bottom-right-radius: 20rpx;
-  display: flex;
-  justify-content: space-between;
-}
-.winthecustomer-content2-1 {
-  color: #000000;
-  font-size: 28rpx;
-  margin-left: 24rpx;
-}
-.winthecustomer-content2-2 {
-  width: 112rpx;
-  height: 44rpx;
-  background: #3552e3;
-  border-radius: 100rpx;
-  color: #ffffff;
-  font-size: 20rpx;
-  line-height: 44rpx;
-  text-align: center;
-  margin-right: 24rpx;
-}
-
-.loading-placeholder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 800rpx;
-  background: #f8f8f8;
-  border-radius: 20rpx;
-  margin: 20rpx;
-}
-
-.loading-placeholder text {
-  color: #999;
-  font-size: 28rpx;
-}
-.video {
-  width: 702rpx;
-  height: 394rpx;
-  border-radius: 20rpx;
-  margin: 20rpx auto;
-  position: relative;
-}
-.video video {
-  width: 100%;
-  height: 100%;
-  border-radius: 20rpx;
-}
-.videoTitle {
-  margin-top: 20rpx;
-}
-.videoTitle1 {
-  color: #000000;
-  font-size: 36rpx;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 24rpx;
-}
-.videoTitle2 {
-  color: #4e4d4d;
-  font-size: 24rpx;
-  padding: 0 24rpx;
-}
-/* 自定义播放按钮样式 */
-.custom-play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  opacity: 0.5;
-}
-
-.custom-play-button:hover {
-  transform: translate(-50%, -50%) scale(1.1);
-  /* background: rgba(255, 255, 255, 1); */
-}
-
-.custom-play-button .play-icon {
-  width: 80rpx;
-  height: 80rpx;
-}
-
-.problem {
-  /* background: #ffffff; */
-  padding: 46rpx 26rpx 20rpx 26rpx;
-}
-.problem-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20rpx;
-  margin-top: 24rpx;
-}
-.problem-card {
-  width: 100%;
-  height: 378rpx;
-  background-size: 106rpx 112rpx, cover;
-  background-position: right 24rpx bottom 24rpx, center;
-  background-repeat: no-repeat, no-repeat;
-  overflow: hidden;
-}
-.problem-card-header {
-  display: flex;
-  align-items: center;
-  padding: 60rpx 20rpx 8rpx 30rpx;
-  justify-content: space-between;
-}
-.problem-icon {
-}
-.problem-icon image {
-  width: 56rpx;
-  height: 56rpx;
-}
-.problem-arrow {
-}
-.problem-arrow image {
-  width: 30rpx;
-  height: 30rpx;
-}
-.problem-card-body {
-  padding: 24rpx;
-}
-.problem-title {
-  width: 100%;
-  height: 40rpx;
-  font-family: PingFang SC, PingFang SC;
-  font-weight: 600;
-  font-size: 32rpx;
-  color: #3351e3;
-  line-height: 40rpx;
-  text-align: left;
-  font-style: normal;
-  text-transform: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.problem-desc {
-  width: 270rpx;
-  font-family: PingFang SC, PingFang SC;
-  font-weight: 400;
-  font-size: 24rpx;
-  color: #3d3d3d;
-  line-height: 40rpx;
-  text-align: left;
-  font-style: normal;
-  text-transform: none;
-  margin-top: 24rpx;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.winthecustomer-head {
-  display: flex;
-}
-.winthecustomer-head1 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-.winthecustomer-title {
-  color: #000000;
-  font-weight: bold;
-  font-size: 40rpx;
-}
-.winthecustomer-title1 {
-  color: #d6d4d4;
-  font-size: 28rpx;
-}
-.viewmore {
-  display: flex;
-  justify-content: center;
-  background: #f3f5fb;
-  border-radius: 8rpx;
-  width: 100%;
-  height: 88rpx;
-  color: #313131;
-  font-size: 30rpx;
-  line-height: 88rpx;
-  margin: 28rpx 0 20rpx 0;
+  height: 1688rpx;
 }
 </style>

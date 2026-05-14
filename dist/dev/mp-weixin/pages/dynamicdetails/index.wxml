@@ -1,1 +1,1 @@
-<view class="content-img"><rich-text class="activity" nodes="{{a}}" type="text"></rich-text><view wx:if="{{b}}" class="service-description"></view></view><back-home u-i="0db1d13c-0" bind:__l="__l"/>
+<view class="content-img"><rich-text class="activity" nodes="{{a}}" type="text"></rich-text><view wx:if="{{b}}" class="service-description"></view></view><back-home u-i="f258e66a-0" bind:__l="__l"/>

@@ -22,18 +22,23 @@ var __async = (__this, __arguments, generator) => {
 const common_vendor = require("../../../common/vendor.js");
 const api_activity = require("../../../api/activity.js");
 const utils_basePoint = require("../../../utils/basePoint.js");
+if (!Math) {
+  (AnimateOnView + CompanyHistory + BusinessPartner + TrafficBanner + BusinessSystem + ProblemList + HonorCertificate + MediaPreview + CustomerServiceBtn)();
+}
+const CompanyHistory = () => "./components/CompanyHistory.js";
+const BusinessPartner = () => "./components/BusinessPartner.js";
+const TrafficBanner = () => "./components/TrafficBanner.js";
+const BusinessSystem = () => "./components/BusinessSystem.js";
+const ProblemList = () => "./components/ProblemList.js";
+const HonorCertificate = () => "./components/HonorCertificate.js";
+const CustomerServiceBtn = () => "../../../components/CustomerServiceBtn/CustomerServiceBtn.js";
+const MediaPreview = () => "../../../components/MediaPreview/MediaPreview.js";
+const AnimateOnView = () => "../../../components/AnimateOnView/AnimateOnView.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
     common_vendor.ref(false);
-    common_vendor.ref({});
-    common_vendor.ref([]);
     const caseDataList = common_vendor.ref([]);
-    const nextVideo = (url, coverImage, visitContent) => {
-      common_vendor.index.navigateTo({
-        url: "/pages/secondary/index/index?url=" + url + "&coverImage=" + coverImage + "&visitContent=" + visitContent
-      });
-    };
     const viewmore = () => {
       common_vendor.index.navigateTo({
         url: "/pages/secondary/businesspartner/index"
@@ -281,6 +286,16 @@ const _sfc_main = {
     const enterpriseList = common_vendor.ref([]);
     const serviceList = common_vendor.ref([]);
     const serviceLists = common_vendor.ref([]);
+    const isManagementService = (item) => {
+      const name = (item == null ? void 0 : item.serviceName) || "";
+      return /管理|CRM/i.test(name);
+    };
+    const businessSystemList = common_vendor.computed(
+      () => serviceLists.value.filter((it) => !isManagementService(it))
+    );
+    const managementSystemList = common_vendor.computed(
+      () => serviceLists.value.filter((it) => isManagementService(it))
+    );
     const companyNewsList = common_vendor.ref([]);
     common_vendor.ref(0);
     common_vendor.ref(false);
@@ -343,39 +358,6 @@ const _sfc_main = {
       // 'image' 或 'video'
       index: 0
     });
-    const getVideoPoster = (videoUrl) => {
-      if (typeof videoUrl !== "string") {
-        console.warn("videoUrl is not a string:", videoUrl);
-        return "";
-      }
-      return videoUrl.replace(
-        /\.(mp4|webm|ogg|mov|avi|wmv|flv|mkv)$/i,
-        "_poster.jpg"
-      );
-    };
-    const closePreview = () => {
-      if (isVideoFullscreen.value) {
-        return;
-      }
-      showPreview.value = false;
-    };
-    const onFullscreenChange = (e) => {
-      console.log("视频全屏状态变化:", e);
-      const isEnteringFullscreen = !!(e && e.detail && (e.detail.fullScreen || e.detail.fullscreen));
-      isVideoFullscreen.value = isEnteringFullscreen;
-      if (isEnteringFullscreen) {
-        console.log("视频进入全屏，保持showPreview显示");
-      } else {
-        console.log("视频退出全屏");
-      }
-    };
-    const handlePreviewModalClick = (e) => {
-      if (isVideoFullscreen.value) {
-        console.log("视频全屏中，不关闭预览");
-        return;
-      }
-      closePreview();
-    };
     const next = (item) => {
       try {
         common_vendor.index.navigateTo({
@@ -392,95 +374,103 @@ const _sfc_main = {
     const handleCustomerServiceClick = () => {
       console.log("Customer service clicked");
     };
-    const getFirstRowCertificates = (certificates) => {
-      if (!certificates || !Array.isArray(certificates))
-        return [];
-      return certificates.filter((_, index) => index % 2 === 0);
-    };
-    const getSecondRowCertificates = (certificates) => {
-      if (!certificates || !Array.isArray(certificates))
-        return [];
-      return certificates.filter((_, index) => index % 2 === 1);
-    };
     common_vendor.onPageScroll((e) => {
     });
     return (_ctx, _cache) => {
-      var _a, _b, _c, _d, _e, _f;
       return common_vendor.e({
-        a: enterpriseList.value.videoEnabled
-      }, enterpriseList.value.videoEnabled ? common_vendor.e({
-        b: common_vendor.f(caseDataList.value, (item, index, i0) => {
-          return {
-            a: item.coverImage + "?image_process=format,webp",
-            b: common_vendor.o(($event) => nextVideo(item.caseImages, item.coverImage, item.caseTitle), index),
-            c: index
-          };
+        a: common_vendor.t(enterpriseList.value.enterpriseName || "天天拓客"),
+        b: common_vendor.t(enterpriseList.value.enterpriseIntroOne || "天天拓客是一家集网络运营、母婴行业软件开发、互联网服务于一体的网络科技公司。4年专注母婴行业，为月子中心提供全案运营、长期陪跑服务，解决月子中心经营难题的实战派团队。"),
+        c: common_vendor.t(enterpriseList.value.enterpriseIntroTwo || "“宝妈小叮当”是公司系统品牌，致力于通过“天天拓客”的服务体系与“宝妈小叮当”的系统工具，双轮驱动助力月子中心满房盈利。"),
+        d: common_vendor.p({
+          animation: "fade-up",
+          duration: 1200
         }),
-        c: enterpriseList.value.videoEnabled
+        e: common_vendor.p({
+          animation: "flip-up",
+          delay: 80,
+          duration: 1100
+        }),
+        f: enterpriseList.value.videoEnabled
       }, enterpriseList.value.videoEnabled ? {
-        d: common_vendor.o(viewmore)
+        g: common_vendor.o(viewmore),
+        h: common_vendor.p({
+          list: caseDataList.value
+        })
       } : {}, {
-        e: enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0]
-      }, enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0] ? {
-        f: enterpriseList.value.bannerImages[0] + "?image_process=format,webp"
-      } : {}) : {}, {
-        g: productIntroList.value.length > 0
+        i: common_vendor.p({
+          animation: "bounce-in",
+          duration: 1200
+        }),
+        j: enterpriseList.value.videoEnabled && enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0]
+      }, enterpriseList.value.videoEnabled && enterpriseList.value.bannerImages && enterpriseList.value.bannerImages[0] ? {
+        k: enterpriseList.value.bannerImages[0] + "?image_process=format,webp"
+      } : {}, {
+        l: common_vendor.p({
+          animation: "zoom-in",
+          duration: 1100
+        }),
+        m: common_vendor.o(nextDetile),
+        n: common_vendor.p({
+          animation: "slide-right",
+          duration: 1100
+        }),
+        o: common_vendor.o(next),
+        p: common_vendor.p({
+          title: "宝妈小叮当",
+          subtitle: "业务系统",
+          list: businessSystemList.value
+        }),
+        q: common_vendor.p({
+          animation: "flip-up",
+          duration: 1100
+        }),
+        r: common_vendor.o(next),
+        s: common_vendor.p({
+          title: "宝妈小叮当",
+          subtitle: "管理系统",
+          list: managementSystemList.value
+        }),
+        t: common_vendor.p({
+          animation: "slide-left",
+          duration: 1100
+        }),
+        v: productIntroList.value.length > 0
       }, productIntroList.value.length > 0 ? {
-        h: common_vendor.o(goToIssueList),
-        i: common_vendor.f(productIntroList.value, (img, index, i0) => {
-          return {
-            a: img.coverImage,
-            b: common_vendor.o(($event) => goToIndex(img), "problem-" + index),
-            c: "problem-" + index
-          };
+        w: common_vendor.o(goToIndex),
+        x: common_vendor.o(goToIssueList),
+        y: common_vendor.p({
+          list: productIntroList.value,
+          limit: 4
         })
       } : {}, {
-        j: ((_b = (_a = serviceList.value) == null ? void 0 : _a.serviceImage) == null ? void 0 : _b[0]) + "?image_process=format,webp"
-      }, ((_d = (_c = serviceList.value) == null ? void 0 : _c.serviceImage) == null ? void 0 : _d[0]) + "?image_process=format,webp" ? {
-        k: (_f = (_e = serviceList.value) == null ? void 0 : _e.serviceImage) == null ? void 0 : _f[0]
-      } : {}, {
-        l: common_vendor.o(($event) => nextDetile()),
-        m: common_vendor.f(serviceLists.value, (item, index, i0) => {
-          return {
-            a: item.serviceImage + "?image_process=format,webp",
-            b: common_vendor.t(item.serviceName),
-            c: index,
-            d: common_vendor.o(($event) => next(item), index)
-          };
+        z: common_vendor.p({
+          animation: "bounce-in",
+          duration: 1200
         }),
-        n: common_vendor.f(getFirstRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
-          return {
-            a: certificate + "?image_process=format,webp",
-            b: "row1-" + index
-          };
-        }),
-        o: getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0
-      }, getSecondRowCertificates(enterpriseList.value.honorCertificates).length > 0 ? {
-        p: common_vendor.f(getSecondRowCertificates(enterpriseList.value.honorCertificates), (certificate, index, i0) => {
-          return {
-            a: certificate,
-            b: "row2-" + index
-          };
+        A: enterpriseList.value.honorCertificates && enterpriseList.value.honorCertificates.length
+      }, enterpriseList.value.honorCertificates && enterpriseList.value.honorCertificates.length ? {
+        B: common_vendor.p({
+          list: enterpriseList.value.honorCertificates,
+          duration: 30
         })
       } : {}, {
-        q: common_vendor.t(enterpriseList.value.enterpriseAddress),
-        r: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
-        s: showPreview.value
-      }, showPreview.value ? common_vendor.e({
-        t: previewMedia.value.type === "video"
-      }, previewMedia.value.type === "video" ? {
-        v: previewMedia.value.src,
-        w: getVideoPoster(previewMedia.value.src),
-        x: common_vendor.o(onFullscreenChange),
-        y: "preview-video-" + previewMedia.value.index
-      } : {
-        z: previewMedia.value.src
-      }, {
-        A: isVideoFullscreen.value ? 1 : "",
-        B: common_vendor.o(handlePreviewModalClick)
-      }) : {}, {
-        C: common_vendor.o(handleCustomerServiceClick),
-        D: showPreview.value ? 1 : ""
+        C: common_vendor.p({
+          animation: "zoom-in",
+          duration: 1100
+        }),
+        D: common_vendor.t(enterpriseList.value.enterpriseAddress),
+        E: `url(${enterpriseList.value.enterpriseLogo}?image_process=format,webp)`,
+        F: common_vendor.o(($event) => isVideoFullscreen.value = $event),
+        G: common_vendor.o(($event) => showPreview.value = $event),
+        H: common_vendor.p({
+          media: previewMedia.value,
+          visible: showPreview.value
+        }),
+        I: common_vendor.o(handleCustomerServiceClick),
+        J: common_vendor.p({
+          bottom: 160
+        }),
+        K: showPreview.value ? 1 : ""
       });
     };
   }

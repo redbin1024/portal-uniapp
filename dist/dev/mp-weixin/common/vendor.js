@@ -1308,7 +1308,7 @@ function populateParameters(fromRes, toRes) {
   let _SDKVersion = SDKVersion;
   const hostLanguage = language.replace(/_/g, "-");
   const parameters = {
-    appId: "__UNI__MASTERGO",
+    appId: "__UNI__D3B26BE",
     appName: "mastergo-project",
     appVersion: "1.0.0",
     appVersionCode: "100",
@@ -1457,7 +1457,7 @@ const getAppBaseInfo = {
       hostName: _hostName,
       hostSDKVersion: SDKVersion,
       hostTheme: theme,
-      appId: "__UNI__MASTERGO",
+      appId: "__UNI__D3B26BE",
       appName: "mastergo-project",
       appVersion: "1.0.0",
       appVersionCode: "100",
@@ -11711,6 +11711,7 @@ exports.Parser = Parser$1;
 exports.Search = Search;
 exports.Style = Style;
 exports._export_sfc = _export_sfc;
+exports.computed = computed;
 exports.context = context;
 exports.createSSRApp = createSSRApp;
 exports.e = e;
@@ -11737,4 +11738,5 @@ exports.ref = ref;
 exports.resolveComponent = resolveComponent;
 exports.s = s;
 exports.t = t$1;
+exports.watch = watch;
 exports.wx$1 = wx$1;

@@ -21,74 +21,34 @@ var __async = (__this, __arguments, generator) => {
 };
 const common_vendor = require("../../common/vendor.js");
 const api_activity = require("../../api/activity.js");
-if (!Array) {
-  const _easycom_BackHome2 = common_vendor.resolveComponent("BackHome");
-  _easycom_BackHome2();
-}
-const _easycom_BackHome = () => "../../components/BackHome/BackHome.js";
 if (!Math) {
-  _easycom_BackHome();
+  (CaseCardGrid + BackHome)();
 }
+const CaseCardGrid = () => "../secondary/winthecustomer/components/CaseCardGrid.js";
+const BackHome = () => "../../components/BackHome/BackHome.js";
 const __default__ = {
-  onPageScroll(e) {
-    if (this.$refs && this.$refs.handleScroll) {
-      this.$refs.handleScroll(e);
-    }
+  onShareAppMessage() {
+    return {
+      title: "商家案例",
+      path: "/pages/case/index"
+    };
+  },
+  onShareTimeline() {
+    return {
+      title: "商家案例",
+      query: ""
+    };
   }
 };
 const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
   __name: "index",
-  setup(__props, { expose: __expose }) {
-    const instance = common_vendor.getCurrentInstance();
+  setup(__props) {
     const successCaseList = common_vendor.ref([]);
-    const animatedItems = common_vendor.ref([]);
     const loading = common_vendor.ref(false);
     const loadingMore = common_vendor.ref(false);
-    const types = common_vendor.ref([]);
+    const hasMore = common_vendor.ref(true);
     const pageNum = common_vendor.ref(1);
-    common_vendor.onReachBottom(() => {
-      if (types.value == 1) {
-        pageNum.value += 1;
-        fetchsuccessCaseList();
-      }
-    });
-    common_vendor.reactive([
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png",
-        title: "东方幸福国际母婴会所",
-        description: "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/d177663900974c55bd7b9d093b77c379.png",
-        title: "东方幸福国际母婴会所",
-        description: "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        title: "东方幸福国际母婴会所",
-        description: "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        title: "东方幸福国际母婴会所",
-        description: "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        title: "东方幸福国际母婴会所",
-        description: "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        title: "东方幸福国际母婴会所",
-        description: "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。"
-      },
-      {
-        image: "http://cdn.xiaodingdang1.com/2025/09/15/b2eb116026c54ead93ac75a6d1c01607.png",
-        title: "东方幸福国际母婴会所",
-        description: "月子中心一般为生产母亲提供专业产后恢复服务的场所，也称为月子会所，有专业营养师负责给产妇提供月子。"
-      }
-    ]);
+    const pageSize = 10;
     const fetchsuccessCaseList = () => __async(this, null, function* () {
       try {
         if (pageNum.value === 1) {
@@ -97,22 +57,16 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
           loadingMore.value = true;
         }
         const response = yield api_activity.getsuccessCaseList({
-          pageSize: 10,
+          pageSize,
           pageNum: pageNum.value
         });
-        let dataArray = [];
-        if (response && response.rows && Array.isArray(response.rows)) {
-          dataArray = response.rows;
-        } else {
-          dataArray = [];
-        }
+        const rows = response && Array.isArray(response.rows) ? response.rows : [];
         if (pageNum.value === 1) {
-          successCaseList.value = dataArray;
+          successCaseList.value = rows;
         } else {
-          successCaseList.value = [...successCaseList.value, ...dataArray];
+          successCaseList.value = [...successCaseList.value, ...rows];
         }
-        types.value = dataArray.length >= 10 ? 1 : 2;
-        initAnimation();
+        hasMore.value = rows.length >= pageSize;
       } catch (error) {
         console.error("获取成功案例列表失败:", error);
       } finally {
@@ -125,61 +79,28 @@ const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
         url: "/pages/casedetails/index?successCaseId=" + item.successCaseId
       });
     };
-    const getBackgroundColor = (index) => {
-      const colors = ["#FFEFEB", "#DFF1FF", "#EDF1FF", "#DAF9FF"];
-      return colors[index % 4];
-    };
-    const initAnimation = () => {
-      common_vendor.nextTick$1(() => {
-        setTimeout(() => {
-          successCaseList.value.forEach((_, index) => {
-            setTimeout(() => {
-              animatedItems.value[index] = true;
-            }, index * 50);
-          });
-        }, 100);
-      });
-    };
-    const handleScroll = (e) => {
-      e.scrollTop;
-      common_vendor.index.createSelectorQuery().in(instance).selectAll(".list-item").boundingClientRect((rects) => {
-        if (rects) {
-          rects.forEach((rect, index) => {
-            if (rect.top < common_vendor.index.getSystemInfoSync().windowHeight * 0.8 && rect.bottom > 0) {
-              if (!animatedItems.value[index]) {
-                animatedItems.value[index] = true;
-              }
-            }
-          });
-        }
-      }).exec();
-    };
+    common_vendor.onReachBottom(() => {
+      if (hasMore.value) {
+        pageNum.value += 1;
+        fetchsuccessCaseList();
+      }
+    });
     common_vendor.onMounted(() => {
       fetchsuccessCaseList();
-    });
-    __expose({
-      onPageScroll: handleScroll
     });
     return (_ctx, _cache) => {
       return common_vendor.e({
         a: loading.value
       }, loading.value ? {} : {}, {
-        b: common_vendor.f(successCaseList.value, (item, index, i0) => {
-          return {
-            a: item.caseImages[0] + "?image_process=format,webp",
-            b: common_vendor.t(item.customerName),
-            c: common_vendor.t(item.caseValue),
-            d: animatedItems.value[index] ? 1 : "",
-            e: index,
-            f: getBackgroundColor(index),
-            g: common_vendor.o(($event) => navigateToDetail(item), index)
-          };
+        b: common_vendor.o(navigateToDetail),
+        c: common_vendor.p({
+          list: successCaseList.value
         }),
-        c: loadingMore.value
+        d: loadingMore.value
       }, loadingMore.value ? {} : {});
     };
   }
 });
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-2786c006"]]);
-_sfc_main.__runtimeHooks = 7;
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

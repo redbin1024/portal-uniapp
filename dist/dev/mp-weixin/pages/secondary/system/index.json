@@ -3,5 +3,10 @@
   "backgroundColor": "#F8F8F8",
   "enableShareAppMessage": true,
   "enableShareTimeline": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "video-carousel": "./components/VideoCarousel",
+    "problem-list": "../homepage/components/ProblemList",
+    "business-system": "../homepage/components/BusinessSystem",
+    "partners": "./components/Partners"
+  }
 }

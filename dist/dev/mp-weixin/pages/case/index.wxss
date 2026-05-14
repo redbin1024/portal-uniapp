@@ -23,80 +23,23 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.container.data-v-2786c006 {
-  padding: 60rpx 26rpx 20rpx 26rpx;
+.case-page.data-v-2786c006 {
+  padding: 40rpx 26rpx 20rpx;
   background-color: #ffffff;
+  min-height: 100vh;
 }
+.loading-container.data-v-2786c006,
 .loading-more-container.data-v-2786c006 {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 40rpx 0;
 }
-.loading-more-container .loading-more-text.data-v-2786c006 {
+.loading-text.data-v-2786c006 {
+  font-size: 28rpx;
+  color: #999999;
+}
+.loading-more-text.data-v-2786c006 {
   font-size: 24rpx;
   color: #999999;
-}
-.loading-container.data-v-2786c006 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 100rpx 0;
-}
-.loading-container .loading-text.data-v-2786c006 {
-  font-size: 28rpx;
-  color: #999999;
-}
-.list-item.data-v-2786c006 {
-  display: flex;
-  align-items: flex-start;
-  border-radius: 16rpx;
-  height: 270rpx;
-  padding: 0 24rpx;
-  margin-bottom: 62rpx;
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-  /* 初始状态 - 与cooperationcase页面相同的动画效果 */
-  opacity: 0;
-  transform: translateY(20rpx);
-  transition: all 0.6s ease-out;
-}
-.list-item.list-item-animate.data-v-2786c006 {
-  opacity: 1;
-  transform: translateY(0);
-}
-.image-container.data-v-2786c006 {
-  flex-shrink: 0;
-  margin-right: 24rpx;
-  position: relative;
-}
-.item-image.data-v-2786c006 {
-  width: 214rpx;
-  height: 282rpx;
-  border-radius: 20rpx;
-  background-color: #f0f0f0;
-  border: 3rpx solid #ffffff;
-  position: relative;
-  top: -30rpx;
-}
-.content-container.data-v-2786c006 {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-.title.data-v-2786c006 {
-  height: 90rpx;
-  line-height: 130rpx;
-  font-size: 34rpx;
-  font-weight: 600;
-  color: #000000;
-  margin-bottom: 12rpx;
-}
-.description.data-v-2786c006 {
-  font-size: 28rpx;
-  color: #7e7f80;
-  line-height: 1.5;
-  word-break: break-all;
 }
