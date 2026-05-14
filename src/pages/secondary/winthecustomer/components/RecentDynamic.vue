@@ -33,7 +33,7 @@
       @click="$emit('more')"
     >
       <view>查看更多</view>
-      <view>></view>
+      <view class="view-more-icon"></view>
     </view>
   </view>
 </template>
@@ -186,6 +186,7 @@ const formatDate = (dateStr) => {
 
 .view-more-btn {
   display: flex;
+  align-items: center;
   justify-content: center;
   background: #f3f5fb;
   border-radius: 8rpx;
@@ -205,5 +206,13 @@ const formatDate = (dateStr) => {
 }
 .view-more-btn:active {
   opacity: 0.7;
+}
+.view-more-icon {
+  width: 14rpx;
+  height: 14rpx;
+  border-top: 3rpx solid currentColor;
+  border-right: 3rpx solid currentColor;
+  transform: rotate(45deg);
+  margin-left: 12rpx;
 }
 </style>
