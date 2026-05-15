@@ -50,11 +50,6 @@
     "terser": "^5.43.1",
     "vite": "5.2.8"
   },
-  "pnpm": {
-    "overrides": {
-      "@vue/shared": "3.5.22"
-    }
-  },
   "uni-app": {
     "scripts": {
       "dev": {
@@ -94,5 +89,8 @@
         }
       }
     }
+  },
+  "overrides": {
+    "@vue/shared": "3.5.22"
   }
 }

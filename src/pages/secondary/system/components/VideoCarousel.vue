@@ -8,24 +8,14 @@
       @change="onSwiperChange"
     >
       <swiper-item v-for="(item, i) in videos" :key="i">
-        <view class="video-cover" @click="onCoverTap(item)">
-          <image
-            class="video-cover__img"
-            :src="item.coverImage + '?image_process=format,webp'"
-            mode="aspectFill"
-          ></image>
-          <view class="video-cover__btn video-cover__btn--mute">
-            <image
-              class="video-cover__btn-icon"
-              :src="muteIcon"
-            ></image>
-          </view>
-          <view class="video-cover__btn video-cover__btn--fullscreen">
-            <image
-              class="video-cover__btn-icon"
-              :src="fullscreenIcon"
-            ></image>
-          </view>
+        <view class="video-card">
+          <video
+            class="video-player"
+            :src="item.videoUrl"
+            :controls="false"
+            object-fit="cover"
+          ></video>
+          <view class="video-mask" @click="onVideoTap(item)"></view>
         </view>
       </swiper-item>
     </swiper>
@@ -66,10 +56,6 @@ watch(
   }
 );
 
-const muteIcon =
-  "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27M11 5L6 9H2v6h4l5 4z%27/%3E%3Cline x1=%2723%27 y1=%279%27 x2=%2717%27 y2=%2715%27/%3E%3Cline x1=%2717%27 y1=%279%27 x2=%2723%27 y2=%2715%27/%3E%3C/svg%3E";
-const fullscreenIcon =
-  "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27M3 9V5a2 2 0 0 1 2-2h4%27/%3E%3Cpath d=%27M21 9V5a2 2 0 0 0-2-2h-4%27/%3E%3Cpath d=%27M3 15v4a2 2 0 0 0 2 2h4%27/%3E%3Cpath d=%27M21 15v4a2 2 0 0 1-2 2h-4%27/%3E%3C/svg%3E";
 const nextIcon =
   "data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27white%27 stroke-width=%273%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpolyline points=%279 18 15 12 9 6%27/%3E%3C/svg%3E";
 
@@ -83,7 +69,7 @@ const goNext = () => {
   currentIndex.value = (currentIndex.value + 1) % total;
 };
 
-const onCoverTap = (item) => {
+const onVideoTap = (item) => {
   if (!item.videoUrl) return;
   emit("play", item);
 };
@@ -102,39 +88,27 @@ const onCoverTap = (item) => {
   height: 360rpx;
 }
 
-.video-cover {
+.video-card {
   position: relative;
-  width: 636rpx;
+  width: calc(100% - 32rpx);
   height: 360rpx;
   border-radius: 20rpx;
   overflow: hidden;
+  box-sizing: border-box;
 }
-.video-cover__img {
+
+.video-player {
   width: 100%;
   height: 100%;
   display: block;
 }
 
-.video-cover__btn {
+.video-mask {
   position: absolute;
-  bottom: 24rpx;
-  width: 56rpx;
-  height: 56rpx;
-  border-radius: 28rpx;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.video-cover__btn--mute {
-  right: 96rpx;
-}
-.video-cover__btn--fullscreen {
-  right: 24rpx;
-}
-.video-cover__btn-icon {
-  width: 32rpx;
-  height: 32rpx;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .video-section__title {

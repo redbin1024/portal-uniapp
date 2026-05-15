@@ -53,16 +53,17 @@ const productIntroList = ref([]);
 const serviceLists = ref([]);
 const businessSystemList = ref([]);
 const partnerList = ref([]);
+const isNavigatingVideo = ref(false);
 
 // ===== 工具方法 =====
-const extractVideoUrl = (bannerVideos) => {
-  if (!Array.isArray(bannerVideos)) return '';
-  for (const item of bannerVideos) {
-    if (typeof item === 'string' && item.includes('.mp4')) return item;
-    if (item?.videoUrl) return item.videoUrl;
-    if (item?.url) return item.url;
-  }
-  return '';
+const normalizeBannerVideos = (bannerVideos) => {
+  if (!Array.isArray(bannerVideos)) return [];
+  return bannerVideos
+    .map((item) => {
+      if (typeof item === 'string') return item;
+      return item?.videoUrl || item?.url || '';
+    })
+    .filter(Boolean);
 };
 
 const formatRichText = (html) => {
@@ -77,11 +78,13 @@ const fetchEnterpriseList = async () => {
     if (response && Array.isArray(response.rows) && response.rows.length > 0) {
       videoList.value = response.rows
         .filter((row) => row.videoEnabled)
-        .map((row) => ({
-          enterpriseName: row.enterpriseName,
-          coverImage: row.coverImage,
-          videoUrl: extractVideoUrl(row.bannerVideos),
-        }))
+        .flatMap((row) =>
+          normalizeBannerVideos(row.bannerVideos).map((videoUrl) => ({
+            enterpriseName: row.enterpriseName,
+            coverImage: row.coverImage,
+            videoUrl,
+          }))
+        )
         .filter((row) => row.videoUrl && row.coverImage);
       partnerList.value = Array.isArray(response.rows[0].cooperationMerchants)
         ? response.rows[0].cooperationMerchants
@@ -123,11 +126,18 @@ const fetchServiceList = async () => {
 
 // ===== 跳转事件 =====
 const onVideoPlay = (item) => {
+  if (isNavigatingVideo.value) return;
+  isNavigatingVideo.value = true;
   uni.navigateTo({
     url:
       '/pages/secondary/index/index?url=' +
       item.videoUrl +
       '&visitContent=宣传视频',
+    complete: () => {
+      setTimeout(() => {
+        isNavigatingVideo.value = false;
+      }, 800);
+    },
   });
 };
 
