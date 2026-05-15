@@ -23,6 +23,7 @@ import {
   getServiceList,
 } from "@/api/activity.js";
 import basePoint from "@/utils/basePoint.js";
+import { formatRichText } from "@/utils/richText.js";
 import RecentDynamic from "./components/RecentDynamic.vue";
 import MerchantCase from "./components/MerchantCase.vue";
 import ServiceContent from "./components/ServiceContent.vue";
@@ -37,15 +38,7 @@ const truncateText = (text, max) => {
 };
 
 const processContent = (content) => {
-  if (!content) return;
-  let imgIndex = 0;
-  richText.value = content.replace(/<img[^>]*>/gi, function (match) {
-    match = match.replace(/style=".*"/gi, "").replace(/style='.*'/gi, "");
-    return match.replace(
-      /<img/gi,
-      `<img data-index="${imgIndex++}" style="width:100%;height:auto;display:block;"`
-    );
-  });
+  richText.value = formatRichText(content);
 };
 
 const fetchServiceList = async () => {

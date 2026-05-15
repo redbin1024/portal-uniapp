@@ -1,8 +1,22 @@
 import { defineConfig } from 'vite'
 import uni from '@dcloudio/vite-plugin-uni'
 
+const fixMpHtmlWxss = () => ({
+  name: 'fix-mp-html-wxss',
+  enforce: 'pre',
+  transform(code, id) {
+    if (!id.includes('uni-app-mp-html/components/mp-html/node/node.vue')) return
+
+    return code
+      .replace(/div\.\/deep\/\s+\.hl-code-toolbar/g, '/deep/ .hl-code-toolbar')
+      .replace(/margin-block-start\s*:\s*1em;?/g, 'margin-top:1em;')
+      .replace(/margin-block-end\s*:\s*1em;?/g, 'margin-bottom:1em;')
+      .replace(/color-adjust\s*:\s*exact;?/g, 'print-color-adjust:exact;')
+  }
+})
+
 export default defineConfig({
-  plugins: [uni()],
+  plugins: [uni(), fixMpHtmlWxss()],
   server: {
     port: 3000,
     open: true
