@@ -147,7 +147,7 @@ const goBack = () => {
     uni.navigateBack();
   } else {
     uni.switchTab({
-      url: "/pages/secondary/homepage/index",
+      url: "/pages/index/index",
     });
   }
 };

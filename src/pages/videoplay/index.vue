@@ -165,7 +165,7 @@ export default {
   onShareAppMessage(res) {
     return {
       title: this.visitContent,
-      path: `/pages/secondary/index/index?url=${encodeURIComponent(
+      path: `/pages/videoplay/index?url=${encodeURIComponent(
         this.videoUrl
       )}&coverImage=${encodeURIComponent(this.coverImage)}`,
       imageUrl: this.coverImage,
@@ -192,7 +192,7 @@ export default {
       if (pages.length > 1) {
         uni.navigateBack({ delta: 1 });
       } else {
-        uni.switchTab({ url: "/pages/secondary/homepage/index" });
+        uni.switchTab({ url: "/pages/index/index" });
       }
     },
 

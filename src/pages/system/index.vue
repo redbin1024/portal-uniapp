@@ -43,9 +43,9 @@ import {
 } from '@/api/activity.js';
 import basePoint from '@/utils/basePoint.js';
 import VideoCarousel from './components/VideoCarousel.vue';
-import ProblemList from '@/pages/secondary/homepage/components/ProblemList.vue';
+import ProblemList from '@/pages/index/components/ProblemList.vue';
 import SystemService from './components/SystemService.vue';
-import BusinessSystem from '@/pages/secondary/homepage/components/BusinessSystem.vue';
+import BusinessSystem from '@/pages/index/components/BusinessSystem.vue';
 import Partners from './components/Partners.vue';
 
 const videoList = ref([]);
@@ -130,7 +130,7 @@ const onVideoPlay = (item) => {
   isNavigatingVideo.value = true;
   uni.navigateTo({
     url:
-      '/pages/secondary/index/index?url=' +
+      '/pages/videoplay/index?url=' +
       item.videoUrl +
       '&visitContent=宣传视频',
     complete: () => {
@@ -144,7 +144,7 @@ const onVideoPlay = (item) => {
 const goToIntro = (item) => {
   if (item.introType == 2) {
     let url =
-      '/pages/secondary/index/index?url=' +
+      '/pages/videoplay/index?url=' +
       item.videoUrl +
       '&visitContent=' +
       item.title;
@@ -154,13 +154,13 @@ const goToIntro = (item) => {
     uni.navigateTo({ url });
   } else {
     uni.navigateTo({
-      url: '/pages/secondary/issueDetails/index?introId=' + item.introId,
+      url: '/pages/issueDetails/index?introId=' + item.introId,
     });
   }
 };
 
 const goToIssueList = () => {
-  uni.navigateTo({ url: '/pages/secondary/issueList/index' });
+  uni.navigateTo({ url: '/pages/issueList/index' });
 };
 
 const goToCustomer = (item) => {
@@ -190,7 +190,7 @@ onHide(async () => {
 // ===== 分享 =====
 onShareAppMessage(() => ({
   title: '系统',
-  path: '/pages/secondary/system/index',
+  path: '/pages/system/index',
 }));
 
 onShareTimeline(() => ({

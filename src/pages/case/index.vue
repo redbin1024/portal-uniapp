@@ -15,7 +15,7 @@
 import { ref, onMounted } from "vue";
 import { onReachBottom } from "@dcloudio/uni-app";
 import { getsuccessCaseList } from "@/api/activity.js";
-import CaseCardGrid from "@/pages/secondary/winthecustomer/components/CaseCardGrid.vue";
+import CaseCardGrid from "@/pages/winthecustomer/components/CaseCardGrid.vue";
 import BackHome from "@/components/BackHome/BackHome.vue";
 
 const successCaseList = ref([]);

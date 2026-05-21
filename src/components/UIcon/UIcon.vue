@@ -15,6 +15,12 @@ import {
   createArrowLeftIcon,
   createCloseIcon,
   createArrowDownIcon,
+  createPaperPlaneIcon,
+  createBriefcaseIcon,
+  createStoreContentIcon,
+  createAiAssistantIcon,
+  createLivePlayIcon,
+  createActivityStarIcon,
 } from '@/utils/svgDataUri.js';
 
 defineOptions({ name: 'UIcon' });
@@ -37,6 +43,12 @@ const factories = {
   'arrow-left': createArrowLeftIcon,
   close: createCloseIcon,
   'arrow-down': createArrowDownIcon,
+  plane: createPaperPlaneIcon,
+  briefcase: createBriefcaseIcon,
+  store: createStoreContentIcon,
+  ai: createAiAssistantIcon,
+  live: createLivePlayIcon,
+  star: createActivityStarIcon,
 };
 
 const dataUri = computed(() => {

@@ -68,7 +68,7 @@ const currentIntroId = ref("");
 onShareAppMessage(() => {
   return {
     title: serviceName.value || "产品服务",
-    path: `/pages/secondary/issueDetails/index?introId=${currentIntroId.value}`,
+    path: `/pages/issueDetails/index?introId=${currentIntroId.value}`,
   };
 });
 

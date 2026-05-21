@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "path": "pages/secondary/homepage/index",
+      "path": "pages/index/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "",
@@ -9,14 +9,14 @@
       }
     },
     {
-      "path": "pages/secondary/winthecustomer/index",
+      "path": "pages/winthecustomer/index",
       "style": {
         "navigationBarTitleText": "线上获客",
          "backgroundColor": "#F8F8F8"
       }
     },
     {
-      "path": "pages/secondary/system/index",
+      "path": "pages/system/index",
       "style": {
         "navigationBarTitleText": "系统服务",
          "backgroundColor": "#F8F8F8",
@@ -25,11 +25,12 @@
       }
     },
     {
-      "path": "pages/index/index",
-     "style": {
-            "navigationStyle": "custom",
-            "navigationBarTitleText": ""
-          }
+      "path": "pages/wisdom/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "月子智慧",
+        "backgroundColor": "#ffffff"
+      }
     },
     {
       "path": "pages/case/index",
@@ -80,29 +81,27 @@
       }
     },
     {
-      "path": "pages/secondary/businesspartner/index",
+      "path": "pages/businesspartner/index",
       "style": {
         "navigationBarTitleText": "合作商家",
         "navigationBarBackgroundColor": "#ffffff"
       }
     },
     {
-      "path": "pages/secondary/index/index",
+      "path": "pages/videoplay/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "",
         "backgroundColor": "#000000",
         "enableShareAppMessage": true,
-        // 关闭微信小程序的系统边缘滑动返回
         "disableSwipeBack": true,
-        // 关闭 App 平台的侧滑返回（如需打包 app-plus）
         "app-plus": {
           "popGesture": "none"
         }
       }
     },
     {
-      "path": "pages/secondary/issueDetails/index",
+      "path": "pages/issueDetails/index",
       "style": {
         "navigationBarTitleText": "AI智能销售",
         "navigationBarBackgroundColor": "#ffffff",
@@ -111,7 +110,7 @@
       }
     },
     {
-      "path": "pages/secondary/issueList/index",
+      "path": "pages/issueList/index",
       "style": {
         "navigationBarTitleText": "您是否也遇到这些问题?",
         "navigationBarBackgroundColor": "#ffffff",
@@ -119,7 +118,6 @@
         "enableShareTimeline": true
       }
     }
-   
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -134,19 +132,25 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/secondary/homepage/index",
+        "pagePath": "pages/index/index",
         "iconPath": "static/index.png",
         "selectedIconPath": "static/indexActive.png",
         "text": "首页"
       },
       {
-        "pagePath": "pages/secondary/winthecustomer/index",
+        "pagePath": "pages/winthecustomer/index",
         "iconPath": "static/serve.png",
         "selectedIconPath": "static/serveActive.png",
         "text": "获客"
       },
       {
-        "pagePath": "pages/secondary/system/index",
+        "pagePath": "pages/wisdom/index",
+        "iconPath": "static/wisdom.png",
+        "selectedIconPath": "static/wisdomActive.png",
+        "text": "智慧"
+      },
+      {
+        "pagePath": "pages/system/index",
         "iconPath": "static/case.png",
         "selectedIconPath": "static/caseActive.png",
         "text": "系统"

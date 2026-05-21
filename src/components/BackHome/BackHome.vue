@@ -11,7 +11,7 @@
 <script setup>
 const goHome = () => {
   uni.switchTab({
-    url: "/pages/secondary/homepage/index",
+    url: "/pages/index/index",
   });
 };
 </script>

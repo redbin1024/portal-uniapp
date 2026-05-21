@@ -16,7 +16,7 @@ export default {
   onShareAppMessage() {
     return {
       title: "列表",
-      path: "/pages/secondary/issueList/index",
+      path: "/pages/issueList/index",
     };
   },
   onShareTimeline() {
@@ -32,7 +32,7 @@ export default {
 import { ref, onMounted } from "vue";
 import { onShow, onReachBottom } from "@dcloudio/uni-app";
 import { getProductIntroList } from "@/api/activity.js";
-import ProblemList from "@/pages/secondary/homepage/components/ProblemList.vue";
+import ProblemList from "@/pages/index/components/ProblemList.vue";
 import BackHome from "@/components/BackHome/BackHome.vue";
 
 const problemList = ref([]);
@@ -44,7 +44,7 @@ const isFinish = ref(false);
 const goToIndex = (item) => {
   if (item.introType == 2) {
     let url =
-      "/pages/secondary/index/index?url=" +
+      "/pages/videoplay/index?url=" +
       item.videoUrl +
       "&visitContent=" +
       item.title;
@@ -54,7 +54,7 @@ const goToIndex = (item) => {
     uni.navigateTo({ url });
   } else {
     uni.navigateTo({
-      url: "/pages/secondary/issueDetails/index?introId=" + item.introId,
+      url: "/pages/issueDetails/index?introId=" + item.introId,
     });
   }
 };
