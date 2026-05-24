@@ -46,7 +46,7 @@ const handleRightClick = () => {
 <style lang="scss" scoped>
 .container {
   width: 100%;
-  height: 640rpx;
+  height: 750rpx;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

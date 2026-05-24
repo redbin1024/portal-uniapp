@@ -26,7 +26,7 @@ const props = defineProps({
   src: {
     type: String,
     default:
-      "https://seal-img.nos-jd.163yun.com/obj/w5rCgMKVw6DCmGzCmsK-/80172634322/adfa/1612/7d3e/2f9ce6f52b3503ccf745b020743c8a1b.png",
+      "https://cdn.xiaodingdang1.com/2026/05/24/4c4d474cdee5418b8a21988f95bab11e.jpg?image_process=format,webp",
   },
   // 视口高度，单位 rpx
   height: {

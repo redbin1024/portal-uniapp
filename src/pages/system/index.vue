@@ -2,9 +2,11 @@
   <view class="main">
     <VideoCarousel :videos="videoList" @play="onVideoPlay" />
 
+    <AboutSection />
+
     <image
       class="business-banner"
-      src="http://cdn.xiaodingdang1.com/2026/05/13/b01ee0a56c40431a8d1a3534c0001f14.png?image_process=format,webp"
+      src="http://cdn.xiaodingdang1.com/2026/05/22/87c4f3899c114908adf6862a0c40c0ab.jpg?image_process=format,webp"
       mode="widthFix"
     ></image>
 
@@ -44,7 +46,7 @@ import {
 import basePoint from '@/utils/basePoint.js';
 import VideoCarousel from './components/VideoCarousel.vue';
 import ProblemList from '@/pages/index/components/ProblemList.vue';
-import SystemService from './components/SystemService.vue';
+import AboutSection from '@/pages/index/components/AboutSection.vue';
 import BusinessSystem from '@/pages/index/components/BusinessSystem.vue';
 import Partners from './components/Partners.vue';
 
@@ -83,7 +85,7 @@ const fetchEnterpriseList = async () => {
             enterpriseName: row.enterpriseName,
             coverImage: row.coverImage,
             videoUrl,
-          }))
+          })),
         )
         .filter((row) => row.videoUrl && row.coverImage);
       partnerList.value = Array.isArray(response.rows[0].cooperationMerchants)
@@ -116,7 +118,7 @@ const fetchServiceList = async () => {
       serviceLists.value = response.rows;
       // 业务系统模块排除 serviceName 为「线上获客」的项
       businessSystemList.value = response.rows.filter(
-        (it) => (it?.serviceName || '').trim() !== '线上获客'
+        (it) => (it?.serviceName || '').trim() !== '线上获客',
       );
     }
   } catch (error) {
@@ -130,9 +132,7 @@ const onVideoPlay = (item) => {
   isNavigatingVideo.value = true;
   uni.navigateTo({
     url:
-      '/pages/videoplay/index?url=' +
-      item.videoUrl +
-      '&visitContent=宣传视频',
+      '/pages/videoplay/index?url=' + item.videoUrl + '&visitContent=宣传视频',
     complete: () => {
       setTimeout(() => {
         isNavigatingVideo.value = false;
