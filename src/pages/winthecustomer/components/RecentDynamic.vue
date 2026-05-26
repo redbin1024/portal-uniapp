@@ -1,6 +1,6 @@
 <template>
   <view class="dynamic">
-    <SectionHeader title="最近动态" subtitle="RECENT UPDATES" />
+    <SectionHeader :title="title" :subtitle="subtitle" />
     <view class="dynamic-content">
       <view
         class="dynamic-item"
@@ -21,7 +21,7 @@
         <view class="dynamic-right">
           <image
             class="dynamic-image"
-            :src="item.newsImages?.[0] + '?image_process=format,webp'"
+            :src="formatImageUrl(item.newsImages?.[0])"
             mode="aspectFill"
           ></image>
         </view>
@@ -44,6 +44,8 @@ import SectionHeader from "./SectionHeader.vue";
 
 const props = defineProps({
   list: { type: Array, default: () => [] },
+  title: { type: String, default: "最近动态" },
+  subtitle: { type: String, default: "RECENT UPDATES" },
   showMore: { type: Boolean, default: true },
   staggerMs: { type: Number, default: 40 },
 });
@@ -75,6 +77,14 @@ watch(
 const formatDate = (dateStr) => {
   if (!dateStr) return "";
   return dateStr.split(" ")[0];
+};
+
+const formatImageUrl = (url) => {
+  if (!url) return "";
+  const imageUrl = String(url);
+  if (/image_process=format,webp/i.test(imageUrl)) return imageUrl;
+  if (/^(data:|blob:|wxfile:|file:|\/static\/)/i.test(imageUrl)) return imageUrl;
+  return `${imageUrl}${imageUrl.includes("?") ? "&" : "?"}image_process=format,webp`;
 };
 </script>
 

@@ -8,7 +8,7 @@
       <!-- 现代化商务城市科技背景图 (契合月子智慧的区域竞争力头部品牌调性) -->
       <image
         class="hero-bg"
-        src="https://cdn.xiaodingdang1.com/2026/05/24/405bdfec724444bbab75232c0c365126.jpg"
+        :src="formatImageUrl('https://cdn.xiaodingdang1.com/2026/05/25/c0f6b7b8626343faa0db97aa8f37b8b6.png')"
         mode="aspectFill"
       />
       <!-- 渐变蓝色浮层，提供更深邃的科技蓝质感与文字易读性 -->
@@ -119,21 +119,17 @@
       <text class="escort-title">三大核心全程陪跑</text>
       <text class="escort-subtitle">从领先到绝对领先</text>
 
-      <scroll-view
-        scroll-x="true"
-        class="escort-scroll-view"
-        show-scrollbar="false"
-        enhanced="true"
-      >
-        <!-- 步骤 01 -->
-        <view
-          class="step-card"
-          :class="{ 'center-step': activeStep === 1 }"
-          @tap="changeStep(1)"
-        >
+      <view class="escort-card-panel">
+        <view class="escort-scroll-view">
+          <!-- 步骤 01 -->
+          <view
+            class="step-card"
+            :class="{ 'center-step': activeStep === 1 }"
+            @tap="changeStep(1)"
+          >
           <view class="step-header">
             <text class="step-number">01</text>
-            <text class="step-title">获客客户</text>
+            <text class="step-title">获取客户</text>
           </view>
           <image
             class="step-divider-line"
@@ -314,68 +310,91 @@
               <text class="capsule-text">线下活动</text>
             </view>
           </view>
-        </view>
-      </scroll-view>
-
-      <!-- 标签和内容详情区域 (根据当前选中的步骤卡片显示其关联的子项) -->
-      <view class="detail-section">
-        <!-- 标签切换栏 -->
-        <view class="tab-header">
-          <view
-            v-for="(tab, index) in currentTabs"
-            :key="tab.id || index"
-            class="tab-item"
-            :class="{ 'tab-active': activeTabIndex === index }"
-            @tap="changeTab(index)"
-          >
-            <!-- 标签图标 -->
-            <image
-              class="tab-icon"
-              :src="getTabIcon(tab.name, tab.image)"
-              mode="aspectFit"
-            />
-            <!-- 标签名称 -->
-            <text class="tab-name">{{ tab.name }}</text>
-            <!-- 底部蓝色指示线 -->
-            <view class="tab-indicator" v-if="activeTabIndex === index"></view>
           </view>
         </view>
 
-        <!-- 详情富文本内容区域 -->
-        <view class="content-detail-box">
-          <rich-text
-            :nodes="formatRichText(currentActiveContent)"
-            class="rich-content"
-          ></rich-text>
-        </view>
-      </view>
-
-      <!-- <view class="wisdom-partners" v-if="partnerList.length > 0">
-        <view class="wisdom-partners-title">
-          <text>500+月子中心</text>
-          <text>共同选择</text>
-        </view>
-        <view class="wisdom-partners-stack">
-          <view
-            class="wisdom-partners-row"
-            :class="`wisdom-partners-row-${rowIndex}`"
-            v-for="(row, rowIndex) in partnerRows"
-            :key="rowIndex"
-          >
+        <!-- 标签和内容详情区域 (根据当前选中的步骤卡片显示其关联的子项) -->
+        <view class="detail-section">
+          <!-- 标签切换栏 -->
+          <view class="tab-header">
             <view
-              class="wisdom-partners-cell"
-              v-for="(item, index) in row"
-              :key="index"
+              v-for="(tab, index) in currentTabs"
+              :key="tab.id || index"
+              class="tab-item"
+              :class="{ 'tab-active': activeTabIndex === index }"
+              @tap="changeTab(index)"
             >
+              <!-- 标签图标 -->
               <image
-                class="wisdom-partners-logo"
-                :src="formatPartnerLogo(item)"
+                class="tab-icon"
+                :src="formatImageUrl(getTabIcon(tab.name, tab.image))"
                 mode="aspectFit"
               />
+              <!-- 标签名称 -->
+              <text class="tab-name">{{ tab.name }}</text>
+              <!-- 底部蓝色指示线 -->
+              <view class="tab-indicator" v-if="activeTabIndex === index"></view>
+            </view>
+          </view>
+
+          <!-- 详情富文本内容区域 -->
+          <view class="content-detail-box">
+            <rich-text
+              :nodes="formatRichText(currentActiveContent)"
+              class="rich-content"
+            ></rich-text>
+          </view>
+
+          <RecentDynamic
+            v-if="showOnlineCustomerSections && companyNewsList.length > 0"
+            class="wisdom-case-section"
+            title="案例展示"
+            subtitle="CASE DISPLAY"
+            :list="companyNewsList"
+            @select="navigateToRecentDetails"
+            @more="goToRecentUpdates"
+          />
+
+          <view
+            class="wisdom-partners"
+            v-if="showOnlineCustomerSections && partnerList.length > 0"
+          >
+            <view class="wisdom-partners-title">
+              <text>500+月子中心</text>
+              <text>共同选择</text>
+            </view>
+            <view class="wisdom-partners-stack">
+              <view
+                class="wisdom-partners-row"
+                :class="`wisdom-partners-row-${rowIndex}`"
+                v-for="(row, rowIndex) in partnerRows"
+                :key="rowIndex"
+              >
+                <view
+                  class="wisdom-partners-cell"
+                  v-for="(item, index) in row"
+                  :key="index"
+                >
+                  <image
+                    class="wisdom-partners-logo"
+                    :src="formatImageUrl(item)"
+                    mode="aspectFit"
+                  />
+                </view>
+              </view>
             </view>
           </view>
         </view>
-      </view> -->
+      </view>
+    </view>
+
+    <view
+      class="back-top-button"
+      v-if="showBackTop"
+      hover-class="button-hover"
+      @tap="backToTop"
+    >
+      <text class="back-top-arrow">⌃</text>
     </view>
   </view>
 </template>
@@ -385,14 +404,16 @@ import { ref, onMounted, computed } from 'vue';
 import {
   onShow,
   onHide,
+  onPageScroll,
   onShareAppMessage,
   onShareTimeline,
 } from '@dcloudio/uni-app';
 import basePoint from '@/utils/basePoint.js';
 import UIcon from '@/components/UIcon/UIcon.vue';
 import { get } from '@/utils/request.js';
-import { getEnterpriseList } from '@/api/activity.js';
+import { getCompanyNewsList, getEnterpriseList } from '@/api/activity.js';
 import { formatRichText } from '@/utils/richText.js';
+import RecentDynamic from '@/pages/winthecustomer/components/RecentDynamic.vue';
 import {
   createTeamIcon,
   createOperationIcon,
@@ -436,7 +457,9 @@ const plusIcon = ref(createPlusIcon('#3B82F6'));
 // 交互与数据驱动状态
 const activeStep = ref(1);
 const activeTabIndex = ref(0);
+const showBackTop = ref(false);
 const partnerList = ref([]);
+const companyNewsList = ref([]);
 const tabLists = ref({
   1: [],
   2: [],
@@ -498,6 +521,18 @@ const clickCapsule = (step, index) => {
   fetchListData(step);
 };
 
+const backToTop = () => {
+  uni.pageScrollTo({
+    scrollTop: 0,
+    duration: 260,
+  });
+};
+
+const truncateText = (text, max) => {
+  if (!text) return '';
+  return text.length > max ? text.substring(0, max) : text;
+};
+
 // 计算当前激活的大类拥有的 Tab 子项
 const currentTabs = computed(() => {
   const tabs = tabLists.value[activeStep.value] || [];
@@ -523,6 +558,10 @@ const currentActiveContent = computed(() => {
   return content;
 });
 
+const showOnlineCustomerSections = computed(() => {
+  return activeStep.value === 1 && activeTabIndex.value === 0;
+});
+
 const partnerRows = computed(() => {
   const rows = [[], [], [], [], []];
   const pattern = [3, 3, 3, 3, 3];
@@ -541,7 +580,7 @@ const getTabIcon = (name, itemImage) => {
     itemImage.startsWith('http') &&
     !itemImage.includes('example.com')
   ) {
-    return itemImage;
+    return formatImageUrl(itemImage);
   }
   const cleanName = String(name || '');
   if (cleanName.includes('线上')) return '/static/widsom/01.png';
@@ -568,11 +607,75 @@ const fetchPartnerList = async () => {
   }
 };
 
-const formatPartnerLogo = (url) => {
+const fetchCompanyNewsList = async () => {
+  try {
+    const response = await getCompanyNewsList({
+      pageSize: 4,
+      pageNum: 1,
+      type: 1,
+    });
+    if (response?.rows?.length > 0) {
+      companyNewsList.value = response.rows.map((item, index) => ({
+        ...item,
+        newsTitle: truncateText(
+          item.newsTitle || item.title || `动态标题${index + 1}`,
+          21,
+        ),
+        newsContent: truncateText(
+          item.newsContent || item.content || item.description || '',
+          24,
+        ),
+        newsImages:
+          Array.isArray(item.newsImages) && item.newsImages.length
+            ? item.newsImages.map(formatImageUrl)
+            : Array.isArray(item.images) && item.images.length
+              ? item.images.map(formatImageUrl)
+              : item.image
+                ? [formatImageUrl(item.image)]
+                : [
+                    formatImageUrl(
+                      'http://cdn.xiaodingdang1.com/2025/09/15/cbbd7e2aa0cd4016b59a3f31dbe46cb2.png',
+                    ),
+                  ],
+        createTime:
+          item.createTime ||
+          item.createDate ||
+          item.date ||
+          new Date().toISOString(),
+        newsId: item.newsId || item.id || index + 1,
+      }));
+    }
+  } catch (error) {
+    uni.showToast({ title: '获取案例展示失败', icon: 'none' });
+  }
+};
+
+const navigateToRecentDetails = (item) => {
+  uni.navigateTo({
+    url:
+      '/pages/recentdetails/index?newsId=' +
+      item.newsId +
+      '&newsTitle=' +
+      item.newsTitle,
+  });
+};
+
+const goToRecentUpdates = () => {
+  uni.navigateTo({ url: '/pages/recentUpdatesnew/index' });
+};
+
+const formatImageUrl = (url) => {
   if (!url) return '';
-  return String(url).includes('?')
-    ? String(url)
-    : `${url}?image_process=format,webp`;
+  const imageUrl = String(url);
+  if (/image_process=format,webp/i.test(imageUrl)) return imageUrl;
+  if (/^(data:|blob:|wxfile:|file:|\/static\/)/i.test(imageUrl)) return imageUrl;
+
+  const hashIndex = imageUrl.indexOf('#');
+  const hash = hashIndex >= 0 ? imageUrl.slice(hashIndex) : '';
+  const baseUrl = hashIndex >= 0 ? imageUrl.slice(0, hashIndex) : imageUrl;
+  const separator = baseUrl.includes('?') ? '&' : '?';
+
+  return `${baseUrl}${separator}image_process=format,webp${hash}`;
 };
 
 // 自定义导航栏高度获取，保障各类手机机型完美适配
@@ -588,6 +691,7 @@ onMounted(() => {
   fetchListData(2);
   fetchListData(3);
   fetchPartnerList();
+  fetchCompanyNewsList();
 });
 
 // 智慧页面统计追踪埋点
@@ -600,6 +704,10 @@ onHide(async () => {
   if (trackingId) {
     await basePoint.trackingEnd({ id: trackingId });
   }
+});
+
+onPageScroll((e) => {
+  showBackTop.value = e.scrollTop > 600;
 });
 
 // 支持小程序分享
@@ -644,7 +752,7 @@ onShareTimeline(() => {
 /* 沉浸式海报头部 */
 .hero-section {
   width: 100%;
-  height: 520rpx;
+  height: 882rpx;
   position: relative;
   overflow: hidden;
 }
@@ -967,11 +1075,22 @@ onShareTimeline(() => {
 .escort-section {
   position: relative;
   width: 750rpx;
-  background-color: #f4f5f9;
-  padding-top: 80rpx;
+  background-color: #f8f8f8;
+  padding: 80rpx 0 72rpx 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.escort-card-panel {
+  width: 707rpx;
+  margin-top: 50rpx;
+  padding: 24rpx 20rpx 48rpx;
+  background: #ffffff;
+  border-radius: 14rpx;
+  box-shadow: 0px 4rpx 32rpx 0px rgba(199, 199, 199, 0.4);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* 主标题：三大核心全程陪跑 */
@@ -1000,24 +1119,33 @@ onShareTimeline(() => {
 /* 横向滑动 scroll-view 容器 */
 .escort-scroll-view {
   position: relative;
-  width: 750rpx;
-  white-space: nowrap; /* 极其关键：防止子模块在横向上换行 */
-  margin-top: 50rpx;
+  width: 100%;
+  padding-bottom: 34rpx;
+  box-sizing: border-box;
+  white-space: normal;
+  display: flex;
+  justify-content: center;
+}
+
+.escort-scroll-view ::v-deep .uni-scroll-view-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 /* 通用流程卡片 (01, 02, 03) */
 .step-card {
-  width: 294rpx;
-  height: 354rpx;
-  display: inline-block; /* 极其关键：支持 inline 排布与横向滑出 */
-  vertical-align: top;
+  width: 215rpx;
+  height: 280rpx;
+  flex: 0 0 215rpx;
   white-space: normal; /* 卡片内文字恢复正常换行 */
-  border-radius: 19rpx;
-  box-shadow: 0px 6rpx 23rpx 0px rgba(220, 222, 229, 0.4);
+  border-radius: 14rpx;
+  box-shadow: 0px 5rpx 17rpx 0px rgba(220, 222, 229, 0.3);
   position: relative;
-  padding: 30rpx 20rpx;
+  padding: 31rpx 16rpx 20rpx;
   box-sizing: border-box;
   background-color: #ffffff;
+  margin-right: 12rpx;
 }
 
 /* 02 卡片为重磅高贵蓝色渐变底色，作为流程视觉中心 */
@@ -1025,12 +1153,24 @@ onShareTimeline(() => {
   background: linear-gradient(180deg, #2668ff 0%, #1857e8 100%);
 }
 
+.step-card.center-step::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -13rpx;
+  width: 44rpx;
+  height: 18rpx;
+  background: #1857e8;
+  transform: translateX(-50%);
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
 /* 卡片边距修正，保证两端滑动呼吸空间 */
 .step-card:first-child {
-  margin-left: 40rpx;
+  margin-left: 0;
 }
 .step-card:last-child {
-  margin-right: 40rpx;
+  margin-right: 0;
 }
 
 /* 卡片头部 01, 02, 03 布局 */
@@ -1043,10 +1183,10 @@ onShareTimeline(() => {
 /* 步骤序号数字 */
 .step-number {
   text-align: center;
-  font-size: 50rpx;
+  font-size: 37rpx;
   font-family: 'DIN Pro', system-ui, sans-serif;
-  font-weight: bold;
-  line-height: 60rpx;
+  font-weight: normal;
+  line-height: 51rpx;
   color: rgba(0, 0, 0, 0.2);
 }
 .center-step .step-number {
@@ -1056,11 +1196,11 @@ onShareTimeline(() => {
 /* 步骤中文核心字 */
 .step-title {
   text-align: center;
-  font-size: 36rpx;
+  font-size: 28rpx;
   font-family: SourceHanSansCN-Revision, sans-serif;
   font-weight: 700;
-  line-height: 48rpx;
-  margin-top: 6rpx;
+  line-height: 41rpx;
+  margin-top: -6rpx;
   color: #0f172a;
 }
 .center-step .step-title {
@@ -1069,21 +1209,25 @@ onShareTimeline(() => {
 
 /* 分割虚线/实线图片 */
 .step-divider-line {
-  width: 230rpx;
-  height: 2rpx;
+  width: 187rpx;
+  height: 1rpx;
   display: block;
-  margin: 20rpx auto 0 auto;
+  margin: 18rpx auto 0 auto;
 }
 
 /* 步骤内带小盾牌图标的功能丸子按钮容器 */
 .capsule-button-container {
-  width: 230rpx;
-  height: 52rpx;
-  margin: 18rpx auto 0 auto;
-  box-shadow: 0px 4rpx 12rpx 0px rgba(189, 206, 240, 0.3);
-  border-radius: 17rpx;
+  width: 168rpx;
+  height: 36rpx;
+  margin: 25rpx auto 0 auto;
+  box-shadow: 0px 0px 9rpx 0px rgba(189, 206, 240, 0.6);
+  border-radius: 12rpx;
   overflow: hidden;
   transition: all 0.15s ease;
+}
+
+.capsule-button-container + .capsule-button-container {
+  margin-top: 15rpx;
 }
 
 /* 按钮按压反馈动效 */
@@ -1100,32 +1244,38 @@ onShareTimeline(() => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0 16rpx;
+  justify-content: center;
+  padding: 0 8rpx;
   box-sizing: border-box;
 }
 
 /* 按钮内核心微图标 */
 .capsule-icon {
-  width: 28rpx;
-  height: 28rpx;
+  width: 20rpx;
+  height: 20rpx;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 按钮内的小指引箭头/符号 */
 .capsule-arrow {
-  width: 6rpx;
-  height: 22rpx;
-  margin-left: 12rpx;
+  width: 4rpx;
+  height: 16rpx;
+  margin-left: 6rpx;
   flex-shrink: 0;
 }
 
 /* 按钮内的超精致小文字 */
 .capsule-text {
-  font-size: 28rpx;
+  font-size: 20rpx;
   font-family: SourceHanSansCN-Revision, sans-serif;
   font-weight: 500;
   color: #475569;
-  margin-left: 12rpx;
+  line-height: 28rpx;
+  margin-left: 8rpx;
+  white-space: nowrap;
 }
 
 /* 当大步骤卡片激活选中时，胶囊内的文本变高亮深蓝色 */
@@ -1138,18 +1288,22 @@ onShareTimeline(() => {
    卡片之间的“加号桥梁”
    ==================== */
 .plus-bridge-container {
-  width: 56rpx;
-  height: 56rpx;
-  display: inline-block;
-  vertical-align: top;
-  margin: 146rpx -10rpx 0 -10rpx; /* 极高工艺：悬挂在两卡片正中做连结 */
+  width: 46rpx;
+  height: 46rpx;
+  flex: 0 0 46rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 118rpx -17rpx 0 -17rpx; /* 极高工艺：悬挂在两卡片正中做连结 */
   position: relative;
   z-index: 5;
 }
 
 .plus-bridge-circle {
-  width: 100%;
-  height: 100%;
+  width: 46rpx;
+  height: 46rpx;
+  min-width: 46rpx;
+  min-height: 46rpx;
   border-radius: 50%;
   background-color: #ffffff;
   box-shadow: 0px 4rpx 10rpx rgba(15, 23, 42, 0.08);
@@ -1161,20 +1315,20 @@ onShareTimeline(() => {
 
 /* 加号十字图标 */
 .plus-icon {
-  width: 28rpx;
-  height: 28rpx;
+  width: 23rpx;
+  height: 23rpx;
 }
 
 /* ========================================================
    步骤详情子 Tab 及数据驱动富文本区域 (扁平化通栏布局)
    ======================================================== */
 .detail-section {
-  width: 750rpx;
+  width: 100%;
   background: #ffffff;
   border-radius: 0;
-  margin-top: 40rpx;
-  padding-top: 40rpx;
-  padding-bottom: 40rpx;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
   box-sizing: border-box;
   box-shadow: none;
 }
@@ -1182,28 +1336,52 @@ onShareTimeline(() => {
 .tab-header {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  border-bottom: 2rpx solid #f1f5f9;
-  padding-bottom: 24rpx;
-  padding-left: 46rpx;
-  padding-right: 46rpx;
+  justify-content: space-between;
+  align-items: center;
+  height: 68rpx;
+  border-bottom: none;
+  padding: 0;
   position: relative;
+  border-radius: 254rpx;
+  background: #ffffff;
+  box-shadow: 0px 4rpx 24rpx 0px rgba(199, 199, 199, 0.28);
+  overflow: visible;
 }
 
 .tab-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
   position: relative;
   flex: 1;
-  padding: 10rpx 0;
+  height: 68rpx;
+  padding: 0;
+  border-radius: 254rpx;
   transition: all 0.2s ease;
 }
 
+.tab-item.tab-active {
+  background: linear-gradient(97deg, #5b8bfa -6%, #1c5cf5 18%, #1e5ef5 71%, #3c75f9 104%);
+}
+
+.tab-item.tab-active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -14rpx;
+  width: 42rpx;
+  height: 18rpx;
+  background: #1e5ef5;
+  transform: translateX(-50%);
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
 .tab-icon {
-  width: 120rpx;
-  height: 120rpx;
-  margin-bottom: 12rpx;
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 14rpx;
+  margin-bottom: 0;
   transition: transform 0.2s ease;
 }
 
@@ -1213,32 +1391,34 @@ onShareTimeline(() => {
 
 .tab-name {
   font-size: 30rpx;
-  color: #64748b;
-  font-weight: 500;
-  line-height: 36rpx;
+  color: #666666;
+  font-weight: 700;
+  line-height: 42rpx;
   transition:
     color 0.2s ease,
     font-weight 0.2s ease;
 }
 
 .tab-active .tab-name {
-  color: #1e56fc;
+  color: #ffffff;
   font-weight: bold;
 }
 
 .tab-indicator {
-  position: absolute;
-  bottom: -24rpx; /* 紧贴下边框线 */
-  width: 100%;
-  height: 6rpx;
-  background: linear-gradient(90deg, #2668ff 0%, #1450ff 100%);
-  border-radius: 100rpx;
+  display: none;
 }
 
 .content-detail-box {
-  margin-top: 30rpx;
-  min-height: 200rpx;
-  animation: fadeIn 0.35s ease-in-out;
+  margin-top: 32rpx;
+  min-height: 1200rpx;
+  background: #f8f8f8;
+  overflow: hidden;
+}
+
+.wisdom-case-section {
+  margin-top: 32rpx;
+  border-radius: 14rpx;
+  overflow: hidden;
 }
 
 .rich-content {
@@ -1247,9 +1427,33 @@ onShareTimeline(() => {
   line-height: 1.6;
 }
 
+.back-top-button {
+  position: fixed;
+  right: 30rpx;
+  bottom: calc(120rpx + env(safe-area-inset-bottom));
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #5b8bfa 0%, #1c5cf5 100%);
+  box-shadow: 0 10rpx 28rpx rgba(28, 92, 245, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+}
+
+.back-top-arrow {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 84rpx;
+  transform: translateY(6rpx);
+}
+
 .wisdom-partners {
-  width: 750rpx;
-  padding: 72rpx 24rpx 70rpx;
+  width: 100%;
+  margin-top: 32rpx;
+  padding: 42rpx 18rpx 34rpx;
   background: #ffffff;
   box-sizing: border-box;
   overflow: hidden;
@@ -1259,9 +1463,9 @@ onShareTimeline(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 46rpx;
-  font-size: 38rpx;
-  line-height: 56rpx;
+  margin-bottom: 32rpx;
+  font-size: 34rpx;
+  line-height: 48rpx;
   font-weight: 800;
   color: #050505;
   letter-spacing: 1rpx;
@@ -1271,37 +1475,37 @@ onShareTimeline(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8rpx;
-  margin-bottom: 56rpx;
+  gap: 6rpx;
+  margin-bottom: 34rpx;
 }
 
 .wisdom-partners-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8rpx;
+  gap: 6rpx;
 }
 
 .wisdom-partners-row-0,
 .wisdom-partners-row-1,
 .wisdom-partners-row-2 {
-  width: 900rpx;
+  width: 660rpx;
 }
 
 .wisdom-partners-row-3,
 .wisdom-partners-row-4 {
-  width: 900rpx;
+  width: 660rpx;
 }
 
 .wisdom-partners-row-1,
 .wisdom-partners-row-3 {
-  transform: translateX(-70rpx);
+  transform: translateX(-38rpx);
 }
 
 .wisdom-partners-cell {
   flex: 1;
   min-width: 0;
-  height: 86rpx;
+  height: 70rpx;
   background: #fcfcfd;
   display: flex;
   align-items: center;
@@ -1315,8 +1519,8 @@ onShareTimeline(() => {
 }
 
 .wisdom-partners-logo {
-  width: 82%;
-  height: 72rpx;
+  width: 78%;
+  height: 58rpx;
 }
 
 .wisdom-partners-cta {
