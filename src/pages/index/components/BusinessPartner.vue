@@ -37,15 +37,14 @@
       <UIcon name="right" :size="'24rpx'" color="#313131" class="bp-more-icon" />
     </view>
 
-    <!-- 内置全屏预览（点击案例直接播放） -->
-    <MediaPreview v-model:visible="showPreview" :media="previewMedia" />
+
   </view>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import UIcon from '@/components/UIcon/UIcon.vue';
-import MediaPreview from '@/components/MediaPreview/MediaPreview.vue';
+
 
 const props = defineProps({
   list: {
@@ -56,20 +55,18 @@ const props = defineProps({
 
 const emit = defineEmits(['play', 'more']);
 
-// 预览状态
-const showPreview = ref(false);
-const previewMedia = ref({ src: '', type: 'video', index: 0 });
-
-// 点击案例：如果是视频则直接在本组件全屏预览，同时对外报件 play 供需要的父级拓展
+// 点击案例：跳转至视频播放页面播放，同时对外报件 play 供需要的父级拓展
 // item.caseImages 为视频 URL，item.coverImage 为封面
 const handlePlay = (item, index) => {
   if (item && item.caseImages) {
-    previewMedia.value = {
-      src: item.caseImages,
-      type: 'video',
-      index,
-    };
-    showPreview.value = true;
+    const url = Array.isArray(item.caseImages) ? item.caseImages[0] : item.caseImages;
+    let path = "/pages/videoplay/index?url=" + encodeURIComponent(url) + "&visitContent=" + encodeURIComponent(item.caseTitle || '');
+    if (item.coverImage) {
+      path += "&coverImage=" + encodeURIComponent(item.coverImage);
+    }
+    uni.navigateTo({
+      url: path
+    });
   }
   emit('play', item);
 };

@@ -147,27 +147,13 @@ const onVideoFullscreenChange = (e, index) => {
 let videoContext = null;
 
 const nextVideo = (url, visitContent, coverImage) => {
-  let path = "/pages/secondary/index/index?url=" + url + "&visitContent=" + visitContent;
+  let path = "/pages/videoplay/index?url=" + encodeURIComponent(url) + "&visitContent=" + encodeURIComponent(visitContent);
   if (coverImage) {
     path += "&coverImage=" + encodeURIComponent(coverImage);
   }
   uni.navigateTo({
     url: path
   });
-  // let sources = [];
-  // sources = [
-  //   {
-  //     url: url,
-  //     type: "video",
-  //     poster: coverImage,
-  //   },
-  // ];
-
-  // uni.previewMedia({
-  //   sources: sources,
-  //   current: 0,
-  //   autoplay: true,
-  // });
 }; // 播放视频
 const playVideo = (index) => {
   // 暂停所有其他视频
