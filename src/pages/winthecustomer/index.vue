@@ -11,12 +11,18 @@
       @more="goToCooperationcase"
     />
     <ServiceContent :rich-text="richText" />
+    <ShareFloatBtn />
   </scroll-view>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { onShow, onHide } from "@dcloudio/uni-app";
+import {
+  onShow,
+  onHide,
+  onShareAppMessage,
+  onShareTimeline,
+} from "@dcloudio/uni-app";
 import {
   getCompanyNewsList,
   getsuccessCaseList,
@@ -127,6 +133,16 @@ const navigateToDetail = (item) => {
     url: "/pages/casedetails/index?successCaseId=" + item.successCaseId,
   });
 };
+
+onShareAppMessage(() => ({
+  title: "天天拓客",
+  path: "/pages/winthecustomer/index",
+}));
+
+onShareTimeline(() => ({
+  title: "天天拓客",
+  query: "",
+}));
 
 onMounted(() => {
   fetchCompanyNewsList();

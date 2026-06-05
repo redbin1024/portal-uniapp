@@ -8,6 +8,7 @@
       <text class="loading-more-text">加载更多中...</text>
     </view>
     <BackHome />
+    <ShareFloatBtn />
   </view>
 </template>
 

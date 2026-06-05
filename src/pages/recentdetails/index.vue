@@ -7,6 +7,7 @@
     <mp-html :content="richText" @imgtap="previewImage"></mp-html>
   </view>
   <BackHome />
+  <ShareFloatBtn />
 </template>
 
 <script setup>

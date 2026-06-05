@@ -34,6 +34,7 @@
     </view>
   </view>
   <BackHome />
+  <ShareFloatBtn />
 </template>
 
 <script setup>
@@ -56,6 +57,16 @@ defineOptions({
   name: "RecentUpdates",
 });
 // 生命周期钩子
+onShareAppMessage(() => ({
+  title: "最近动态",
+  path: "/pages/recentUpdatesnew/index",
+}));
+
+onShareTimeline(() => ({
+  title: "最近动态",
+  query: "",
+}));
+
 onMounted(() => {
   fetchCompanyNewsList();
 });

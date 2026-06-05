@@ -42,20 +42,25 @@ const props = defineProps({
 }
 
 .about-xdd-title {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: #0076ff;
+  font-family: SourceHanSansCN-Revision, system-ui, -apple-system, sans-serif;
+  font-size: 46rpx;
+  font-weight: bold;
   line-height: 56rpx;
   text-align: center;
   margin-bottom: 40rpx;
+  background: linear-gradient(90deg, #006eee 53%, #00bdfe 97%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .about-xdd-desc {
-  font-size: 28rpx;
-  font-weight: 400;
-  color: #666666;
+  font-family: SourceHanSansCN-Revision, system-ui, -apple-system, sans-serif;
+  font-size: 27rpx;
+  font-weight: normal;
   line-height: 48rpx;
   text-align: justify;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .about-xdd-desc + .about-xdd-desc {

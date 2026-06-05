@@ -9,6 +9,7 @@
     </view>
   </view>
   <BackHome />
+  <ShareFloatBtn />
 </template>
 
 <script setup>

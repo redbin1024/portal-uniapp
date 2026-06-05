@@ -97,6 +97,7 @@
     </view>
   </view>
   <BackHome />
+  <ShareFloatBtn />
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
@@ -309,6 +310,16 @@ const onMediaClick = (item, index, type) => {
   };
   showPreview.value = true;
 };
+onShareAppMessage(() => ({
+  title: "合作商家",
+  path: "/pages/businesspartner/index",
+}));
+
+onShareTimeline(() => ({
+  title: "合作商家",
+  query: "",
+}));
+
 onMounted(() => {
   caseList();
 });

@@ -1,32 +1,30 @@
 <template>
   <view class="main">
+    <view class="system-hero">
+      <image class="system-hero-bg" src="http://cdn.xiaodingdang1.com/2026/06/04/db67846d9c5f43f9bed93d42278f040f.png"
+        mode="aspectFill" />
+      <view class="system-hero-content">
+        <text class="system-hero-title">关于宝妈小叮当</text>
+        <text class="system-hero-subtitle">宝妈小叮当是天天拓客旗下，专为解决”月子中心有客户、
+          但转化难”痛点而生的智能签单系统。解决月子中心"转化差、流失高、管理乱”的
+          顽疾，让每一条客资，都最大可能转化为实打实的业绩。</text>
+      </view>
+    </view>
+
     <VideoCarousel :videos="videoList" @play="onVideoPlay" />
 
-    <AboutSection />
-
-    <image
-      class="business-banner"
+    <image class="business-banner"
       src="http://cdn.xiaodingdang1.com/2026/05/22/87c4f3899c114908adf6862a0c40c0ab.jpg?image_process=format,webp"
-      mode="widthFix"
-    ></image>
+      mode="widthFix"></image>
 
-    <BusinessSystem
-      v-if="businessSystemList.length > 0"
-      title="宝妈小叮当"
-      subtitle="业务系统"
-      :list="businessSystemList"
-      @click="goToCustomer"
-    />
+    <BusinessSystem v-if="businessSystemList.length > 0" title="宝妈小叮当" subtitle="业务系统" :list="businessSystemList"
+      @click="goToCustomer" />
 
-    <ProblemList
-      v-if="productIntroList.length > 0"
-      :list="productIntroList"
-      :limit="4"
-      @click="goToIntro"
-      @more="goToIssueList"
-    />
+    <ProblemList v-if="productIntroList.length > 0" :list="productIntroList" :limit="4" @click="goToIntro"
+      @more="goToIssueList" />
 
     <Partners :list="partnerList" />
+    <ShareFloatBtn />
   </view>
 </template>
 
@@ -205,6 +203,57 @@ onShareTimeline(() => ({
   min-height: 100vh;
   overflow: hidden;
 }
+
+.system-hero {
+  position: relative;
+  width: 750rpx;
+  height: 834rpx;
+  overflow: hidden;
+}
+
+.system-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 750rpx;
+  height: 834rpx;
+  z-index: 1;
+}
+
+.system-hero-content {
+  position: absolute;
+  top: 180rpx;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 40rpx;
+}
+
+.system-hero-title {
+  font-family: SourceHanSansCN-Revision, system-ui, -apple-system, sans-serif;
+  font-size: 46rpx;
+  font-weight: bold;
+  line-height: 56rpx;
+  text-align: center;
+  margin-bottom: 24rpx;
+  background: linear-gradient(90deg, #006eee 53%, #00bdfe 97%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.system-hero-subtitle {
+  font-family: SourceHanSansCN-Revision, system-ui, -apple-system, sans-serif;
+  font-size: 27rpx;
+  font-weight: normal;
+  line-height: 48rpx;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+}
+
 .business-banner {
   margin-top: 40rpx;
   display: block;

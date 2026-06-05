@@ -8,6 +8,7 @@
       @click="goToIndex"
     />
     <BackHome />
+    <ShareFloatBtn />
   </view>
 </template>
 

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" version="1.1" width="445.5" height="152" viewBox="0 0 445.5 152">
+  <defs>
+    <filter id="tab_active_shadow" filterUnits="objectBoundingBox" color-interpolation-filters="sRGB" x="-0.06037735849056604" y="-0.3076923076923077" width="1.120754716981132" height="1.4615384615384615">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+      <feOffset dy="-8" dx="0"/>
+      <feGaussianBlur stdDeviation="6"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.250980406999588 0 0 0 0 0.5411764979362488 0 0 0 0 0.9607843160629272 0 0 0 0.20999999344348907 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+    <linearGradient x1="0.5" y1="0" x2="0.5" y2="1" id="tab_active_fill">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+  <path d="M24,136L421.5,136L383.61136,53.04381C377.7562,40.2240658,364.95874,32,350.86517,32L60.000004,32C40.11775,32,24,48.11775,24,68L24,136Z" fill="url(#tab_active_fill)" filter="url(#tab_active_shadow)"/>
+</svg>

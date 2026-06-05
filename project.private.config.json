@@ -1,7 +1,7 @@
 {
   "libVersion": "3.10.0",
-  "projectname": "mastergo-project",
-  "setting": {
+  "projectname": "portal-uniapp",
+  "setting": {  
     "urlCheck": true,
     "coverView": true,
     "lazyloadPlaceholderEnable": false,

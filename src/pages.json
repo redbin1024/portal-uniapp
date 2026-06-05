@@ -5,14 +5,18 @@
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
     {
       "path": "pages/winthecustomer/index",
       "style": {
         "navigationBarTitleText": "线上获客",
-         "backgroundColor": "#F8F8F8"
+         "backgroundColor": "#F8F8F8",
+         "enableShareAppMessage": true,
+         "enableShareTimeline": true
       }
     },
     {
@@ -29,21 +33,37 @@
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "月子智慧",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
+      }
+    },
+    {
+      "path": "pages/wisdom/detail/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "服务详情",
+        "backgroundColor": "#f6f8fb",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
     {
       "path": "pages/case/index",
       "style": {
         "navigationBarTitleText": "服务案例",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
     {
       "path": "pages/casedetails/index",
       "style": {
         "navigationBarTitleText": "澜悦湾",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
     {
@@ -59,7 +79,9 @@
       "path": "pages/recentUpdatesnew/index",
       "style": {
         "navigationBarTitleText": "最近动态",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
     {
@@ -84,7 +106,9 @@
       "path": "pages/businesspartner/index",
       "style": {
         "navigationBarTitleText": "合作商家",
-        "navigationBarBackgroundColor": "#ffffff"
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
       }
     },
     {
@@ -121,7 +145,7 @@
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "MasterGo项目",
+    "navigationBarTitleText": "天天拓客官网",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
@@ -147,7 +171,7 @@
         "pagePath": "pages/wisdom/index",
         "iconPath": "static/wisdom.png",
         "selectedIconPath": "static/wisdomActive.png",
-        "text": "智慧"
+        "text": "全案服务"
       },
       {
         "pagePath": "pages/system/index",

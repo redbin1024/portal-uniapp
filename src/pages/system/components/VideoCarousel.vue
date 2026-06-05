@@ -1,34 +1,22 @@
 <template>
   <view class="video-section" v-if="videos.length > 0">
-    <swiper
-      class="video-swiper"
-      :current="currentIndex"
-      :circular="videos.length > 1"
-      next-margin="80rpx"
-      @change="onSwiperChange"
-    >
+    <swiper class="video-swiper" :current="currentIndex" :circular="videos.length > 1" next-margin="80rpx"
+      @change="onSwiperChange">
       <swiper-item v-for="(item, i) in videos" :key="i">
-        <view class="video-card">
-          <video
-            class="video-player"
-            :src="item.videoUrl"
-            :controls="false"
-            object-fit="cover"
-          ></video>
-          <view class="video-mask" @click="onVideoTap(item)"></view>
+        <view class="video-card-shell">
+          <view class="video-card">
+            <view class="video-media">
+              <video class="video-player" :src="item.videoUrl" :controls="false" object-fit="cover"></video>
+              <view class="video-mask" @click="onVideoTap(item)"></view>
+            </view>
+          </view>
         </view>
       </swiper-item>
     </swiper>
-    <text class="video-section__title">{{
-      videos[currentIndex].enterpriseName
-    }}</text>
     <view class="video-pager">
       <view class="video-pager__bar">
-        <block v-for="(item, i) in videos" :key="i">
-          <view
-            v-if="i === currentIndex"
-            class="video-pager__progress"
-          ></view>
+        <block v-for="(_, i) in videos" :key="i">
+          <view v-if="i === currentIndex" class="video-pager__progress"></view>
           <view v-else class="video-pager__dot"></view>
         </block>
       </view>
@@ -77,6 +65,9 @@ const onVideoTap = (item) => {
 
 <style scoped>
 .video-section {
+  position: relative;
+  margin-top: -360rpx;
+  z-index: 999;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -88,13 +79,36 @@ const onVideoTap = (item) => {
   height: 360rpx;
 }
 
-.video-card {
+.video-card-shell {
   position: relative;
-  width: calc(100% - 32rpx);
+  width: 612rpx;
   height: 360rpx;
-  border-radius: 20rpx;
-  overflow: hidden;
+  margin: 0 auto;
+  padding: 10rpx;
+  border-radius: 32rpx;
+  background: linear-gradient(180deg, #daf7fa 0%, #529cf2 100%);
+  box-shadow:
+    5rpx 12rpx 13rpx rgba(190, 219, 249, 0.98),
+    inset 0 0 4rpx #ffffff;
   box-sizing: border-box;
+}
+
+.video-card {
+  width: 100%;
+  height: 100%;
+  padding: 18rpx;
+  border-radius: 32rpx;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.video-media {
+  position: relative;
+  width: 556rpx;
+  height: 313rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  background: linear-gradient(180deg, #c7defc 0%, #8eb6f6 100%);
 }
 
 .video-player {
@@ -164,6 +178,7 @@ const onVideoTap = (item) => {
   align-items: center;
   justify-content: center;
 }
+
 .video-pager__next-icon {
   width: 28rpx;
   height: 36rpx;

@@ -89,6 +89,7 @@
       </view>
     </view>
   </view>
+  <ShareFloatBtn />
   <!-- <BackHome /> -->
 </template>
 

@@ -112,6 +112,7 @@
 
     <!-- 右下角悬浮客服按钮 -->
     <CustomerServiceBtn :bottom="80" @click="handleCustomerServiceClick" />
+    <ShareFloatBtn />
   </view>
 </template>
 <script setup>

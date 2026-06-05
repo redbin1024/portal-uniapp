@@ -11,6 +11,7 @@
       <mp-html :content="richText" @imgtap="previewImage"></mp-html>
     </view>
     <BackHome />
+    <ShareFloatBtn />
   </view>
 </template>
 

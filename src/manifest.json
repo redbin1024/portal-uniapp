@@ -1,7 +1,7 @@
 {
-    "name" : "mastergo-project",
+    "name" : "portal-uniapp",
     "appid" : "__UNI__D3B26BE",
-    "description" : "基于MasterGo设计稿的UniApp项目",
+    "description" : "天天拓客官网",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
