@@ -22,9 +22,7 @@
         /> -->
 
         <view
-          @click="
-            nextVideo(item.caseImages[0], item.caseTitle, item.coverImage)
-          "
+          @click="handleItemClick(item)"
           style="width: 344rpx; height: 458rpx"
         >
           <!-- <image
@@ -36,7 +34,7 @@
             mode="aspectFill"
             style="width: 100%; height: 100%; border-radius: 20rpx"
           ></image>
-          <view class="custom-play-button">
+          <view v-if="videoEnabled" class="custom-play-button">
             <image
               src="http://cdn.xiaodingdang1.com/2025/10/22/2f504fbb11944ad8834f6c479f233281.png"
               class="play-icon"
@@ -101,7 +99,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
-import { getcaseList } from "@/api/activity.js";
+import { getcaseList, getEnterpriseList } from "@/api/activity.js";
 import {
   onLoad,
   onReady,
@@ -114,6 +112,7 @@ import {
   onShareTimeline,
 } from "@dcloudio/uni-app";
 const caseDataList = ref([]);
+const videoEnabled = ref(uni.getStorageSync("videoEnabled") || false);
 const showPreview = ref(false);
 const types = ref("");
 const pageNum = ref(1);
@@ -146,6 +145,22 @@ const onVideoFullscreenChange = (e, index) => {
   }
 };
 let videoContext = null;
+
+const handleItemClick = (item) => {
+  if (videoEnabled.value) {
+    const videoUrl = Array.isArray(item.caseImages) ? item.caseImages[0] : item.caseImages;
+    if (videoUrl) {
+      nextVideo(videoUrl, item.caseTitle, item.coverImage);
+    }
+  } else {
+    const urls = caseDataList.value.map(i => i.coverImage).filter(Boolean);
+    const current = urls.indexOf(item.coverImage);
+    uni.previewImage({
+      urls: urls,
+      current: current >= 0 ? current : 0
+    });
+  }
+};
 
 const nextVideo = (url, visitContent, coverImage) => {
   let path = "/pages/videoplay/index?url=" + encodeURIComponent(url) + "&visitContent=" + encodeURIComponent(visitContent);
@@ -320,8 +335,24 @@ onShareTimeline(() => ({
   query: "",
 }));
 
+const fetchVideoSwitch = async () => {
+  try {
+    const response = await getEnterpriseList({
+      pageSize: 10,
+      pageNum: 1,
+    });
+    if (response?.rows?.length > 0) {
+      videoEnabled.value = response.rows[0].videoEnabled;
+      uni.setStorageSync("videoEnabled", response.rows[0].videoEnabled);
+    }
+  } catch (error) {
+    console.error("获取企业开关失败:", error);
+  }
+};
+
 onMounted(() => {
   caseList();
+  fetchVideoSwitch();
 });
 </script>
 <style lang="scss" scoped>

@@ -125,8 +125,9 @@
 
     <ShareFloatBtn />
 
-    <view class="back-top-button" v-if="showBackTop" hover-class="button-hover" @tap="backToTop">
-      <text class="back-top-arrow">⌃</text>
+    <view class="back-top-button" v-if="showBackTop" hover-class="back-top-button-hover" @tap="backToTop">
+      <image class="back-top-icon" :src="backTopIconSrc" mode="aspectFit" />
+      <text class="back-top-text">顶部</text>
     </view>
   </view>
 </template>
@@ -164,6 +165,9 @@ const effectIcon = ref(createEffectIcon());
 // 交互与数据驱动状态
 const showBackTop = ref(false);
 const typeCards = ref([]);
+
+const backTopIconSrc =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"%3E%3Cpath d="M12 28L24 16L36 28" fill="none" stroke="%232C80FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/%3E%3Cpath d="M12 12H36" fill="none" stroke="%232C80FF" stroke-width="3.5" stroke-linecap="round"/%3E%3C/svg%3E';
 
 const backToTop = () => {
   uni.pageScrollTo({
@@ -758,25 +762,39 @@ onShareTimeline(() => {
 
 .back-top-button {
   position: fixed;
-  right: 30rpx;
+  right: 28rpx;
   bottom: calc(120rpx + env(safe-area-inset-bottom));
-  width: 84rpx;
-  height: 84rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 50%;
-  background: linear-gradient(180deg, #5b8bfa 0%, #1c5cf5 100%);
-  box-shadow: 0 10rpx 28rpx rgba(28, 92, 245, 0.28);
+  background: #ffffff;
+  box-shadow: 0 8rpx 28rpx rgba(0, 0, 0, 0.1), 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 99;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
 }
 
-.back-top-arrow {
-  font-size: 48rpx;
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 84rpx;
-  transform: translateY(6rpx);
+.back-top-button-hover {
+  transform: scale(0.94);
+  opacity: 0.9;
+}
+
+.back-top-icon {
+  width: 34rpx;
+  height: 34rpx;
+  display: block;
+  margin-bottom: 2rpx;
+}
+
+.back-top-text {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: #666666;
+  line-height: 28rpx;
 }
 
 </style>

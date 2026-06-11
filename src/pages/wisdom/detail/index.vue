@@ -339,19 +339,15 @@ onShareTimeline(() => {
 <style lang="scss" scoped>
 .detail-page {
   min-height: 100vh;
-  padding-top: 259rpx;
   background: #ffffff;
   box-sizing: border-box;
 }
 
 .detail-top {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 750rpx;
-  height: 331rpx;
-  background: linear-gradient(180deg, #0d52c1 13%, #0877e3 100%);
   z-index: 100;
+  background: linear-gradient(180deg, #0d52c1 13%, #0877e3 100%);
 }
 
 .detail-status-bar {
@@ -359,7 +355,7 @@ onShareTimeline(() => {
 }
 
 .detail-navbar {
-  height: 108rpx;
+  height: 88rpx;
   padding: 0 28rpx;
   display: flex;
   align-items: center;
