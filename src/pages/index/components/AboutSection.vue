@@ -56,7 +56,7 @@ const props = defineProps({
 
 .about-xdd-desc {
   font-family: SourceHanSansCN-Revision, system-ui, -apple-system, sans-serif;
-  font-size: 27rpx;
+  font-size: 30rpx;
   font-weight: normal;
   line-height: 48rpx;
   text-align: justify;

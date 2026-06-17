@@ -17,9 +17,6 @@
         <view v-if="currentTabs.length" class="tab-header">
           <view v-for="(tab, index) in currentTabs" :key="tab.id || index" class="tab-item"
             :class="{ 'tab-active': activeTabIndex === index }" @tap="changeTab(index)">
-            <image v-if="activeTabIndex === index" class="tab-active-bg"
-              :class="{ 'tab-active-bg-right': index % 2 === 1 }" src="/static/widsom/tab_active.svg"
-              mode="scaleToFill" />
             <image class="tab-icon" :src="formatWisdomImageUrl(getWisdomTabIcon(tab.name, tab.image))"
               mode="aspectFit" />
             <text class="tab-name">{{ tab.name }}</text>
@@ -402,11 +399,13 @@ onShareTimeline(() => {
   position: relative;
   display: flex;
   width: 100%;
-  height: 132rpx;
-  border-radius: 36rpx;
-  background: linear-gradient(180deg, #c9e2f6 0%, #ffffff 35%);
+  height: 128rpx;
+  background: #ffffff;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
+  padding: 18rpx 32rpx;
+  gap: 24rpx;
+  border-bottom: 1rpx solid #e2e8f0;
 }
 
 .tab-header-empty {
@@ -428,31 +427,29 @@ onShareTimeline(() => {
   align-items: center;
   justify-content: center;
   min-width: 0;
-  height: 120rpx;
-  padding: 0 24rpx;
-  border-radius: 36rpx 36rpx 0 0;
+  height: 92rpx;
+  border-radius: 46rpx;
   transition: all 0.2s ease;
   box-sizing: border-box;
   overflow: visible;
 }
 
 .tab-item.tab-active {
+  background-color: #0e50be;
   z-index: 1;
 }
 
-.tab-active-bg {
+.tab-active::after {
+  content: '';
   position: absolute;
+  bottom: -12rpx;
   left: 50%;
-  bottom: 0;
-  width: 446rpx;
-  height: 152rpx;
-  transform: translateX(-50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.tab-active-bg-right {
-  transform: translateX(-50%) scaleX(-1);
+  transform: translateX(-50%) rotate(45deg);
+  width: 24rpx;
+  height: 24rpx;
+  background-color: #0e50be;
+  border-bottom-right-radius: 6rpx;
+  z-index: 2;
 }
 
 .tab-icon {
@@ -475,15 +472,17 @@ onShareTimeline(() => {
 }
 
 .tab-active .tab-icon {
+  filter: brightness(0) invert(1);
   opacity: 1;
 }
 
 .tab-active .tab-name {
-  color: #1d5ae8;
+  color: #ffffff;
 }
 
 .content-detail-box {
   min-height: 760rpx;
+  padding: 36rpx 32rpx;
   box-sizing: border-box;
 }
 

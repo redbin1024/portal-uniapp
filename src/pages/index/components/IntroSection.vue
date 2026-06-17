@@ -44,7 +44,7 @@ const props = defineProps({
 }
 
 .intro-desc {
-  font-size: 26rpx;
+  font-size: 30rpx;
   font-weight: normal;
   line-height: 44rpx;
   color: #333333;

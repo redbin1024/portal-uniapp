@@ -76,7 +76,7 @@ const fetchEnterpriseList = async () => {
   try {
     const response = await getEnterpriseList({ pageSize: 10, pageNum: 1 });
     if (response && Array.isArray(response.rows) && response.rows.length > 0) {
-      videoList.value = response.rows
+      const enterpriseVideos = response.rows
         .filter((row) => row.videoEnabled)
         .flatMap((row) =>
           normalizeBannerVideos(row.bannerVideos).map((videoUrl) => ({
@@ -86,6 +86,7 @@ const fetchEnterpriseList = async () => {
           })),
         )
         .filter((row) => row.videoUrl && row.coverImage);
+      videoList.value = enterpriseVideos.slice(0, 1);
       partnerList.value = Array.isArray(response.rows[0].cooperationMerchants)
         ? response.rows[0].cooperationMerchants
         : [];
@@ -222,7 +223,7 @@ onShareTimeline(() => ({
 
 .system-hero-content {
   position: absolute;
-  top: 180rpx;
+  top: 150rpx;
   left: 0;
   right: 0;
   z-index: 2;
@@ -247,7 +248,7 @@ onShareTimeline(() => ({
 
 .system-hero-subtitle {
   font-family: SourceHanSansCN-Revision, system-ui, -apple-system, sans-serif;
-  font-size: 27rpx;
+  font-size: 30rpx;
   font-weight: normal;
   line-height: 48rpx;
   text-align: center;

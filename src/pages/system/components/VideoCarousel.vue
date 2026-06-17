@@ -1,6 +1,6 @@
 <template>
   <view class="video-section" v-if="videos.length > 0">
-    <swiper class="video-swiper" :current="currentIndex" :circular="videos.length > 1" next-margin="80rpx"
+    <swiper class="video-swiper" :current="currentIndex" :circular="videos.length > 1" :next-margin="videos.length > 1 ? '80rpx' : '0rpx'"
       @change="onSwiperChange">
       <swiper-item v-for="(item, i) in videos" :key="i">
         <view class="video-card-shell">
@@ -13,7 +13,7 @@
         </view>
       </swiper-item>
     </swiper>
-    <view class="video-pager">
+    <view class="video-pager" v-if="videos.length > 1">
       <view class="video-pager__bar">
         <block v-for="(_, i) in videos" :key="i">
           <view v-if="i === currentIndex" class="video-pager__progress"></view>
@@ -66,7 +66,7 @@ const onVideoTap = (item) => {
 <style scoped>
 .video-section {
   position: relative;
-  margin-top: -360rpx;
+  margin-top: -400rpx;
   z-index: 999;
   display: flex;
   flex-direction: column;
