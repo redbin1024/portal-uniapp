@@ -49,6 +49,15 @@
       }
     },
     {
+      "path": "pages/trafficDetails/index",
+      "style": {
+        "navigationBarTitleText": "精准获取线上流量",
+        "navigationBarBackgroundColor": "#ffffff",
+        "enableShareAppMessage": true,
+        "enableShareTimeline": true
+      }
+    },
+    {
       "path": "pages/case/index",
       "style": {
         "navigationBarTitleText": "服务案例",

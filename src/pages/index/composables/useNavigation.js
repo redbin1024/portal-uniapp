@@ -80,6 +80,15 @@ export function useNavigation() {
     });
   };
 
+  /**
+   * 跳转到精准流量详情页面
+   */
+  const goToTrafficDetails = () => {
+    uni.navigateTo({
+      url: '/pages/trafficDetails/index',
+    });
+  };
+
   return {
     goToWinTheCustomer,
     goToSystem,
@@ -88,6 +97,7 @@ export function useNavigation() {
     goToIssueDetail,
     viewMoreCases,
     goToCompanyNewsDetail,
+    goToTrafficDetails,
   };
 }
 

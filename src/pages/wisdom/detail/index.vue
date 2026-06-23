@@ -17,7 +17,9 @@
         <view v-if="currentTabs.length" class="tab-header">
           <view v-for="(tab, index) in currentTabs" :key="tab.id || index" class="tab-item"
             :class="{ 'tab-active': activeTabIndex === index }" @tap="changeTab(index)">
-            <image class="tab-icon" :src="formatWisdomImageUrl(getWisdomTabIcon(tab.name, tab.image))"
+            <view v-if="activeTabIndex === index" class="tab-icon-active"
+              :style="{ 'mask-image': `url(${formatWisdomImageUrl(getWisdomTabIcon(tab.name, tab.image))})`, '-webkit-mask-image': `url(${formatWisdomImageUrl(getWisdomTabIcon(tab.name, tab.image))})` }" />
+            <image v-else class="tab-icon" :src="formatWisdomImageUrl(getWisdomTabIcon(tab.name, tab.image))"
               mode="aspectFit" />
             <text class="tab-name">{{ tab.name }}</text>
           </view>
@@ -344,7 +346,7 @@ onShareTimeline(() => {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: linear-gradient(180deg, #0d52c1 13%, #0877e3 100%);
+  background: #ffffff;
 }
 
 .detail-status-bar {
@@ -371,8 +373,8 @@ onShareTimeline(() => {
 .detail-back-arrow {
   width: 24rpx;
   height: 24rpx;
-  border-left: 5rpx solid #ffffff;
-  border-bottom: 5rpx solid #ffffff;
+  border-left: 5rpx solid #333333;
+  border-bottom: 5rpx solid #333333;
   transform: rotate(45deg);
 }
 
@@ -383,7 +385,7 @@ onShareTimeline(() => {
   z-index: 1;
   font-size: 32rpx;
   line-height: 72rpx;
-  color: #ffffff;
+  color: #1a1a1a;
   font-weight: 700;
 }
 
@@ -432,6 +434,7 @@ onShareTimeline(() => {
   transition: all 0.2s ease;
   box-sizing: border-box;
   overflow: visible;
+  background-color: #f3f4f6;
 }
 
 .tab-item.tab-active {
@@ -471,9 +474,18 @@ onShareTimeline(() => {
   z-index: 1;
 }
 
-.tab-active .tab-icon {
-  filter: brightness(0) invert(1);
-  opacity: 1;
+.tab-icon-active {
+  width: 38rpx;
+  height: 38rpx;
+  margin-right: 14rpx;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 .tab-active .tab-name {

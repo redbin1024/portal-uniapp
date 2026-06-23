@@ -38,7 +38,7 @@
             border-radius: 20rpx;
           "
         >
-          立即采购
+          立即体检
         </button>
       </view>
     </view>

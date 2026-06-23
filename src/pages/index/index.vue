@@ -40,7 +40,7 @@
 
       <!-- 天天拓客 · 精准获取线上流量 -->
       <AnimateOnView animation="fade-up" :duration="700">
-        <TrafficBanner @click="goToWinTheCustomer" />
+        <TrafficBanner @click="goToTrafficDetails" />
       </AnimateOnView>
 
       <!-- 关于宝妈小叮当 -->
@@ -157,6 +157,7 @@ const {
   goToIssueList,
   goToIssueDetail,
   viewMoreCases,
+  goToTrafficDetails,
 } = useNavigation();
 
 // 查看更多案例（BusinessPartner 组件使用）
