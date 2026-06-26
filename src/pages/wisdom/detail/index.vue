@@ -17,10 +17,21 @@
         <view v-if="currentTabs.length" class="tab-header">
           <view v-for="(tab, index) in currentTabs" :key="tab.id || index" class="tab-item"
             :class="{ 'tab-active': activeTabIndex === index }" @tap="changeTab(index)">
-            <view v-if="activeTabIndex === index" class="tab-icon-active"
-              :style="{ 'mask-image': `url(${formatWisdomImageUrl(getWisdomTabIcon(tab.name, tab.image))})`, '-webkit-mask-image': `url(${formatWisdomImageUrl(getWisdomTabIcon(tab.name, tab.image))})` }" />
-            <image v-else class="tab-icon" :src="formatWisdomImageUrl(getWisdomTabIcon(tab.name, tab.image))"
-              mode="aspectFit" />
+            <template v-if="hasExternalTabImage(tab.image)">
+              <view v-if="activeTabIndex === index" class="tab-icon-active"
+                :style="{ 'mask-image': `url(${formatWisdomImageUrl(tab.image)})`, '-webkit-mask-image': `url(${formatWisdomImageUrl(tab.image)})` }" />
+              <image v-else class="tab-icon" :src="formatWisdomImageUrl(tab.image)"
+                mode="aspectFit" />
+            </template>
+            <template v-else>
+              <UIcon
+                class="tab-uicon"
+                :class="{ 'tab-uicon-inactive': activeTabIndex !== index }"
+                :name="getWisdomTabUIconName(tab.name)"
+                :color="activeTabIndex === index ? '#ffffff' : ''"
+                size="38rpx"
+              />
+            </template>
             <text class="tab-name">{{ tab.name }}</text>
           </view>
         </view>
@@ -74,9 +85,12 @@ import { get } from '@/utils/request.js';
 import { getCompanyNewsList, getEnterpriseList } from '@/api/activity.js';
 import { formatRichText } from '@/utils/richText.js';
 import RecentDynamic from '@/pages/winthecustomer/components/RecentDynamic.vue';
+import UIcon from '@/components/UIcon/UIcon.vue';
 import {
   getWisdomTabIcon,
   formatWisdomImageUrl,
+  hasExternalTabImage,
+  getWisdomTabUIconName,
 } from '../config.js';
 import {
   mapWisdomTypeToCard,
@@ -407,7 +421,6 @@ onShareTimeline(() => {
   overflow: visible;
   padding: 18rpx 32rpx;
   gap: 24rpx;
-  border-bottom: 1rpx solid #e2e8f0;
 }
 
 .tab-header-empty {
@@ -430,8 +443,7 @@ onShareTimeline(() => {
   justify-content: center;
   min-width: 0;
   height: 92rpx;
-  border-radius: 46rpx;
-  transition: all 0.2s ease;
+  border-radius: 20rpx;
   box-sizing: border-box;
   overflow: visible;
   background-color: #f3f4f6;
@@ -465,8 +477,19 @@ onShareTimeline(() => {
   z-index: 1;
 }
 
+.tab-uicon {
+  margin-right: 14rpx;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.tab-uicon-inactive {
+  opacity: 0.7;
+}
+
 .tab-name {
-  font-size: 28rpx;
+  font-size: 36rpx;
   line-height: 40rpx;
   color: #6b7280;
   font-weight: 700;

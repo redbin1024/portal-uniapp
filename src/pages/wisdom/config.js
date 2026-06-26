@@ -66,3 +66,18 @@ export const getWisdomTabIcon = (name, itemImage) => {
   if (cleanName.includes('活动')) return '/static/widsom/06.png';
   return '/static/widsom/01.png';
 };
+
+export const hasExternalTabImage = (itemImage) => {
+  return !!(itemImage && itemImage.startsWith('http') && !itemImage.includes('example.com'));
+};
+
+export const getWisdomTabUIconName = (name) => {
+  const cleanName = String(name || '');
+  if (cleanName.includes('线上')) return 'plane';
+  if (cleanName.includes('工具')) return 'briefcase';
+  if (cleanName.includes('官网') || cleanName.includes('门店')) return 'store';
+  if (cleanName.includes('AI') || cleanName.includes('助手')) return 'ai';
+  if (cleanName.includes('直播')) return 'live';
+  if (cleanName.includes('活动')) return 'star';
+  return 'plane';
+};
