@@ -1,27 +1,30 @@
 <template>
   <view class="main">
-    <view class="system-hero">
-      <image class="system-hero-bg" src="http://cdn.xiaodingdang1.com/2026/06/04/db67846d9c5f43f9bed93d42278f040f.png"
-        mode="aspectFill" />
-      <view class="system-hero-content">
-        <text class="system-hero-title">关于宝妈小叮当</text>
-        <text class="system-hero-subtitle">宝妈小叮当是天天拓客旗下，专为解决”月子中心有客户、
-          但转化难”痛点而生的智能签单系统。解决月子中心"转化差、流失高、管理乱”的
-          顽疾，让每一条客资，都最大可能转化为实打实的业绩。</text>
+
+    <!-- 顶部头部：logo + slogan -->
+    <view class="sys-header">
+      <view class="sys-header__bar">
+        <image class="sys-header__logo-img" src="/static/system/top_log.png" mode="heightFix"></image>
+        <text class="sys-header__slogan">专注月子中心业务系统</text>
       </view>
     </view>
 
-    <VideoCarousel :videos="videoList" @play="onVideoPlay" />
+    <view class="sys-hero-video">
+      <VideoCarousel :videos="videoList" :images="bannerImageList" @play="onVideoPlay" @image="onImagePreview" />
+    </view>
 
-    <image class="business-banner"
-      src="http://cdn.xiaodingdang1.com/2026/05/22/87c4f3899c114908adf6862a0c40c0ab.jpg?image_process=format,webp"
-      mode="widthFix"></image>
+    <!-- 关于宝妈小叮当系统 -->
+    <view class="about-system-section">
+      <text class="about-system-title">宝妈小叮当系统</text>
+      <text class="about-system-desc">宝妈小叮当围绕月子中心“签单转化难、管理效率低、业务增长乏力”三大核心痛点研发，是集获客、转化、管理于一体的系统。帮助月子中心实现从流量获取到客户转化的全链路提效。</text>
+    </view>
 
-    <BusinessSystem v-if="businessSystemList.length > 0" title="宝妈小叮当" subtitle="业务系统" :list="businessSystemList"
-      @click="goToCustomer" />
 
-    <ProblemList v-if="productIntroList.length > 0" :list="productIntroList" :limit="4" @click="goToIntro"
+    <ProblemList v-if="productIntroList.length > 0" :list="productIntroList" :limit="8" @click="goToIntro"
       @more="goToIssueList" />
+
+    <SystemBusiness v-if="businessSystemList.length > 0" title="宝妈小叮当" subtitle="业务系统" :list="businessSystemList"
+      @click="goToCustomer" />
 
     <Partners :list="partnerList" />
     <ShareFloatBtn />
@@ -44,11 +47,11 @@ import {
 import basePoint from '@/utils/basePoint.js';
 import VideoCarousel from './components/VideoCarousel.vue';
 import ProblemList from '@/pages/index/components/ProblemList.vue';
-import AboutSection from '@/pages/index/components/AboutSection.vue';
-import BusinessSystem from '@/pages/index/components/BusinessSystem.vue';
+import SystemBusiness from './components/SystemBusiness.vue';
 import Partners from './components/Partners.vue';
 
 const videoList = ref([]);
+const bannerImageList = ref([]);
 const productIntroList = ref([]);
 const serviceLists = ref([]);
 const businessSystemList = ref([]);
@@ -62,6 +65,16 @@ const normalizeBannerVideos = (bannerVideos) => {
     .map((item) => {
       if (typeof item === 'string') return item;
       return item?.videoUrl || item?.url || '';
+    })
+    .filter(Boolean);
+};
+
+const normalizeBannerImages = (bannerImages) => {
+  if (!Array.isArray(bannerImages)) return [];
+  return bannerImages
+    .map((item) => {
+      if (typeof item === 'string') return item;
+      return item?.imageUrl || item?.url || '';
     })
     .filter(Boolean);
 };
@@ -87,6 +100,9 @@ const fetchEnterpriseList = async () => {
         )
         .filter((row) => row.videoUrl && row.coverImage);
       videoList.value = enterpriseVideos.slice(0, 1);
+      bannerImageList.value = normalizeBannerImages(
+        response.rows[0].bannerImages,
+      );
       partnerList.value = Array.isArray(response.rows[0].cooperationMerchants)
         ? response.rows[0].cooperationMerchants
         : [];
@@ -98,7 +114,7 @@ const fetchEnterpriseList = async () => {
 
 const fetchProductIntroList = async () => {
   try {
-    const response = await getProductIntroList({ pageSize: 6, pageNum: 1 });
+    const response = await getProductIntroList({ pageSize: 8, pageNum: 1 });
     if (response && Array.isArray(response.rows) && response.rows.length > 0) {
       response.rows.forEach((item) => {
         item.introDetailFormat = formatRichText(item.introDetail);
@@ -137,6 +153,16 @@ const onVideoPlay = (item) => {
         isNavigatingVideo.value = false;
       }, 800);
     },
+  });
+};
+
+const onImagePreview = (item) => {
+  if (!item?.url) return;
+  uni.previewImage({
+    urls: bannerImageList.value,
+    current: item.url,
+    indicator: 'number',
+    loop: true,
   });
 };
 
@@ -205,54 +231,76 @@ onShareTimeline(() => ({
   overflow: hidden;
 }
 
-.system-hero {
+/* 顶部头部：宽高比 1094 : 271，满屏宽 → 高约 186rpx */
+.sys-header {
+  height: 186rpx;
+  box-sizing: border-box;
+  background: linear-gradient(86deg, #6493f7 4%, #2e5fdc 97%);
+  border-bottom-left-radius: 24rpx;
+  border-bottom-right-radius: 24rpx;
+}
+
+.sys-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36rpx 40rpx 0;
+}
+
+/* 视频卡片上叠进头部弧形区 */
+.sys-hero-video {
+  margin-top: -75rpx;
   position: relative;
+  z-index: 2;
+}
+
+.sys-header__logo-img {
+  height: 66rpx;
+  width: auto;
+}
+
+.sys-header__slogan {
+  font-family: SourceHanSansCN-Revision, system-ui, -apple-system, sans-serif;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 1rpx;
+}
+
+.system-hero {
   width: 750rpx;
-  height: 834rpx;
-  overflow: hidden;
+  display: block;
 }
 
 .system-hero-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 750rpx;
-  height: 834rpx;
-  z-index: 1;
+  display: block;
 }
 
-.system-hero-content {
-  position: absolute;
-  top: 150rpx;
-  left: 0;
-  right: 0;
-  z-index: 2;
+.about-system-section {
+  padding: 48rpx 44rpx 56rpx;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0 40rpx;
 }
 
-.system-hero-title {
+.about-system-title {
+  display: block;
   font-family: SourceHanSansCN-Revision, system-ui, -apple-system, sans-serif;
-  font-size: 46rpx;
+  font-size: 44rpx;
   font-weight: bold;
-  line-height: 56rpx;
-  text-align: center;
-  margin-bottom: 24rpx;
-  background: linear-gradient(90deg, #006eee 53%, #00bdfe 97%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #000000;
+  text-align: left;
+  margin-bottom: 28rpx;
 }
 
-.system-hero-subtitle {
+.about-system-desc {
+  display: block;
   font-family: SourceHanSansCN-Revision, system-ui, -apple-system, sans-serif;
   font-size: 30rpx;
-  font-weight: normal;
-  line-height: 48rpx;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.8);
+  line-height: 52rpx;
+  text-align: left;
 }
 
 .business-banner {

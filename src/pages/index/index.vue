@@ -33,8 +33,8 @@
       <!-- 合作商家底部横幅图 -->
       <AnimateOnView animation="fade-in" :duration="650">
         <BannerImage
-          v-if="enterpriseList.videoEnabled && enterpriseList.bannerImages?.[0]"
-          :image-url="enterpriseList.bannerImages[0]"
+          v-if="enterpriseList.videoEnabled"
+          image-url="http://cdn.xiaodingdang1.com/2026/07/08/b1b91d8deb1740e3a559aa9ba89f6437.png"
         />
       </AnimateOnView>
 
@@ -69,7 +69,7 @@
       </AnimateOnView>
 
       <!-- 你的会所是否需要解决 这些经营问题 -->
-      <AnimateOnView animation="fade-up" :duration="700">
+      <!-- <AnimateOnView animation="fade-up" :duration="700">
         <ProblemList
           v-if="productIntroList.length > 0"
           :list="productIntroList"
@@ -77,7 +77,7 @@
           @click="goToIndex"
           @more="goToIssueList"
         />
-      </AnimateOnView>
+      </AnimateOnView> -->
 
       <!-- 荣誉证书（双排自动跑马灯轮播） -->
       <AnimateOnView animation="fade-in" :duration="650">

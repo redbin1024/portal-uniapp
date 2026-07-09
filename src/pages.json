@@ -171,6 +171,12 @@
         "text": "首页"
       },
       {
+        "pagePath": "pages/system/index",
+        "iconPath": "static/case.png",
+        "selectedIconPath": "static/caseActive.png",
+        "text": "系统"
+      },
+      {
         "pagePath": "pages/winthecustomer/index",
         "iconPath": "static/serve.png",
         "selectedIconPath": "static/serveActive.png",
@@ -181,12 +187,6 @@
         "iconPath": "static/wisdom.png",
         "selectedIconPath": "static/wisdomActive.png",
         "text": "全案服务"
-      },
-      {
-        "pagePath": "pages/system/index",
-        "iconPath": "static/case.png",
-        "selectedIconPath": "static/caseActive.png",
-        "text": "系统"
       }
     ]
   }
