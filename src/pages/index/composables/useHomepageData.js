@@ -46,6 +46,13 @@ export function useHomepageData() {
     serviceLists.value.filter((it) => isManagementService(it))
   );
 
+  // 业务板块 02 卡片：业务系统 + 管理系统合并（业务在前）
+  const businessBlockList = computed(() => [
+    ...businessSystemList.value,
+    ...managementSystemList.value,
+  ]);
+
+
   /**
    * 获取企业列表数据
    */
@@ -125,8 +132,13 @@ export function useHomepageData() {
       });
       
       if (response?.rows?.length > 0) {
-        serviceList.value = response.rows[0];
-        serviceLists.value = response.rows.slice(1);
+        const filteredRows = response.rows.filter(
+          (it) => (it?.serviceName || '').trim() !== '排房系统'
+        );
+        if (filteredRows.length > 0) {
+          serviceList.value = filteredRows[0];
+          serviceLists.value = filteredRows.slice(1);
+        }
       }
     } catch (error) {
       console.error('获取服务列表失败:', error);
@@ -182,6 +194,7 @@ export function useHomepageData() {
     productIntroList,
     businessSystemList,
     managementSystemList,
+    businessBlockList,
     
     // 方法
     fetchEnterpriseList,

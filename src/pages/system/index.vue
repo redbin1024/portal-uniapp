@@ -16,11 +16,11 @@
     <!-- 关于宝妈小叮当系统 -->
     <view class="about-system-section">
       <text class="about-system-title">宝妈小叮当系统</text>
-      <text class="about-system-desc">宝妈小叮当围绕月子中心“签单转化难、管理效率低、业务增长乏力”三大核心痛点研发，是集获客、转化、管理于一体的系统。帮助月子中心实现从流量获取到客户转化的全链路提效。</text>
+      <text class="about-system-desc">宝妈小叮当围绕月子中心“<text class="highlight">签单转化难、管理效率低、业务增长乏力</text>”三大核心痛点研发，是集<text class="highlight">获客、转化、管理于一体</text>的系统。帮助月子中心实现<text class="highlight">从流量获取到客户转化</text>的全链路提效。</text>
     </view>
 
 
-    <ProblemList v-if="productIntroList.length > 0" :list="productIntroList" :limit="8" @click="goToIntro"
+    <ProblemList v-if="productIntroList.length > 0" :list="productIntroList" :limit="9" @click="goToIntro"
       @more="goToIssueList" />
 
     <SystemBusiness v-if="businessSystemList.length > 0" title="宝妈小叮当" subtitle="业务系统" :list="businessSystemList"
@@ -114,7 +114,7 @@ const fetchEnterpriseList = async () => {
 
 const fetchProductIntroList = async () => {
   try {
-    const response = await getProductIntroList({ pageSize: 8, pageNum: 1 });
+    const response = await getProductIntroList({ pageSize: 20, pageNum: 1 });
     if (response && Array.isArray(response.rows) && response.rows.length > 0) {
       response.rows.forEach((item) => {
         item.introDetailFormat = formatRichText(item.introDetail);
@@ -128,12 +128,15 @@ const fetchProductIntroList = async () => {
 
 const fetchServiceList = async () => {
   try {
-    const response = await getServiceList({ pageSize: 10, pageNum: 1 });
+    const response = await getServiceList({ pageSize: 100, pageNum: 1 });
     if (response && Array.isArray(response.rows) && response.rows.length > 0) {
       serviceLists.value = response.rows;
-      // 业务系统模块排除 serviceName 为「线上获客」的项
+      // 业务系统模块排除 serviceName 为「线上获客」和「排房系统」的项
       businessSystemList.value = response.rows.filter(
-        (it) => (it?.serviceName || '').trim() !== '线上获客',
+        (it) => {
+          const name = (it?.serviceName || '').trim();
+          return name !== '线上获客' && name !== '排房系统';
+        }
       );
     }
   } catch (error) {
@@ -301,6 +304,11 @@ onShareTimeline(() => ({
   color: rgba(0, 0, 0, 0.8);
   line-height: 52rpx;
   text-align: left;
+}
+
+.about-system-desc .highlight {
+  font-weight: bold;
+  color: #2e5fdc;
 }
 
 .business-banner {

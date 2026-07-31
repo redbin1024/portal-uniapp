@@ -17,7 +17,7 @@
         <view class="sb-image-wrap">
           <image
             class="sb-image"
-            :src="resolveImage(item) + '?image_process=format,webp'"
+            :src="resolveImage(item, index) + '?image_process=format,webp'"
             mode="aspectFill"
           />
         </view>
@@ -45,7 +45,17 @@ const props = defineProps({
 
 const emit = defineEmits(['click']);
 
-const resolveImage = (item) => {
+const defaultCovers = [
+  'http://cdn.xiaodingdang1.com/2026/07/16/1eadcef2ea114374812b002da56d2b22.png', // 卡片一（原图二）
+  'http://cdn.xiaodingdang1.com/2026/07/16/002d7019ea1c44129b1e48e8c171f95b.png', // 卡片二（原图一）
+  'http://cdn.xiaodingdang1.com/2026/07/16/802f16de8d454acd8c7522f56b4f0861.png', // 卡片三
+  'http://cdn.xiaodingdang1.com/2026/07/16/3750dd96a0944dfaa9da6bd8f98875ab.png', // 卡片四
+];
+
+const resolveImage = (item, index) => {
+  if (props.subtitle === '业务系统' && index !== undefined && defaultCovers[index]) {
+    return defaultCovers[index];
+  }
   if (!item) return '';
   const img = item.serviceImage;
   if (Array.isArray(img)) return img[0] || '';
@@ -100,9 +110,9 @@ const handleClick = (item) => {
 .sb-image-wrap {
   width: 340rpx;
   height: 340rpx;
-  border-radius: 40rpx; /* 大圆角 */
+  border-radius: 24rpx;
   overflow: hidden;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.05); /* 微弱阴影 */
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.05);
   background-color: #f7f9ff;
 }
 

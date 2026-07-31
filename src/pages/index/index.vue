@@ -48,23 +48,17 @@
         <AboutSection />
       </AnimateOnView>
 
-      <!-- 宝妈小叮当 业务系统 -->
+      <!-- 业务板块：01线上获客 + 02业务/管理系统 -->
       <AnimateOnView animation="fade-up" :duration="700">
         <BusinessSystem
-          title="宝妈小叮当"
-          subtitle="业务系统"
-          :list="businessSystemList"
+          layout="business"
+          title="业务板块"
+          en-title="BUSINESS"
+          slogan="专注月子中心 赋能行业未来"
+          :list="businessBlockList"
           @click="next"
-        />
-      </AnimateOnView>
-
-      <!-- 宝妈小叮当 管理系统 -->
-      <AnimateOnView animation="fade-up" :duration="700">
-        <BusinessSystem
-          title="宝妈小叮当"
-          subtitle="管理系统"
-          :list="managementSystemList"
-          @click="next"
+          @toker-click="goToTrafficDetails"
+          @more-click="goToSystem"
         />
       </AnimateOnView>
 
@@ -144,8 +138,7 @@ const {
   enterpriseList,
   caseDataList,
   productIntroList,
-  businessSystemList,
-  managementSystemList,
+  businessBlockList,
   initAllData,
 } = useHomepageData();
 
