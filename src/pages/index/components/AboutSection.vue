@@ -1,5 +1,5 @@
 <template>
-  <view class="about-xdd-section">
+  <view class="about-xdd-section" :style="{ background: bgColor }">
     <view class="about-xdd-card">
       <view class="about-xdd-title">{{ title }}</view>
       <view class="about-xdd-desc" v-if="description1">{{ description1 }}</view>
@@ -21,6 +21,11 @@ const props = defineProps({
     type: String,
     default:
       '宝妈小叮当是天天拓客旗下，专为解决“月子中心有客户、但转化难”痛点而生的智能签单系统。解决月子中心“转化差、流失高、管理乱”的顽疾，让每一条客资，都最大可能转化为实打实的业绩。',
+  },
+  /** 区块背景色，与原 TrafficBanner 保持一致 */
+  bgColor: {
+    type: String,
+    default: '#ffffff',
   },
 });
 </script>

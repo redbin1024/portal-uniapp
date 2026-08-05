@@ -21,23 +21,22 @@
     </view>
     <view style="height: 150rpx"></view>
     <view class="btns">
-      <view class="btn">
+      <view class="btn-row">
         <button
+          v-if="targetAppId"
+          class="action-btn action-btn-primary"
+          @click="handleExperience"
+        >
+          立即体验
+        </button>
+        <button
+          class="action-btn action-btn-contact"
+          :class="{ 'action-btn-block': !targetAppId }"
           show-message-card="true"
           open-type="contact"
           bindcontact="handleContact"
-          style="
-            background: #2f6cf4;
-            color: #fff;
-            font-size: 32rpx;
-            width: 90vw;
-            height: 88rpx;
-            text-align: center;
-            line-height: 85rpx;
-            border-radius: 20rpx;
-          "
         >
-          立即体检
+          联系客服
         </button>
       </view>
     </view>
@@ -47,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import {
   onPageScroll,
   onShow,
@@ -67,6 +66,30 @@ const serviceName = ref("");
 const currentServiceId = ref("");
 const logoSrc = ref("");
 const enterinto = ref(1);
+
+// serviceId → 目标小程序 appid 映射
+const MINI_APP_MAP = {
+  22: "wx1df89e340decbc7a", // 门店系统
+  17: "wx69ea94f1b7b242c8", // CRM 系统
+  18: "wxcfa9a0762889c1fb", // 请帖获客系统
+  19: "wx10300d0f6a63c28b", // AI 工具
+};
+
+// 当前服务对应的小程序 appid，无映射则不展示“立即体验”
+const targetAppId = computed(() => MINI_APP_MAP[currentServiceId.value] || "");
+
+// 跳转对应小程序
+const handleExperience = () => {
+  const appId = targetAppId.value;
+  if (!appId) return;
+  uni.navigateToMiniProgram({
+    appId,
+    fail: (err) => {
+      uni.showToast({ title: "打开失败，请稍后重试", icon: "none" });
+      console.error("navigateToMiniProgram fail", err);
+    },
+  });
+};
 
 onShareAppMessage(() => {
   return {
@@ -226,16 +249,38 @@ const goBack = () => {
   position: fixed;
   bottom: 0;
 }
-.btn {
-  background: #2f6cf4;
-  color: #fff;
-  font-size: 32rpx;
+.btn-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
   width: 90vw;
+  margin: 20rpx auto;
+}
+.action-btn {
+  flex: 1;
   height: 88rpx;
+  font-size: 32rpx;
   text-align: center;
   line-height: 88rpx;
   border-radius: 20rpx;
-  margin: 20rpx 0 20rpx 5vw;
+  padding: 0;
+  margin: 0;
+}
+.action-btn::after {
+  border: none;
+}
+.action-btn-primary {
+  background: #2f6cf4;
+  color: #fff;
+}
+.action-btn-contact {
+  background: #eef2fb;
+  color: #2f6cf4;
+}
+/* 无“立即体验”时，联系客服占满整行 */
+.action-btn-block {
+  background: #2f6cf4;
+  color: #fff;
 }
 .viewmore {
   display: flex;

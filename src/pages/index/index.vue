@@ -1,19 +1,12 @@
-
 <template>
   <view class="main" :class="{ 'no-scroll': showPreview }">
     <!-- 容器和热区 -->
-    <ContainerHotspot
-      :background-image="enterpriseList.enterpriseLogo"
-      @left-click="goToWinTheCustomer"
-      @right-click="goToSystem"
-    >
+    <ContainerHotspot :background-image="enterpriseList.enterpriseLogo" @left-click="goToWinTheCustomer"
+      @right-click="goToSystem">
       <!-- 企业介绍 -->
       <AnimateOnView animation="fade-up" :duration="700">
-        <IntroSection
-          :title="enterpriseList.enterpriseName || '天天拓客'"
-          :description1="enterpriseList.enterpriseIntroOne"
-          :description2="enterpriseList.enterpriseIntroTwo"
-        />
+        <IntroSection :title="enterpriseList.enterpriseName || '天天拓客'" :description1="enterpriseList.enterpriseIntroOne"
+          :description2="enterpriseList.enterpriseIntroTwo" />
       </AnimateOnView>
 
       <!-- 公司发展历程 -->
@@ -23,43 +16,24 @@
 
       <!-- 合作商家 · 赋能月子服务（内部已集成视频预览） -->
       <AnimateOnView animation="fade-up" :duration="700">
-        <BusinessPartner
-          v-if="enterpriseList.videoEnabled"
-          :list="caseDataList"
-          @more="viewmore"
-        />
+        <BusinessPartner v-if="enterpriseList.videoEnabled" :list="caseDataList" @more="viewmore" />
       </AnimateOnView>
 
       <!-- 合作商家底部横幅图 -->
       <AnimateOnView animation="fade-in" :duration="650">
-        <BannerImage
-          v-if="enterpriseList.videoEnabled"
-          image-url="http://cdn.xiaodingdang1.com/2026/07/08/b1b91d8deb1740e3a559aa9ba89f6437.png"
-        />
+        <BannerImage v-if="enterpriseList.videoEnabled"
+          image-url="http://cdn.xiaodingdang1.com/2026/07/08/b1b91d8deb1740e3a559aa9ba89f6437.png" />
       </AnimateOnView>
 
-      <!-- 天天拓客 · 精准获取线上流量 -->
+      <!-- 天天拓客位置：改为关于宝妈小叮当内容，背景沿用原 #f4f5f9 -->
       <AnimateOnView animation="fade-up" :duration="700">
-        <TrafficBanner @click="goToTrafficDetails" />
-      </AnimateOnView>
-
-      <!-- 关于宝妈小叮当 -->
-      <AnimateOnView animation="fade-up" :duration="700">
-        <AboutSection />
+        <AboutSection bg-color="#f4f5f9" />
       </AnimateOnView>
 
       <!-- 业务板块：01线上获客 + 02业务/管理系统 -->
       <AnimateOnView animation="fade-up" :duration="700">
-        <BusinessSystem
-          layout="business"
-          title="业务板块"
-          en-title="BUSINESS"
-          slogan="专注月子中心 赋能行业未来"
-          :list="businessBlockList"
-          @click="next"
-          @toker-click="goToTrafficDetails"
-          @more-click="goToSystem"
-        />
+        <BusinessSystem layout="business" title="业务板块" en-title="BUSINESS" slogan="专注月子中心 赋能行业未来"
+          :list="businessBlockList" @click="next" @toker-click="goToTrafficDetails" @more-click="goToSystem" />
       </AnimateOnView>
 
       <!-- 你的会所是否需要解决 这些经营问题 -->
@@ -76,33 +50,24 @@
       <!-- 荣誉证书（双排自动跑马灯轮播） -->
       <AnimateOnView animation="fade-in" :duration="650">
         <view class="brand-story">
-          <HonorCertificate
-            v-if="
-              enterpriseList.honorCertificates &&
-              enterpriseList.honorCertificates.length
-            "
-            :list="enterpriseList.honorCertificates"
-          />
+          <HonorCertificate v-if="
+            enterpriseList.honorCertificates &&
+            enterpriseList.honorCertificates.length
+          " :list="enterpriseList.honorCertificates" />
         </view>
       </AnimateOnView>
 
       <view class="introduce">
-        <image
-          src="http://cdn.xiaodingdang1.com/2025/11/07/c6dd442174ea42628e4c8a5fc0a58617.png"
-          style="width: 170rpx; height: 47rpx"
-        ></image>
+        <image src="http://cdn.xiaodingdang1.com/2025/11/07/c6dd442174ea42628e4c8a5fc0a58617.png"
+          style="width: 170rpx; height: 47rpx"></image>
         <view class="introduce-title4">{{
           enterpriseList.enterpriseAddress
-        }}</view>
+          }}</view>
       </view>
     </ContainerHotspot>
 
     <!-- 全屏预览（图片/视频） -->
-    <MediaPreview
-      v-model:visible="showPreview"
-      :media="previewMedia"
-      @fullscreenchange="isVideoFullscreen = $event"
-    />
+    <MediaPreview v-model:visible="showPreview" :media="previewMedia" @fullscreenchange="isVideoFullscreen = $event" />
 
     <!-- 右下角悬浮客服按钮 -->
     <CustomerServiceBtn @click="handleCustomerServiceClick" />
@@ -563,6 +528,7 @@ const onShareTimeline = () => {
   position: fixed;
   width: 100%;
 }
+
 .header {
   padding: 110rpx 0rpx 30rpx 26rpx;
   position: fixed;
@@ -582,11 +548,13 @@ const onShareTimeline = () => {
   display: flex;
   align-items: center;
 }
+
 .headLogo {
   border-radius: 100rpx;
   width: 62rpx;
   height: 62rpx;
 }
+
 .logo {
   width: 100%;
   height: 100%;
@@ -659,11 +627,13 @@ const onShareTimeline = () => {
   justify-content: space-between;
   margin: 60rpx auto;
 }
+
 .company-btn1 {
   display: flex;
   justify-content: center;
   width: 20%;
 }
+
 .contact-btn {
   width: 80rpx;
   height: 80rpx;
@@ -680,6 +650,7 @@ const onShareTimeline = () => {
 .contact-btn::after {
   border: none !important;
 }
+
 .contact-btn image {
   width: 80rpx;
   height: 80rpx;
@@ -740,6 +711,7 @@ const onShareTimeline = () => {
   line-height: 1.4;
   text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.5);
 }
+
 /**线上获客 */
 .brand-story {
   background: #ffffff;
@@ -760,19 +732,23 @@ const onShareTimeline = () => {
   &::-webkit-scrollbar {
     display: none;
   }
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 ._deprecated_teamappearance-item {
   background: #f7f7f7;
   border-radius: 20rpx;
   flex-shrink: 0;
   width: 440rpx;
   margin-right: 20rpx;
+
   &:last-child {
     margin-right: 26rpx;
   }
 }
+
 ._deprecated_teamappearance-item-content {
   padding: 18rpx 18rpx;
   color: #3d3d3d;
@@ -784,6 +760,7 @@ const onShareTimeline = () => {
   padding: 40rpx 26rpx;
   // margin-top: 38rpx;
 }
+
 .certificate-title {
   font-size: 40rpx;
   font-weight: bold;
@@ -791,6 +768,7 @@ const onShareTimeline = () => {
   text-align: center;
   padding: 0 49rpx;
 }
+
 .certificate-list {
   margin-top: 20rpx;
 }
@@ -803,6 +781,7 @@ const onShareTimeline = () => {
   &::-webkit-scrollbar {
     display: none;
   }
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -816,6 +795,7 @@ const onShareTimeline = () => {
 .certificate-row {
   display: flex;
   gap: 0;
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -831,20 +811,24 @@ const onShareTimeline = () => {
   flex-direction: column;
   margin: 16rpx 16rpx;
   border-radius: 12rpx;
+
   &:last-child {
     margin-right: 49rpx;
   }
 }
+
 .certificate-item image {
   width: 100%;
   height: 265rpx;
   object-fit: cover;
   border-radius: 12rpx;
 }
+
 /**合作商 */
 .businesspartner {
   padding: 80rpx 0;
 }
+
 .businesspartner-list {
   margin-top: 40rpx;
   padding: 0 49rpx;
@@ -855,6 +839,7 @@ const onShareTimeline = () => {
   &::-webkit-scrollbar {
     display: none;
   }
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -884,15 +869,18 @@ const onShareTimeline = () => {
     margin-right: 49rpx;
   }
 }
+
 .businesspartner-item image {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
+
 /** 系统服务 / 流量服务样式已移除（原模块已下线，由 BusinessSystem、TrafficBanner 等组件代替） */
 .winthecustomer-head {
   display: flex;
 }
+
 .winthecustomer-head1 {
   display: flex;
   align-items: center;
@@ -905,10 +893,12 @@ const onShareTimeline = () => {
     transform: scale(0);
     opacity: 0;
   }
+
   50% {
     transform: scale(1.2);
     opacity: 0.8;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -920,6 +910,7 @@ const onShareTimeline = () => {
   font-weight: bold;
   font-size: 40rpx;
 }
+
 .view-more-btn {
   font-size: 33rpx;
   color: #313131;
@@ -929,30 +920,29 @@ const onShareTimeline = () => {
   align-items: center;
   justify-content: center;
 }
+
 /* .winthecustomer-line / .winthecustomer-content* 已废弃 */
 .headContent {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .headLeft {
   width: 142rpx;
   height: 5rpx;
-  background: linear-gradient(
-    90deg,
-    rgba(216, 216, 216, 0) 0%,
-    rgba(51, 51, 51, 0.5) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(216, 216, 216, 0) 0%,
+      rgba(51, 51, 51, 0.5) 100%);
   border-radius: 0rpx 0rpx 0rpx 0rpx;
 }
+
 .headRight {
   width: 142rpx;
   height: 5rpx;
-  background: linear-gradient(
-    90deg,
-    rgba(51, 51, 51, 0.5) 0%,
-    rgba(216, 216, 216, 0) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(51, 51, 51, 0.5) 0%,
+      rgba(216, 216, 216, 0) 100%);
   border-radius: 0rpx 0rpx 0rpx 0rpx;
 }
 
@@ -960,32 +950,39 @@ const onShareTimeline = () => {
   background: #ffffff;
   padding: 63rpx 44rpx;
 }
+
 .introduce-title1 {
   color: #3d3d3d;
   font-size: 21rpx;
   font-weight: bold;
 }
+
 .introduce-title2 {
   color: #000000;
   font-size: 18rpx;
   margin-top: 8rpx;
 }
+
 .introduce-title3 {
   border: 1rpx solid #e2e2e2;
   margin: 24rpx 0;
 }
+
 .introduce-title4 {
   color: #7a7878;
   font-size: 24rpx;
   margin-top: 15rpx;
 }
+
 .introduce-container5 {
   text-align: center;
 }
+
 .introduce-container5 image {
   width: 152rpx;
   height: 152rpx;
 }
+
 .introduce-container6 {
   color: #000000;
   font-size: 18rpx;
@@ -1007,20 +1004,25 @@ wx-button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+
   /* 隐藏视频控件 */
   /* 移除所有可能的控制条 */
   ::-webkit-media-controls-panel {
     display: none !important;
   }
+
   ::-webkit-media-controls-play-button {
     display: none !important;
   }
+
   ::-webkit-media-controls {
     display: none !important;
   }
+
   video::-webkit-media-controls {
     display: none !important;
   }
+
   video::-webkit-media-controls-start-playback-button {
     display: none !important;
   }
@@ -1047,6 +1049,7 @@ wx-button {
   align-items: center;
   justify-content: center;
 }
+
 .play-icon image {
   width: 100%;
   height: 100%;
@@ -1090,9 +1093,11 @@ wx-button {
   width: 100%;
   height: 100%;
 }
+
 wx-button:after {
   border: none !important;
 }
+
 /**合作商家 */
 .businesspartnernew {
   background: #ffffff;
@@ -1101,18 +1106,21 @@ wx-button:after {
   padding: 46rpx 26rpx;
   margin-top: 100rpx;
 }
+
 .businesspartnernew-content {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 9px;
   margin-top: 24rpx;
 }
+
 .businesspartnernew-item {
   width: 224rpx;
   height: 340rpx;
   border-radius: 20rpx;
   position: relative;
 }
+
 .viewmore {
   display: flex;
   justify-content: center;
@@ -1157,11 +1165,13 @@ wx-button:after {
   background: #ffffff;
   padding: 46rpx 26rpx;
 }
+
 .problem-swiper {
   height: 364rpx;
   background-color: #fff;
   margin-top: 24rpx;
 }
+
 .problem-slide {
   display: flex;
   align-items: center;
@@ -1171,26 +1181,31 @@ wx-button:after {
   width: 100%;
   height: 100%;
 }
+
 .problem-slide-image {
   height: 360rpx;
   border-radius: 20rpx;
   border: 2rpx solid #e1e1e1;
 }
+
 .problem-scroll {
   margin-top: 24rpx;
   white-space: nowrap;
 }
+
 .problem-scroll-inner {
   display: flex;
   gap: 20rpx;
   padding-right: 26rpx;
 }
+
 .problem-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20rpx;
   margin-top: 24rpx;
 }
+
 .problem-card {
   width: 306rpx;
   height: 366rpx;
@@ -1204,27 +1219,32 @@ wx-button:after {
   flex-shrink: 0;
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
 }
+
 .problem-card-header {
   display: flex;
   align-items: center;
   padding: 60rpx 20rpx 8rpx 30rpx;
   justify-content: space-between;
 }
-.problem-icon {
-}
+
+.problem-icon {}
+
 .problem-icon image {
   width: 56rpx;
   height: 56rpx;
 }
-.problem-arrow {
-}
+
+.problem-arrow {}
+
 .problem-arrow image {
   width: 30rpx;
   height: 30rpx;
 }
+
 .problem-card-body {
   padding: 24rpx;
 }
+
 .problem-title {
   width: 128rpx;
   height: 40rpx;
@@ -1237,6 +1257,7 @@ wx-button:after {
   font-style: normal;
   text-transform: none;
 }
+
 .problem-desc {
   width: 270rpx;
   height: 80rpx;
@@ -1276,6 +1297,7 @@ wx-button:after {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }

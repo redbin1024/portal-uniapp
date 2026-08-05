@@ -111,7 +111,7 @@
 
               <text v-if="plainDesc(item)" class="bs-item-desc">{{
                 plainDesc(item)
-                }}</text>
+              }}</text>
             </view>
 
           </view>
@@ -397,9 +397,8 @@ const handleMoreClick = () => emit('more-click');
   padding: 28rpx 36rpx;
   box-sizing: border-box;
   overflow: hidden;
-  /* 底色兜底：切图为半透明叠加层 */
-  background: linear-gradient(105deg, #1658c8 0%, #1e6adf 55%, #1450b8 100%);
 }
+
 
 .card01-header-bg {
   position: absolute;
@@ -410,6 +409,7 @@ const handleMoreClick = () => emit('more-click');
   z-index: 0;
 }
 
+
 .card01-num {
   position: absolute;
   left: 24rpx;
@@ -418,10 +418,16 @@ const handleMoreClick = () => emit('more-click');
   font-size: 132rpx;
   font-weight: 800;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.72);
   letter-spacing: -4rpx;
   z-index: 1;
-  text-shadow: 0 4rpx 16rpx rgba(0, 40, 120, 0.35);
+  /* 文字竖向渐变:上亮下暗 */
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.45) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .card01-header-title {
@@ -562,7 +568,6 @@ const handleMoreClick = () => emit('more-click');
   padding: 28rpx 36rpx;
   box-sizing: border-box;
   overflow: hidden;
-  background: linear-gradient(105deg, #0f8f8f 0%, #1aa3a0 50%, #129194 100%);
 }
 
 .card02-header-bg {
@@ -582,10 +587,16 @@ const handleMoreClick = () => emit('more-click');
   font-size: 132rpx;
   font-weight: 800;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.72);
   letter-spacing: -4rpx;
   z-index: 1;
-  text-shadow: 0 4rpx 16rpx rgba(0, 80, 80, 0.35);
+  /* 文字竖向渐变:上亮下暗 */
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.45) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .card02-header-title {
@@ -671,10 +682,10 @@ const handleMoreClick = () => emit('more-click');
 
 .card02-phones {
   position: absolute;
-  right: -10rpx;
-  top: 10rpx;
-  width: 360rpx;
-  height: 300rpx;
+  right: 10rpx;
+  top: 40rpx;
+  width: 320rpx;
+  height: 280rpx;
   z-index: 0;
 }
 
