@@ -67,23 +67,31 @@ const currentServiceId = ref("");
 const logoSrc = ref("");
 const enterinto = ref(1);
 
-// serviceId → 目标小程序 appid 映射
+// 跳转目标小程序时携带的租户 ID
+const TENANT_ID = "194338";
+
+// serviceId → 目标小程序 appid + 落地页路径映射
+// path 为空表示不指定页面、直接打开目标小程序首页（CRM / AI 工具不携带 tenantId）
 const MINI_APP_MAP = {
-  22: "wx1df89e340decbc7a", // 门店系统
-  17: "wx69ea94f1b7b242c8", // CRM 系统
-  18: "wxcfa9a0762889c1fb", // 请帖获客系统
-  19: "wx10300d0f6a63c28b", // AI 工具
+  22: { appId: "wx1df89e340decbc7a", path: "pages/home/index" }, // 门店系统
+  17: { appId: "wx69ea94f1b7b242c8", path: "" }, // CRM 系统（不携带 tenantId）
+  18: { appId: "wxcfa9a0762889c1fb", path: "pages/index/index" }, // 请帖获客系统
+  19: { appId: "wx10300d0f6a63c28b", path: "" }, // AI 工具（不携带 tenantId）
 };
 
-// 当前服务对应的小程序 appid，无映射则不展示“立即体验”
-const targetAppId = computed(() => MINI_APP_MAP[currentServiceId.value] || "");
+// 当前服务对应的小程序，无映射则不展示“立即体验”
+const targetMiniApp = computed(() => MINI_APP_MAP[currentServiceId.value] || null);
+const targetAppId = computed(() => targetMiniApp.value?.appId || "");
+const targetPath = computed(() => targetMiniApp.value?.path || "");
 
-// 跳转对应小程序
+// 跳转对应小程序；门店 / 请帖小程序携带 tenantId
 const handleExperience = () => {
   const appId = targetAppId.value;
   if (!appId) return;
+  const path = targetPath.value ? `${targetPath.value}?tenantId=${TENANT_ID}` : "";
   uni.navigateToMiniProgram({
     appId,
+    path,
     fail: (err) => {
       uni.showToast({ title: "打开失败，请稍后重试", icon: "none" });
       console.error("navigateToMiniProgram fail", err);
