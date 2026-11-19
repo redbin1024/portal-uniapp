@@ -58,6 +58,9 @@ import {
 import basePoint from "@/utils/basePoint.js";
 import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
 import { getservice } from "@/api/activity.js";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/customer/index");
 
 // 定义响应式数据
 const serviceDescription = ref("");
@@ -68,7 +71,7 @@ const logoSrc = ref("");
 const enterinto = ref(1);
 
 // 跳转目标小程序时携带的租户 ID
-const TENANT_ID = "194338";
+const TENANT_ID = "309485";
 
 // serviceId → 目标小程序 appid + 落地页路径映射
 // path 为空表示不指定页面、直接打开目标小程序首页（CRM / AI 工具不携带 tenantId）

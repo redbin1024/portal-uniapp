@@ -94,6 +94,8 @@
 </template>
 
 <script>
+import { maybePromptForDirectEntry } from "@/utils/authGuard.js";
+
 export default {
   data() {
     return {
@@ -122,6 +124,7 @@ export default {
       lastTimeUpdate: 0,
       isLoading: true,
       visitContent: "",
+      authGateChecked: false,
     };
   },
 
@@ -161,6 +164,14 @@ export default {
   onReady() {
     this.videoContext = uni.createVideoContext("myVideo", this);
     this.resetControlsTimer();
+  },
+
+  onShow() {
+    if (this.authGateChecked) return;
+    this.authGateChecked = true;
+    setTimeout(() => {
+      maybePromptForDirectEntry("pages/videoplay/index");
+    }, 300);
   },
 
   onShareAppMessage(res) {

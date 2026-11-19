@@ -1,4 +1,7 @@
 import config from '@/config/env.js'
+import { getToken, clearAuth } from '@/utils/token.js'
+import { LOGIN_PAGE } from '@/config/auth.js'
+import { buildLoginUrl, getCurrentPageUrl, setPendingRedirect } from '@/utils/route.js'
 
 // 请求状态枚举
 const REQUEST_STATUS = {
@@ -56,7 +59,7 @@ function requestInterceptor(options) {
   options.requestKey = requestKey
   
   // 添加token
-  const token = uni.getStorageSync('token')
+  const token = getToken()
   if (token) {
     options.header.Authorization = `Bearer ${token}`
   }
@@ -89,7 +92,7 @@ function requestInterceptor(options) {
 }
 
 // 响应拦截器
-function responseInterceptor(response, requestKey) {
+function responseInterceptor(response, requestKey, options = {}) {
   const { data, statusCode, header } = response
   
   // 请求完成后从队列中移除
@@ -109,17 +112,19 @@ function responseInterceptor(response, requestKey) {
   // 处理HTTP状态码
   if (statusCode !== REQUEST_STATUS.SUCCESS) {
     const errorMessage = getHttpErrorMessage(statusCode)
-    showError(errorMessage)
+    if (!options.silent) {
+      showError(errorMessage)
+    }
     return Promise.reject({
       code: statusCode,
       message: errorMessage,
       data: null
     })
   }
-  
+
   // 处理业务状态码
-  if (data && data.code !== undefined && data.code !== REQUEST_STATUS.SUCCESS) {
-    return handleBusinessError(data)
+  if (data && data.code !== undefined && Number(data.code) !== REQUEST_STATUS.SUCCESS) {
+    return handleBusinessError(data, options)
   }
   
   return data
@@ -143,31 +148,46 @@ function getHttpErrorMessage(statusCode) {
 }
 
 // 处理业务错误
-function handleBusinessError(data) {
-  const { code, message } = data
-  
+function handleBusinessError(data, options = {}) {
+  const { code } = data
+  const message = data.message || data.msg
+
   // token过期处理
-  if (code === REQUEST_STATUS.UNAUTHORIZED) {
+  if (Number(code) === REQUEST_STATUS.UNAUTHORIZED) {
     handleTokenExpired()
     return Promise.reject(data)
   }
-  
+
   // 权限不足
-  if (code === REQUEST_STATUS.FORBIDDEN) {
-    showError('权限不足')
+  if (Number(code) === REQUEST_STATUS.FORBIDDEN) {
+    if (!options.silent) {
+      showError('权限不足')
+    }
     return Promise.reject(data)
   }
-  
+
   // 其他业务错误
-  showError(message || '请求失败')
+  if (!options.silent) {
+    showError(message || '请求失败')
+  }
   return Promise.reject(data)
 }
 
 // 处理token过期
 function handleTokenExpired() {
-  uni.removeStorageSync('token')
-  uni.removeStorageSync('userInfo')
-  
+  // 当前已经在登录页时不再重复弹窗/跳转，也避免清掉刚拿到的 token
+  try {
+    const pages = getCurrentPages()
+    const top = pages && pages.length ? pages[pages.length - 1] : null
+    if (top && top.route && `/${top.route}` === LOGIN_PAGE) return
+  } catch (error) {
+    // ignore
+  }
+
+  clearAuth()
+  setPendingRedirect(getCurrentPageUrl())
+  const loginUrl = buildLoginUrl({ from: 'expired' })
+
   // 显示登录提示
   uni.showModal({
     title: '提示',
@@ -175,7 +195,7 @@ function handleTokenExpired() {
     showCancel: false,
     success: () => {
       uni.reLaunch({
-        url: '/pages/login/login'
+        url: loginUrl
       })
     }
   })
@@ -214,8 +234,10 @@ function request(options) {
       // })
     }
     
-    // 合并配置
-    const config = Object.assign({}, requestConfig, options)
+    // 合并配置（header 需要深合并，避免自定义 header 覆盖掉 Content-Type）
+    const config = Object.assign({}, requestConfig, options, {
+      header: Object.assign({}, requestConfig.header, options.header || {})
+    })
     
     // 请求拦截
     const interceptedConfig = requestInterceptor(config)
@@ -237,7 +259,7 @@ function request(options) {
       url: fullUrl,
       success: (response) => {
         try {
-          const result = responseInterceptor(response, requestKey)
+          const result = responseInterceptor(response, requestKey, interceptedConfig)
           resolve(result)
         } catch (error) {
           reject(error)
@@ -253,8 +275,10 @@ function request(options) {
         
         // 处理网络错误
         const errorMessage = getNetworkErrorMessage(error)
-        showError(errorMessage)
-        
+        if (!options.silent) {
+          showError(errorMessage)
+        }
+
         reject({
           code: -1,
           message: errorMessage,

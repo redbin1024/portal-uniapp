@@ -23,6 +23,9 @@ import {
   onShareAppMessage,
   onShareTimeline,
 } from "@dcloudio/uni-app";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/recentdetails/index");
 
 onShareAppMessage(() => {
   return {

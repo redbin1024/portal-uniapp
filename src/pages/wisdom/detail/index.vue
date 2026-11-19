@@ -99,6 +99,9 @@ import {
   findWisdomTypeById,
   isPrimaryWisdomType,
 } from '../apiAdapters.mjs';
+import { useSecondaryPageGate } from '@/utils/authGuard.js';
+
+useSecondaryPageGate('pages/wisdom/detail/index');
 
 const statusBarHeight = ref(uni.getSystemInfoSync().statusBarHeight || 20);
 const currentTypeId = ref(0);

@@ -18,6 +18,9 @@ import { onReachBottom } from "@dcloudio/uni-app";
 import { getsuccessCaseList } from "@/api/activity.js";
 import CaseCardGrid from "@/pages/winthecustomer/components/CaseCardGrid.vue";
 import BackHome from "@/components/BackHome/BackHome.vue";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/case/index");
 
 const successCaseList = ref([]);
 const loading = ref(false);

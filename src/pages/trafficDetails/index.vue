@@ -18,6 +18,9 @@ import { getServiceList } from "@/api/activity.js";
 import basePoint from "@/utils/basePoint.js";
 import { formatRichText } from "@/utils/richText.js";
 import ServiceContent from "@/pages/winthecustomer/components/ServiceContent.vue";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/trafficDetails/index");
 
 const richText = ref("");
 const loading = ref(false);

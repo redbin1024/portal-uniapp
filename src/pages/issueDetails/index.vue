@@ -59,6 +59,9 @@ import {
 import { ref, onMounted } from "vue";
 import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
 import { getproductIntro } from "@/api/activity.js";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/issueDetails/index");
 
 // 定义响应式数据
 const serviceDescription = ref("");

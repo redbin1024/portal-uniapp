@@ -26,6 +26,9 @@ import {
   onShareTimeline,
 } from "@dcloudio/uni-app";
 import mpHtml from "uni-app-mp-html/components/mp-html/mp-html.vue";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/casedetails/index");
 
 onShareAppMessage(() => {
   return {

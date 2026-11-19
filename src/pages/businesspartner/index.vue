@@ -111,6 +111,10 @@ import {
   onShareAppMessage,
   onShareTimeline,
 } from "@dcloudio/uni-app";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/businesspartner/index");
+
 const caseDataList = ref([]);
 const videoEnabled = ref(uni.getStorageSync("videoEnabled") || false);
 const showPreview = ref(false);

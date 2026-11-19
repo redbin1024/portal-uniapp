@@ -35,6 +35,9 @@ import { onShow, onReachBottom } from "@dcloudio/uni-app";
 import { getProductIntroList } from "@/api/activity.js";
 import ProblemList from "@/pages/index/components/ProblemList.vue";
 import BackHome from "@/components/BackHome/BackHome.vue";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/issueList/index");
 
 const problemList = ref([]);
 const pageNum = ref(1);

@@ -15,6 +15,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/firmdynamicdetails/index");
 
 onShareAppMessage(() => {
   return {

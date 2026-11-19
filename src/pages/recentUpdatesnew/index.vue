@@ -52,6 +52,10 @@ import {
   onShareTimeline,
 } from "@dcloudio/uni-app";
 import basePoint from "@/utils/basePoint.js";
+import { useSecondaryPageGate } from "@/utils/authGuard.js";
+
+useSecondaryPageGate("pages/recentUpdatesnew/index");
+
 // 定义组件名称（可选）
 defineOptions({
   name: "RecentUpdates",
